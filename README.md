@@ -5,8 +5,13 @@
 [Notion](https://surf-cyclone-e28.notion.site/1b6c6350dc0a803fad75e52bca616886?pvs=4)
 
 ## 🧑‍💻 Member
-이선욱 - https://github.com/leesunuk 
-김용연 - https://github.com/Rider96 
-조경준 - https://github.com/GenTaram 
+이선욱 - https://github.com/leesunuk
+김용연 - https://github.com/Rider96
+조경준 - https://github.com/GenTaram
 이상민 - https://github.com/geniusBrainLsm 
 김진영 - https://github.com/Kimhasa 
+
+
+
+
+
