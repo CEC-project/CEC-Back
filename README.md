@@ -6,3 +6,7 @@
 
 ### 🧑‍💻 Member
 이선욱 - https://github.com/leesunuk
+김용연 - https://github.com/Rider96
+조경준 - https://github.com/GenTaram
+이상민 - https://github.com/geniusBrainLsm
+김진영 - https://github.com/Kimhasa
