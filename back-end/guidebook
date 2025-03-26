@@ -1,0 +1,11 @@
+ api 개발 가이드
+
+1. models.py 에서 모델 정의
+2. admins.py 에서 모델을 관리할 수 있도록 설정
+3. serializers.py 에서 모델 데이터를 JSON으로 전환
+4. views.py 에서 기능(api) 구현
+5. urls.py 에서 api 엔드포인트 등록
+6. 마이그레이션 - python manage.py makemigrations
+7. DB에 마이그레이션 파일 반영 - python manage.py migrate
+8. 서버 실행 - python manage.py runserver
+9. 만든 api 테스트
