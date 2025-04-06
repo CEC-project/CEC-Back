@@ -1,12 +1,17 @@
-# 📢 2025-CameraRecording
-2025 캡스톤 디자인을 위한 레포지토리
+# 🌟 CEC-Front 학생들이 사용할 어플리케이션
 
-## 💡 Idea & Plan
-[Notion](https://surf-cyclone-e28.notion.site/1b6c6350dc0a803fad75e52bca616886?pvs=4)
+
+## 🚀 개발 환경
+
+
+## ✅ 기술 스택
+
+
+## 📁 네이밍 규칙 `소문자 시작`
 
 ## 🧑‍💻 Member
 이선욱 - https://github.com/leesunuk \
 김용연 - https://github.com/Rider96 \
 조경준 - https://github.com/GenTaram \
 이상민 - https://github.com/geniusBrainLsm \
-김진영 - https://github.com/Kimhasa 
+김진영 - https://github.com/Kimhasa
