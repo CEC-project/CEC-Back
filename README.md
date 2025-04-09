@@ -24,3 +24,5 @@
 - 조경준 - [GitHub](https://github.com/GenTaram)  
 - 이상민 - [GitHub](https://github.com/geniusBrainLsm)  
 - 김진영 - [GitHub](https://github.com/Kimhasa)
+
+## [서버 실행 방법 및 개발 규칙](docs/dev-docs.md)

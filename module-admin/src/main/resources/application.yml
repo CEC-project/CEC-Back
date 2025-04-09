@@ -1,0 +1,3 @@
+spring.application.name: server
+
+spring.config.import: classpath:admin-settings/settings.yml
