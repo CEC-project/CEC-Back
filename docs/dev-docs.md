@@ -59,13 +59,11 @@ docker run --name redis-container\
     - 모든 모듈이 사용하는 의존성(라이브러리) 목록
     - 프로젝트에 대한 설정
 
-## 규칙 (04-09 07:16)
-1. feat : 작업내용, fix : 작업내용, chore : 작업내용 과 같이 커밋 컨벤션 잘 지키기
-    - 두줄 이상 커밋 메세지를 적는 것도 적극 권장함
-    - [커밋 컨벤션 참고 링크](https://velog.io/@shin6403/Git-git-%EC%BB%A4%EB%B0%8B-%EC%BB%A8%EB%B2%A4%EC%85%98-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0)
+## 규칙 (04-09 09:23)
+1. feat : 작업내용, fix : 작업내용 과 같이 커밋 컨벤션 지키기
 2. 커밋할때는 실행이 가능할때만 커밋하기
 3. 커밋할때는 컴파일시 뜨는 경고문구도 최대한 해결해서 커밋하기
 4. private 레포지토리를 만들어서 그곳에 user-settings, admin-settings 등 설정파일을 저장하기
     - 설정파일이 업데이트 되면 팀원들에게 알려서 각자 받아가도록 하기
 5. 가능하면 DTO 안에 [toEntity 메소드](../module-user/src/main/java/cec/backend/user/dto/test/CreateTestRequest.java) 처럼 엔티티로 바꾸는 메소드나, [엔티티로 생성하는 생성자](../module-user/src/main/java/cec/backend/user/dto/test/TestResponse.java) 를 만들고 최대한 사용할것.
-6. 작업하기 전에, "feature/기능명" 처럼 브랜치를 나누고 작업하고, pr을 날릴때 메인 브랜치로 pr한다. (GtiHub Flow)  
+6. 작업하기 전에, "feature/기능명", "fix/기능명" 처럼 브랜치를 나누고 작업하고, pr을 날릴때 메인 브랜치로 pr한다. (GtiHub Flow)  
