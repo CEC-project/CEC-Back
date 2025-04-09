@@ -1,7 +1,9 @@
-spring.application.name: server
 
-# 아래 내용은 개발용 임시 키값임
+# 아래 내용은 개발용 임시 값임
 # 추후 따로 private 레포지토리를 파서 관리해야 함
+
+server:
+  port: 8080
 
 spring:
   datasource:
@@ -11,7 +13,7 @@ spring:
     password: 1234
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:

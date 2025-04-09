@@ -1,1 +1,5 @@
 rootProject.name = 'server'
+include 'module-core'
+include 'module-user'
+include 'module-admin'
+
