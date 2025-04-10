@@ -36,5 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 
-/module-user/src/main/resources/user-settings/
-/module-admin/src/main/resources/admin-settings/
+### Project Specific ###
+module-user/src/main/resources/user-settings/
+module-admin/src/main/resources/admin-settings/
