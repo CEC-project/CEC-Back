@@ -1,12 +1,23 @@
 ## 개발용 DB, Redis 실행 방법  (docker compose 로 간편화 예정)
 1. 도커를 설치한다
-2. 다음 명령어를 입력하면 DB가 실행된다.  (이 명령어는 도커를 재시작할때마다 데이터가 날아감에 주의)
+2. 다음 명령어를 입력하면 DB가 실행된다.  (이 명령어는 도커를 재시작해도 데이터가 유지됨)
 ```  
-docker run --name postgres-container\
-  -e POSTGRES_PASSWORD=1234\
-  -e POSTGRES_USER=cec\
-  -e POSTGRES_DB=cec\
-  -p 5432:5432\
+맥 / 리눅스용
+docker run --name postgres-container \
+  -e POSTGRES_PASSWORD=1234 \
+  -e POSTGRES_USER=cec \
+  -e POSTGRES_DB=cec \
+  -p 5432:5432 \
+  -v postgres-data:/var/lib/postgresql/data \
+  -d postgres
+  
+윈도우용
+docker run --name postgres-container ^
+  -e POSTGRES_PASSWORD=1234 ^
+  -e POSTGRES_USER=cec ^
+  -e POSTGRES_DB=cec ^
+  -p 5432:5432 ^
+  -v postgres-data:/var/lib/postgresql/data ^
   -d postgres
 ```
 3. 다음 명령어를 입력하면 Redis가 실행된다.
