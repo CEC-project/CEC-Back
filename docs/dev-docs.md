@@ -1,30 +1,36 @@
-## 개발용 DB, Redis 실행 방법  (docker compose 로 간편화 예정)
-1. 도커를 설치한다
-2. 다음 명령어를 입력하면 DB가 실행된다.  (이 명령어는 도커를 재시작해도 데이터가 유지됨)
+## DB, Redis 한꺼번에 실행하는 방법
+1. 도커 데스크탑을 설치한다 (리눅스 환경에서는 도커만 설치한다)
+2. 프로젝트경로/docker/db-redis 로 이동한다
+3. docker-compose up -d 으로 실행한다 (컴퓨터를 재시작해도 종료할 때까지 꺼지지 않음)
+4. docker-compose down 으로 중지한다
+
+## DB, Redis 각각 실행하는 방법
+1. 도커 데스크탑을 설치한다 (리눅스 환경에서는 도커만 설치한다)
+2. 다음 명령어를 입력하면 DB가 실행된다. (컴퓨터를 재시작해도 중지할 때까지 꺼지지 않음)
 ```  
-맥 / 리눅스용
+실행 명령어 (윈도우에서는 \ 를 ^ 로 고쳐야 CMD에서 실행됨)
 docker run --name postgres-container \
   -e POSTGRES_PASSWORD=1234 \
   -e POSTGRES_USER=cec \
   -e POSTGRES_DB=cec \
   -p 5432:5432 \
   -v postgres-data:/var/lib/postgresql/data \
+  --restart unless-stopped \
   -d postgres
-  
-윈도우용
-docker run --name postgres-container ^
-  -e POSTGRES_PASSWORD=1234 ^
-  -e POSTGRES_USER=cec ^
-  -e POSTGRES_DB=cec ^
-  -p 5432:5432 ^
-  -v postgres-data:/var/lib/postgresql/data ^
-  -d postgres
+
+종료 명령어
+docker stop postgres-container
 ```
-3. 다음 명령어를 입력하면 Redis가 실행된다.
+3. 다음 명령어를 입력하면 Redis가 실행된다. (컴퓨터를 재시작해도 중지할 때까지 꺼지지 않음)
 ```  
-docker run --name redis-container\
-  -p 6379:6379\
+실행 명령어 (윈도우에서는 \ 를 ^ 로 고쳐야 CMD에서 실행됨)
+docker run --name redis-container \
+  -p 6379:6379 \
+  --restart unless-stopped \
   -d redis
+  
+종료 명령어
+docker stop redis-container
 ```
 - 참고 링크 : https://hub.docker.com/_/redis
 - 참고 링크 : https://hub.docker.com/_/postgres
