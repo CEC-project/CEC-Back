@@ -1,11 +1,11 @@
 ## DB, Redis 한꺼번에 실행하는 방법
-1. 도커 데스크탑을 설치한다 (리눅스 환경에서는 도커만 설치한다)
+1. [도커 데스크탑](https://www.docker.com/products/docker-desktop/)을 설치한다 (리눅스 환경에서는 도커만 설치한다)
 2. 프로젝트경로/docker/db-redis 로 이동한다
 3. docker-compose up -d 으로 실행한다 (컴퓨터를 재시작해도 종료할 때까지 꺼지지 않음)
 4. docker-compose down 으로 중지한다
 
 ## DB, Redis 각각 실행하는 방법
-1. 도커 데스크탑을 설치한다 (리눅스 환경에서는 도커만 설치한다)
+1. [도커 데스크탑](https://www.docker.com/products/docker-desktop/)을 설치한다 (리눅스 환경에서는 도커만 설치한다)
 2. 다음 명령어를 입력하면 DB가 실행된다. (컴퓨터를 재시작해도 중지할 때까지 꺼지지 않음)
 ```  
 실행 명령어 (윈도우에서는 \ 를 ^ 로 고쳐야 CMD에서 실행됨)
