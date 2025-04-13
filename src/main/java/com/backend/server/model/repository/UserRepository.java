@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.backend.server.model.entity.User;
 
-public interface UserRepository extends JpaRepository<User, String> {
-    Optional<User> findByUserStudentNumber(String id);
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByStudentNumber(String studentNumber);
 }

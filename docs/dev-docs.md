@@ -2,7 +2,7 @@
 1. [도커 데스크탑](https://www.docker.com/products/docker-desktop/)을 설치한다 (리눅스 환경에서는 도커만 설치한다)
 2. 프로젝트경로/docker/db-redis 로 이동한다
 3. docker-compose up -d 으로 실행한다 (컴퓨터를 재시작해도 종료할 때까지 꺼지지 않음)
-4. docker-compose down 으로 중지한다
+4. docker-compose down 으로 중지cd한다
 
 ## DB, Redis 각각 실행하는 방법
 1. [도커 데스크탑](https://www.docker.com/products/docker-desktop/)을 설치한다 (리눅스 환경에서는 도커만 설치한다)

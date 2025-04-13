@@ -11,68 +11,68 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class User{
+public class User extends BaseTimeEntity {
     @Id
     @Column(name = "user_id")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String studentNumber;
 
     //닉네임은 엑셀파일에서 가져올 수 없으므로 기본값 = 이름
     @Column
     private String nickname;
 
-    @Column(nullable = false)
-    private String department;
+    // @Column(nullable = false)
+    // private String department;
 
-    @Column(nullable = false)
-    private String major;
+    // @Column(nullable = false)
+    // private String major;
 
-    @Column(nullable = false)
+    @Column
     private String grade;
 
-    @Column(nullable = false)
+    @Column(name = "\"group\"")
+    private String group;
+
+    @Column
     private String gender;
 
-    @Column(nullable = false)
+    @Column
     private String professor;
 
-    @Column(nullable = false)
+    @Column
     private String phoneNumber;
 
-    @Column(nullable = false, unique = true)
+    @Column
     private String email;
 
-    @Column(nullable = false)
+    @Column
     private String password;
 
     private String profilePicture;
 
-    @Column(nullable = false)
+    @Column
     private LocalDate birthDate;
 
-    @Column(nullable = false)
+    @Column
     private int restrictionCount;
 
-    @Column(nullable = false)
+    @Column
     private int reportCount;
 
-    @Column(nullable = false)
+    @Column
     private String role;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 
     // @OneToMany(mappedBy = "user")
     // private List<Equipment> equipments = new ArrayList<>();
@@ -94,37 +94,6 @@ public class User{
     @Column
     private String rentalHistoryId;
 
-    @Builder
-    public User(String id, String name, String nickname, String department, String major, String grade, 
-               String gender, String professor, String phoneNumber, String email, String password,
-               String profilePicture, LocalDate birthDate, int restrictionCount, int reportCount,
-               String role, LocalDateTime createdAt, LocalDateTime updatedAt, String equipmentId,
-               String bookmarkId, String complaintId, String rentalHistoryId) {
-        this.id = id;
-        this.name = name;
-        //엔티티 생성 시 기본값은 사용자 이름으로
-        this.nickname = nickname != null ? nickname : name;
-        this.department = department;
-        this.major = major;
-        this.grade = grade;
-        this.gender = gender;
-        this.professor = professor;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.password = password;
-        this.profilePicture = profilePicture;
-        this.birthDate = birthDate;
-        this.restrictionCount = restrictionCount;
-        this.reportCount = reportCount;
-        this.role = role;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.equipmentId = equipmentId;
-        this.bookmarkId = bookmarkId;
-        this.complaintId = complaintId;
-        this.rentalHistoryId = rentalHistoryId;
-    }
-
     public void changePassword(String password) {
         this.password = password;
     }
@@ -145,5 +114,11 @@ public class User{
         this.email = email;
     }
 
-
+    @PrePersist //닉네임을 이름으로 설정하기 위해 30줄가량 생성자를 일일이 써야하는 문제를 해결
+    public void prePersist() {
+        
+        if (this.nickname == null && this.name != null) {
+            this.nickname = this.name;
+        }
+    }
 } 
