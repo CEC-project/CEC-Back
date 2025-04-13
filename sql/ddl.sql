@@ -22,25 +22,28 @@ CREATE TABLE equipment (
 
 -- users
 CREATE TABLE users (
-    user_id BIGSERIAL PRIMARY KEY,
-    student_id VARCHAR UNIQUE,
-    name VARCHAR,
-    nickname VARCHAR,
-    department VARCHAR,
-    major VARCHAR,
-    year INTEGER,
-    gender VARCHAR,
-    professor VARCHAR,
-    phone_number VARCHAR,
-    email VARCHAR,
-    password VARCHAR,
-    profile_picture VARCHAR,
-    birth_date DATE,
-    restriction_count INTEGER,
-    report_count INTEGER,
-    role VARCHAR,
-    created_at TIMESTAMP,
-    updated_at TIMESTAMP
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    student_number VARCHAR(255) NOT NULL,
+    nickname VARCHAR(255),
+    grade VARCHAR(255) NOT NULL,
+    group VARCHAR(255) NOT NULL,
+    gender VARCHAR(255) NOT NULL,
+    professor VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    profile_picture VARCHAR(255),
+    birthdate DATE NOT NULL,
+    restriction_count INTEGER NOT NULL DEFAULT 0,
+    report_count INTEGER NOT NULL DEFAULT 0,
+    role VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    equipment_id VARCHAR(255),
+    bookmark_id VARCHAR(255),
+    complaint_id VARCHAR(255),
+    rental_history_id VARCHAR(255)
 );
 
 -- bookmarks
