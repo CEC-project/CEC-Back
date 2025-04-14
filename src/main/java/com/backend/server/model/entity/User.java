@@ -2,13 +2,7 @@ package com.backend.server.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 
 @Entity
 @Table(name = "users")
@@ -59,10 +53,17 @@ public class User extends BaseTimeEntity {
     @Column
     private String password;
 
+    @Column
     private String profilePicture;
 
     @Column
     private LocalDate birthDate;
+
+    @Column
+    private int rentalCount;
+
+    @Column
+    private int damageCount;
 
     @Column
     private int restrictionCount;
