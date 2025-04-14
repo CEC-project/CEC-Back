@@ -38,41 +38,32 @@ public class AdminEquipmentService {
             throw new IllegalArgumentException("관리자 권한이 없는 사용자입니다: " + request.getManagerId());
         }
 
-        Equipment equipment = Equipment.builder()
-                .name(request.getName())
-                .category(request.getCategory())
-                .modelName(request.getModelName())
-                .status(request.getStatus())
-                .quantity(request.getQuantity())
-                .description(request.getDescription())
-                .attachment(request.getAttachment())
-                .managerId(request.getManagerId())
-                .managerName(manager.getName())
-                .rentalStatus(RentalStatus.AVAILABLE)
-                .build();
-  
+        Equipment equipment = request.toEntity(manager, null);
         return equipmentRepository.save(equipment);
     }
+
+    //장비전체조회
     @Transactional(readOnly = true)
     public List<Equipment> getAllEquipments() {
         return equipmentRepository.findAll();
     }
 
+    //개별상세조회
     @Transactional(readOnly = true)
     public Optional<Equipment> getEquipmentById(Long id) {
         return equipmentRepository.findById(id);
     }
 
-   
+   //카테고리로 검색하기
     @Transactional(readOnly = true)
     public List<Equipment> getEquipmentsByCategory(String category) {
         return equipmentRepository.findByCategory(category);
     }
 
- 
+    //업데이트
     @Transactional
     public Equipment updateEquipment(Long id, AdminEquipmentCreateRequest request) {
-        Equipment equipment = equipmentRepository.findById(id)
+        Equipment existingEquipment = equipmentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 장비가 존재하지 않습니다: " + id));
         
         // 관리자 정보 확인
@@ -83,39 +74,12 @@ public class AdminEquipmentService {
         if (!"ADMIN".equals(manager.getRole())) {
             throw new IllegalArgumentException("관리자 권한이 없는 사용자입니다: " + request.getManagerId());
         }
-        
-        // 기존 장비의 상태 유지 , 값이 있다면 변경
-        RentalStatus rentalStatus = equipment.getRentalStatus();
-        if (request.getRentalStatus() != null) {
-            try {
-                rentalStatus = RentalStatus.valueOf(request.getRentalStatus());
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("유효하지 않은 대여 상태입니다: " + request.getRentalStatus());
-            }
-        }
 
-        // 업데이트할 필드 반영
-        Equipment updatedEquipment = Equipment.builder()
-                .id(equipment.getId())
-                .name(request.getName())
-                .category(request.getCategory())
-                .modelName(request.getModelName())
-                .status(request.getStatus())
-                .quantity(request.getQuantity())
-                .description(request.getDescription())
-                .attachment(request.getAttachment())
-                .managerId(request.getManagerId())
-                .managerName(manager.getName())
-                .rentalStatus(rentalStatus)
-                .rentalTime(equipment.getRentalTime())
-                .returnTime(equipment.getReturnTime())
-                .renterId(equipment.getRenterId())
-                .build();
-        
+        Equipment updatedEquipment = request.toEntity(manager, existingEquipment);
         return equipmentRepository.save(updatedEquipment);
     }
 
-
+    //지우기
     @Transactional
     public void deleteEquipment(Long id) {
         Equipment equipment = equipmentRepository.findById(id)

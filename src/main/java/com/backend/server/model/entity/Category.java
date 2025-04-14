@@ -1,10 +1,10 @@
 package com.backend.server.model.entity;
 
+import com.backend.server.api.admin.dto.AdminCategoryCreateRequest;
+import com.backend.server.api.common.dto.CommonCategoryResponse;
 import jakarta.persistence.*;
 import lombok.*;
 
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "categories")
@@ -20,4 +20,10 @@ public class Category extends BaseTimeEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
+    public CommonCategoryResponse toDto() {  // Response DTO로 변환
+        return CommonCategoryResponse.builder()
+                .id(this.id)
+                .name(this.name)
+                .build();
+    }
 } 

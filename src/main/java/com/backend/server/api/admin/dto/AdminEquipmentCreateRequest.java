@@ -1,5 +1,9 @@
 package com.backend.server.api.admin.dto;
 
+import com.backend.server.model.entity.Equipment;
+import com.backend.server.model.entity.User;
+import com.backend.server.model.entity.enums.RentalStatus;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -47,4 +51,24 @@ public class AdminEquipmentCreateRequest {
     
     // 대여 제한 학년 (체크박스로 다중 선택)
     private List<Integer> rentalRestrictedGrades;
+
+    //업데이트에서도 쓸거라서 arguments에 existingEquipment도 넣음
+    public Equipment toEntity(User manager, Equipment existingEquipment) {
+        return Equipment.builder()
+                .id(existingEquipment != null ? existingEquipment.getId() : null)
+                .name(this.name)
+                .category(this.category)
+                .modelName(this.modelName)
+                .status(this.status)
+                .quantity(this.quantity)
+                .description(this.description)
+                .attachment(this.attachment)
+                .managerId(this.managerId)
+                .managerName(manager.getName())
+                .rentalStatus(existingEquipment != null ? existingEquipment.getRentalStatus() : RentalStatus.AVAILABLE)
+                .rentalTime(existingEquipment != null ? existingEquipment.getRentalTime() : null)
+                .returnTime(existingEquipment != null ? existingEquipment.getReturnTime() : null)
+                .renterId(existingEquipment != null ? existingEquipment.getRenterId() : null)
+                .build();
+    }
 } 
