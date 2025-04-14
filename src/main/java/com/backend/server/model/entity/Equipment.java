@@ -1,5 +1,4 @@
 package com.backend.server.model.entity;
-import com.backend.server.api.admin.dto.AdminEquipmentResponse;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -65,23 +64,5 @@ public class Equipment extends BaseTimeEntity {
     @Column
     private Integer renterId;
 
-    public AdminEquipmentResponse toDto() {
-        return AdminEquipmentResponse.builder()
-                .id(this.id)
-                .name(this.name)
-                .category(this.category)
-                .modelName(this.modelName)
-                .status(this.status)
-                .quantity(this.quantity)
-                .description(this.description)
-                .attachment(this.attachment)
-                .managerId(this.managerId)
-                .managerName(this.managerName)
-                .rentalRestrictedGrades(this.rentalRestrictedGrades)
-                .rentalStatus(this.rentalStatus != null ? this.rentalStatus.toString() : null)
-                .rentalTime(this.rentalTime != null ? this.rentalTime.toString() : null)
-                .returnTime(this.returnTime != null ? this.returnTime.toString() : null)
-                .renterId(this.renterId)
-                .build();
-    }
+    
 }        

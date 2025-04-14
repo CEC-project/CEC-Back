@@ -10,7 +10,6 @@ import java.util.List;
 @Repository
 public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
     List<Equipment> findByCategory(String category);
-    List<Equipment> findByAvailable(Boolean available);
     List<Equipment> findByRenterId(Integer renterId);
     List<Equipment> findByManagerName(String managerName);
     List<Equipment> findByRentalStatus(RentalStatus rentalStatus);
