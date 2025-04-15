@@ -3,7 +3,7 @@ package com.backend.server.api.admin.controller;
 import com.backend.server.api.admin.dto.user.AdminUserListRequest;
 import com.backend.server.api.admin.dto.user.AdminUserListResponse;
 import com.backend.server.api.admin.service.AdminUserService;
-import com.backend.server.api.dto.ApiResponse;
+import com.backend.server.api.common.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

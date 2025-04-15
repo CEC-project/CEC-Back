@@ -1,6 +1,6 @@
 package com.backend.server.api.admin.dto.user;
 
-import com.backend.server.api.dto.PageableInfo;
+import com.backend.server.api.common.dto.PageableInfo;
 import com.backend.server.model.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

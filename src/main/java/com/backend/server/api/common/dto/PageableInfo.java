@@ -1,4 +1,4 @@
-package com.backend.server.api.dto;
+package com.backend.server.api.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
