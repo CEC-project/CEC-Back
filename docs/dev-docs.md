@@ -37,8 +37,9 @@ docker stop redis-container
 
 ## 서버 실행 방법
 1. intelliJ 에서 클론한 프로젝트를 연다
-2. 의존성(라이브러리)이 설치되는지 확인한다 (intelliJ 화면 하단에 뜸)
-3. 의존성이 다 설치되면, 실행버튼을 누르면 된다.
+2. settings private 레포지토리에서 설정파일을 다운받아 src/main/resources/settings/ 경로에 저장한다
+3. 의존성(라이브러리)이 설치되는지 확인한다 (intelliJ 화면 하단에 뜸)
+4. 의존성이 다 설치되면, 실행버튼을 누르면 된다
 
 ## 디렉토리/파일 설명
 아래 내용은 상황에 따라 유연하게 바꿔도 됨. 
@@ -56,7 +57,6 @@ docker stop redis-container
   - api
     - user
       - 사용자 웹의 API 가 위치하는 곳
-      - 로그인 API 는 이곳에 위치함
       - controller
         - 컨트롤러가 위치하는 곳 (메소드 하나가 엔드포인트 하나에 대응됨)
       - service
@@ -67,11 +67,16 @@ docker stop redis-container
     - admin
       - 관리자 웹의 API 가 위치하는 곳
       - user 패키지와 같은 구조임
+    - common
+      - 공통 API, DTO 등이 위치하는 곳
+      - user 패키지와 같은 구조임
 - src.main.resource.settings
   - 설정파일이 위치하는 곳
   - 설정파일은 백엔드 private 레포지토리에서 받을수 있음
 - docs
   - 본 문서와 사진이 저장되는 위치
+- sql
+  - ddl, dml, erd.dbml 파일이 위치하는 곳
 - build.gradle
   - 의존성(라이브러리) 목록
   - 프로젝트에 대한 설정
@@ -82,7 +87,7 @@ docker stop redis-container
 3. 설정파일 저장용 private 레포지토리를 업데이트 시켰다면, 팀원들에게 알려서 각자 받아가도록 하기
 4. 작업하기 전에, "feature/기능명", "fix/기능명" 처럼 브랜치를 나누고 작업하고, pr을 날릴때 메인 브랜치로 pr 하기 (= GtiHub Flow)
 
-## 코딩 관련 규칙 (4/14 15:25)
-1. 가능하면 DTO 안에 "toEntity 메소드" 처럼 엔티티로 바꾸는 메소드나, "엔티티로 생성하는 생성자" 를 만들고 최대한 사용하기
-2. 컨트롤러, 서비스, DTO 파일을 생성할 때마다, 해당 파일이 "관리자용" 기능이라면 접두어로 "Admin" 을 덧붙이기
+## 코딩 관련 규칙 (4/15 18:30)
+1. 가능하면 DTO 안에 "toEntity 메소드" 처럼 엔티티로 바꾸는 메소드나, "[엔티티로 생성하는 생성자](../src/main/java/com/backend/server/api/admin/dto/user/AdminUserResponse.java)" 를 만들고 최대한 사용하기
+2. 컨트롤러, 서비스, DTO 파일이 admin 패키지 아래에 있으면 "Admin" 을 덧붙이기. common 패키지 아래에 있으면 "Common" 을 덧붙이기
    - IDE 자동완성 충돌과, 스프링 빈 이름 충돌을 근본적으로 방지하기 위함
