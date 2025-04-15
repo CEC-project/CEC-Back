@@ -14,7 +14,7 @@ import java.util.Date;
 public class JwtTokenProvider {
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    @Value("${spring.jwt.access-token-validity-in-seconds}")
+    @Value("${spring.jwt.access-token-validity-in-seconds:1}")
     private long tokenValidityInSeconds;
 
     public String createToken(String userId, String role) {
