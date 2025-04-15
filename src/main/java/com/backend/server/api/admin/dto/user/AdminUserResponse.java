@@ -15,7 +15,6 @@ public class AdminUserResponse {
     private String name;
     private String studentNumber;
     private String nickname;
-    private String department;
     private String year;
     private String gender;
     private String professor;
@@ -35,7 +34,6 @@ public class AdminUserResponse {
         studentNumber = user.getStudentNumber();
         name = user.getName();
         nickname = user.getNickname();
-        department = user.getGroup();
         year = user.getGrade();
         gender = user.getGender();
         professor = user.getProfessor();
