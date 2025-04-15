@@ -1,6 +1,9 @@
 package com.backend.server.api.common.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
+
+import com.backend.server.model.entity.Category;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,9 +16,16 @@ import lombok.NoArgsConstructor;
 public class CommonCategoryResponse {
     
     private Long id;
-    
-    @NotBlank(message = "카테고리 이름은 필수입니다")
     private String name;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    public CommonCategoryResponse(Category category) {
+        this.id = category.getId();
+        this.name = category.getName();
+        this.createdAt = category.getCreatedAt();
+        this.updatedAt = category.getUpdatedAt();
+    }
     
 
 } 

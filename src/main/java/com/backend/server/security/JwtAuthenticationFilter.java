@@ -1,6 +1,5 @@
 package com.backend.server.security;
 
-import com.backend.server.security.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

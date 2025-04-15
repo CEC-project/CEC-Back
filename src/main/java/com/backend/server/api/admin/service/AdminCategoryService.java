@@ -1,8 +1,9 @@
 package com.backend.server.api.admin.service;
 
 import com.backend.server.api.admin.dto.AdminCategoryCreateRequest;
+
 import com.backend.server.api.common.dto.CommonCategoryResponse;
-import com.backend.server.api.common.service.CommonCategoryReadServiceImpl;
+import com.backend.server.api.common.service.CommonCategoryReadService;
 import com.backend.server.model.entity.Category;
 import com.backend.server.model.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,14 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AdminCategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final CommonCategoryReadServiceImpl categoryReadService;
+    private final CommonCategoryReadService categoryReadService;
+    
     //카테고리 조회. 이건 유저도 공통 기능을 가지니까 CategoryResponse를 씀.
     @Transactional(readOnly = true)
     public List<CommonCategoryResponse> getAllCategories() {
@@ -35,7 +36,7 @@ public class AdminCategoryService {
 
         Category category = request.toEntity();
         category = categoryRepository.save(category);
-        return category.toDto();
+        return new CommonCategoryResponse(category);
     }
 
     //카테고리 수정. 이것도 어드민만 됌.
@@ -56,7 +57,7 @@ public class AdminCategoryService {
                 .build();
 
         updatedCategory = categoryRepository.save(updatedCategory);
-        return updatedCategory.toDto();
+        return new CommonCategoryResponse(updatedCategory);
     }
 
     //카테고리 삭제

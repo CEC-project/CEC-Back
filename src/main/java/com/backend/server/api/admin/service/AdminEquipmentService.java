@@ -3,7 +3,6 @@ package com.backend.server.api.admin.service;
 import com.backend.server.api.admin.dto.AdminEquipmentCreateRequest;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.User;
-import com.backend.server.model.entity.enums.RentalStatus;
 import com.backend.server.model.repository.EquipmentRepository;
 import com.backend.server.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

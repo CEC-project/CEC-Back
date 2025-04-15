@@ -28,8 +28,8 @@ public class Equipment extends BaseTimeEntity {
     @Column(nullable = false)
     private String status;
 
-    // @Column
-    // private Boolean available;
+    @Column
+    private Boolean available;
 
     @Column
     private Integer quantity;
