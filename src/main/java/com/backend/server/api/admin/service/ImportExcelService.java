@@ -1,5 +1,6 @@
 package com.backend.server.api.admin.service;
 
+import com.backend.server.model.entity.Role;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -115,7 +116,7 @@ public class ImportExcelService {
                     userBuilder.studentNumber(studentNumber);
                     userBuilder.nickname(name); // 닉네임은 이름으로 설정
                     
-                    if (gradeIndex != null) userBuilder.grade(getCellValue(row.getCell(gradeIndex)));
+                    if (gradeIndex != null) userBuilder.grade(Integer.parseInt(getCellValue(row.getCell(gradeIndex))));
                     if (genderIndex != null) userBuilder.gender(getCellValue(row.getCell(genderIndex)));
                     if (professorIndex != null) userBuilder.professor(getCellValue(row.getCell(professorIndex)));
                     if (phoneIndex != null) userBuilder.phoneNumber(getCellValue(row.getCell(phoneIndex)));
@@ -140,7 +141,7 @@ public class ImportExcelService {
                     userBuilder.password(passwordEncoder.encode(studentNumber)); //기본 비밀번호는 학번임.
                     userBuilder.restrictionCount(0);
                     userBuilder.reportCount(0);
-                    userBuilder.role("USER");
+                    userBuilder.role(Role.valueOf("ROLE_USER"));
                     
                     User user = userBuilder.build();
                     
