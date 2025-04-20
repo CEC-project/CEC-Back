@@ -14,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @RestController
 @RequestMapping("/api/equipment")
@@ -30,23 +28,6 @@ public class AdminEquipmentController {
     public ResponseEntity<List<User>> getAdminUsers() {
         List<User> adminUsers = adminEquipmentService.getAdminUsers();
         return ResponseEntity.ok(adminUsers);
-    }
-    
-    @GetMapping("/grades")
-    @Operation(summary = "학년 목록 조회", description = "대여 제한 가능한 학년 목록을 조회합니다")
-    public ResponseEntity<List<Integer>> getGrades() {
-        // 1, 2, 3, 4학년 반환
-        List<Integer> grades = IntStream.rangeClosed(1, 4)
-                .boxed()
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(grades);
-    }
-
-    @PostMapping
-    @Operation(summary = "장비 등록", description = "새로운 장비를 등록합니다")
-    public ResponseEntity<Equipment> registerEquipment(@Valid @RequestBody AdminEquipmentCreateRequest requset) {
-        Equipment savedEquipment = adminEquipmentService.createEquipment(requset);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedEquipment);
     }
 
     @GetMapping
@@ -64,11 +45,11 @@ public class AdminEquipmentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/category/{category}")
-    @Operation(summary = "카테고리별 장비 조회", description = "특정 카테고리의 장비 목록을 조회합니다")
-    public ResponseEntity<List<Equipment>> getEquipmentsByCategory(@PathVariable String category) {
-        List<Equipment> equipments = adminEquipmentService.getEquipmentsByCategory(category);
-        return ResponseEntity.ok(equipments);
+    @PostMapping
+    @Operation(summary = "장비 등록", description = "새로운 장비를 등록합니다")
+    public ResponseEntity<Equipment> registerEquipment(@Valid @RequestBody AdminEquipmentCreateRequest requset) {
+        Equipment savedEquipment = adminEquipmentService.createEquipment(requset);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedEquipment);
     }
 
     @PutMapping("/{id}")

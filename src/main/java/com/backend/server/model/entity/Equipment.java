@@ -19,6 +19,9 @@ public class Equipment extends BaseTimeEntity {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String image_url;
+
     @Column
     private String category;
 

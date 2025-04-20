@@ -26,6 +26,8 @@ public class AdminEquipmentResponse {
     private String description;
     private String attachment;
     
+    private String imageUrl;  // 이미지 URL 필드 추가
+    
     private Long managerId;
     private String managerName;
     
@@ -49,6 +51,10 @@ public class AdminEquipmentResponse {
         this.quantity = equipment.getQuantity();
         this.description = equipment.getDescription();
         this.attachment = equipment.getAttachment();
+        
+        // 이미지 URL 설정
+        this.imageUrl = equipment.getImage_url() != null ? 
+                "/api/equipment/images/" + equipment.getImage_url() : null;
         
         this.managerId = equipment.getManagerId();
         this.managerName = equipment.getManagerName();

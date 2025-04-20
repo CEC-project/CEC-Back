@@ -25,6 +25,19 @@ public class AdminEquipmentService {
         return userRepository.findByRole("ADMIN");
     }
 
+    
+    //장비전체조회
+    @Transactional(readOnly = true)
+    public List<Equipment> getAllEquipments() {
+        return equipmentRepository.findAll();
+    }
+
+    //개별상세조회
+    @Transactional(readOnly = true)
+    public Optional<Equipment> getEquipmentById(Long id) {
+        return equipmentRepository.findById(id);
+    }
+
     //장비등록
     @Transactional
     public Equipment createEquipment(AdminEquipmentCreateRequest request) {
@@ -39,24 +52,6 @@ public class AdminEquipmentService {
 
         Equipment equipment = request.toEntity(manager, null);
         return equipmentRepository.save(equipment);
-    }
-
-    //장비전체조회
-    @Transactional(readOnly = true)
-    public List<Equipment> getAllEquipments() {
-        return equipmentRepository.findAll();
-    }
-
-    //개별상세조회
-    @Transactional(readOnly = true)
-    public Optional<Equipment> getEquipmentById(Long id) {
-        return equipmentRepository.findById(id);
-    }
-
-   //카테고리로 검색하기
-    @Transactional(readOnly = true)
-    public List<Equipment> getEquipmentsByCategory(String category) {
-        return equipmentRepository.findByCategory(category);
     }
 
     //업데이트

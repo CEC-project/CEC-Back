@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
-public class UserCategoryController {
+public class CategoryController {
     private final CommonCategoryReadService categoryReadService;
 
     //API 설계서를 보면 대부분의 응답에서는 

@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserCategoryService {
+public class CategoryService {
     private final CommonCategoryReadService categoryReadService;
     
     // 조회만 가능
