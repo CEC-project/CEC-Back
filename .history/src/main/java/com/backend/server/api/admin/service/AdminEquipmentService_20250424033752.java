@@ -3,7 +3,6 @@ package com.backend.server.api.admin.service;
 import com.backend.server.api.admin.dto.AdminEquipmentCreateRequest;
 import com.backend.server.api.admin.dto.AdminEquipmentListRequest;
 import com.backend.server.api.admin.dto.AdminEquipmentListResponse;
-import com.backend.server.api.admin.dto.AdminEquipmentResponse;
 import com.backend.server.api.user.dto.EquipmentListRequest;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.User;
@@ -30,6 +29,7 @@ public class AdminEquipmentService {
 
     private final EquipmentRepository equipmentRepository;
     private final UserRepository userRepository;
+    private final EquipmentSpecification equipmentSpecification;
 
     //장비등록할떄 관리자 목록 조회
     public List<AdminManagerCandidatesResponse> getAdminUsers() {
@@ -38,37 +38,22 @@ public class AdminEquipmentService {
             .map(AdminManagerCandidatesResponse::new)
             .collect(Collectors.toList());
     }
-    //모든장비 조회 / 필터링링
-    public AdminEquipmentListResponse getEquipments(AdminEquipmentListRequest request) {
+    public EquipmentListResponse getEquipments(EquipmentListRequest request) {
+
+        Pageable pageable = EquipmentSpecification.getPageable(request);
+        //유저학년찾기
+        User user = userRepository.findById(securityUtil.getCurrentUserId())
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        Long grade = Long.parseLong(user.getGrade());
+        Specification<Equipment> spec = EquipmentSpecification.filterEquipments(request, grade);
+        Page<Equipment> page = equipmentRepository.findAll(spec, pageable);
+        return new EquipmentListResponse(page);
+    }
+    public AdminEquipmentListResponse getAllEquipments(AdminEquipmentListRequest request) {
         Pageable pageable = EquipmentSpecification.getPageable(request);
 
-        Specification<Equipment> spec = EquipmentSpecification.AdminfilterEquipments(request);
-        Page<Equipment> page = equipmentRepository.findAll(spec, pageable);
-        return new AdminEquipmentListResponse(page);
-    }
-    //장비 상세 조회
-    public AdminEquipmentResponse getEquipment(Long id) {
-        Equipment equipment = equipmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
-        return new AdminEquipmentResponse(equipment);
-    }
-
-    //장비 등록
-    public void createEquipment(AdminEquipmentCreateRequest request) {
-        User manager = userRepository.findById(request.getManagerId())
-                .orElseThrow(() -> new RuntimeException("관리자를 찾을 수 없습니다."));
-        Equipment equipment = request.toEntity(manager, null);
-        equipmentRepository.save(equipment);
-    }
-
-    //장비 수정
-    public void updateEquipment(Long id, AdminEquipmentCreateRequest request) {
-        Equipment equipment = equipmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
-        User manager = userRepository.findById(request.getManagerId())
-                .orElseThrow(() -> new RuntimeException("관리자를 찾을 수 없습니다."));
-        equipment = request.toEntity(manager, equipment);
-        equipmentRepository.save(equipment);
+        userRepository.findAll(specification)
+        return new AdminEquipmentListResponse(equipments);
     }
     
 } 

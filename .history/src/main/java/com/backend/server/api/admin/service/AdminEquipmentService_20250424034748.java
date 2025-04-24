@@ -65,10 +65,6 @@ public class AdminEquipmentService {
     public void updateEquipment(Long id, AdminEquipmentCreateRequest request) {
         Equipment equipment = equipmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
-        User manager = userRepository.findById(request.getManagerId())
-                .orElseThrow(() -> new RuntimeException("관리자를 찾을 수 없습니다."));
-        equipment = request.toEntity(manager, equipment);
-        equipmentRepository.save(equipment);
     }
     
 } 

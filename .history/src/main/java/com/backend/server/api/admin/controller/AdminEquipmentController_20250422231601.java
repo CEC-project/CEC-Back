@@ -4,7 +4,7 @@ import com.backend.server.api.admin.service.AdminEquipmentService;
 import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.admin.dto.AdminEquipmentCreateRequest;
 import com.backend.server.api.admin.dto.AdminEquipmentListResponse;
-import com.backend.server.api.admin.dto.AdminManagerCandidatesResponse;
+import com.backend.server.api.admin.dto.AdminEquipmentManagerResponse;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.User;
 
@@ -29,9 +29,9 @@ public class AdminEquipmentController {
 
     @GetMapping("/admin-users")
     @Operation(summary = "관리자 목록 조회", description = "등록 가능한 관리자 목록을 조회합니다")
-    public ApiResponse<List<AdminManagerCandidatesResponse>> getAdminUsers() {
+    public ApiResponse<List<AdminEquipmentManagerResponse>> getAdminUsers() {
         List<User> adminUsers = adminEquipmentService.getAdminUsers();
-        return ApiResponse.success("관리자 목록 조회 성공", adminUsers.stream().map(AdminManagerCandidatesResponse::new).collect(Collectors.toList()));
+        return ApiResponse.success("관리자 목록 조회 성공", adminUsers.stream().map(AdminEquipmentManagerResponse::new).collect(Collectors.toList()));
     }
 
     @GetMapping("/equipments")
@@ -88,7 +88,7 @@ public class AdminEquipmentController {
     public ApiResponse<Void> approveRentalRequest(
             @PathVariable Long id, 
             @Valid @RequestBody AdminRentalApprovalRequest request) {
-                adminEquipmentService.approveRentalRequest(id, request);
+        adminService.approveRentalRequest(id, request);
         return ApiResponse.success("장비 대여 요청 승인 성공", null);
     }
 
@@ -97,7 +97,7 @@ public class AdminEquipmentController {
     public ApiResponse<Void> rejectRentalRequest(
             @PathVariable Long id, 
             @Valid @RequestBody AdminRentalApprovalRequest request) {
-        adminEquipmentService.rejectRentalRequest(id, request);
+        adminService.rejectRentalRequest(id, request);
         return ApiResponse.success("장비 대여 요청 거절 성공", null);
     }
 
@@ -106,7 +106,7 @@ public class AdminEquipmentController {
     public ApiResponse<Void> approveReturnRequestNormal(
             @PathVariable Long id, 
             @Valid @RequestBody AdminReturnApprovalRequest request) {
-        adminEquipmentService.approveReturnRequest(id, request, false);
+        adminService.approveReturnRequest(id, request, false);
         return ApiResponse.success("장비 반납 요청 정상 승인 성공", null);
     }
 
@@ -115,7 +115,7 @@ public class AdminEquipmentController {
     public ApiResponse<Void> approveReturnRequestDamaged(
             @PathVariable Long id, 
             @Valid @RequestBody AdminReturnApprovalRequest request) {
-        adminEquipmentService.approveReturnRequest(id, request, true);
+        adminService.approveReturnRequest(id, request, true);
         return ApiResponse.success("장비 반납 요청 파손 승인 성공", null);
     }
 } 
