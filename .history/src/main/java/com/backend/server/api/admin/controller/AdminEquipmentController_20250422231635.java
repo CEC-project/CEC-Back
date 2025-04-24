@@ -4,7 +4,7 @@ import com.backend.server.api.admin.service.AdminEquipmentService;
 import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.admin.dto.AdminEquipmentCreateRequest;
 import com.backend.server.api.admin.dto.AdminEquipmentListResponse;
-import com.backend.server.api.admin.dto.AdminManagerCandidatesResponse;
+import com.backend.server.api.admin.dto.AdminEquipmentManagerResponse;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.User;
 
@@ -29,9 +29,9 @@ public class AdminEquipmentController {
 
     @GetMapping("/admin-users")
     @Operation(summary = "관리자 목록 조회", description = "등록 가능한 관리자 목록을 조회합니다")
-    public ApiResponse<List<AdminManagerCandidatesResponse>> getAdminUsers() {
+    public ApiResponse<List<AdminEquipmentManagerResponse>> getAdminUsers() {
         List<User> adminUsers = adminEquipmentService.getAdminUsers();
-        return ApiResponse.success("관리자 목록 조회 성공", adminUsers.stream().map(AdminManagerCandidatesResponse::new).collect(Collectors.toList()));
+        return ApiResponse.success("관리자 목록 조회 성공", adminUsers.stream().map(AdminEquipmentManagerResponse::new).collect(Collectors.toList()));
     }
 
     @GetMapping("/equipments")

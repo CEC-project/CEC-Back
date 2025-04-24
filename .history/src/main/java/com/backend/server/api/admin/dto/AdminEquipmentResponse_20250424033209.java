@@ -1,4 +1,4 @@
-package com.backend.server.api.admin.dto;
+package com.backend.server.api.admin;
 
 import com.backend.server.model.entity.Equipment;
 import lombok.AllArgsConstructor;

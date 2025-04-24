@@ -67,28 +67,5 @@ public class Equipment extends BaseTimeEntity {
     @Column
     private Integer renterId;
 
-    // 대여 상태 업데이트를 위한 Setter 메소드
-    public void setRentalStatus(RentalStatus rentalStatus) {
-        this.rentalStatus = rentalStatus;
-    }
     
-    // 대여자 ID 업데이트를 위한 Setter 메소드
-    public void setRenterId(Integer renterId) {
-        this.renterId = renterId;
-    }
-    
-    // 대여 시간 업데이트를 위한 Setter 메소드
-    public void setRentalTime(LocalDateTime rentalTime) {
-        this.rentalTime = rentalTime;
-    }
-    
-    // 반납 시간 업데이트를 위한 Setter 메소드
-    public void setReturnTime(LocalDateTime returnTime) {
-        this.returnTime = returnTime;
-    }
-    
-    // 대여 가능 여부 업데이트를 위한 Setter 메소드
-    public void setAvailable(Boolean available) {
-        this.available = available;
-    }
 }        

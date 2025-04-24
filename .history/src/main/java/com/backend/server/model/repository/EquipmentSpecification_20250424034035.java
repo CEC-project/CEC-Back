@@ -68,7 +68,7 @@ public class EquipmentSpecification {
     }
     
     // 장비 목록 필터링 (어드민용)
-    public static Specification<Equipment> AdminfilterEquipments(AdminEquipmentListRequest request) {
+    public static Specification<Equipment> AdminfilterEquipments(EquipmentListRequest request) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             
