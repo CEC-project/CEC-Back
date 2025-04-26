@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @Slf4j  // 로깅 기능을 위한 어노테이션 (로그 기록용)
 @Service  // 스프링 서비스 컴포넌트로 지정
-public class ImportExcelService {
+public class AdminImportExcelService {
 
     @Autowired
     private UserRepository userRepository;

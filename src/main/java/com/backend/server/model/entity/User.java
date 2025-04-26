@@ -3,6 +3,7 @@ package com.backend.server.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -80,10 +81,6 @@ public class User extends BaseTimeEntity {
     @Column
     private String equipmentId;
 
-    // @OneToMany(mappedBy = "user")
-    // private List<Bookmark> bookmarks = new ArrayList<>();
-    @Column
-    private String bookmarkId;
 
     // @OneToMany(mappedBy = "user")
     // private List<Complaint> complaints = new ArrayList<>();

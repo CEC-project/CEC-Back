@@ -9,15 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.backend.server.api.admin.service.ImportExcelService;
+import com.backend.server.api.admin.service.AdminImportExcelService;
 
 @RestController
 @RequestMapping("/api/admin")
 @Tag(name = "Excel API", description = "엑셀 파일 관련 API")
-public class ImportExcelController {
+public class AdminImportExcelController {
 
     @Autowired
-    private ImportExcelService excelService;
+    private AdminImportExcelService excelService;
 
     @PostMapping(value = "/import-users", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
