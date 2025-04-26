@@ -60,4 +60,9 @@ public class EquipmentRental extends BaseTimeEntity {
     public void completeReturn() {
         this.status = RentalStatus.AVAILABLE;
     }
+
+    // 반납 완료(피손)
+    public void completeReturnDamaged() {
+        this.status = RentalStatus.BROKEN;
+    }
 } 

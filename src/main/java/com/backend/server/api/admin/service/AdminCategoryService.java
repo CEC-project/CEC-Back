@@ -1,7 +1,6 @@
 package com.backend.server.api.admin.service;
 
-import com.backend.server.api.admin.dto.AdminCategoryCreateRequest;
-
+import com.backend.server.api.admin.dto.category.AdminCategoryCreateRequest;
 import com.backend.server.api.common.dto.CommonCategoryResponse;
 import com.backend.server.api.common.service.CommonCategoryReadService;
 import com.backend.server.model.entity.Category;

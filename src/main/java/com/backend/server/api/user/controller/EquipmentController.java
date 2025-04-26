@@ -1,16 +1,14 @@
 package com.backend.server.api.user.controller;
 
 import com.backend.server.api.common.dto.ApiResponse;
-import com.backend.server.api.user.dto.EquipmentListRequest;
-import com.backend.server.api.user.dto.EquipmentListResponse;
-import com.backend.server.api.user.dto.EquipmentResponse;
-import com.backend.server.api.user.dto.RentalResponse;
-import com.backend.server.api.user.dto.FavoriteListResponse;
-
-import com.backend.server.api.user.dto.RentalListResponse;
-import com.backend.server.api.user.dto.RentalRequest;
-import com.backend.server.api.user.dto.RentalListRequest;
-
+import com.backend.server.api.user.dto.equipment.EquipmentListRequest;
+import com.backend.server.api.user.dto.equipment.EquipmentListResponse;
+import com.backend.server.api.user.dto.equipment.EquipmentResponse;
+import com.backend.server.api.user.dto.equipment.FavoriteListResponse;
+import com.backend.server.api.user.dto.equipment.RentalListRequest;
+import com.backend.server.api.user.dto.equipment.RentalListResponse;
+import com.backend.server.api.user.dto.equipment.RentalRequest;
+import com.backend.server.api.user.dto.equipment.RentalResponse;
 import com.backend.server.api.user.service.EquipmentService;
 import com.backend.server.security.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;

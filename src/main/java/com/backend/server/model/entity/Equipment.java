@@ -37,6 +37,9 @@ public class Equipment extends BaseTimeEntity {
     @Column
     private Integer quantity;
 
+    @Column
+    private Integer maxRentalCount;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
