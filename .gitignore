@@ -36,4 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 
+.history/
+
 src/main/resources/settings/
