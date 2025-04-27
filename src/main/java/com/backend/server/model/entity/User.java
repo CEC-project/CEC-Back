@@ -31,14 +31,12 @@ public class User extends BaseTimeEntity {
     private String department;
 
     @Column
-<<<<<<< HEAD
     private Integer grade;
-=======
-    private String major;
 
     @Column
-    private int grade;
->>>>>>> 4207cc8f4009a2b9ab5292ee9418a038abef3b6c
+    private String major;
+
+
 
     @Column(name = "\"group\"")
     private String group;
