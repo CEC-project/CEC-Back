@@ -28,42 +28,42 @@ public class AdminEquipmentController {
 
     private final AdminEquipmentService adminEquipmentService;
 
-    @GetMapping("/admin-users")
+    @GetMapping
     @Operation(summary = "관리자 목록 조회", description = "등록 가능한 관리자 목록을 조회합니다")
     public ApiResponse<List<AdminManagerCandidatesResponse>> getAdminUsers() {
         List<AdminManagerCandidatesResponse> adminUsers = adminEquipmentService.getAdminUsers();
         return ApiResponse.success("관리자 목록 조회 성공", adminUsers);
     }
 
-    @GetMapping("/equipments")
+    @GetMapping
     @Operation(summary = "모든 장비 조회", description = "모든 장비 목록을 조회합니다")
     public ApiResponse<AdminEquipmentListResponse> getAllEquipments(@RequestBody AdminEquipmentListRequest request) {
         AdminEquipmentListResponse equipments = adminEquipmentService.getEquipments(request);
         return ApiResponse.success("모든 장비 조회 성공", equipments);
     }
 
-    @GetMapping("/equipments/{id}")
+    @GetMapping("/{id}")
     @Operation(summary = "개별 장비 조회", description = "ID로 특정 장비를 조회합니다")
     public ApiResponse<AdminEquipmentResponse> getEquipmentById(@PathVariable Long id) {
         AdminEquipmentResponse equipment = adminEquipmentService.getEquipment(id);
         return ApiResponse.success("개별 장비 조회 성공", equipment);
     }
 
-    @PostMapping("/equipments")
+    @PostMapping
     @Operation(summary = "장비 등록", description = "새로운 장비를 등록합니다")
     public ApiResponse<AdminEquipmentResponse> registerEquipment(@Valid @RequestBody AdminEquipmentCreateRequest request) {
         adminEquipmentService.createEquipment(request);
         return ApiResponse.success("장비 등록 성공", null);
     }
 
-    @PutMapping("/equipments/{id}")
+    @PutMapping("/{id}")
     @Operation(summary = "장비 수정", description = "ID로 특정 장비를 수정합니다")
     public ApiResponse<AdminEquipmentResponse> updateEquipment(@PathVariable Long id, @Valid @RequestBody AdminEquipmentCreateRequest request) {
         adminEquipmentService.updateEquipment(id, request);
         return ApiResponse.success("장비 수정 성공", null);
     }
 
-    @DeleteMapping("/equipments/{id}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "장비 삭제", description = "ID로 특정 장비를 삭제합니다")
     public ApiResponse<Void> deleteEquipment(@PathVariable Long id) {
         adminEquipmentService.deleteEquipment(id);
