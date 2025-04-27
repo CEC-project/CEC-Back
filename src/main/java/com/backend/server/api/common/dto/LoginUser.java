@@ -1,8 +1,6 @@
-package com.backend.server.api.admin.dto.user;
+package com.backend.server.api.common.dto;
 
 import com.backend.server.model.entity.User;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,42 +8,40 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class AdminUserResponse {
+public class LoginUser {
     private Long id;
     private String name;
     private String studentNumber;
     private String nickname;
-    private int year;
+    private int grade;
+    private String group;
     private String gender;
     private String professor;
     private String phoneNumber;
     private String email;
     private String profilePicture;
-    private LocalDate birthDate;
     private int rentalCount;
     private int damageCount;
     private int restrictionCount;
     private int reportCount;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    
-    public AdminUserResponse(User user) {
+    private String role;
+
+    public LoginUser(User user) {
         id = user.getId();
-        studentNumber = user.getStudentNumber();
         name = user.getName();
+        studentNumber = user.getStudentNumber();
         nickname = user.getNickname();
-        year = user.getGrade();
+        grade = user.getGrade();
+        group = user.getGroup();
         gender = user.getGender();
         professor = user.getProfessor();
         phoneNumber = user.getPhoneNumber();
         email = user.getEmail();
         profilePicture = user.getProfilePicture();
-        birthDate = user.getBirthDate();
         rentalCount = user.getRentalCount();
         damageCount = user.getDamageCount();
         restrictionCount = user.getRestrictionCount();
         reportCount = user.getReportCount();
-        createdAt = user.getCreatedAt();
-        updatedAt = user.getUpdatedAt();
+        role = user.getRole().toString();
     }
 }
