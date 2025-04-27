@@ -34,7 +34,7 @@ public class User extends BaseTimeEntity {
     // private String major;
 
     @Column
-    private String grade;
+    private Integer grade;
 
     @Column(name = "\"group\"")
     private String group;

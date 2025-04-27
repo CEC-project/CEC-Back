@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class AdminClassRoomCreateResponse {
+public class AdminClassRoomIdResponse {
     private Long id;
 }

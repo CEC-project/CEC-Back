@@ -15,7 +15,7 @@ public class AdminUserResponse {
     private String name;
     private String studentNumber;
     private String nickname;
-    private String year;
+    private Integer year;
     private String gender;
     private String professor;
     private String phoneNumber;
