@@ -36,7 +36,13 @@ out/
 ### VS Code ###
 .vscode/
 
+
+.history/
+
+src/main/resources/settings/
+
 src/main/resources/settings/settings.yml
 
 # macOS 시스템 파일 무시
 .DS_Store
+
