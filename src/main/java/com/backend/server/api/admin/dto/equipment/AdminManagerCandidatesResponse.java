@@ -24,6 +24,6 @@ public class AdminManagerCandidatesResponse {
         this.user_id = user.getId();
         this.name = user.getName();
         this.nickname = user.getNickname();
-        this.role = Role.valueOf(user.getRole());    
+        this.role = user.getRole();
     }
 }

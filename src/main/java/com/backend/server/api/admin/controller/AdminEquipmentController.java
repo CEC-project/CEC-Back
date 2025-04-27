@@ -21,14 +21,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/equipment")
+@RequestMapping("/api/admin/equipment")
 @RequiredArgsConstructor
 @Tag(name = "Equipment API", description = "장비 관리 API")
 public class AdminEquipmentController {
 
     private final AdminEquipmentService adminEquipmentService;
 
-    @GetMapping
+    @GetMapping("/admin-users")
     @Operation(summary = "관리자 목록 조회", description = "등록 가능한 관리자 목록을 조회합니다")
     public ApiResponse<List<AdminManagerCandidatesResponse>> getAdminUsers() {
         List<AdminManagerCandidatesResponse> adminUsers = adminEquipmentService.getAdminUsers();

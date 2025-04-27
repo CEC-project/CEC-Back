@@ -1,6 +1,6 @@
 package com.backend.server.api.admin.service;
 
-import com.backend.server.model.entity.Role;
+import com.backend.server.model.entity.enums.Role;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;

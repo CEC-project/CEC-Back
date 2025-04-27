@@ -115,7 +115,7 @@ public class EquipmentSpecification {
     }
     
     //장비 목록 필터링 유저용
-    public static Specification<Equipment> filterEquipments(EquipmentListRequest request, Long userGrade) {
+    public static Specification<Equipment> filterEquipments(EquipmentListRequest request, Integer userGrade) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             

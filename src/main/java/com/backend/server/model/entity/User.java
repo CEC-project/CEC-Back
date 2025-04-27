@@ -5,6 +5,8 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.backend.server.model.entity.enums.Role;
+
 @Entity
 @Table(name = "users")
 @Getter

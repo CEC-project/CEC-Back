@@ -51,7 +51,7 @@ public class EquipmentService {
         //유저학년찾기
         User user = userRepository.findById(securityUtil.getCurrentUserId())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
-        Long grade = Long.parseLong(user.getGrade());
+        Integer grade = user.getGrade();
         Specification<Equipment> spec = EquipmentSpecification.filterEquipments(request, grade);
         Page<Equipment> page = equipmentRepository.findAll(spec, pageable);
         return new EquipmentListResponse(page);
@@ -219,7 +219,7 @@ public class EquipmentService {
             root.get("id").in(favoriteEquipmentIds);
         
         if (request.getCategory() != null) {
-            spec = spec.and(EquipmentSpecification.filterEquipments(request, Long.parseLong(user.getGrade())));
+            spec = spec.and(EquipmentSpecification.filterEquipments(request, user.getGrade()));
         }
         
         Page<Equipment> page = equipmentRepository.findAll(spec, pageable);
