@@ -2,7 +2,6 @@ package com.backend.server.api.common.controller;
 
 import com.backend.server.api.common.dto.ApiResponse;
 import jakarta.servlet.http.HttpServletResponse;
-import java.nio.file.AccessDeniedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
