@@ -1,6 +1,10 @@
 package com.backend.server.config;
 
+import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.config.security.JwtAuthenticationFilter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +28,7 @@ import org.springframework.web.cors.CorsConfiguration;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -64,13 +69,22 @@ public class SecurityConfig {
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(configurer ->
                     configurer.accessDeniedHandler(
-                            (req, res, ex) -> {
-                                // @PreAuthorize 에서 권한이 없다고 예외가 발생시, RestControllerAdvise 로 넘김
-                                throw ex;
-                            })
+                                    (req, res, ex) ->
+                                            responseMsg(res, "권한이 부족합니다."))
+                            .authenticationEntryPoint(
+                                    (req, res, ex) ->
+                                            responseMsg(res, "로그인이 필요합니다."))
             );
 
         return http.build();
+    }
+
+    private void responseMsg(HttpServletResponse res, String msg) throws IOException {
+        res.setStatus(401);
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+        String body = objectMapper.writeValueAsString(ApiResponse.fail(msg));
+        res.getWriter().write(body);
     }
 
     @Bean
