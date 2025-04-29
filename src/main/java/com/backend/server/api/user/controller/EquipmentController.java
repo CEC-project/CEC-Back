@@ -5,11 +5,12 @@ import com.backend.server.api.user.dto.equipment.EquipmentListRequest;
 import com.backend.server.api.user.dto.equipment.EquipmentListResponse;
 import com.backend.server.api.user.dto.equipment.EquipmentResponse;
 import com.backend.server.api.user.dto.equipment.FavoriteListResponse;
-import com.backend.server.api.user.dto.equipment.RentalListRequest;
-import com.backend.server.api.user.dto.equipment.RentalListResponse;
-import com.backend.server.api.user.dto.equipment.RentalRequest;
-import com.backend.server.api.user.dto.equipment.RentalResponse;
+import com.backend.server.api.user.dto.equipment.EquipmentRentalListRequest;
+import com.backend.server.api.user.dto.equipment.EquipmentRentalListResponse;
+import com.backend.server.api.user.dto.equipment.EquipmentRentalRequest;
+import com.backend.server.api.user.dto.equipment.EquipmentRentalResponse;
 import com.backend.server.api.user.service.EquipmentService;
+
 import com.backend.server.security.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,29 +48,29 @@ public class EquipmentController {
 
     @PostMapping("/rent-request")
     @Operation(summary = "장비 대여 요청", description = "단일 장비 대여를 요청합니다.")
-    public ApiResponse<RentalResponse> createRentRequest(@RequestBody RentalRequest request) {
-        RentalResponse response = EquipmentService.createRentRequest(request);
+    public ApiResponse<EquipmentRentalResponse> createRentRequest(@RequestBody EquipmentRentalRequest request) {
+        EquipmentRentalResponse response = EquipmentService.createRentRequest(request);
         return ApiResponse.success("장비 대여 요청 성공", response);
     }
     
     @PostMapping("/rent-requests")
     @Operation(summary = "다중 장비 대여 요청", description = "여러 장비의 대여를 한번에 요청합니다.")
-    public ApiResponse<RentalListResponse> createRentRequests(@RequestBody RentalListRequest requestList) {
-        RentalListResponse responses = EquipmentService.createRentRequests(requestList);
+    public ApiResponse<EquipmentRentalListResponse> createRentRequests(@RequestBody EquipmentRentalListRequest requestList) {
+        EquipmentRentalListResponse responses = EquipmentService.createRentRequests(requestList);
         return ApiResponse.success("다중 장비 대여 요청 성공", responses);
     }
     
     @PostMapping("/return-request")
     @Operation(summary = "장비 반납 요청", description = "장비 반납을 요청합니다.")
-    public ApiResponse<RentalResponse> createReturnRequest(@RequestBody RentalRequest request) {
-        RentalResponse response = EquipmentService.createReturnRequest(request);
+    public ApiResponse<EquipmentRentalResponse> createReturnRequest(@RequestBody EquipmentRentalRequest request) {
+        EquipmentRentalResponse response = EquipmentService.createReturnRequest(request);
         return ApiResponse.success("장비 반납 요청 성공", response);
     }
     
     @PostMapping("/return-requests")
     @Operation(summary = "다중 장비 반납 요청", description = "여러 장비의 반납을 한번에 요청합니다.")
-    public ApiResponse<RentalListResponse> createReturnRequests(@RequestBody RentalListRequest requestList) {
-        RentalListResponse responses = EquipmentService.createReturnRequests(requestList);
+    public ApiResponse<EquipmentRentalListResponse> createReturnRequests(@RequestBody EquipmentRentalListRequest requestList) {
+        EquipmentRentalListResponse responses = EquipmentService.createReturnRequests(requestList);
         return ApiResponse.success("다중 장비 반납 요청 성공", responses);
     }
     

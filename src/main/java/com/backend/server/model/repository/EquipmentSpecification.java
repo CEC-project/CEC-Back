@@ -1,9 +1,10 @@
 package com.backend.server.model.repository;
 
+import com.backend.server.api.admin.dto.equipment.AdminEquipmentRentalRequestListRequest;
 import com.backend.server.api.admin.dto.equipment.AdminEquipmentListRequest;
-import com.backend.server.api.admin.dto.equipment.AdminRentalRequestListRequest;
 import com.backend.server.api.user.dto.equipment.EquipmentListRequest;
 import com.backend.server.model.entity.Equipment;
+import com.backend.server.model.entity.EquipmentCart;
 import com.backend.server.model.entity.EquipmentRental;
 import com.backend.server.model.entity.enums.RentalStatus;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +15,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
 import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Subquery;
+import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -172,6 +175,20 @@ public class EquipmentSpecification {
                 predicates.add(criteriaBuilder.or(noRestrictions, notRestrictedForUser));
             }
             
+            // 장바구니 필터링
+            if (request.getInCart() != null && request.getInCart() && request.getUserId() != null) {
+                // 장바구니에 있는 장비만 필터링
+                Subquery<Long> cartSubquery = query.subquery(Long.class);
+                Root<EquipmentCart> cartRoot = cartSubquery.from(EquipmentCart.class);
+                cartSubquery.select(cartRoot.get("equipmentId"))
+                    .where(
+                        criteriaBuilder.equal(cartRoot.get("userId"), request.getUserId())
+                    );
+                
+                // 메인 쿼리에 서브쿼리 조건 추가
+                predicates.add(criteriaBuilder.in(root.get("id")).value(cartSubquery));
+            }
+            
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
@@ -222,7 +239,7 @@ public class EquipmentSpecification {
     }
     
     // 대여 요청 목록 필터링 (어드민용)
-    public static Specification<EquipmentRental> filterRentalRequests(AdminRentalRequestListRequest request) {
+    public static Specification<EquipmentRental> filterRentalRequests(AdminEquipmentRentalRequestListRequest request) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             
@@ -270,7 +287,7 @@ public class EquipmentSpecification {
     }
     
     // 페이징 및 정렬 정보 생성 (대여 요청 목록용)
-    public static Pageable getRentalRequestPageable(AdminRentalRequestListRequest request) {
+    public static Pageable getRentalRequestPageable(AdminEquipmentRentalRequestListRequest request) {
         String sortBy = "createdAt"; // 기본값은 생성일자순
         
         if (StringUtils.hasText(request.getSortBy())) {

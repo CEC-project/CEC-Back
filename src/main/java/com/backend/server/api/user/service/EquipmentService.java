@@ -13,13 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.server.api.user.dto.equipment.EquipmentListRequest;
 import com.backend.server.api.user.dto.equipment.EquipmentListResponse;
+import com.backend.server.api.user.dto.equipment.EquipmentRentalResponse;
 import com.backend.server.api.user.dto.equipment.EquipmentResponse;
 import com.backend.server.api.user.dto.equipment.FavoriteListResponse;
-import com.backend.server.api.user.dto.equipment.RentalListRequest;
-import com.backend.server.api.user.dto.equipment.RentalListResponse;
-import com.backend.server.api.user.dto.equipment.RentalRequest;
-import com.backend.server.api.user.dto.equipment.RentalResponse;
-import com.backend.server.api.user.dto.equipment.RentalListResponse.FailedRentalInfo;
+import com.backend.server.api.user.dto.equipment.EquipmentRentalListRequest;
+import com.backend.server.api.user.dto.equipment.EquipmentRentalListResponse;
+import com.backend.server.api.user.dto.equipment.EquipmentRentalRequest;
+import com.backend.server.api.user.dto.equipment.EquipmentRentalResponse;
+import com.backend.server.api.user.dto.equipment.EquipmentRentalListResponse.FailedRentalInfo;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.EquipmentFavorite;
 import com.backend.server.model.entity.EquipmentRental;
@@ -68,7 +69,7 @@ public class EquipmentService {
     
     //장비대여요청
     @Transactional
-    public RentalResponse createRentRequest(RentalRequest request) {
+    public EquipmentRentalResponse createRentRequest(EquipmentRentalRequest request) {
         // 현재 로그인한 사용자 조회
         Long userId = securityUtil.getCurrentUserId();
         // 장비 조회
@@ -85,15 +86,15 @@ public class EquipmentService {
         // 새로운 대여 신청 생성
         equipmentRentalRepository.save(rental);
 
-        return new RentalResponse(rental);
+        return new EquipmentRentalResponse(rental);
     }
 
     //다중장비대여요청
     @Transactional
-    public RentalListResponse createRentRequests(RentalListRequest request) {
+    public EquipmentRentalListResponse createRentRequests(EquipmentRentalListRequest request) {
         Long userId = securityUtil.getCurrentUserId();
         
-        List<RentalResponse> successResponses = new ArrayList<>();
+        List<EquipmentRentalResponse> successResponses = new ArrayList<>();
         List<FailedRentalInfo> failedRequests = new ArrayList<>();
         
         LocalDateTime rentalTime = request.getStartTime();
@@ -113,12 +114,12 @@ public class EquipmentService {
                     continue;
                 }
                 
-                RentalRequest singleRequest = new RentalRequest();
+                EquipmentRentalRequest singleRequest = new EquipmentRentalRequest();
                 RentalStatus status = RentalStatus.RENTAL_PENDING;
                 EquipmentRental rental = singleRequest.toEntity(userId, equipmentId, rentalTime, returnTime, status);
                 EquipmentRental savedRental = equipmentRentalRepository.save(rental);
                 
-                RentalResponse successResponse = new RentalResponse(savedRental);
+                EquipmentRentalResponse successResponse = new EquipmentRentalResponse(savedRental);
                 successResponses.add(successResponse);
                 
             } catch (Exception e) {
@@ -126,25 +127,25 @@ public class EquipmentService {
                 failedRequests.add(new FailedRentalInfo(equipmentId, e.getMessage()));
             }
         }
-        return new RentalListResponse(successResponses, failedRequests);
+        return new EquipmentRentalListResponse(successResponses, failedRequests);
     }
 
     //단일장비반납
     //ReturnResponse 만든 이유는 반납예정시간이랑 실제반납시간이 다르기때문에에
-    public RentalResponse createReturnRequest(RentalRequest request) {
+    public EquipmentRentalResponse createReturnRequest(EquipmentRentalRequest request) {
         Long userId = securityUtil.getCurrentUserId();
         LocalDateTime returnTime = LocalDateTime.now();
         RentalStatus status = RentalStatus.RETURN_PENDING;
         EquipmentRental equipmentRental = request.toEntity(userId, request.getEquipmentId(), request.getRentalTime(), returnTime, status);
         equipmentRentalRepository.save(equipmentRental);
-        return new RentalResponse(equipmentRental);
+        return new EquipmentRentalResponse(equipmentRental);
     }
 
     //다중장비반납요청
-    public RentalListResponse createReturnRequests(RentalListRequest request) {
+    public EquipmentRentalListResponse createReturnRequests(EquipmentRentalListRequest request) {
         Long userId = securityUtil.getCurrentUserId();
         
-        List<RentalResponse> successResponses = new ArrayList<>();
+        List<EquipmentRentalResponse> successResponses = new ArrayList<>();
         List<FailedRentalInfo> failedRequests = new ArrayList<>();
 
         LocalDateTime startTime = request.getStartTime();
@@ -153,13 +154,13 @@ public class EquipmentService {
         for (Long equipmentId : request.getEquipmentIds()) {
             try {
                 // 장비 조회
-                RentalRequest singleRequest = new RentalRequest();
+                EquipmentRentalRequest singleRequest = new EquipmentRentalRequest();
                 RentalStatus status = RentalStatus.RETURN_PENDING;
                 LocalDateTime returnTime = request.getEndTime();
                 EquipmentRental rental = singleRequest.toEntity(userId, equipmentId, startTime, returnTime, status);
                 EquipmentRental savedRental = equipmentRentalRepository.save(rental);
                 
-                RentalResponse successResponse = new RentalResponse(savedRental);
+                EquipmentRentalResponse successResponse = new EquipmentRentalResponse(savedRental);
                 successResponses.add(successResponse);
             } catch (Exception e) {
                 // 예외 발생 시 실패 목록에 추가
@@ -168,7 +169,7 @@ public class EquipmentService {
                 continue;
             }
         }
-        return new RentalListResponse(successResponses, failedRequests);
+        return new EquipmentRentalListResponse(successResponses, failedRequests);
     }
 
     //대여/반납 요청 취소

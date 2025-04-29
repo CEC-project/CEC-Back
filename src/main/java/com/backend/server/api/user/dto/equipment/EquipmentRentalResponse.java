@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RentalResponse {
+public class EquipmentRentalResponse {
     private Long id;                  // 대여 ID
     private Long equipmentId;         // 장비 ID
     private LocalDateTime rentalTime; // 대여 시작 시간
@@ -22,7 +22,7 @@ public class RentalResponse {
 
  
     
-    public RentalResponse(EquipmentRental rental) {
+    public EquipmentRentalResponse(EquipmentRental rental) {
         this.id = rental.getId();
         this.equipmentId = rental.getEquipmentId();
         this.rentalTime = rental.getRentalTime();

@@ -1,13 +1,13 @@
 package com.backend.server.api.admin.controller;
 
+import com.backend.server.api.admin.dto.AdminManagerCandidatesResponse;
 import com.backend.server.api.admin.dto.equipment.AdminEquipmentCreateRequest;
 import com.backend.server.api.admin.dto.equipment.AdminEquipmentListRequest;
 import com.backend.server.api.admin.dto.equipment.AdminEquipmentListResponse;
 import com.backend.server.api.admin.dto.equipment.AdminEquipmentResponse;
-import com.backend.server.api.admin.dto.equipment.AdminManagerCandidatesResponse;
-import com.backend.server.api.admin.dto.equipment.AdminRentalOrReturnApprovalRequest;
-import com.backend.server.api.admin.dto.equipment.AdminRentalRequestListRequest;
-import com.backend.server.api.admin.dto.equipment.AdminRentalRequestListResponse;
+import com.backend.server.api.admin.dto.equipment.AdminEquipmentRentalOrReturnApprovalRequest;
+import com.backend.server.api.admin.dto.equipment.AdminEquipmentRentalRequestListRequest;
+import com.backend.server.api.admin.dto.equipment.AdminEquipmentRentalRequestListResponse;
 import com.backend.server.api.admin.service.AdminEquipmentService;
 import com.backend.server.api.common.dto.ApiResponse;
 
@@ -72,8 +72,8 @@ public class AdminEquipmentController {
 
     @GetMapping("/rental-requests")
     @Operation(summary = "장비 대여 요청 / 반납 목록 조회", description = "모든 장비 대여 요청 목록을 조회합니다")
-    public ApiResponse<AdminRentalRequestListResponse> getRentalRequests(@RequestBody AdminRentalRequestListRequest request) {
-        AdminRentalRequestListResponse rentalRequests = adminEquipmentService.getRentalRequests(request);
+    public ApiResponse<AdminEquipmentRentalRequestListResponse> getRentalRequests(@RequestBody AdminEquipmentRentalRequestListRequest request) {
+        AdminEquipmentRentalRequestListResponse rentalRequests = adminEquipmentService.getRentalRequests(request);
         return ApiResponse.success("장비 대여 요청 목록 조회 성공", rentalRequests);
     }
 
@@ -86,7 +86,7 @@ public class AdminEquipmentController {
 
     @PostMapping("/rental-requests/approve")
     @Operation(summary = "장비 대여 요청 승인 (다중선택)", description = "여러 장비 대여 요청을 승인합니다")
-    public ApiResponse<Void> approveRentalRequests(@Valid @RequestBody AdminRentalOrReturnApprovalRequest request) {
+    public ApiResponse<Void> approveRentalRequests(@Valid @RequestBody AdminEquipmentRentalOrReturnApprovalRequest request) {
         
         adminEquipmentService.approveReturnRequestsNormal(request.getIds());
         return ApiResponse.success("장비 대여 요청 승인 성공", null);
@@ -94,21 +94,21 @@ public class AdminEquipmentController {
 
     @PostMapping("/rental-requests/{id}/reject")
     @Operation(summary = "장비 대여 요청 거절 (다중선택)", description = "특정 장비 대여 요청을 거절합니다")
-    public ApiResponse<Void> rejectRentalRequest(@Valid @RequestBody AdminRentalOrReturnApprovalRequest request) {
+    public ApiResponse<Void> rejectRentalRequest(@Valid @RequestBody AdminEquipmentRentalOrReturnApprovalRequest request) {
         adminEquipmentService.rejectRentalRequests(request.getIds());
         return ApiResponse.success("장비 대여 요청 거절 성공", null);
     }
 
     @PostMapping("/return-requests/{id}/approve")
     @Operation(summary = "장비 반납 요청 승인 (정상)", description = "특정 장비 반납 요청을 정상 상태로 승인합니다")
-    public ApiResponse<Void> approveReturnRequestNormal(@Valid @RequestBody AdminRentalOrReturnApprovalRequest request) {
+    public ApiResponse<Void> approveReturnRequestNormal(@Valid @RequestBody AdminEquipmentRentalOrReturnApprovalRequest request) {
         adminEquipmentService.approveReturnRequestsNormal(request.getIds());
         return ApiResponse.success("장비 반납 요청 정상 승인 성공", null);
     }
 
     @PostMapping("/return-requests/{id}/approve-damaged")
     @Operation(summary = "장비 반납 요청 승인 (파손)", description = "특정 장비 반납 요청을 파손 상태로 승인합니다")
-    public ApiResponse<Void> approveReturnDamegedRequestsNormal(@Valid @RequestBody AdminRentalOrReturnApprovalRequest request) {
+    public ApiResponse<Void> approveReturnDamegedRequestsNormal(@Valid @RequestBody AdminEquipmentRentalOrReturnApprovalRequest request) {
         adminEquipmentService.approveReturnDamegedRequestsNormal(request.getIds());
         return ApiResponse.success("장비 반납 요청 파손 승인 성공", null);
     }

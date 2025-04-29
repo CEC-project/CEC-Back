@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class RentalRequest {
+public class EquipmentRentalRequest {
     private Long equipmentId;         
     private LocalDateTime rentalTime; 
     private LocalDateTime returnTime; 
