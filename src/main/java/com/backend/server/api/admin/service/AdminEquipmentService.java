@@ -1,12 +1,12 @@
 package com.backend.server.api.admin.service;
 
+import com.backend.server.api.admin.dto.AdminManagerCandidatesResponse;
+import com.backend.server.api.admin.dto.equipment.AdminEquipmentRentalRequestListRequest;
+import com.backend.server.api.admin.dto.equipment.AdminEquipmentRentalRequestListResponse;
 import com.backend.server.api.admin.dto.equipment.AdminEquipmentCreateRequest;
 import com.backend.server.api.admin.dto.equipment.AdminEquipmentListRequest;
 import com.backend.server.api.admin.dto.equipment.AdminEquipmentListResponse;
 import com.backend.server.api.admin.dto.equipment.AdminEquipmentResponse;
-import com.backend.server.api.admin.dto.equipment.AdminManagerCandidatesResponse;
-import com.backend.server.api.admin.dto.equipment.AdminRentalRequestListRequest;
-import com.backend.server.api.admin.dto.equipment.AdminRentalRequestListResponse;
 import com.backend.server.api.user.dto.equipment.EquipmentListRequest;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.User;
@@ -87,7 +87,7 @@ public class AdminEquipmentService {
     }
 
     //장비 대여/반납 요청 목록 조회 (status를 다르게해서 대여요청 목록과 반납요청 목록 둘다 조회 가능)
-    public AdminRentalRequestListResponse getRentalRequests(AdminRentalRequestListRequest request) {
+    public AdminEquipmentRentalRequestListResponse getRentalRequests(AdminEquipmentRentalRequestListRequest request) {
         Pageable pageable = EquipmentSpecification.getRentalRequestPageable(request);
         Specification<EquipmentRental> spec = EquipmentSpecification.filterRentalRequests(request);
     
@@ -115,7 +115,7 @@ public class AdminEquipmentService {
             .collect(Collectors.toMap(Equipment::getId, Function.identity()));
     
         // 4.위 과정 조립
-        return new AdminRentalRequestListResponse(page, userMap, equipmentMap);
+        return new AdminEquipmentRentalRequestListResponse(page, userMap, equipmentMap);
     }
 
     //장비 대여 요청 다중 승인

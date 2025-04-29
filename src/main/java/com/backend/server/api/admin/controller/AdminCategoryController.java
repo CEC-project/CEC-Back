@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.backend.server.api.admin.dto.category.AdminClassRoomCreateRequest;
+import com.backend.server.api.admin.dto.category.AdminCategoryRequest;
 import com.backend.server.api.admin.service.AdminCategoryService;
 import com.backend.server.api.common.dto.CommonCategoryResponse;
 import com.backend.server.api.common.service.CommonCategoryReadService;
@@ -32,14 +32,14 @@ public class AdminCategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CommonCategoryResponse> createCategory(@RequestBody AdminClassRoomCreateRequest request) {
+    public ResponseEntity<CommonCategoryResponse> createCategory(@RequestBody AdminCategoryRequest request) {
         return ResponseEntity.ok(adminCategoryService.createCategory(request));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CommonCategoryResponse> updateCategory(
             @PathVariable Long id,
-            @RequestBody AdminClassRoomCreateRequest request) {
+            @RequestBody AdminCategoryRequest request) {
         return ResponseEntity.ok(adminCategoryService.updateCategory(id, request));
     }
 

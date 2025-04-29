@@ -1,5 +1,7 @@
 package com.backend.server.api.admin.dto.equipment;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminReturnApprovalRequest {
-    private String condition; // 장비 상태 설명 (선택)
-    private String comment;   // 반납 승인 코멘트 (선택)
+public class AdminEquipmentRentalOrReturnApprovalRequest {
+    private List<Long> ids;
 } 

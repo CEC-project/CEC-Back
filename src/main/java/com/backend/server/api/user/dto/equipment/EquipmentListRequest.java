@@ -1,5 +1,6 @@
 package com.backend.server.api.user.dto.equipment;
 
+import com.backend.server.model.entity.EquipmentCart;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,4 +19,6 @@ public class EquipmentListRequest {
     private String sortBy;           // 정렬 기준 (name|category|status)
     private String sortDirection;    // 정렬 방향 (asc|desc)
     private Boolean favoriteOnly;    // 즐겨찾기한 장비만 필터링
+    private Boolean inCart;          // 장바구니에 있는 장비만 필터링
+    private Long userId;             // 사용자 ID (장바구니 및 즐겨찾기 필터링용)
 }

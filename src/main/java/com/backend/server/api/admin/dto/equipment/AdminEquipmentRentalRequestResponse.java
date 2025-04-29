@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 
 
-public class AdminRentalRequestResponse {
+public class AdminEquipmentRentalRequestResponse {
     private Long id;
     private Long equipmentId;
     private String equipmentName;
@@ -32,7 +32,7 @@ public class AdminRentalRequestResponse {
 
     //생성자에 장비랑 유저 엔티티는 왜넣냐?
     // ->엔티티에 연관관계 설정이 없으니까 이걸 서비스에서 조립할거에요 근데 이거 맞나?
-    public AdminRentalRequestResponse(EquipmentRental rental, Equipment equipment, User user) {
+    public AdminEquipmentRentalRequestResponse(EquipmentRental rental, Equipment equipment, User user) {
         this.id = rental.getId();
         this.equipmentId = rental.getEquipmentId();
         this.equipmentName = equipment != null ? equipment.getName() : null;

@@ -1,4 +1,4 @@
-package com.backend.server.api.admin.dto.equipment;
+package com.backend.server.api.admin.dto;
 
 
 

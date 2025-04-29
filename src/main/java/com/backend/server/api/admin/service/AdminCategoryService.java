@@ -1,6 +1,6 @@
 package com.backend.server.api.admin.service;
 
-import com.backend.server.api.admin.dto.category.AdminClassRoomCreateRequest;
+import com.backend.server.api.admin.dto.category.AdminCategoryRequest;
 import com.backend.server.api.common.dto.CommonCategoryResponse;
 import com.backend.server.api.common.service.CommonCategoryReadService;
 import com.backend.server.model.entity.Category;
@@ -27,7 +27,7 @@ public class AdminCategoryService {
 
     //카테고리 만들기. 이건 어드민만
     @Transactional
-    public CommonCategoryResponse createCategory(AdminClassRoomCreateRequest request) {
+    public CommonCategoryResponse createCategory(AdminCategoryRequest request) {
         // 동일 이름의 카테고리가 있는지 확인
         if (categoryRepository.existsByName(request.getName())) {
             throw new IllegalArgumentException("이미 존재하는 카테고리 이름입니다: " + request.getName());
@@ -40,7 +40,7 @@ public class AdminCategoryService {
 
     //카테고리 수정. 이것도 어드민만 됌.
     @Transactional
-    public CommonCategoryResponse updateCategory(Long id, AdminClassRoomCreateRequest request) {
+    public CommonCategoryResponse updateCategory(Long id, AdminCategoryRequest request) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다: " + id));
 
