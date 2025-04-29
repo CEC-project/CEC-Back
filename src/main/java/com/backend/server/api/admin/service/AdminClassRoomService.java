@@ -17,7 +17,6 @@ import com.backend.server.api.admin.dto.classroom.AdminClassRoomIdResponse;
 import com.backend.server.api.common.dto.classRoom.CommonClassRoomListRequest;
 import com.backend.server.api.common.dto.classRoom.CommonClassRoomListResponse;
 import com.backend.server.api.common.dto.classRoom.CommonClassRoomResponse;
-import com.backend.server.api.admin.dto.classroom.AdminClassRoomRentalListResponse;
 import com.backend.server.api.admin.dto.classroom.AdminClassRoomRentalRequestListRequest;
 import com.backend.server.api.admin.dto.classroom.AdminClassRoomRentalRequestListResponse;
 import com.backend.server.model.entity.ClassRoom;
@@ -25,20 +24,18 @@ import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.ClassRoomRespository;
 import com.backend.server.model.repository.ClassRoomSpecification;
 import com.backend.server.model.repository.UserRepository;
-import com.backend.server.security.SecurityUtil;
 import com.backend.server.model.entity.ClassRoomRental;
 import com.backend.server.model.repository.ClassRoomRentalRepository;
-import com.backend.server.model.entity.enums.RentalStatus;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class AdminClassRoomService {
+
     private ClassRoomRespository classRoomRespository;  
     private UserRepository userRepository;
     private final ClassRoomRentalRepository classRoomRentalRepository;
-    //private SecurityUtil securityUtil;
     
     //강의실 등록
     public AdminClassRoomIdResponse createClassRoom(AdminClassRoomCreateRequest request){
