@@ -22,7 +22,7 @@ public class JwtUtil {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    @Value("${spring.jwt.secret:'111111'}")
+    @Value("${spring.jwt.secret:111111}")
     private String secret;
 
     @Value("${access-token-validity-in-minutes:15}")
