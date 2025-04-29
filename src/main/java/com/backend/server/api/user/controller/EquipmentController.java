@@ -34,9 +34,11 @@ public class EquipmentController {
     private final EquipmentService EquipmentService;
 
     @GetMapping
-    @Operation(summary = "장비 목록 조회", description = "장비 목록을 조회합니다. sortedby 0 1 2 |  (name|category|status)")
+    @Operation(
+        summary = "장비 목록 조회",
+        description = "장비 목록을 카테고리, 상태, 대여 가능 여부, 검색어, 사용자 학년 및 장바구니 필터링 조건에 따라 조회합니다. 그리고 즐겨찾기를 곁들인 근데 왜 밑에 또 즐겨찾기 api가 있냐면 그냥 만들어봤어요 혹시몰라서서"
+    )    
     public ApiResponse<EquipmentListResponse> getEquipments(EquipmentListRequest request) {
-        
         return ApiResponse.success("장비 목록 조회 성공", EquipmentService.getEquipments(request));
     }
 

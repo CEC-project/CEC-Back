@@ -20,5 +20,6 @@ public class EquipmentListRequest {
     private String sortDirection;    // 정렬 방향 (asc|desc)
     private Boolean favoriteOnly;    // 즐겨찾기한 장비만 필터링
     private Boolean inCart;          // 장바구니에 있는 장비만 필터링
+    private Boolean isFavorite;      // 즐겨찾기 여부
     private Long userId;             // 사용자 ID (장바구니 및 즐겨찾기 필터링용)
 }
