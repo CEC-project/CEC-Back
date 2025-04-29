@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.user.dto.equipment.EquipmentListRequest;
 import com.backend.server.api.user.dto.equipment.EquipmentListResponse;
 import com.backend.server.api.user.dto.equipment.EquipmentRentalResponse;
@@ -31,7 +32,7 @@ import com.backend.server.model.repository.EquipmentRentalRepository;
 import com.backend.server.model.repository.EquipmentRepository;
 import com.backend.server.model.repository.EquipmentSpecification;
 import com.backend.server.model.repository.UserRepository;
-import com.backend.server.security.SecurityUtil;
+//import com.backend.server.security.SecurityUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,16 +42,16 @@ public class EquipmentService {
     private final EquipmentRepository equipmentRepository;
     private final EquipmentRentalRepository equipmentRentalRepository;
     private final UserRepository userRepository;
-    private final SecurityUtil securityUtil;
+    //private final SecurityUtil securityUtil;
     private final EquipmentFavoriteRepository equipmentFavoriteRepository;
  
 
     //장비 목록 조회
-    public EquipmentListResponse getEquipments(EquipmentListRequest request) {
+    public EquipmentListResponse getEquipments(LoginUser loginUser, EquipmentListRequest request) {
 
         Pageable pageable = EquipmentSpecification.getPageable(request);
         //유저학년찾기
-        User user = userRepository.findById(securityUtil.getCurrentUserId())
+        User user = userRepository.findById(loginUser.getId())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
         Integer grade = user.getGrade();
         Specification<Equipment> spec = EquipmentSpecification.filterEquipments(request, grade);
@@ -69,9 +70,9 @@ public class EquipmentService {
     
     //장비대여요청
     @Transactional
-    public EquipmentRentalResponse createRentRequest(EquipmentRentalRequest request) {
+    public EquipmentRentalResponse createRentRequest(LoginUser loginUser, EquipmentRentalRequest request) {
         // 현재 로그인한 사용자 조회
-        Long userId = securityUtil.getCurrentUserId();
+        Long userId = loginUser.getId();
         // 장비 조회
         Equipment equipment = equipmentRepository.findById(request.getEquipmentId())
                 .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
@@ -91,8 +92,8 @@ public class EquipmentService {
 
     //다중장비대여요청
     @Transactional
-    public EquipmentRentalListResponse createRentRequests(EquipmentRentalListRequest request) {
-        Long userId = securityUtil.getCurrentUserId();
+    public EquipmentRentalListResponse createRentRequests(LoginUser loginUser, EquipmentRentalListRequest request) {
+        Long userId = loginUser.getId();
         
         List<EquipmentRentalResponse> successResponses = new ArrayList<>();
         List<FailedRentalInfo> failedRequests = new ArrayList<>();
@@ -132,8 +133,8 @@ public class EquipmentService {
 
     //단일장비반납
     //ReturnResponse 만든 이유는 반납예정시간이랑 실제반납시간이 다르기때문에에
-    public EquipmentRentalResponse createReturnRequest(EquipmentRentalRequest request) {
-        Long userId = securityUtil.getCurrentUserId();
+    public EquipmentRentalResponse createReturnRequest(LoginUser loginUser, EquipmentRentalRequest request) {
+        Long userId = loginUser.getId();
         LocalDateTime returnTime = LocalDateTime.now();
         RentalStatus status = RentalStatus.RETURN_PENDING;
         EquipmentRental equipmentRental = request.toEntity(userId, request.getEquipmentId(), request.getRentalTime(), returnTime, status);
@@ -142,8 +143,8 @@ public class EquipmentService {
     }
 
     //다중장비반납요청
-    public EquipmentRentalListResponse createReturnRequests(EquipmentRentalListRequest request) {
-        Long userId = securityUtil.getCurrentUserId();
+    public EquipmentRentalListResponse createReturnRequests(LoginUser loginUser, EquipmentRentalListRequest request) {
+        Long userId = loginUser.getId();
         
         List<EquipmentRentalResponse> successResponses = new ArrayList<>();
         List<FailedRentalInfo> failedRequests = new ArrayList<>();
@@ -183,8 +184,8 @@ public class EquipmentService {
     }
 
     //즐찾추가
-    public void addFavorite(Long equipmentId) {
-        User user = userRepository.findById(securityUtil.getCurrentUserId())
+    public void addFavorite(Long equipmentId, LoginUser loginUser) {
+        User user = userRepository.findById(loginUser.getId())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
         Equipment equipment = equipmentRepository.findById(equipmentId)
                 .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
@@ -196,8 +197,8 @@ public class EquipmentService {
     }
 
     //즐찾삭제
-    public void removeFavorite(Long equipmentId) {
-        User user = userRepository.findById(securityUtil.getCurrentUserId())
+    public void removeFavorite(Long equipmentId, LoginUser loginUser) {
+        User user = userRepository.findById(loginUser.getId())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
         Equipment equipment = equipmentRepository.findById(equipmentId)
                 .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
@@ -205,8 +206,8 @@ public class EquipmentService {
     }
     
     //즐찾목록조호 (페이지네이션)
-    public FavoriteListResponse getFavoriteList(EquipmentListRequest request) {
-        User user = userRepository.findById(securityUtil.getCurrentUserId())
+    public FavoriteListResponse getFavoriteList(LoginUser loginUser, EquipmentListRequest request) {
+        User user = userRepository.findById(loginUser.getId())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
         
         Pageable pageable = EquipmentSpecification.getPageable(request);

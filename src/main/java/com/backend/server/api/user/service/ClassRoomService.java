@@ -8,9 +8,11 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.common.dto.classRoom.CommonClassRoomListRequest;
 import com.backend.server.api.user.dto.classroom.ClassRoomListResponse;
 import com.backend.server.api.user.dto.classroom.ClassRoomRentalListRequest;
@@ -30,7 +32,6 @@ import com.backend.server.model.repository.ClassRoomRentalRepository;
 import com.backend.server.model.repository.ClassRoomRespository;
 import com.backend.server.model.repository.ClassRoomSpecification;
 import com.backend.server.model.repository.UserRepository;
-import com.backend.server.security.SecurityUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,7 +42,6 @@ public class ClassRoomService {
     private final ClassRoomRentalRepository classRoomRentalRepository;
     private final ClassRoomFavoriteRepository classRoomFavoriteRepository;
     private final UserRepository userRepository;
-    private final SecurityUtil securityUtil;
 
     //강의실 목록 조회
     public ClassRoomListResponse getClassRooms(CommonClassRoomListRequest request) {
@@ -61,9 +61,9 @@ public class ClassRoomService {
 
     //강의실 대여 요청청
     @Transactional
-    public ClassRoomRentalResponse createRentRequest(ClassRoomRentalRequest request) {
+    public ClassRoomRentalResponse createRentRequest(LoginUser loginUser, ClassRoomRentalRequest request) {
         // 현재 로그인한 사용자 조회
-        Long userId = securityUtil.getCurrentUserId();
+        Long userId = loginUser.getId();
         // 장비 조회
         ClassRoom classRoom = classRoomRespository.findById(request.getClassRoomId())
                 .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
@@ -83,8 +83,8 @@ public class ClassRoomService {
 
     //다중장비대여요청
     @Transactional
-    public ClassRoomRentalListResponse createRentRequests(ClassRoomRentalListRequest request) {
-        Long userId = securityUtil.getCurrentUserId();
+    public ClassRoomRentalListResponse createRentRequests(LoginUser loginUser, ClassRoomRentalListRequest request) {
+        Long userId = loginUser.getId();
         
         List<ClassRoomRentalResponse> successResponses = new ArrayList<>();
         List<FailedRentalInfo> failedRequests = new ArrayList<>();
@@ -124,8 +124,8 @@ public class ClassRoomService {
 
     //단일장비반납
     @Transactional
-    public ClassRoomRentalResponse createReturnRequest(ClassRoomRentalRequest request) {
-        Long userId = securityUtil.getCurrentUserId();
+    public ClassRoomRentalResponse createReturnRequest(LoginUser loginUser, ClassRoomRentalRequest request) {
+        Long userId = loginUser.getId();
         LocalDateTime returnTime = LocalDateTime.now();
         RentalStatus status = RentalStatus.RETURN_PENDING;
         ClassRoomRental equipmentRental = request.toEntity(userId, request.getClassRoomId(), request.getRentalTime(), returnTime, status);
@@ -135,8 +135,8 @@ public class ClassRoomService {
 
     //다중장비반납요청
     @Transactional
-    public ClassRoomRentalListResponse createReturnRequests(ClassRoomRentalListRequest request) {
-        Long userId = securityUtil.getCurrentUserId();
+    public ClassRoomRentalListResponse createReturnRequests(LoginUser loginUser, ClassRoomRentalListRequest request) {
+        Long userId = loginUser.getId();
         
         List<ClassRoomRentalResponse> successResponses = new ArrayList<>();
         List<FailedRentalInfo> failedRequests = new ArrayList<>();
@@ -179,8 +179,8 @@ public class ClassRoomService {
 
     //즐찾추가
     @Transactional
-    public void addFavorite(Long equipmentId) {
-        User user = userRepository.findById(securityUtil.getCurrentUserId())
+    public void addFavorite(Long equipmentId, LoginUser loginUser) {
+        User user = userRepository.findById(loginUser.getId())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
         ClassRoom classRoom = classRoomRespository.findById(equipmentId)
                 .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
@@ -193,8 +193,8 @@ public class ClassRoomService {
 
     //즐찾삭제
     @Transactional
-    public void removeFavorite(Long classRoomId) {
-        User user = userRepository.findById(securityUtil.getCurrentUserId())
+    public void removeFavorite(Long classRoomId, LoginUser loginUser) {
+        User user = userRepository.findById(loginUser.getId())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
         ClassRoom classRoom = classRoomRespository.findById(classRoomId)
                 .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
@@ -203,8 +203,8 @@ public class ClassRoomService {
     
     //즐찾목록조호 (페이지네이션)
     @Transactional(readOnly = true)
-    public FavoriteListResponse getFavoriteList(CommonClassRoomListRequest request) {
-        User user = userRepository.findById(securityUtil.getCurrentUserId())
+    public FavoriteListResponse getFavoriteList(LoginUser loginUser, CommonClassRoomListRequest request) {
+        User user = userRepository.findById(loginUser.getId())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
         
         Pageable pageable = ClassRoomSpecification.getPageable(request);

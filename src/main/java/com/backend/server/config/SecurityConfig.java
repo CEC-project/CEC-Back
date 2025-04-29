@@ -51,7 +51,14 @@ public class SecurityConfig {
                     // 나머지 모든 요청은 인증 필요
                     .anyRequest().authenticated()
             )
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling(configurer ->
+                    configurer.accessDeniedHandler(
+                            (req, res, ex) -> {
+                                // @PreAuthorize 에서 권한이 없다고 예외가 발생시, RestControllerAdvise 로 넘김
+                                throw ex;
+                            })
+            );
 
         return http.build();
     }
