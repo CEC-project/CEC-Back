@@ -5,6 +5,7 @@ import com.backend.server.api.admin.dto.equipment.AdminEquipmentListRequest;
 import com.backend.server.api.user.dto.equipment.EquipmentListRequest;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.EquipmentCart;
+import com.backend.server.model.entity.EquipmentFavorite;
 import com.backend.server.model.entity.EquipmentRental;
 import com.backend.server.model.entity.enums.RentalStatus;
 import org.springframework.data.domain.PageRequest;
@@ -187,6 +188,20 @@ public class EquipmentSpecification {
                 
                 // 메인 쿼리에 서브쿼리 조건 추가
                 predicates.add(criteriaBuilder.in(root.get("id")).value(cartSubquery));
+            }
+
+            // 즐겨찾기 필터링
+            if (request.getIsFavorite() != null && request.getIsFavorite() && request.getUserId() != null) {
+                // 즐겨찾기에 있는 장비만 필터링
+                Subquery<Long> favoriteSubquery = query.subquery(Long.class);
+                Root<EquipmentFavorite> favoriteRoot = favoriteSubquery.from(EquipmentFavorite.class);
+                favoriteSubquery.select(favoriteRoot.get("equipmentId"))
+                    .where(
+                        criteriaBuilder.equal(favoriteRoot.get("userId"), request.getUserId())
+                    );
+                
+                // 메인 쿼리에 서브쿼리 조건 추가
+                predicates.add(criteriaBuilder.in(root.get("id")).value(favoriteSubquery));
             }
             
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
