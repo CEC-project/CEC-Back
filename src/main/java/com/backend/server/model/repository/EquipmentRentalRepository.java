@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface EquipmentRentalRepository extends JpaRepository<EquipmentRental, Long>, JpaSpecificationExecutor<EquipmentRental> {
     
-    List<EquipmentRental> findByStatus(RentalStatus status);
+    List<EquipmentRental> findByRentalStatus(RentalStatus rentalStatus);
     List<EquipmentRental> findByUserId(Long userId);
     List<EquipmentRental> findByEquipmentId(Long equipmentId);
 }

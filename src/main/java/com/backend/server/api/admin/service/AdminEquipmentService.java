@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.backend.server.model.entity.enums.RentalStatus;
 import com.backend.server.model.entity.enums.Role;
 import com.backend.server.model.entity.EquipmentRental;
 import com.backend.server.model.repository.EquipmentRentalRepository;

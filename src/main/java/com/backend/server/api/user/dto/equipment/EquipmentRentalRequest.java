@@ -15,14 +15,16 @@ public class EquipmentRentalRequest {
     private Long equipmentId;         
     private LocalDateTime rentalTime; 
     private LocalDateTime returnTime; 
-    
-    public EquipmentRental toEntity(Long userId,Long equipmentId, LocalDateTime rentalTime, LocalDateTime returnTime, RentalStatus status) {
+    private Integer quantity;
+
+    public EquipmentRental toEntity(Long userId,Long equipmentId, LocalDateTime rentalTime, LocalDateTime returnTime, RentalStatus rentalStatus, Integer quantity) {
         return EquipmentRental.builder()
-                .equipmentId(this.equipmentId)
+                .equipmentId(equipmentId)
                 .userId(userId)
                 .rentalTime(rentalTime)
                 .returnTime(returnTime)
-                .status(status)
+                .rentalStatus(rentalStatus)
+                .quantity(quantity)
                 .build();
     }
 } 

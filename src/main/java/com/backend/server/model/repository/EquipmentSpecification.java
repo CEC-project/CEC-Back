@@ -22,6 +22,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EquipmentSpecification {
+
+    public static Pageable getPageable(
+    Integer page, 
+    Integer size, 
+    String sortBy, 
+    String sortDirection
+) {
+    // 정렬 기준 설정
+    String sortField;
+    if ("category".equals(sortBy)) {
+        sortField = "category";
+    } else if ("status".equals(sortBy)) {
+        sortField = "status";
+    } else {
+        sortField = "name"; // 기본값은 이름순
+    }
+
+    // 정렬 방향 설정
+    String direction = (sortDirection == null || !sortDirection.toLowerCase().equals("desc")) 
+        ? "asc" 
+        : "desc";
+
+    // 페이지네이션 설정
+    int pageNumber = page != null ? page - 1 : 0;  // 페이지는 0부터 시작
+    int pageSize = size != null ? size : 17;       // 기본값 17
+
+    return PageRequest.of(
+        pageNumber,
+        pageSize,
+        Sort.by(Direction.fromString(direction), sortField)
+    );
+}
     
     // 페이징 및 정렬 정보 생성
     public static Pageable getPageable(EquipmentListRequest request) {
@@ -80,13 +112,13 @@ public class EquipmentSpecification {
             List<Predicate> predicates = new ArrayList<>();
             
             // 카테고리 필터링
-            if (StringUtils.hasText(request.getCategory())) {
-                predicates.add(criteriaBuilder.equal(root.get("category"), request.getCategory()));
+            if (request.getCategoryId() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("categoryId"), request.getCategoryId()));
             }
             
             // 상태 필터링
-            if (StringUtils.hasText(request.getStatus())) {
-                predicates.add(criteriaBuilder.equal(root.get("status"), request.getStatus()));
+            if (request.getRentalStatus() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("rentalStatus"), request.getRentalStatus()));
             }
             
             // 대여 가능 여부 필터링
@@ -125,13 +157,13 @@ public class EquipmentSpecification {
             
             // 기본 필터링 조건은 관리자용과 동일
             // 카테고리 필터링
-            if (StringUtils.hasText(request.getCategory())) {
-                predicates.add(criteriaBuilder.equal(root.get("category"), request.getCategory()));
+            if (request.getCategoryId() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("categoryId"), request.getCategoryId()));
             }
             
             // 상태 필터링
-            if (StringUtils.hasText(request.getStatus())) {
-                predicates.add(criteriaBuilder.equal(root.get("status"), request.getStatus()));
+            if (request.getRentalStatus() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("rentalStatus"), request.getRentalStatus()));
             }
             
             // 대여 가능 여부 필터링

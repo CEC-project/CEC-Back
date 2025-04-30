@@ -23,13 +23,10 @@ public class Equipment extends BaseTimeEntity {
     private String image_url;
 
     @Column
-    private String category;
+    private Long categoryId;
 
     @Column(nullable = false)
     private String modelName;
-
-    @Column(nullable = false)
-    private String status;
 
     @Column
     private Boolean available;

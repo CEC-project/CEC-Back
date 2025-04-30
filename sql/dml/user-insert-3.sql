@@ -7,9 +7,9 @@ INSERT INTO users (
     rental_history_id, created_at, updated_at
 ) VALUES
       (
-          '홍길동', '20230001', '길동이', '학과', '세부전공', 3, 'A조', '남', '김교수', '010-1234-5678',
+          '슈퍼어드민', '000', '길동이', '학과', '세부전공', 3, 'A조', '남', '김교수', '010-1234-5678',
           'hong@example.com', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2', 'profile1.jpg', '2001-03-15', 5, 0,
-          1, 2, 0, 'EQ-001', 'BM-001', 'CP-001',
+          1, 2, 2, 'EQ-001', 'BM-001', 'CP-001',
           'RH-001', NOW(), NOW()
       ),
       (

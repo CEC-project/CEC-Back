@@ -2,6 +2,7 @@ package com.backend.server.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
@@ -23,6 +24,7 @@ import com.backend.server.model.entity.enums.RentalStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "class_rooms")
 public class ClassRoom extends BaseTimeEntity {
 
     @Id
