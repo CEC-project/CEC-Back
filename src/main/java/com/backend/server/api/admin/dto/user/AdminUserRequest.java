@@ -14,15 +14,15 @@ public class AdminUserRequest {
     private String department;
     private Integer grade;
     private String gender;
-    @Schema(description = "202301234 형식 문자열")
+    @Schema(defaultValue = "202301234")
     private String studentNumber;
     private String name;
     private String nickname;
-    @Schema(description = "지도교수의 이름")
+    @Schema(defaultValue = "유응구")
     private String professor;
-    @Schema(description = "2024-01-01 형식 문자열")
+    @Schema(defaultValue = "2024-01-01")
     private String birthday;
-    @Schema(description = "01012341234 형식 문자열")
+    @Schema(defaultValue = "01012341234")
     private String phoneNumber;
     private String profilePicture;
 
