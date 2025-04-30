@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,7 +40,7 @@ public class EquipmentController {
         summary = "장비 목록 조회",
         description = "장비 목록을 카테고리, 상태, 대여 가능 여부, 검색어, 사용자 학년 및 장바구니 필터링 조건에 따라 조회합니다. 그리고 즐겨찾기를 곁들인 근데 왜 밑에 또 즐겨찾기 api가 있냐면 그냥 만들어봤어요 혹시몰라서서"
     )    
-    public ApiResponse<EquipmentListResponse> getEquipments(EquipmentListRequest request, @AuthenticationPrincipal LoginUser loginUser) {
+    public ApiResponse<EquipmentListResponse> getEquipments(@ModelAttribute EquipmentListRequest request, @AuthenticationPrincipal LoginUser loginUser) {
         return ApiResponse.success("장비 목록 조회 성공", EquipmentService.getEquipments(loginUser, request));
     }
 
@@ -93,7 +94,7 @@ public class EquipmentController {
     
     @GetMapping("/favorites")
     @Operation(summary = "즐겨찾기 장비 목록 조회", description = "즐겨찾기에 추가된 장비 목록을 조회합니다.")
-    public ApiResponse<FavoriteListResponse> getFavorites(EquipmentListRequest request, @AuthenticationPrincipal LoginUser loginUser) {
+    public ApiResponse<FavoriteListResponse> getFavorites(@ModelAttribute EquipmentListRequest request, @AuthenticationPrincipal LoginUser loginUser) {
         return ApiResponse.success("즐겨찾기 장비 목록 조회 성공", EquipmentService.getFavoriteList(loginUser, request));
     }
     

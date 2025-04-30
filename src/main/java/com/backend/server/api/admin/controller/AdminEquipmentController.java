@@ -10,6 +10,7 @@ import com.backend.server.api.admin.dto.equipment.AdminEquipmentRentalRequestLis
 import com.backend.server.api.admin.dto.equipment.AdminEquipmentRentalRequestListResponse;
 import com.backend.server.api.admin.service.AdminEquipmentService;
 import com.backend.server.api.common.dto.ApiResponse;
+import com.backend.server.model.entity.enums.RentalStatus;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,7 +41,9 @@ public class AdminEquipmentController {
         summary = "장비 필터링 조회",
         description = "장비의 카테고리, 상태, 대여 가능 여부, 검색어 등을 기반으로 장비 목록을 필터링하여 조회합니다."
     )
-    public ApiResponse<AdminEquipmentListResponse> getAllEquipments(@RequestBody AdminEquipmentListRequest request) {
+    public ApiResponse<AdminEquipmentListResponse> getAllEquipments(
+        @ModelAttribute AdminEquipmentListRequest request
+    ) {
         AdminEquipmentListResponse equipments = adminEquipmentService.getEquipments(request);
         return ApiResponse.success("모든 장비 조회 성공", equipments);
     }

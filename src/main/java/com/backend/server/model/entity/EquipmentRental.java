@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "rentals")
+@Table(name = "equipment_rentals")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,6 +27,9 @@ public class EquipmentRental extends BaseTimeEntity {
     @Column(name = "user_id", nullable = false)
     private Long userId;
     
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
+    
     @Column(name = "rental_time", nullable = false)
     private LocalDateTime rentalTime;
     
@@ -34,35 +37,35 @@ public class EquipmentRental extends BaseTimeEntity {
     private LocalDateTime returnTime;
     
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private RentalStatus status;
+    @Column(name = "rental_status", nullable = false)
+    private RentalStatus rentalStatus;
     
     
     public void returnEquipment(String returnCondition) {
-        this.status = RentalStatus.RETURN_PENDING;
+        this.rentalStatus = RentalStatus.RETURN_PENDING;
     }
 
     public void rentalEquipment(String rentalCondition) {
-        this.status = RentalStatus.RENTAL_PENDING;
+        this.rentalStatus = RentalStatus.RENTAL_PENDING;
     }
     
     // 대여 요청 승인
     public void approveRental() {
-        this.status = RentalStatus.APPROVED;
+        this.rentalStatus = RentalStatus.APPROVED;
     }
     
     // 대여 요청 거절
     public void rejectRental() {
-        this.status = RentalStatus.REJECTED;
+        this.rentalStatus = RentalStatus.REJECTED;
     }
     
     // 반납 완료
     public void completeReturn() {
-        this.status = RentalStatus.AVAILABLE;
+        this.rentalStatus = RentalStatus.AVAILABLE;
     }
 
     // 반납 완료(피손)
     public void completeReturnDamaged() {
-        this.status = RentalStatus.BROKEN;
+        this.rentalStatus = RentalStatus.BROKEN;
     }
 } 

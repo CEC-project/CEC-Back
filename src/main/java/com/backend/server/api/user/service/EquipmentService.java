@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.user.dto.equipment.EquipmentListRequest;
 import com.backend.server.api.user.dto.equipment.EquipmentListResponse;
+import com.backend.server.api.user.dto.equipment.EquipmentRentalItem;
 import com.backend.server.api.user.dto.equipment.EquipmentRentalResponse;
 import com.backend.server.api.user.dto.equipment.EquipmentResponse;
 import com.backend.server.api.user.dto.equipment.FavoriteListResponse;
@@ -82,8 +83,11 @@ public class EquipmentService {
         if (equipment.getAvailable() != null && !equipment.getAvailable()) {
             throw new RuntimeException("현재 대여 불가능한 장비입니다.");
         }
+        if (equipment.getMaxRentalCount() != null && equipment.getMaxRentalCount() <= request.getQuantity()) {
+            throw new RuntimeException("대여 가능한 수량을 초과했습니다.");
+        }
         RentalStatus status = RentalStatus.RENTAL_PENDING;
-        EquipmentRental rental = request.toEntity(userId, equipmentId, request.getRentalTime(), request.getReturnTime(), status);
+        EquipmentRental rental = request.toEntity(userId, equipmentId, request.getRentalTime(), request.getReturnTime(), status, request.getQuantity());
         // 새로운 대여 신청 생성
         equipmentRentalRepository.save(rental);
 
@@ -102,22 +106,23 @@ public class EquipmentService {
         LocalDateTime returnTime = request.getEndTime();
         
 
-        for (Long equipmentId : request.getEquipmentIds()) {
+        for (EquipmentRentalItem item : request.getItems()) {
+
             try {
                 // 장비 조회
-                Equipment equipment = equipmentRepository.findById(equipmentId)
+                Equipment equipment = equipmentRepository.findById(item.getEquipmentId())
                         .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
                 
                 // 장비가 대여 가능한지 확인
                 if (equipment.getAvailable() != null && !equipment.getAvailable()) {
                     // 대여 불가능한 장비는 실패 목록에 추가
-                    failedRequests.add(new FailedRentalInfo(equipmentId, "현재 대여 불가능한 장비입니다."));
+                    failedRequests.add(new FailedRentalInfo(item.getEquipmentId(), "현재 대여 불가능한 장비입니다."));
                     continue;
                 }
                 
                 EquipmentRentalRequest singleRequest = new EquipmentRentalRequest();
                 RentalStatus status = RentalStatus.RENTAL_PENDING;
-                EquipmentRental rental = singleRequest.toEntity(userId, equipmentId, rentalTime, returnTime, status);
+                EquipmentRental rental = singleRequest.toEntity(userId, item.getEquipmentId(), rentalTime, returnTime, status, item.getQuantity());
                 EquipmentRental savedRental = equipmentRentalRepository.save(rental);
                 
                 EquipmentRentalResponse successResponse = new EquipmentRentalResponse(savedRental);
@@ -125,7 +130,7 @@ public class EquipmentService {
                 
             } catch (Exception e) {
                 // 예외 발생 시 실패 목록에 추가
-                failedRequests.add(new FailedRentalInfo(equipmentId, e.getMessage()));
+                failedRequests.add(new FailedRentalInfo(item.getEquipmentId(), e.getMessage()));
             }
         }
         return new EquipmentRentalListResponse(successResponses, failedRequests);
@@ -137,7 +142,7 @@ public class EquipmentService {
         Long userId = loginUser.getId();
         LocalDateTime returnTime = LocalDateTime.now();
         RentalStatus status = RentalStatus.RETURN_PENDING;
-        EquipmentRental equipmentRental = request.toEntity(userId, request.getEquipmentId(), request.getRentalTime(), returnTime, status);
+        EquipmentRental equipmentRental = request.toEntity(userId, request.getEquipmentId(), request.getRentalTime(), returnTime, status, request.getQuantity());
         equipmentRentalRepository.save(equipmentRental);
         return new EquipmentRentalResponse(equipmentRental);
     }
@@ -152,13 +157,13 @@ public class EquipmentService {
         LocalDateTime startTime = request.getStartTime();
 
         
-        for (Long equipmentId : request.getEquipmentIds()) {
+        for (EquipmentRentalItem item : request.getItems()) {
             try {
                 // 장비 조회
                 EquipmentRentalRequest singleRequest = new EquipmentRentalRequest();
                 RentalStatus status = RentalStatus.RETURN_PENDING;
                 LocalDateTime returnTime = request.getEndTime();
-                EquipmentRental rental = singleRequest.toEntity(userId, equipmentId, startTime, returnTime, status);
+                EquipmentRental rental = singleRequest.toEntity(userId, item.getEquipmentId(), startTime, returnTime, status, item.getQuantity());
                 EquipmentRental savedRental = equipmentRentalRepository.save(rental);
                 
                 EquipmentRentalResponse successResponse = new EquipmentRentalResponse(savedRental);
@@ -166,7 +171,7 @@ public class EquipmentService {
             } catch (Exception e) {
                 // 예외 발생 시 실패 목록에 추가
                 //이건 메시지 뭐라해야할까?
-                failedRequests.add(new FailedRentalInfo(equipmentId, e.getMessage()));
+                failedRequests.add(new FailedRentalInfo(item.getEquipmentId(), e.getMessage()));
                 continue;
             }
         }
@@ -220,7 +225,7 @@ public class EquipmentService {
         Specification<Equipment> spec = (root, query, criteriaBuilder) -> 
             root.get("id").in(favoriteEquipmentIds);
         
-        if (request.getCategory() != null) {
+        if (request.getCategoryId() != null) {
             spec = spec.and(EquipmentSpecification.filterEquipments(request, user.getGrade()));
         }
         
