@@ -2,7 +2,6 @@ package com.backend.server.api.user.controller;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.backend.server.api.common.dto.CommonCategoryResponse;

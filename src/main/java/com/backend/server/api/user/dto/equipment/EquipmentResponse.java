@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 public class EquipmentResponse {
     private Long id;
     private String name;
-    private String category;
+    private Long categoryId;
     private String modelName;
-    private String status;
+    //private String status;
     private Boolean available;
     private Integer quantity;
     private Integer maxRentalCount;
@@ -32,9 +32,9 @@ public class EquipmentResponse {
     public EquipmentResponse(Equipment equipment) {
         this.id = equipment.getId();
         this.name = equipment.getName();
-        this.category = equipment.getCategory();
+        this.categoryId = equipment.getCategoryId();
         this.modelName = equipment.getModelName();
-        this.status = equipment.getStatus();
+        //this.status = equipment.getStatus();
         this.available = equipment.getAvailable();
         this.quantity = equipment.getQuantity();
         this.maxRentalCount = equipment.getMaxRentalCount();     

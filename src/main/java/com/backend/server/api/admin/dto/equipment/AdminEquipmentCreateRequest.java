@@ -7,6 +7,7 @@ import com.backend.server.model.entity.enums.RentalStatus;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,38 +19,59 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "장비 생성 요청 DTO")
 public class AdminEquipmentCreateRequest {
+    @Schema(description = "장비 이름", example = "맥북 프로 M3")
     @NotBlank(message = "장비 이름은 필수입니다")
     private String name;
 
-    @NotBlank(message = "카테고리는 필수입니다")
-    private String category;
+    @Schema(description = "이미지 URL", example = "images/macbook_pro.jpg")
+    @NotBlank(message = "이미지 URL은 필수입니다")
+    private String imageUrl;
 
+    @Schema(description = "카테고리 ID", example = "1")
+    @NotNull(message = "카테고리는 필수입니다")
+    private Long categoryId;
+
+    @Schema(description = "모델명", example = "MacBook Pro 16-inch M3")
     @NotBlank(message = "모델명은 필수입니다")
     private String modelName;
 
-    @NotBlank(message = "상태는 필수입니다")
-    private String status;
+    @Schema(
+        description = "대여 상태 (AVAILABLE: 대여 가능, IN_USE: 대여중, BROKEN: 파손 등)",
+        example = "AVAILABLE",
+        allowableValues = {
+        "AVAILABLE", 
+        "IN_USE", 
+        "BROKEN", 
+        "RENTAL_PENDING", 
+        "APPROVED", 
+        "REJECTED", 
+        "RETURN_PENDING"
+        }
+    )
+    @NotBlank(message = "대여 상태는 필수입니다")
+    private String rentalStatus;
 
+    @Schema(description = "수량", example = "5")
     @NotNull(message = "수량은 필수입니다")
     @Min(value = 1, message = "수량은 최소 1개 이상이어야 합니다")
     private Integer quantity;
 
+    @Schema(description = "최대 대여 수량", example = "5")
+    private Integer maxRentalCount;
+
+    @Schema(description = "장비 설명", example = "2024년 신규 구매된 맥북 프로")
     private String description;
     
+    @Schema(description = "부속장비비", example = "hdmi 등등등...")
     private String attachment;
     
-    // 관리자 ID (어드민 유저 중에서 선택)
+    @Schema(description = "관리자 ID", example = "1")
     @NotNull(message = "관리자는 필수입니다")
     private Long managerId;
     
-    // 관리자 이름 (표시용)
-    private String managerName;
-    
-    // 대여 상태 (AVAILABLE, IN_USE, UNDER_REPAIR, RESERVED, LOST, DISPOSED)
-    private String rentalStatus;
-    
-    // 대여 제한 학년 (체크박스로 다중 선택)
+    @Schema(description = "대여 제한 학년 목록", example = "[1, 2, 3]")
     private List<Integer> rentalRestrictedGrades;
 
     //업데이트에서도 쓸거라서 arguments에 existingEquipment도 넣음
@@ -57,15 +79,15 @@ public class AdminEquipmentCreateRequest {
         return Equipment.builder()
                 .id(existingEquipment != null ? existingEquipment.getId() : null)
                 .name(this.name)
-                .category(this.category)
+                .image_url(this.imageUrl)
+                .categoryId(this.categoryId)
                 .modelName(this.modelName)
-                .status(this.status)
+                .rentalStatus(RentalStatus.valueOf(this.rentalStatus))
                 .quantity(this.quantity)
                 .description(this.description)
                 .attachment(this.attachment)
                 .managerId(this.managerId)
                 .managerName(manager.getName())
-                .rentalStatus(existingEquipment != null ? existingEquipment.getRentalStatus() : RentalStatus.AVAILABLE)
                 .rentalTime(existingEquipment != null ? existingEquipment.getRentalTime() : null)
                 .returnTime(existingEquipment != null ? existingEquipment.getReturnTime() : null)
                 .renterId(existingEquipment != null ? existingEquipment.getRenterId() : null)

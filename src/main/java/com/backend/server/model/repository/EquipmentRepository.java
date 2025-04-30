@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface EquipmentRepository extends JpaRepository<Equipment, Long>, JpaSpecificationExecutor<Equipment> {
-    List<Equipment> findByCategory(String category);
+    List<Equipment> findByCategoryId(Long categoryId);
     List<Equipment> findByRenterId(Integer renterId);
     List<Equipment> findByManagerName(String managerName);
     List<Equipment> findByRentalStatus(RentalStatus rentalStatus);

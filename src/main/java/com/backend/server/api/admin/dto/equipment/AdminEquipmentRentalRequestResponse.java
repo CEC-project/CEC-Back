@@ -3,6 +3,8 @@ package com.backend.server.api.admin.dto.equipment;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.EquipmentRental;
 import com.backend.server.model.entity.User;
+import com.backend.server.model.entity.enums.RentalStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,12 +23,12 @@ public class AdminEquipmentRentalRequestResponse {
     private Long equipmentId;
     private String equipmentName;
     //private String equipmentImageUrl;
-    private Long userId;
+    //private Long userId;
     private String userName;
     private String userEmail;
     private LocalDateTime rentalTime;
     private LocalDateTime returnTime;
-    private String status;
+    private RentalStatus rentalStatus;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -37,12 +39,12 @@ public class AdminEquipmentRentalRequestResponse {
         this.equipmentId = rental.getEquipmentId();
         this.equipmentName = equipment != null ? equipment.getName() : null;
         //this.equipmentImageUrl = equipment != null ? equipment.getImageUrl() : null;
-        this.userId = rental.getUserId();
+        //this.userId = rental.getUserId();
         this.userName = user != null ? user.getName() : null;
         this.userEmail = user != null ? user.getEmail() : null;
         this.rentalTime = rental.getRentalTime();
         this.returnTime = rental.getReturnTime();
-        this.status = rental.getStatus().toString();
+        this.rentalStatus = rental.getRentalStatus();
         this.createdAt = rental.getCreatedAt();
         this.updatedAt = rental.getUpdatedAt();
     }
