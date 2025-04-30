@@ -38,4 +38,10 @@ public class AdminUserService {
         user = userRepository.save(user);
         return new AdminUserResponse(user);
     }
+
+    public AdminUserResponse createUser(AdminUserRequest request) {
+        User user = request.toEntity(null, passwordEncoder);
+        user = userRepository.save(user);
+        return new AdminUserResponse(user);
+    }
 }

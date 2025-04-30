@@ -41,4 +41,10 @@ public class AdminUserController {
             @RequestBody AdminUserRequest request) {
         return ApiResponse.success("사용자 수정 성공", adminUserService.updateUser(id, request));
     }
+
+    @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
+    public ApiResponse<AdminUserResponse> createUser(@RequestBody AdminUserRequest request) {
+        return ApiResponse.success("사용자 등록 성공", adminUserService.createUser(request));
+    }
 }
