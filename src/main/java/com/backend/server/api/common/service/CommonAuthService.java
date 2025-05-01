@@ -6,6 +6,7 @@ import com.backend.server.api.common.dto.auth.CommonSignInResponse;
 import com.backend.server.config.security.JwtUtil;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.UserRepository;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
@@ -47,11 +48,11 @@ public class CommonAuthService {
     @Transactional
     public CommonSignInResponse refresh(String refreshToken) {
         if (!jwtUtil.validateRefreshToken(refreshToken))
-            throw new RuntimeException("리프레시 토큰이 올바르지 않거나 만료되었습니다.");
+            throw new JwtException("리프레시 토큰이 올바르지 않거나 만료되었습니다. 다시 로그인 하세요.");
 
         Long userid = jwtUtil.getUserIdByRefreshToken(refreshToken);
         if (userid == null)
-            throw new RuntimeException("레디스에서 찾을수 없는 리프레시 토큰입니다.");
+            throw new RuntimeException("레디스에서 찾을 수 없는 리프레시 토큰입니다.");
 
         Optional<User> optionalUser = userRepository.findById(userid);
         if (optionalUser.isEmpty())

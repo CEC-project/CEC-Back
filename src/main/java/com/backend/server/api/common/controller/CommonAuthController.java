@@ -1,12 +1,16 @@
 package com.backend.server.api.common.controller;
 
-import com.backend.server.api.common.dto.ApiResponse;
+import com.backend.server.api.common.dto.CommonResponse;
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.common.dto.auth.CommonSignInRequest;
 import com.backend.server.api.common.dto.auth.CommonSignInResponse;
 import com.backend.server.api.common.service.CommonAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,35 +31,99 @@ public class CommonAuthController {
 
     @Operation(
             summary = "로그인 API",
-            description = "엑세스 토큰을 반환합니다. 엑세스 토큰은 15분만 지속됩니다.\\n"
-                    + "스웨거로 테스트 할때 15분마다 로그인하기 귀찮으면, 설정파일에서 액세스 토큰 시간을 늘려주세요."
-    )
+            description = "엑세스 토큰을 반환합니다. 엑세스 토큰은 15분만 지속됩니다.<br/>"
+                    + "http 상태 코드는 200 / 500 을 반환합니다. - 아래 응답 예시 참고")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "로그인 성공",
+                    content = @Content(examples = @ExampleObject(
+                            """
+                                    {
+                                      "status": "success",
+                                      "message": "로그인 성공",
+                                      "data": {
+                                        "id": 3,
+                                        "studentNumber": "20230003",
+                                        "nickname": "철수짱",
+                                        "role": "ROLE_ADMIN",
+                                        "department": "학과",
+                                        "accessToken": "jwt헤더.jwt바디.jwt서명",
+                                        "tokenType": "Bearer"
+                                      }
+                                    }"""
+            ))),
+            @ApiResponse(responseCode = "500", description = "DB에 없는 학번 or PW 틀림",
+                    content = @Content(examples = @ExampleObject(
+                            """
+                                    {
+                                      "status": "fail",
+                                      "message": "2025-05-01T12:19:12.285+09:00 --- 로그인 실패",
+                                      "data": null
+                                    }"""
+            )))})
     @PostMapping("/sign-in")
-    public ApiResponse<CommonSignInResponse> signIn(
+    public CommonResponse<CommonSignInResponse> signIn(
             HttpServletResponse response,
             @RequestBody CommonSignInRequest request) {
-        return ApiResponse.success("로그인 성공", commonAuthService.login(response, request));
+        return CommonResponse.success("로그인 성공", commonAuthService.login(response, request));
     }
 
     @Operation(
             summary = "엑세스 토큰 재발급 API",
-            description = "스웨거에서는 사용하지 못하는 API 입니다."
+            description = "스웨거에서는 사용하지 못하는 API 입니다.<br/>"
+                    + "로그인 API 와 같은 구조로 응답합니다.<br/>"
+                    + "http 상태 코드는 200 / 500 / 401 을 반환합니다. - 아래 응답 예시 참고"
     )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "토큰 리프레시 성공",
+                    content = @Content(examples = @ExampleObject(
+                            """
+                                    {
+                                      "status": "success",
+                                      "message": "토큰 리프레시 성공",
+                                      "data": {
+                                        "id": 3,
+                                        "studentNumber": "20230003",
+                                        "nickname": "철수짱",
+                                        "role": "ROLE_ADMIN",
+                                        "department": "학과",
+                                        "accessToken": "jwt헤더.jwt바디.jwt서명",
+                                        "tokenType": "Bearer"
+                                      }
+                                    }"""
+                    ))),
+            @ApiResponse(responseCode = "500", description = "DB에 없는 사용자 or 레디스에 없는 리프레시 토큰",
+                    content = @Content(examples = @ExampleObject(
+                            """
+                                    {
+                                      "status": "fail",
+                                      "message": "2025-05-01T12:19:12.285+09:00 --- {오류난 이유}",
+                                      "data": null
+                                    }"""
+                    ))),
+            @ApiResponse(responseCode = "401", description = "리프레시 토큰이 만료되거나 올바르지 않음. 다시 로그인 해야함",
+                    content = @Content(examples = @ExampleObject(
+                                    """
+                                    {
+                                      "status": "fail",
+                                      "message": "2025-05-01T12:19:12.285+09:00 --- {오류난 이유}",
+                                      "data": null
+                                    }"""
+                    )))})
     @PostMapping("/token/refresh")
-    public ApiResponse<CommonSignInResponse> refresh(
+    public CommonResponse<CommonSignInResponse> refresh(
             @Parameter(hidden = true) @CookieValue("refreshToken") String refreshToken) {
-        return ApiResponse.success("토큰 리프레시 성공", commonAuthService.refresh(refreshToken));
+        return CommonResponse.success("토큰 리프레시 성공", commonAuthService.refresh(refreshToken));
     }
 
     @Operation(
             summary = "로그아웃 API",
-            description = "엑세스 토큰으로 로그아웃 처리합니다.\\n"
+            description = "엑세스 토큰으로 로그아웃 처리합니다.<br/>"
                     + "프론트는 로그아웃 시 엑세스 토큰을 삭제해야 합니다."
     )
     @DeleteMapping("/sign-out")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public ApiResponse<Object> signOut(@AuthenticationPrincipal LoginUser loginUser, HttpServletResponse response) {
+    public CommonResponse<Object> signOut(@AuthenticationPrincipal LoginUser loginUser, HttpServletResponse response) {
         commonAuthService.logout(loginUser, response);
-        return ApiResponse.success("로그아웃 성공", null);
+        return CommonResponse.success("로그아웃 성공", null);
     }
 }

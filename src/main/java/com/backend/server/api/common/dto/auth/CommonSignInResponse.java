@@ -27,5 +27,6 @@ public class CommonSignInResponse {
         this.role = user.getRole().name();
         this.department = user.getDepartment();
         this.accessToken = access;
+        this.tokenType = "Bearer";
     }
 }
