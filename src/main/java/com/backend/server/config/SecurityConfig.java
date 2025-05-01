@@ -51,10 +51,11 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(request -> {
                 CorsConfiguration config = new CorsConfiguration();
-                config.setAllowedOrigins(List.of("*")); // 모든 Origin 허용
+                config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:3001",
+                        "https://bmvcec.store", "https://admin.bmvcec.store")); // 모든 Origin 허용
                 config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
                 config.setAllowedHeaders(List.of("*"));
-                config.setAllowCredentials(false); // "*"을 사용할 때는 반드시 false
+                config.setAllowCredentials(true);
                 return config;
             }))
             .formLogin(AbstractHttpConfigurer::disable)
