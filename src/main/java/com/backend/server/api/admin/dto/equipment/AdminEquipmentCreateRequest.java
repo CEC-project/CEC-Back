@@ -50,8 +50,8 @@ public class AdminEquipmentCreateRequest {
         "RETURN_PENDING"
         }
     )
-    @NotBlank(message = "대여 상태는 필수입니다")
-    private String rentalStatus;
+    @NotNull(message = "대여 상태는 필수입니다")
+    private RentalStatus rentalStatus;
 
     @Schema(description = "수량", example = "5")
     @NotNull(message = "수량은 필수입니다")
@@ -82,8 +82,9 @@ public class AdminEquipmentCreateRequest {
                 .image_url(this.imageUrl)
                 .categoryId(this.categoryId)
                 .modelName(this.modelName)
-                .rentalStatus(RentalStatus.valueOf(this.rentalStatus))
+                .rentalStatus(this.rentalStatus)
                 .quantity(this.quantity)
+                .maxRentalCount(this.maxRentalCount)
                 .description(this.description)
                 .attachment(this.attachment)
                 .managerId(this.managerId)

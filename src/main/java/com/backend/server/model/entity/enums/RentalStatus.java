@@ -10,8 +10,6 @@ public enum RentalStatus {
     IN_USE("대여중"),
     BROKEN("파손"),
     RENTAL_PENDING("대여 신청 중"),
-    APPROVED("대여 승인됨"),
-    REJECTED("대여 거절됨"),
     RETURN_PENDING("반납 처리중");
     private final String description;
 

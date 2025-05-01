@@ -7,6 +7,7 @@ import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.EquipmentCart;
 import com.backend.server.model.entity.EquipmentFavorite;
 import com.backend.server.model.entity.EquipmentRental;
+import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.RentalStatus;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -291,8 +292,8 @@ public class EquipmentSpecification {
             List<Predicate> predicates = new ArrayList<>();
             
             // 대여 상태 필터링
-            if (StringUtils.hasText(request.getStatus())) {
-                predicates.add(criteriaBuilder.equal(root.get("status"), request.getStatus()));
+            if (request.getRentalStatus() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("rentalStatus"), request.getRentalStatus()));
             }
             
             // 검색어 필터링 (장비 이름, 모델명)
@@ -303,20 +304,45 @@ public class EquipmentSpecification {
                 if (searchType != null) {
                     if (searchType == 0) {
                         // 사용자 이름 검색
-                        predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.join("user").get("name")), keyword));
+                        Subquery<Long> userSubquery = query.subquery(Long.class);
+                        Root<User> userRoot = userSubquery.from(User.class);
+                        userSubquery.select(userRoot.get("id"))
+                            .where(criteriaBuilder.like(criteriaBuilder.lower(userRoot.get("name")), keyword));
+                        predicates.add(criteriaBuilder.in(root.get("userId")).value(userSubquery));
                     } else if (searchType == 1) {
                         // 장비 이름 검색
-                        predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.join("equipment").get("name")), keyword));
+                        Subquery<Long> equipmentSubquery = query.subquery(Long.class);
+                        Root<Equipment> equipmentRoot = equipmentSubquery.from(Equipment.class);
+                        equipmentSubquery.select(equipmentRoot.get("id"))
+                            .where(criteriaBuilder.like(criteriaBuilder.lower(equipmentRoot.get("name")), keyword));
+                        predicates.add(criteriaBuilder.in(root.get("equipmentId")).value(equipmentSubquery));
                     } else if (searchType == 2) {
                         // 카테고리 검색
-                        predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.join("equipment").get("category")), keyword));
+                        Subquery<Long> equipmentSubquery = query.subquery(Long.class);
+                        Root<Equipment> equipmentRoot = equipmentSubquery.from(Equipment.class);
+                        equipmentSubquery.select(equipmentRoot.get("id"))
+                            .where(criteriaBuilder.like(criteriaBuilder.lower(equipmentRoot.get("categoryId").as(String.class)), keyword));
+                        predicates.add(criteriaBuilder.in(root.get("equipmentId")).value(equipmentSubquery));
                     }
                 } else {
                     // 기본적으로 모든 필드 검색
-                    Predicate userNamePredicate = criteriaBuilder.like(criteriaBuilder.lower(root.join("user").get("name")), keyword);
-                    Predicate equipmentNamePredicate = criteriaBuilder.like(criteriaBuilder.lower(root.join("equipment").get("name")), keyword);
-                    Predicate categoryPredicate = criteriaBuilder.like(criteriaBuilder.lower(root.join("equipment").get("category")), keyword);
-                    predicates.add(criteriaBuilder.or(userNamePredicate, equipmentNamePredicate, categoryPredicate));
+                    Subquery<Long> userSubquery = query.subquery(Long.class);
+                    Root<User> userRoot = userSubquery.from(User.class);
+                    userSubquery.select(userRoot.get("id"))
+                        .where(criteriaBuilder.like(criteriaBuilder.lower(userRoot.get("name")), keyword));
+                    
+                    Subquery<Long> equipmentSubquery = query.subquery(Long.class);
+                    Root<Equipment> equipmentRoot = equipmentSubquery.from(Equipment.class);
+                    equipmentSubquery.select(equipmentRoot.get("id"))
+                        .where(criteriaBuilder.or(
+                            criteriaBuilder.like(criteriaBuilder.lower(equipmentRoot.get("name")), keyword),
+                            criteriaBuilder.like(criteriaBuilder.lower(equipmentRoot.get("categoryId").as(String.class)), keyword)
+                        ));
+                    
+                    predicates.add(criteriaBuilder.or(
+                        criteriaBuilder.in(root.get("userId")).value(userSubquery),
+                        criteriaBuilder.in(root.get("equipmentId")).value(equipmentSubquery)
+                    ));
                 }
             }
             

@@ -51,15 +51,15 @@ public class EquipmentRental extends BaseTimeEntity {
     
     // 대여 요청 승인
     public void approveRental() {
-        this.rentalStatus = RentalStatus.APPROVED;
+        this.rentalStatus = RentalStatus.IN_USE;
     }
     
-    // 대여 요청 거절
-    public void rejectRental() {
-        this.rentalStatus = RentalStatus.REJECTED;
-    }
+    // // 대여 요청 거절
+    // public void rejectRental() {
+    //     this.rentalStatus = RentalStatus.REJECTED;
+    // }
     
-    // 반납 완료
+    // 반납 완료, 대여 요청 거절
     public void completeReturn() {
         this.rentalStatus = RentalStatus.AVAILABLE;
     }

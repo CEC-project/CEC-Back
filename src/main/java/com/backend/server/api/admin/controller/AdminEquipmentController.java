@@ -41,9 +41,7 @@ public class AdminEquipmentController {
         summary = "장비 필터링 조회",
         description = "장비의 카테고리, 상태, 대여 가능 여부, 검색어 등을 기반으로 장비 목록을 필터링하여 조회합니다."
     )
-    public ApiResponse<AdminEquipmentListResponse> getAllEquipments(
-        @ModelAttribute AdminEquipmentListRequest request
-    ) {
+    public ApiResponse<AdminEquipmentListResponse> getAllEquipments(@ModelAttribute AdminEquipmentListRequest request) {
         AdminEquipmentListResponse equipments = adminEquipmentService.getEquipments(request);
         return ApiResponse.success("모든 장비 조회 성공", equipments);
     }
@@ -79,9 +77,9 @@ public class AdminEquipmentController {
     @GetMapping("/rental-requests")
     @Operation(summary = "장비 대여 요청 / 반납 목록 조회", description = "강의실의 대여 상태, 대여 가능 여부, 검색어, 즐겨찾기 여부, 정렬 조건 등을 기반으로 필터링하여 강의실 목록을 조회합니다."
     )
-    public ApiResponse<AdminEquipmentRentalRequestListResponse> getRentalRequests(@RequestBody AdminEquipmentRentalRequestListRequest request) {
-        AdminEquipmentRentalRequestListResponse rentalRequests = adminEquipmentService.getRentalRequests(request);
-        return ApiResponse.success("장비 대여 요청 목록 조회 성공", rentalRequests);
+    public ApiResponse<AdminEquipmentRentalRequestListResponse> getRentalRequests(@ModelAttribute AdminEquipmentRentalRequestListRequest request) {
+        AdminEquipmentRentalRequestListResponse rentalResponses = adminEquipmentService.getRentalRequests(request);
+        return ApiResponse.success("장비 대여 요청 목록 조회 성공", rentalResponses);
     }
 
     // @GetMapping("/return-requests")
