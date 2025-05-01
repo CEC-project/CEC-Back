@@ -47,12 +47,17 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/api/excel/import-users")
         );
 
+        List<String> origins = List.of(
+                "http://localhost:3000", "http://localhost:3001", "http://localhost:8080",
+                "https://bmvcec.store", "https://admin.bmvcec.store",
+                "https://api.bmvcec.store", "https://dev.api.bmvcec.store"
+        );
+
         http
             .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(request -> {
                 CorsConfiguration config = new CorsConfiguration();
-                config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:3001",
-                        "https://bmvcec.store", "https://admin.bmvcec.store")); // 모든 Origin 허용
+                config.setAllowedOrigins(origins); // 모든 Origin 허용
                 config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
                 config.setAllowedHeaders(List.of("*"));
                 config.setAllowCredentials(true);
