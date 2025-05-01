@@ -208,14 +208,26 @@ public class EquipmentService {
     //     return new EquipmentRentalResponse(equipmentRental);
     // }
 
-    //대여/반납 요청 취소
-    public void cancelRentalRequest(Long requestId) {
-        equipmentRentalRepository.deleteById(requestId);
-    }
+    // //대여/반납 요청 취소
+    // public void cancelRentalRequest(Long requestId) {
+    //     equipmentRentalRepository.deleteById(requestId);
+    // }
 
     //다중 대여/반납 요청 취소
-    public void cancelBulkRentalRequests(List<Long> requestIds) {
-        equipmentRentalRepository.deleteAllById(requestIds);
+    public void cancelBulkRentalRequests(EquipmentRentalListRequest request) {
+        for (EquipmentRentalItem item : request.getItems()) {
+            Equipment equipment = equipmentRepository.findById(item.getEquipmentId()).orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
+
+            if(equipment.getRentalStatus() == RentalStatus.RENTAL_PENDING) {
+                equipment.setQuantity(equipment.getQuantity() + item.getQuantity());
+                equipmentRepository.save(equipment);
+                equipmentRentalRepository.deleteById(item.getEquipmentId());
+            } else if(equipment.getRentalStatus() == RentalStatus.RETURN_PENDING) {
+                equipment.setQuantity(equipment.getQuantity() + item.getQuantity());
+                equipmentRepository.save(equipment);
+                equipmentRentalRepository.deleteById(item.getEquipmentId());
+            }
+        }
     }
 
     //즐찾추가
