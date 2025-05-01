@@ -25,11 +25,9 @@ public class AdminEquipmentResponse {
     private Integer maxRentalCount;
     private String description;
     private String imageUrl;
-    private Boolean isFavorite;
+    //private Boolean isFavorite;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    
-
     
     public AdminEquipmentResponse(Equipment equipment) {
         this.id = equipment.getId();

@@ -75,7 +75,7 @@ public class EquipmentService {
         // 현재 로그인한 사용자 조회
         Long userId = loginUser.getId();
         // 장비 조회
-        Equipment equipment = equipmentRepository.findById(request.getEquipmentId())
+        Equipment equipment = equipmentRepository.findByIdForUpdate(request.getEquipmentId())
                 .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
         
         Long equipmentId = request.getEquipmentId();
@@ -90,6 +90,15 @@ public class EquipmentService {
         EquipmentRental rental = request.toEntity(userId, equipmentId, request.getRentalTime(), request.getReturnTime(), status, request.getQuantity());
         // 새로운 대여 신청 생성
         equipmentRentalRepository.save(rental);
+        equipment.setQuantity(equipment.getQuantity() - request.getQuantity());
+        equipmentRepository.save(equipment);    
+        Equipment rentalPendingEquipment = equipment.toBuilder()
+        .id(null)
+        .quantity(request.getQuantity())
+        .rentalStatus(status)
+        .available(false)
+        .build();
+        equipmentRepository.save(rentalPendingEquipment);
 
         return new EquipmentRentalResponse(rental);
     }
@@ -110,7 +119,7 @@ public class EquipmentService {
 
             try {
                 // 장비 조회
-                Equipment equipment = equipmentRepository.findById(item.getEquipmentId())
+                Equipment equipment = equipmentRepository.findByIdForUpdate(item.getEquipmentId())
                         .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
                 
                 // 장비가 대여 가능한지 확인
@@ -124,28 +133,29 @@ public class EquipmentService {
                 RentalStatus status = RentalStatus.RENTAL_PENDING;
                 EquipmentRental rental = singleRequest.toEntity(userId, item.getEquipmentId(), rentalTime, returnTime, status, item.getQuantity());
                 EquipmentRental savedRental = equipmentRentalRepository.save(rental);
+                equipment.setQuantity(equipment.getQuantity() - item.getQuantity());
+                equipmentRepository.save(equipment);
                 
                 EquipmentRentalResponse successResponse = new EquipmentRentalResponse(savedRental);
                 successResponses.add(successResponse);
+
+                Equipment rentalPendingEquipment = equipment.toBuilder()
+                    .id(null)
+                    .quantity(item.getQuantity())
+                    .rentalStatus(status)
+                    .available(false)
+                .build();
+                equipmentRepository.save(rentalPendingEquipment);
                 
             } catch (Exception e) {
                 // 예외 발생 시 실패 목록에 추가
                 failedRequests.add(new FailedRentalInfo(item.getEquipmentId(), e.getMessage()));
             }
         }
+        
         return new EquipmentRentalListResponse(successResponses, failedRequests);
     }
 
-    //단일장비반납
-    //ReturnResponse 만든 이유는 반납예정시간이랑 실제반납시간이 다르기때문에에
-    public EquipmentRentalResponse createReturnRequest(LoginUser loginUser, EquipmentRentalRequest request) {
-        Long userId = loginUser.getId();
-        LocalDateTime returnTime = LocalDateTime.now();
-        RentalStatus status = RentalStatus.RETURN_PENDING;
-        EquipmentRental equipmentRental = request.toEntity(userId, request.getEquipmentId(), request.getRentalTime(), returnTime, status, request.getQuantity());
-        equipmentRentalRepository.save(equipmentRental);
-        return new EquipmentRentalResponse(equipmentRental);
-    }
 
     //다중장비반납요청
     public EquipmentRentalListResponse createReturnRequests(LoginUser loginUser, EquipmentRentalListRequest request) {
@@ -165,7 +175,10 @@ public class EquipmentService {
                 LocalDateTime returnTime = request.getEndTime();
                 EquipmentRental rental = singleRequest.toEntity(userId, item.getEquipmentId(), startTime, returnTime, status, item.getQuantity());
                 EquipmentRental savedRental = equipmentRentalRepository.save(rental);
-                
+                Equipment equipment = equipmentRepository.findById(item.getEquipmentId())
+                .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
+                equipment.toBuilder().rentalStatus(status).build();
+                equipmentRepository.save(equipment);
                 EquipmentRentalResponse successResponse = new EquipmentRentalResponse(savedRental);
                 successResponses.add(successResponse);
             } catch (Exception e) {
@@ -177,6 +190,23 @@ public class EquipmentService {
         }
         return new EquipmentRentalListResponse(successResponses, failedRequests);
     }
+
+    // //단일장비반납
+    // //ReturnResponse 만든 이유는 반납예정시간이랑 실제반납시간이 다르기때문에에
+    // public EquipmentRentalResponse createReturnRequest(LoginUser loginUser, EquipmentRentalRequest request) {
+    //     Long userId = loginUser.getId();
+    //     LocalDateTime returnTime = LocalDateTime.now();
+    //     RentalStatus status = RentalStatus.RETURN_PENDING;
+    //     EquipmentRental equipmentRental = request.toEntity(userId, request.getEquipmentId(), request.getRentalTime(), returnTime, status, request.getQuantity());
+    //     equipmentRentalRepository.save(equipmentRental);
+    //     Equipment equipment = equipmentRepository.findByIdForUpdate(request.getEquipmentId())
+    //     .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
+    //     if
+
+        
+    //     equipment.setQuantity(equipment.getQuantity() + request.getQuantity());
+    //     return new EquipmentRentalResponse(equipmentRental);
+    // }
 
     //대여/반납 요청 취소
     public void cancelRentalRequest(Long requestId) {

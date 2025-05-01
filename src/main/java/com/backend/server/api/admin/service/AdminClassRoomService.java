@@ -21,6 +21,7 @@ import com.backend.server.api.admin.dto.classroom.AdminClassRoomRentalRequestLis
 import com.backend.server.api.admin.dto.classroom.AdminClassRoomRentalRequestListResponse;
 import com.backend.server.model.entity.ClassRoom;
 import com.backend.server.model.entity.User;
+import com.backend.server.model.entity.enums.RentalStatus;
 import com.backend.server.model.repository.ClassRoomRespository;
 import com.backend.server.model.repository.ClassRoomSpecification;
 import com.backend.server.model.repository.UserRepository;
@@ -113,7 +114,10 @@ public class AdminClassRoomService {
     public void approveRentalRequest(Long rentalId) {
         ClassRoomRental rental = classRoomRentalRepository.findById(rentalId)
                 .orElseThrow(() -> new RuntimeException("대여 요청을 찾을 수 없습니다."));
-        rental.approveRental();
+        ClassRoom classRoom = classRoomRespository.findById(rental.getClassRoomId())
+                .orElseThrow(() -> new RuntimeException("강의실을 찾을 수 없습니다."));
+        classRoom.setRentalStatus(RentalStatus.IN_USE);
+        classRoomRespository.save(classRoom);
         classRoomRentalRepository.save(rental);
     }
 
@@ -121,24 +125,33 @@ public class AdminClassRoomService {
     public void rejectRentalRequest(Long rentalId) {
         ClassRoomRental rental = classRoomRentalRepository.findById(rentalId)
                 .orElseThrow(() -> new RuntimeException("대여 요청을 찾을 수 없습니다."));
-        rental.rejectRental();
-        classRoomRentalRepository.save(rental);
+        ClassRoom classRoom = classRoomRespository.findById(rental.getClassRoomId())
+                .orElseThrow(() -> new RuntimeException("강의실을 찾을 수 없습니다."));
+        classRoom.setRentalStatus(RentalStatus.AVAILABLE);
+        classRoomRespository.save(classRoom);
+        classRoomRentalRepository.delete(rental);
     }
 
     @Transactional
     public void approveReturnRequest(Long rentalId) {
         ClassRoomRental rental = classRoomRentalRepository.findById(rentalId)
                 .orElseThrow(() -> new RuntimeException("대여 요청을 찾을 수 없습니다."));
-        rental.completeReturn();
-        classRoomRentalRepository.save(rental);
+        ClassRoom classRoom = classRoomRespository.findById(rental.getClassRoomId())
+                .orElseThrow(() -> new RuntimeException("강의실을 찾을 수 없습니다."));
+        classRoom.setRentalStatus(RentalStatus.AVAILABLE);
+        classRoomRespository.save(classRoom);
+        classRoomRentalRepository.delete(rental);
     }
 
     @Transactional
     public void approveReturnRequestDamaged(Long rentalId) {
         ClassRoomRental rental = classRoomRentalRepository.findById(rentalId)
                 .orElseThrow(() -> new RuntimeException("대여 요청을 찾을 수 없습니다."));
-        rental.completeReturnDamaged();
-        classRoomRentalRepository.save(rental);
+        ClassRoom classRoom = classRoomRespository.findById(rental.getClassRoomId())
+                .orElseThrow(() -> new RuntimeException("강의실을 찾을 수 없습니다."));
+        classRoom.setRentalStatus(RentalStatus.BROKEN);
+        classRoomRespository.save(classRoom);
+        classRoomRentalRepository.delete(rental);
     }
 }
                                                     

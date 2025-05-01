@@ -121,32 +121,118 @@ public class AdminEquipmentService {
     }
 
     //장비 대여 요청 다중 승인
+    @Transactional
     public void approveRentalRequests(List<Long> ids) {
         List<EquipmentRental> rentals = equipmentRentalRepository.findAllById(ids);
-        rentals.forEach(EquipmentRental::approveRental); // 엔티티에 정의된 메소드 사용
-        equipmentRentalRepository.saveAll(rentals);
+        for (EquipmentRental rental : rentals) {
+            rental.approveRental();
+            // 장비 상태도 함께 업데이트
+            Equipment equipment = equipmentRepository.findByIdForUpdate(rental.getEquipmentId())
+                .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
+            
+            // 현재 장비의 수량 감소
+            equipment.setQuantity(equipment.getQuantity() - rental.getQuantity());
+            equipmentRepository.save(equipment);
+
+            //요청이 승인됐으니까 장비 상태가 바뀐 채로 row하나 더만들기
+            Equipment rentalPendingEquipment = equipment.toBuilder()
+                .id(null)
+                .quantity(rental.getQuantity())
+                .rentalStatus(RentalStatus.IN_USE)
+                .available(false)
+                .build();
+            equipmentRepository.save(rentalPendingEquipment);
+        }
+        // 대여 요청 레코드 삭제
+        equipmentRentalRepository.deleteAll(rentals);
     }
 
-    //장비 대여 요청 다중 거절
+    @Transactional
     public void rejectRentalRequests(List<Long> ids) {
         List<EquipmentRental> rentals = equipmentRentalRepository.findAllById(ids);
-        rentals.forEach(EquipmentRental::rejectRental); // 엔티티에 정의된 메소드 사용
-        equipmentRentalRepository.saveAll(rentals);
+
+        for (EquipmentRental rental : rentals) {
+            // 1. 기존 장비 (원본 row) 찾기
+            Equipment originalEquipment = equipmentRepository.findByIdForUpdate(rental.getEquipmentId())
+                .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
+
+            // 2. rentalPendingEquipment 삭제 (id=null로 생성된 것)
+            List<Equipment> duplicates = equipmentRepository.findByRentalStatusAndName(
+                RentalStatus.RENTAL_PENDING, originalEquipment.getName());
+
+            for (Equipment duplicate : duplicates) {
+                if (!duplicate.getId().equals(originalEquipment.getId())) {
+                    equipmentRepository.delete(duplicate); // 임시 장비 row 삭제
+                }
+            }
+
+            // 3. 원본 장비 수량 복구
+            originalEquipment.setQuantity(originalEquipment.getQuantity() + rental.getQuantity());
+            equipmentRepository.save(originalEquipment);
+        }
+
+        // 4. 대여 요청 삭제
+        equipmentRentalRepository.deleteAll(rentals);
     }
 
+    @Transactional
+public void approveReturnRequestsNormal(List<Long> ids) {
+    List<EquipmentRental> returns = equipmentRentalRepository.findAllById(ids);
 
-    //장비 반납 다중승인(정상 반납)
-    public void approveReturnRequestsNormal(List<Long> ids) {
-        List<EquipmentRental> returns = equipmentRentalRepository.findAllById(ids);
-        returns.forEach(EquipmentRental::completeReturn); // 엔티티에 정의된 메소드 사용
-        equipmentRentalRepository.saveAll(returns);
+    for (EquipmentRental rental : returns) {
+        // 1. 기존 장비 찾기
+        Equipment originalEquipment = equipmentRepository.findByIdForUpdate(rental.getEquipmentId())
+            .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
+
+        // 2. rentalPending 상태의 임시 장비 삭제
+        List<Equipment> duplicates = equipmentRepository.findByRentalStatusAndName(
+            RentalStatus.RETURN_PENDING, originalEquipment.getName());
+        
+        for (Equipment duplicate : duplicates) {
+            if (!duplicate.getId().equals(originalEquipment.getId())) {
+                equipmentRepository.delete(duplicate); // 임시 장비 row 삭제
+            }
+        }
+
+        // 3. 원래 장비 수량 복원
+        originalEquipment.setQuantity(originalEquipment.getQuantity() + rental.getQuantity());
+        originalEquipment.setRentalStatus(RentalStatus.AVAILABLE);
+        equipmentRepository.save(originalEquipment);
     }
 
-    //장비 반납 다중승인(파손 반납)
-    public void approveReturnDamegedRequestsNormal(List<Long> ids) {
-        List<EquipmentRental> returns = equipmentRentalRepository.findAllById(ids);
-        returns.forEach(EquipmentRental::completeReturnDamaged); // 엔티티에 정의된 메소드 사용
-        equipmentRentalRepository.saveAll(returns);
+    // 4. 반납 요청 삭제
+    equipmentRentalRepository.deleteAll(returns);
+}
+
+
+@Transactional
+public void approveReturnDamegedRequestsNormal(List<Long> ids) {
+    List<EquipmentRental> returns = equipmentRentalRepository.findAllById(ids);
+
+    for (EquipmentRental rental : returns) {
+        // 1. 기존 장비 찾기
+        Equipment originalEquipment = equipmentRepository.findByIdForUpdate(rental.getEquipmentId())
+            .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
+
+        // 2. RETURN_PENDING 임시 장비 삭제
+        List<Equipment> duplicates = equipmentRepository.findByRentalStatusAndName(
+            RentalStatus.RETURN_PENDING, originalEquipment.getName());
+
+        for (Equipment duplicate : duplicates) {
+            if (!duplicate.getId().equals(originalEquipment.getId())) {
+                equipmentRepository.delete(duplicate); // 임시 장비 row 삭제
+            }
+        }
+
+        // 3. 원래 장비 수량 감소 or 파손 처리
+        // 수량 감소하지 않고 상태만 BROKEN 처리할 경우:
+        originalEquipment.setRentalStatus(RentalStatus.BROKEN);
+        equipmentRepository.save(originalEquipment);
     }
+
+    // 4. 반납 요청 삭제
+    equipmentRentalRepository.deleteAll(returns);
+}
+
     
 } 

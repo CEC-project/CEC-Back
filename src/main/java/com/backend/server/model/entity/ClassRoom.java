@@ -97,4 +97,9 @@ public class ClassRoom extends BaseTimeEntity {
     public void setAvailable(Boolean available) {
         this.available = available;
     }
+    
+    // 대여자 아이디 업데이트를 위한 Setter 메소드
+    public void setRenterId(Long renterId) {
+        this.renterId = renterId;
+    }
 }

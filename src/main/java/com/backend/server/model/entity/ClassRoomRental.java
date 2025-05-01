@@ -44,15 +44,7 @@ public class ClassRoomRental extends BaseTimeEntity {
     @Column
     private LocalDateTime returnTime;
 
-    // 대여 요청 승인
-    public void approveRental() {
-        this.status = RentalStatus.APPROVED;
-    }
-    
-    // 대여 요청 거절
-    public void rejectRental() {
-        this.status = RentalStatus.REJECTED;
-    }
+
     
     // 반납 완료
     public void completeReturn() {
