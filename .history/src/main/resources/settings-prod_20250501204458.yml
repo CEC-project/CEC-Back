@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/cecprod
+    username: cecprod
+    password: ulJLQuuOq7OxnHs
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  data:
+    redis:
+      port: 6380
+  jwt:
+    secret: 'QpAgEawb9QDRrAn8kdUg9Q8Kx6d4vAWZ'
+    access-token-validity-in-minutes: 15  # 15분
+    refresh-token-validity-in-days: 14  # 14일
+
+swagger.server.url: 'https://api.bmvcec.store'
+
+server.port: 8081
