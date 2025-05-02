@@ -2,7 +2,7 @@ package com.backend.server.api.user.dto.classroom;
 
 import java.time.LocalDateTime;
 import com.backend.server.model.entity.ClassRoom;
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 import lombok.Getter;
 
 @Getter
@@ -11,7 +11,7 @@ public class ClassRoomResponse {
     private String name;
     private String imageUrl;
     private String location;
-    private RentalStatus status;
+    private Status status;
     private String managerName;
     private LocalDateTime availableStartTime;
     private LocalDateTime availableEndTime;

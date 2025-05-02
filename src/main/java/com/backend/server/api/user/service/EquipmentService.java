@@ -27,7 +27,7 @@ import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.EquipmentFavorite;
 import com.backend.server.model.entity.EquipmentRental;
 import com.backend.server.model.entity.User;
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.repository.EquipmentFavoriteRepository;
 import com.backend.server.model.repository.EquipmentRentalRepository;
 import com.backend.server.model.repository.EquipmentRepository;
@@ -86,7 +86,7 @@ public class EquipmentService {
         if (equipment.getMaxRentalCount() != null && equipment.getMaxRentalCount() <= request.getQuantity()) {
             throw new RuntimeException("대여 가능한 수량을 초과했습니다.");
         }
-        RentalStatus status = RentalStatus.RENTAL_PENDING;
+        Status status = Status.RENTAL_PENDING;
         EquipmentRental rental = request.toEntity(userId, equipmentId, request.getRentalTime(), request.getReturnTime(), status, request.getQuantity());
         // 새로운 대여 신청 생성
         equipmentRentalRepository.save(rental);
@@ -130,7 +130,7 @@ public class EquipmentService {
                 }
                 
                 EquipmentRentalRequest singleRequest = new EquipmentRentalRequest();
-                RentalStatus status = RentalStatus.RENTAL_PENDING;
+                Status status = Status.RENTAL_PENDING;
                 EquipmentRental rental = singleRequest.toEntity(userId, item.getEquipmentId(), rentalTime, returnTime, status, item.getQuantity());
                 EquipmentRental savedRental = equipmentRentalRepository.save(rental);
                 equipment.setQuantity(equipment.getQuantity() - item.getQuantity());
@@ -171,7 +171,7 @@ public class EquipmentService {
             try {
                 // 장비 조회
                 EquipmentRentalRequest singleRequest = new EquipmentRentalRequest();
-                RentalStatus status = RentalStatus.RETURN_PENDING;
+                Status status = Status.RETURN_PENDING;
                 LocalDateTime returnTime = request.getEndTime();
                 EquipmentRental rental = singleRequest.toEntity(userId, item.getEquipmentId(), startTime, returnTime, status, item.getQuantity());
                 EquipmentRental savedRental = equipmentRentalRepository.save(rental);
@@ -218,11 +218,11 @@ public class EquipmentService {
         for (EquipmentRentalItem item : request.getItems()) {
             Equipment equipment = equipmentRepository.findById(item.getEquipmentId()).orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
 
-            if(equipment.getRentalStatus() == RentalStatus.RENTAL_PENDING) {
+            if(equipment.getRentalStatus() == Status.RENTAL_PENDING) {
                 equipment.setQuantity(equipment.getQuantity() + item.getQuantity());
                 equipmentRepository.save(equipment);
                 equipmentRentalRepository.deleteById(item.getEquipmentId());
-            } else if(equipment.getRentalStatus() == RentalStatus.RETURN_PENDING) {
+            } else if(equipment.getRentalStatus() == Status.RETURN_PENDING) {
                 equipment.setQuantity(equipment.getQuantity() + item.getQuantity());
                 equipmentRepository.save(equipment);
                 equipmentRentalRepository.deleteById(item.getEquipmentId());

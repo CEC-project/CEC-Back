@@ -1,7 +1,7 @@
 package com.backend.server.api.user.dto.equipment;
 
 import com.backend.server.model.entity.Equipment;
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +19,7 @@ public class EquipmentResponse {
     private String name;
     private Long categoryId;
     private String modelName;
-    private RentalStatus rentalStatus;
+    private Status rentalStatus;
     private Boolean available;
     private Integer quantity;
     private Integer maxRentalCount;

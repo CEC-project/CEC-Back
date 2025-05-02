@@ -1,7 +1,7 @@
 package com.backend.server.api.user.dto.equipment;
 
 import com.backend.server.model.entity.EquipmentRental;
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +17,7 @@ public class EquipmentRentalRequest {
     private LocalDateTime returnTime; 
     private Integer quantity;
 
-    public EquipmentRental toEntity(Long userId,Long equipmentId, LocalDateTime rentalTime, LocalDateTime returnTime, RentalStatus rentalStatus, Integer quantity) {
+    public EquipmentRental toEntity(Long userId,Long equipmentId, LocalDateTime rentalTime, LocalDateTime returnTime, Status rentalStatus, Integer quantity) {
         return EquipmentRental.builder()
                 .equipmentId(equipmentId)
                 .userId(userId)

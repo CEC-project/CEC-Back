@@ -3,7 +3,7 @@ package com.backend.server.api.admin.service;
 import com.backend.server.api.admin.dto.AdminManagerCandidatesResponse;
 import com.backend.server.api.admin.dto.equipment.AdminEquipmentRentalRequestListRequest;
 import com.backend.server.api.admin.dto.equipment.AdminEquipmentRentalRequestListResponse;
-import com.backend.server.api.admin.dto.equipment.AdminEquipmentCreateRequest;
+import com.backend.server.api.admin.dto.equipment.PastAdminEquipmentCreateRequest;
 import com.backend.server.api.admin.dto.equipment.AdminEquipmentListRequest;
 import com.backend.server.api.admin.dto.equipment.AdminEquipmentListResponse;
 import com.backend.server.api.admin.dto.equipment.AdminEquipmentResponse;
@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.enums.Role;
 import com.backend.server.model.entity.EquipmentRental;
 import com.backend.server.model.repository.EquipmentRentalRepository;
@@ -66,7 +66,7 @@ public class AdminEquipmentService {
     }
 
     //장비 등록
-    public void createEquipment(AdminEquipmentCreateRequest request) {
+    public void createEquipment(PastAdminEquipmentCreateRequest request) {
         User manager = userRepository.findById(request.getManagerId())
                 .orElseThrow(() -> new RuntimeException("관리자를 찾을 수 없습니다."));
         Equipment equipment = request.toEntity(manager, null);
@@ -74,7 +74,7 @@ public class AdminEquipmentService {
     }
 
     //장비 수정
-    public void updateEquipment(Long id, AdminEquipmentCreateRequest request) {
+    public void updateEquipment(Long id, PastAdminEquipmentCreateRequest request) {
         Equipment equipment = equipmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
         User manager = userRepository.findById(request.getManagerId())
@@ -138,7 +138,7 @@ public class AdminEquipmentService {
             Equipment rentalPendingEquipment = equipment.toBuilder()
                 .id(null)
                 .quantity(rental.getQuantity())
-                .rentalStatus(RentalStatus.IN_USE)
+                .rentalStatus(Status.IN_USE)
                 .available(false)
                 .build();
             equipmentRepository.save(rentalPendingEquipment);
@@ -158,7 +158,7 @@ public class AdminEquipmentService {
 
             // 2. rentalPendingEquipment 삭제 (id=null로 생성된 것)
             List<Equipment> duplicates = equipmentRepository.findByRentalStatusAndName(
-                RentalStatus.RENTAL_PENDING, originalEquipment.getName());
+                Status.RENTAL_PENDING, originalEquipment.getName());
 
             for (Equipment duplicate : duplicates) {
                 if (!duplicate.getId().equals(originalEquipment.getId())) {
@@ -186,7 +186,7 @@ public void approveReturnRequestsNormal(List<Long> ids) {
 
         // 2. rentalPending 상태의 임시 장비 삭제
         List<Equipment> duplicates = equipmentRepository.findByRentalStatusAndName(
-            RentalStatus.RETURN_PENDING, originalEquipment.getName());
+            Status.RETURN_PENDING, originalEquipment.getName());
         
         for (Equipment duplicate : duplicates) {
             if (!duplicate.getId().equals(originalEquipment.getId())) {
@@ -196,7 +196,7 @@ public void approveReturnRequestsNormal(List<Long> ids) {
 
         // 3. 원래 장비 수량 복원
         originalEquipment.setQuantity(originalEquipment.getQuantity() + rental.getQuantity());
-        originalEquipment.setRentalStatus(RentalStatus.AVAILABLE);
+        originalEquipment.setRentalStatus(Status.AVAILABLE);
         equipmentRepository.save(originalEquipment);
     }
 
@@ -216,7 +216,7 @@ public void approveReturnDamegedRequestsNormal(List<Long> ids) {
 
         // 2. RETURN_PENDING 임시 장비 삭제
         List<Equipment> duplicates = equipmentRepository.findByRentalStatusAndName(
-            RentalStatus.RETURN_PENDING, originalEquipment.getName());
+            Status.RETURN_PENDING, originalEquipment.getName());
 
         for (Equipment duplicate : duplicates) {
             if (!duplicate.getId().equals(originalEquipment.getId())) {
@@ -226,7 +226,7 @@ public void approveReturnDamegedRequestsNormal(List<Long> ids) {
 
         // 3. 원래 장비 수량 감소 or 파손 처리
         // 수량 감소하지 않고 상태만 BROKEN 처리할 경우:
-        originalEquipment.setRentalStatus(RentalStatus.BROKEN);
+        originalEquipment.setRentalStatus(Status.BROKEN);
         equipmentRepository.save(originalEquipment);
     }
 

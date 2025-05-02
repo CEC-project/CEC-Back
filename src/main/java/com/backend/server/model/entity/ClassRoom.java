@@ -17,7 +17,7 @@ import lombok.Builder;
 
 import java.time.LocalDateTime;
 
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 
 @Entity
 @Getter
@@ -40,7 +40,7 @@ public class ClassRoom extends BaseTimeEntity {
     private String location; // 강의실 위치
 
     @Enumerated(EnumType.STRING)
-    private RentalStatus rentalStatus; // 강의실 상태 (RentalStatus 열거형 사용)
+    private Status rentalStatus; // 강의실 상태 (RentalStatus 열거형 사용)
     @Column
     private Long managerId; // 강의실 관리자 아이디
 
@@ -63,9 +63,9 @@ public class ClassRoom extends BaseTimeEntity {
     private Boolean favorite; // 즐겨찾기 여부
 
     @Enumerated(EnumType.STRING)
-    private RentalStatus status;
+    private Status status;
 
-    public RentalStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
@@ -78,7 +78,7 @@ public class ClassRoom extends BaseTimeEntity {
     }
 
     // 대여 상태 업데이트를 위한 Setter 메소드
-    public void setRentalStatus(RentalStatus rentalStatus) {
+    public void setRentalStatus(Status rentalStatus) {
         this.rentalStatus = rentalStatus;
     }
     

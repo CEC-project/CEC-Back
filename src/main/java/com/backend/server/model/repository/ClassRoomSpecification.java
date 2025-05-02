@@ -4,7 +4,7 @@ import com.backend.server.api.admin.dto.classroom.AdminClassRoomRentalRequestLis
 import com.backend.server.api.common.dto.classRoom.CommonClassRoomListRequest;
 import com.backend.server.model.entity.ClassRoom;
 import com.backend.server.model.entity.ClassRoomRental;
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
@@ -25,7 +25,7 @@ public class ClassRoomSpecification {
 
             // 상태 필터링
             if (request.getStatus() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("status"), RentalStatus.valueOf(request.getStatus())));
+                predicates.add(criteriaBuilder.equal(root.get("status"), Status.valueOf(request.getStatus())));
             }
 
             // 대여 가능 여부 필터링

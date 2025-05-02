@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum RentalStatus {
+public enum Status {
     AVAILABLE("대여 가능"),
     IN_USE("대여중"),
     BROKEN("파손"),

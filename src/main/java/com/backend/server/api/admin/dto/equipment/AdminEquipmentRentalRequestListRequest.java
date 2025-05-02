@@ -2,7 +2,7 @@ package com.backend.server.api.admin.dto.equipment;
 
 import java.time.LocalDateTime;
 
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class AdminEquipmentRentalRequestListRequest {
     @Schema(description = "대여 상태", example = "RENTAL_PENDING", 
         allowableValues = {"RENTAL_PENDING", "RETURN_PENDING"})
-    private RentalStatus rentalStatus;
+    private Status rentalStatus;
     
     @Schema(description = "검색어", example = "맥북")
     private String searchKeyword;

@@ -16,7 +16,7 @@ import lombok.Builder;
 
 import java.time.LocalDateTime;
 
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 
 @Entity
 @Getter
@@ -36,7 +36,7 @@ public class ClassRoomRental extends BaseTimeEntity {
     private Long renterId;
 
     @Enumerated(EnumType.STRING)
-    private RentalStatus status;
+    private Status status;
 
     @Column
     private LocalDateTime rentalTime;
@@ -48,11 +48,11 @@ public class ClassRoomRental extends BaseTimeEntity {
     
     // 반납 완료
     public void completeReturn() {
-        this.status = RentalStatus.AVAILABLE;
+        this.status = Status.AVAILABLE;
     }
 
     // 반납 완료(피손)
     public void completeReturnDamaged() {
-        this.status = RentalStatus.BROKEN;
+        this.status = Status.BROKEN;
     }
 } 

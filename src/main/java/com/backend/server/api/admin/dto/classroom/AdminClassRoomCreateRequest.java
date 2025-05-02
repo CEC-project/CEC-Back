@@ -2,7 +2,7 @@ package com.backend.server.api.admin.dto.classroom;
 
 import com.backend.server.model.entity.ClassRoom;
 import com.backend.server.model.entity.User;
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +19,7 @@ public class AdminClassRoomCreateRequest {
     private String name; // 강의실 이름
     private String imageUrl; // 강의실 이미지
     private String location; // 강의실 위치
-    private RentalStatus status; // 강의실 상태
+    private Status status; // 강의실 상태
     private Long managerId;
     private String managerName; // 강의실 관리자
     private LocalDateTime availableStartTime; // 강의실 대여 가능 시작 시간
