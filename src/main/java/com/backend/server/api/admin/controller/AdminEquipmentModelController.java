@@ -27,7 +27,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/equipment-models")
+@RequestMapping("/api/admin/equipment-models")
 @RequiredArgsConstructor
 @Tag(name = "장비 모델 어드민 API", description = "장비 모델 조회 관련 API")
 public class AdminEquipmentModelController {

@@ -27,7 +27,7 @@ import java.util.List;
 
 @Tag(name = "관리자 장비 카테고리", description = "관리자용 장비 카테고리 관리 API")
 @RestController
-@RequestMapping("/api/equipment-categories")
+@RequestMapping("/api/admin/equipment-categories")
 @RequiredArgsConstructor
 public class AdminEquipmentCategoryController {
 
