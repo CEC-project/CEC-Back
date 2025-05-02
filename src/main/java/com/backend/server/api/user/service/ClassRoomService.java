@@ -26,7 +26,7 @@ import com.backend.server.model.entity.ClassRoom;
 import com.backend.server.model.entity.ClassRoomFavorite;
 import com.backend.server.model.entity.ClassRoomRental;
 import com.backend.server.model.entity.User;
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.repository.ClassRoomFavoriteRepository;
 import com.backend.server.model.repository.ClassRoomRentalRepository;
 import com.backend.server.model.repository.ClassRoomRespository;
@@ -73,7 +73,7 @@ public class ClassRoomService {
         if (classRoom.getAvailable() != null && !classRoom.getAvailable()) {
             throw new RuntimeException("현재 대여 불가능한 장비입니다.");
         }
-        RentalStatus status = RentalStatus.RENTAL_PENDING;
+        Status status = Status.RENTAL_PENDING;
         ClassRoomRental rental = request.toEntity(userId, classRoomId, request.getRentalTime(), request.getReturnTime(), status);
         // 새로운 대여 신청 생성
         classRoomRentalRepository.save(rental);
@@ -107,7 +107,7 @@ public class ClassRoomService {
                 }
                 
                 ClassRoomRentalRequest singleRequest = new ClassRoomRentalRequest();
-                RentalStatus status = RentalStatus.RENTAL_PENDING;
+                Status status = Status.RENTAL_PENDING;
                 ClassRoomRental rental = singleRequest.toEntity(userId, classRoomId, rentalTime, returnTime, status);
                 ClassRoomRental savedRental = classRoomRentalRepository.save(rental);
                 
@@ -127,7 +127,7 @@ public class ClassRoomService {
     public ClassRoomRentalResponse createReturnRequest(LoginUser loginUser, ClassRoomRentalRequest request) {
         Long userId = loginUser.getId();
         LocalDateTime returnTime = LocalDateTime.now();
-        RentalStatus status = RentalStatus.RETURN_PENDING;
+        Status status = Status.RETURN_PENDING;
         ClassRoomRental equipmentRental = request.toEntity(userId, request.getClassRoomId(), request.getRentalTime(), returnTime, status);
         classRoomRentalRepository.save(equipmentRental);
         return new ClassRoomRentalResponse(equipmentRental);
@@ -148,7 +148,7 @@ public class ClassRoomService {
             try {
                 // 장비 조회
                 ClassRoomRentalRequest singleRequest = new ClassRoomRentalRequest();
-                RentalStatus status = RentalStatus.RETURN_PENDING;
+                Status status = Status.RETURN_PENDING;
                 LocalDateTime returnTime = request.getEndTime();
                 ClassRoomRental rental = singleRequest.toEntity(userId, classRoomId, startTime, returnTime, status);
                 ClassRoomRental savedRental = classRoomRentalRepository.save(rental);

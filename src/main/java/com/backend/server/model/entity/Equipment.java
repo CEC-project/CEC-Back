@@ -1,9 +1,8 @@
 package com.backend.server.model.entity;
+
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 
 @Entity
 @Table(name = "equipment")
@@ -12,91 +11,48 @@ import com.backend.server.model.entity.enums.RentalStatus;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Equipment extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
-    private String image_url;
-
-    @Column
+    @Column(name = "category_id", nullable = false)
     private Long categoryId;
 
+    @Column(name = "model_id", nullable = false)
+    private Long modelId;
+
     @Column(nullable = false)
-    private String modelName;
+    private Long quantity;
 
-    @Column
-    private Boolean available;
+    @Column(name = "serial_number", unique = true)
+    private Long serialNumber;
 
-    @Column
-    private Integer quantity;
-
-    @Column
-    private LocalDateTime rentalTime;
-
-    @Column
-    private LocalDateTime returnTime;
-
-    @Column
-    private Integer renterId;
-
-    
-    @Column
-    private RentalStatus rentalStatus;
-
-    @Column
-    private Integer maxRentalCount;
+    @Column(name = "manager_id")
+    private Long managerId;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column
-    private String attachment;
+    @Column(name = "restriction_grade")
+    private Long restrictionGrade;
 
-    // 관리자 참조
-    @Column(name = "manager_id")
-    private Long managerId;
-    
-    @Column(name = "manager_name")
-    private String managerName;
+    @Column(name = "image_url")
+    private String imageUrl;
 
-    // 대여 제한 학년인데 콤마로 구분해서 넣음
-    @Column(name = "rental_restricted_grades")
-    private String rentalRestrictedGrades;
-    
+    @Column(nullable = false)
+    private boolean available;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "rental_status", nullable = false)
+    private Status rentalStatus;
 
+    @Column(name = "rental_count", nullable = false)
+    private Long rentalCount;
 
-    // 대여 상태 업데이트를 위한 Setter 메소드
-    public void setRentalStatus(RentalStatus rentalStatus) {
-        this.rentalStatus = rentalStatus;
-    }
-    
-    // 대여자 ID 업데이트를 위한 Setter 메소드
-    public void setRenterId(Integer renterId) {
-        this.renterId = renterId;
-    }
-    
-    // 대여 시간 업데이트를 위한 Setter 메소드
-    public void setRentalTime(LocalDateTime rentalTime) {
-        this.rentalTime = rentalTime;
-    }
-    
-    // 반납 시간 업데이트를 위한 Setter 메소드
-    public void setReturnTime(LocalDateTime returnTime) {
-        this.returnTime = returnTime;
-    }
-    
-    // 대여 가능 여부 업데이트를 위한 Setter 메소드
-    public void setAvailable(Boolean available) {
-        this.available = available;
-    }
+    @Column(name = "broken_count", nullable = false)
+    private Long brokenCount;
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
+    @Column(name = "repair_count", nullable = false)
+    private Long repairCount;
 }

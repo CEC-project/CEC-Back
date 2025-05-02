@@ -4,14 +4,14 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import com.backend.server.model.entity.EquipmentRental;
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 
 import java.util.List;
 
 @Repository
 public interface EquipmentRentalRepository extends JpaRepository<EquipmentRental, Long>, JpaSpecificationExecutor<EquipmentRental> {
     
-    List<EquipmentRental> findByRentalStatus(RentalStatus rentalStatus);
+    List<EquipmentRental> findByRentalStatus(Status rentalStatus);
     List<EquipmentRental> findByUserId(Long userId);
     List<EquipmentRental> findByEquipmentId(Long equipmentId);
 }

@@ -3,7 +3,7 @@ package com.backend.server.api.common.dto.classRoom;
 import java.time.LocalDateTime;
 
 import com.backend.server.model.entity.ClassRoom;
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +17,7 @@ public class CommonClassRoomResponse {
     //위치
     private String location;
     //상태
-    private RentalStatus status;
+    private Status status;
     //관리자
     private Long managerId;
     //대여가능시작시간

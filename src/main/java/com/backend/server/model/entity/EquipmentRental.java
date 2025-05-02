@@ -1,6 +1,6 @@
 package com.backend.server.model.entity;
 
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,20 +38,20 @@ public class EquipmentRental extends BaseTimeEntity {
     
     @Enumerated(EnumType.STRING)
     @Column(name = "rental_status", nullable = false)
-    private RentalStatus rentalStatus;
+    private Status rentalStatus;
     
     
     public void returnEquipment(String returnCondition) {
-        this.rentalStatus = RentalStatus.RETURN_PENDING;
+        this.rentalStatus = Status.RETURN_PENDING;
     }
 
     public void rentalEquipment(String rentalCondition) {
-        this.rentalStatus = RentalStatus.RENTAL_PENDING;
+        this.rentalStatus = Status.RENTAL_PENDING;
     }
     
     // 대여 요청 승인
     public void approveRental() {
-        this.rentalStatus = RentalStatus.IN_USE;
+        this.rentalStatus = Status.IN_USE;
     }
     
     // // 대여 요청 거절
@@ -61,11 +61,11 @@ public class EquipmentRental extends BaseTimeEntity {
     
     // 반납 완료, 대여 요청 거절
     public void completeReturn() {
-        this.rentalStatus = RentalStatus.AVAILABLE;
+        this.rentalStatus = Status.AVAILABLE;
     }
 
     // 반납 완료(피손)
     public void completeReturnDamaged() {
-        this.rentalStatus = RentalStatus.BROKEN;
+        this.rentalStatus = Status.BROKEN;
     }
 } 

@@ -1,7 +1,7 @@
 package com.backend.server.api.user.dto.classroom;
 
 import com.backend.server.model.entity.ClassRoomRental;
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,7 +16,7 @@ public class ClassRoomRentalRequest {
     private LocalDateTime rentalTime; 
     private LocalDateTime returnTime; 
     
-    public ClassRoomRental toEntity(Long userId,Long equipmentId, LocalDateTime rentalTime, LocalDateTime returnTime, RentalStatus status) {
+    public ClassRoomRental toEntity(Long userId,Long equipmentId, LocalDateTime rentalTime, LocalDateTime returnTime, Status status) {
         return ClassRoomRental.builder()
                 .classRoomId(this.classRoomId)
                 .renterId(userId)

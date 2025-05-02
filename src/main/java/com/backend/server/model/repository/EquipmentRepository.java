@@ -1,7 +1,7 @@
 package com.backend.server.model.repository;
 
 import com.backend.server.model.entity.Equipment;
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 
 import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.persistence.LockModeType;
@@ -20,9 +20,9 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     List<Equipment> findByCategoryId(Long categoryId);
     List<Equipment> findByRenterId(Integer renterId);
     List<Equipment> findByManagerName(String managerName);
-    List<Equipment> findByRentalStatus(RentalStatus rentalStatus);
-    Integer countByRentalStatus(RentalStatus rentalStatus);
-    List<Equipment> findByRentalStatusAndName(RentalStatus status, String name);
+    List<Equipment> findByRentalStatus(Status rentalStatus);
+    Integer countByRentalStatus(Status rentalStatus);
+    List<Equipment> findByRentalStatusAndName(Status status, String name);
 
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)

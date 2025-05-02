@@ -1,6 +1,6 @@
 package com.backend.server.api.user.dto.equipment;
 
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -24,7 +24,7 @@ public class EquipmentListRequest {
     @Schema(description = "대여 상태", example = "AVAILABLE", allowableValues = {
         "AVAILABLE", "IN_USE", "BROKEN", "RENTAL_PENDING", "APPROVED", "REJECTED", "RETURN_PENDING 중 하나나"
     })
-    private RentalStatus rentalStatus;         
+    private Status rentalStatus;         
 
     @Schema(description = "대여 가능 여부", example = "true")
     private Boolean available;       // 대여 가능 여부

@@ -3,7 +3,7 @@ package com.backend.server.api.admin.dto.equipment;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.EquipmentRental;
 import com.backend.server.model.entity.User;
-import com.backend.server.model.entity.enums.RentalStatus;
+import com.backend.server.model.entity.enums.Status;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +28,7 @@ public class AdminEquipmentRentalRequestResponse {
     private String userEmail;
     private LocalDateTime rentalTime;
     private LocalDateTime returnTime;
-    private RentalStatus rentalStatus;
+    private Status rentalStatus;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
