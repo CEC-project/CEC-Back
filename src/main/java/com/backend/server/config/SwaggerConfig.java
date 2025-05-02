@@ -5,11 +5,17 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
+
+    @Value("${swagger.server.url:http://localhost:8080}")
+    private String url;
 
     @Bean
     public OpenAPI openAPI() {
@@ -27,8 +33,12 @@ public class SwaggerConfig {
                         .scheme("bearer")
                         .bearerFormat("JWT"));
 
+        var server = new Server();
+        server.setUrl(url);
+
         return new OpenAPI()
                 .info(info)
+                .servers(List.of(server))
                 .addSecurityItem(securityRequirement)
                 .components(components);
     }

@@ -1,11 +1,11 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:latest
     container_name: postgres-container
     environment:
       POSTGRES_USER: cec
+      # 개발 환경 설정을 편하게 하기 위한 키값.
+      # 운영 환경에서는 개발환경과 같은 키값을 쓰지 않음.
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: cec
     ports:

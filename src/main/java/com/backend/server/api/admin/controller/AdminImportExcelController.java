@@ -13,7 +13,7 @@ import com.backend.server.api.admin.service.AdminImportExcelService;
 
 @RestController
 @RequestMapping("/api/admin")
-@Tag(name = "Excel API", description = "엑셀 파일 관련 API")
+@Tag(name = "Excel Admin API", description = "액셀 파일에서 유저 정보 추출하는 어드민 API")
 public class AdminImportExcelController {
 
     @Autowired

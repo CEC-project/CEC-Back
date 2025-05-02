@@ -5,47 +5,56 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.backend.server.api.admin.dto.AdminCategoryCreateRequest;
+import com.backend.server.api.admin.dto.category.AdminCategoryRequest;
 import com.backend.server.api.admin.service.AdminCategoryService;
+import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.common.dto.CommonCategoryResponse;
 import com.backend.server.api.common.service.CommonCategoryReadService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/admin/categories")
 @RequiredArgsConstructor
+@Tag(name = "Category Admin API", description = "카테고리 관리 어드민 API")
 public class AdminCategoryController {
     private final AdminCategoryService adminCategoryService;
     private final CommonCategoryReadService categoryReadService;
 
     @GetMapping
-    public ResponseEntity<List<CommonCategoryResponse>> getAllCategories() {
-        return ResponseEntity.ok(categoryReadService.getAllCategories());
+    @Operation(summary = "모든 카테고리 조회", description = "모든 카테고리를 조회합니다")
+    public ApiResponse<List<CommonCategoryResponse>> getAllCategories() {
+        return ApiResponse.success("success", categoryReadService.getAllCategories());
     }
 
 
     //단일조회는 지금으로써는 필요없지만 혹시몰라 만들었어요
     @GetMapping("/{id}")
-    public ResponseEntity<CommonCategoryResponse> getCategory(@PathVariable Long id) {
-        return ResponseEntity.ok(categoryReadService.getCategory(id));
+    @Operation(summary = "단일 카테고리 조회", description = "ID로 특정 카테고리를 조회합니다")
+    public ApiResponse<CommonCategoryResponse> getCategory(@PathVariable Long id) {
+        return ApiResponse.success("success", categoryReadService.getCategory(id));
     }
 
     @PostMapping
-    public ResponseEntity<CommonCategoryResponse> createCategory(@RequestBody AdminCategoryCreateRequest request) {
-        return ResponseEntity.ok(adminCategoryService.createCategory(request));
+    @Operation(summary = "카테고리 생성", description = "새로운 카테고리를 생성합니다")
+    public ApiResponse<CommonCategoryResponse> createCategory(@RequestBody AdminCategoryRequest request) {
+        return ApiResponse.success("success", adminCategoryService.createCategory(request));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommonCategoryResponse> updateCategory(
+    @Operation(summary = "카테고리 수정", description = "ID로 특정 카테고리를 수정합니다")
+    public ApiResponse<CommonCategoryResponse> updateCategory(
             @PathVariable Long id,
-            @RequestBody AdminCategoryCreateRequest request) {
-        return ResponseEntity.ok(adminCategoryService.updateCategory(id, request));
+            @RequestBody AdminCategoryRequest request) {
+        return ApiResponse.success("success", adminCategoryService.updateCategory(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+    @Operation(summary = "카테고리 삭제", description = "ID로 특정 카테고리를 삭제합니다")
+    public ApiResponse<Void> deleteCategory(@PathVariable Long id) {
         adminCategoryService.deleteCategory(id);
-        return ResponseEntity.ok().build();
+        return ApiResponse.success("success", null);
     }
 } 

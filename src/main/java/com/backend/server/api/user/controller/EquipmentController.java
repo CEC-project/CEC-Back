@@ -23,15 +23,6 @@
 // import org.springframework.web.bind.annotation.RequestMapping;
 // import org.springframework.web.bind.annotation.RestController;
 // import org.springframework.web.bind.annotation.DeleteMapping;
-
-// import java.util.List;
-
-// @RestController
-// @RequestMapping("/api/equipment")
-// @RequiredArgsConstructor
-// @Tag(name = "Equipment API", description = "장비 API")
-// public class EquipmentController {
-
 //     private final EquipmentService EquipmentService;
 
 //     @GetMapping
@@ -109,3 +100,4 @@
 //         return ApiResponse.success("즐겨찾기 삭제 성공", null);
 //     }
 // } 
+

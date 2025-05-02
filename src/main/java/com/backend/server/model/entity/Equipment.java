@@ -10,7 +10,7 @@ import com.backend.server.model.entity.enums.RentalStatus;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 public class Equipment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,19 +23,32 @@ public class Equipment extends BaseTimeEntity {
     private String image_url;
 
     @Column
-    private String category;
+    private Long categoryId;
 
     @Column(nullable = false)
     private String modelName;
-
-    @Column(nullable = false)
-    private String status;
 
     @Column
     private Boolean available;
 
     @Column
     private Integer quantity;
+
+    @Column
+    private LocalDateTime rentalTime;
+
+    @Column
+    private LocalDateTime returnTime;
+
+    @Column
+    private Integer renterId;
+
+    
+    @Column
+    private RentalStatus rentalStatus;
+
+    @Column
+    private Integer maxRentalCount;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -55,17 +68,7 @@ public class Equipment extends BaseTimeEntity {
     private String rentalRestrictedGrades;
     
 
-    @Column
-    private RentalStatus rentalStatus;
 
-    @Column
-    private LocalDateTime rentalTime;
-
-    @Column
-    private LocalDateTime returnTime;
-
-    @Column
-    private Integer renterId;
 
     // 대여 상태 업데이트를 위한 Setter 메소드
     public void setRentalStatus(RentalStatus rentalStatus) {
@@ -91,4 +94,9 @@ public class Equipment extends BaseTimeEntity {
     public void setAvailable(Boolean available) {
         this.available = available;
     }
-}        
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+}

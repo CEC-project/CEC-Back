@@ -5,6 +5,8 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.backend.server.model.entity.enums.Role;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -27,14 +29,16 @@ public class User extends BaseTimeEntity {
     @Column
     private String nickname;
 
-    // @Column(nullable = false)
-    // private String department;
-
-    // @Column(nullable = false)
-    // private String major;
+    @Column
+    private String department;
 
     @Column
-    private String grade;
+    private Integer grade;
+
+    @Column
+    private String major;
+
+
 
     @Column(name = "\"group\"")
     private String group;
@@ -73,7 +77,7 @@ public class User extends BaseTimeEntity {
     private int reportCount;
 
     @Column
-    private String role;
+    private Role role;
 
 
     // @OneToMany(mappedBy = "user")
