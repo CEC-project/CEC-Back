@@ -26,7 +26,7 @@ public class EquipmentModelListRequest {
     @Schema(description = "페이지 크기", example = "10")
     private Integer size;
     
-    @Schema(description = "정렬 기준", example = "id")
+    @Schema(description = "정렬 기준", example = "name")
     private String sortBy;
     
     @Schema(description = "정렬 방향 (ASC, DESC)", example = "DESC")

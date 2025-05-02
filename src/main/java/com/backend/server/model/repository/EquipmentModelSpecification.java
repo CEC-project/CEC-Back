@@ -16,23 +16,10 @@ import java.util.List;
 
 public class EquipmentModelSpecification {
     
-    /**
-     * 장비 모델 필터링을 위한 Specification 생성
-     */
-    public static Specification<EquipmentModel> filterEquipments(EquipmentModelListRequest request) {
+   //장비 모델 필터링 전체 조회 하하하하하
+    public static Specification<EquipmentModel> filterEquipmentModels(EquipmentModelListRequest request) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
-            
-            // 카테고리 필터링
-            if (request.getCategoryId() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("categoryId"), request.getCategoryId()));
-            }
-            
-            // 사용 가능 여부 필터링
-            if (request.getAvailable() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("available"), request.getAvailable()));
-            }
-            
             // 검색어 필터링 (모델명, 영문코드)
             if (StringUtils.hasText(request.getKeyword())) {
                 String likePattern = "%" + request.getKeyword().toLowerCase() + "%";
@@ -49,16 +36,17 @@ public class EquipmentModelSpecification {
         };
     }
     
-    /**
-     * 페이징 및 정렬 정보 생성
-     */
+    //페이징 생성
+    //프론트에서 페이지 정보 없으면 0 , 10
     public static Pageable getPageable(EquipmentModelListRequest request) {
         Direction direction = request.getSortDirection().equalsIgnoreCase("ASC") ? 
             Direction.ASC : Direction.DESC;
+        int page = request.getPage() != null ? request.getPage() : 0;
+        int size = request.getSize() != null ? request.getSize() : 10;
             
         return PageRequest.of(
-            request.getPage(), 
-            request.getSize(),
+            page,
+            size,
             Sort.by(direction, request.getSortBy())
         );
     }

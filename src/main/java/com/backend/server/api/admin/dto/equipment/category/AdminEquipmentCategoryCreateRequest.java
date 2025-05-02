@@ -24,6 +24,8 @@ public class AdminEquipmentCategoryCreateRequest {
     @NotBlank(message = "인당 대여 제한 갯수는 필수 입력 항목입니다.")
     private Integer maxRentalCount;
 
+    
+
     public EquipmentCategory toEntity() {
         return EquipmentCategory.builder()
                 .name(this.name)

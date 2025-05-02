@@ -31,6 +31,7 @@ public class AdminEquipmentCategoryService {
             
         category = category.toBuilder()
                 .name(request.getName())
+                .maxRentalCount(request.getMaxRentalCount())
                 .englishCode(request.getEnglishCode())
                 .build();
             

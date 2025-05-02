@@ -21,8 +21,8 @@ public class EquipmentCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
+  
     private Integer maxRentalCount;
     private String englishCode; 
 }
