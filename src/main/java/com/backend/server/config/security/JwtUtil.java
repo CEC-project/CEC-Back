@@ -67,6 +67,7 @@ public class JwtUtil {
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .secure(true)
+                .sameSite("None")
                 .path("/api/auth/token/refresh")
                 .maxAge(refreshTokenDuration)
                 .build();
@@ -77,6 +78,7 @@ public class JwtUtil {
         ResponseCookie cookie = ResponseCookie.from("refreshToken", "")
                 .httpOnly(true)
                 .secure(true)
+                .sameSite("None")
                 .path("/api/auth/token/refresh")
                 .maxAge(0)
                 .build();
