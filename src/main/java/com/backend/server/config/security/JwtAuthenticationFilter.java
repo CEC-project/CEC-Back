@@ -55,6 +55,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 엑세스 토큰이 존재하므로 인증처리함
         try {
+            // ✅ CSRF 방지: Referer & Origin 검사
+            String origin = request.getHeader("Origin");
+            String referer = request.getHeader("Referer");
+
+            // ✅ 허용된 도메인
+            List<String> trustedDomains = List.of(
+                    "http://localhost:3000", "http://localhost:3001", "http://localhost:8080",
+                    "https://bmvcec.store", "https://admin.bmvcec.store",
+                    "https://api.bmvcec.store", "https://dev.api.bmvcec.store"
+            );
+
+            for (String trustedDomain : trustedDomains)
+                if ((origin != null && !origin.startsWith(trustedDomain)) ||
+                        (referer != null && !referer.startsWith(trustedDomain))) {
+                    failAuth(request, response, "Invalid request origin");
+                    return;
+                }
+
             String accessToken = authorizationHeader.substring(BEARER_PREFIX.length());
             Long id = jwtUtil.getUserIdByAccessToken(accessToken);
 
