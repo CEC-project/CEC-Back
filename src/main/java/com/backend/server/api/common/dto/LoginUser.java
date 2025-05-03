@@ -34,7 +34,7 @@ public class LoginUser {
         grade = user.getGrade();
         group = user.getGroup();
         gender = user.getGender();
-        professor = user.getProfessor();
+        professor = user.getProfessor() == null ? "" : user.getProfessor().getName();
         phoneNumber = user.getPhoneNumber();
         email = user.getEmail();
         profilePicture = user.getProfilePicture();
