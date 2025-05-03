@@ -3,6 +3,7 @@ package com.backend.server.api.common.controller;
 import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.common.service.CommonPresignedUrlService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/s3")
+@Tag(name = "[공통] 파일 업로드 API", description = "presigned url 발급 API")
 public class CommonPresignedUrlController {
 
     private final CommonPresignedUrlService presignedUrlService;

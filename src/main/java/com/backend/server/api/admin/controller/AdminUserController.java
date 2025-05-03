@@ -9,6 +9,7 @@ import com.backend.server.api.common.dto.ApiResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/admin/user")
 @RequiredArgsConstructor
-@Tag(name = "User Admin API", description = "유저 관리 어드민 API")
+@Tag(name = "[관리자] 사용자 관리 API", description = "사용자 관리 어드민 API")
 public class AdminUserController {
 
     private final AdminUserService adminUserService;
@@ -45,13 +46,22 @@ public class AdminUserController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ApiResponse<AdminUserResponse> updateUser(
             @PathVariable Long id,
-            @RequestBody AdminUserRequest request) {
+            @Valid @RequestBody AdminUserRequest request) {
         return ApiResponse.success("사용자 수정 성공", adminUserService.updateUser(id, request));
+    }
+
+    @Operation(summary = "사용자 비밀번호 초기화 API",
+            description = "비밀번호는 학번으로 초기화 됩니다.")
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
+    public ApiResponse<AdminUserResponse> updateUser(
+            @PathVariable Long id) {
+        return ApiResponse.success("비밀번호 초기화 성공", adminUserService.resetUserPassword(id));
     }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public ApiResponse<AdminUserResponse> createUser(@RequestBody AdminUserRequest request) {
+    public ApiResponse<AdminUserResponse> createUser(@Valid @RequestBody AdminUserRequest request) {
         return ApiResponse.success("사용자 등록 성공", adminUserService.createUser(request));
     }
 }

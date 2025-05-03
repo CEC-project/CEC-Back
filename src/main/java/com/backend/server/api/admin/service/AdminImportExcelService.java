@@ -83,7 +83,7 @@ public class AdminImportExcelService {
             Integer studentNumberIndex = headerMap.get("학번");
             Integer gradeIndex = headerMap.get("학년");
             Integer genderIndex = headerMap.get("성별");
-            Integer professorIndex = headerMap.get("지도교수");
+            //Integer professorIndex = headerMap.get("지도교수");
             Integer phoneIndex = headerMap.get("휴대폰번호");
             Integer emailIndex = headerMap.get("이메일");
             Integer birthDateIndex = headerMap.get("생년월일");
@@ -118,7 +118,7 @@ public class AdminImportExcelService {
                     
                     if (gradeIndex != null) userBuilder.grade(Integer.parseInt(getCellValue(row.getCell(gradeIndex))));
                     if (genderIndex != null) userBuilder.gender(getCellValue(row.getCell(genderIndex)));
-                    if (professorIndex != null) userBuilder.professor(getCellValue(row.getCell(professorIndex)));
+                    // if (professorIndex != null) userBuilder.professor(getCellValue(row.getCell(professorIndex)));
                     if (phoneIndex != null) userBuilder.phoneNumber(getCellValue(row.getCell(phoneIndex)));
                     if (emailIndex != null) userBuilder.email(getCellValue(row.getCell(emailIndex)));
                     if (classIndex != null) userBuilder.group(getCellValue(row.getCell(classIndex)));
