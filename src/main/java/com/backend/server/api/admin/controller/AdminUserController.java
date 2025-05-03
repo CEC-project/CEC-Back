@@ -7,6 +7,7 @@ import com.backend.server.api.admin.dto.user.AdminUserResponse;
 import com.backend.server.api.admin.service.AdminUserService;
 import com.backend.server.api.common.dto.ApiResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +21,13 @@ public class AdminUserController {
 
     private final AdminUserService adminUserService;
 
+    @Operation(summary = "사용자 페이지네이션 조회 API",
+            description = "검색 유형(=searchType)은 다음과 같습니다.<br/>"
+                    + "0:이름으로 검색 | 1:전화번호로 검색 | 2:학번으로 검색<br/><br/>"
+                    + "정렬 기준(=sortBy)은 다음과 같습니다.<br/>"
+                    + "0:이름순 정렬 | 1:학번순 정렬 | 2:제제 횟수순 정렬<br/><br/>"
+                    + "정렬 방향(=sortDirection)은 다음과 같습니다.<br/>"
+                    + "asc:오름차순 | desc:내림차순<br/>")
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ApiResponse<AdminUserListResponse> getUsers(AdminUserListRequest request) {
