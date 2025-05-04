@@ -1,7 +1,7 @@
 name: PR Build Check
 
 on:
-  pull_request:
+  pull_request_target:
     branches: [ "main" ]
   release:
     types: [ published ]
@@ -18,6 +18,10 @@ jobs:
         options: --privileged
 
     steps:
+      - name: Check if author is allowed
+        if: contains('["qkr10","geniusBrainLsm","leesunuk"]', github.event.pull_request.user.login)
+        run: echo "Allowed user"
+
       - name: Checkout this repo
         uses: actions/checkout@v4
 
