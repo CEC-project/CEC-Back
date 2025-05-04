@@ -8,7 +8,7 @@ import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.UserRepository;
 import com.backend.server.model.repository.UserSpecification;
-import com.backend.server.model.repository.professor.ProfessorRepository;
+import com.backend.server.model.repository.ProfessorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
