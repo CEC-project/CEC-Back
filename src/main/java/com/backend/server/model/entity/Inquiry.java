@@ -2,7 +2,9 @@ package com.backend.server.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +15,8 @@ import java.util.List;
 @Table(name = "inquiry")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder(toBuilder = true)
 public class Inquiry extends BaseTimeEntity {
 
     @Id
@@ -29,20 +33,15 @@ public class Inquiry extends BaseTimeEntity {
     @Column(name = "author_id", nullable = false)
     private Long authorId;  // 작성자 ID
 
-    @ElementCollection
-    @CollectionTable(name = "inquiry_inquiry_type", joinColumns = @JoinColumn(name = "inquiry_id"))
-    @Column(name = "inquiry_type_id")
-    private List<Long> inquiryTypeIds = new ArrayList<>();  // 문의 유형 ID 리스트
+    @ManyToMany
+    @JoinTable(
+            name = "inquiry_inquiry_type",
+            joinColumns = @JoinColumn(name = "inquiry_id"),
+            inverseJoinColumns = @JoinColumn(name = "inquiry_type_id")
+    )
+    @Default
+    private List<InquiryType> inquiryTypes = new ArrayList<>();  // 문의 유형 ID 리스트
 
     @Column
     private String attachmentUrl;  // 첨부파일 URL
-
-    @Builder
-    public Inquiry(String title, String content, String attachmentUrl, Long authorId, List<Long> inquiryTypeIds) {
-        this.title = title;
-        this.content = content;
-        this.attachmentUrl = attachmentUrl;
-        this.authorId = authorId;
-        this.inquiryTypeIds = inquiryTypeIds;
-    }
 }

@@ -20,9 +20,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class Professor extends BaseTimeEntity{
+public class BoardCategory extends BaseTimeEntity{
     @Id
-    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -33,6 +32,6 @@ public class Professor extends BaseTimeEntity{
     private String description;
 
     @Builder.Default
-    @OneToMany(mappedBy = "professor")
-    private List<User> students = new ArrayList<>();
+    @OneToMany(mappedBy = "boardCategory")
+    private List<Board> posts = new ArrayList<>();
 }

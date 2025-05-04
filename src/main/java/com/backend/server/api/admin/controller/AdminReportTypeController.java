@@ -2,7 +2,7 @@ package com.backend.server.api.admin.controller;
 
 import com.backend.server.api.admin.dto.category.AdminCommonCategoryRequest;
 import com.backend.server.api.admin.dto.category.AdminCommonCategoryResponse;
-import com.backend.server.api.admin.service.AdminProfessorService;
+import com.backend.server.api.admin.service.AdminReportTypeService;
 import com.backend.server.api.common.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -18,38 +18,38 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/admin/professor")
+@RequestMapping("/api/admin/report-type")
 @RequiredArgsConstructor
-@Tag(name = "교수 카테고리", description = "교수 카테고리 관리 어드민 API")
-public class AdminProfessorController {
+@Tag(name = "신고 카테고리", description = "신고 카테고리 관리 어드민 API")
+public class AdminReportTypeController {
 
-    private final AdminProfessorService adminProfessorService;
+    private final AdminReportTypeService adminReportTypeService;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public ApiResponse<List<AdminCommonCategoryResponse>> getProfessors() {
-        return ApiResponse.success("교수 목록 조회 성공", adminProfessorService.getProfessorList());
+    public ApiResponse<List<AdminCommonCategoryResponse>> getReportTypes() {
+        return ApiResponse.success("신고 카테고리 목록 조회 성공", adminReportTypeService.getReportTypeList());
     }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public ApiResponse<Long> postProfessor(@RequestBody AdminCommonCategoryRequest request) {
-        return ApiResponse.success("교수 등록 성공", adminProfessorService.createProfessor(request));
+    public ApiResponse<Long> postReportType(@RequestBody AdminCommonCategoryRequest request) {
+        return ApiResponse.success("신고 카테고리 등록 성공", adminReportTypeService.createReportType(request));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public ApiResponse<Long> putProfessor(
+    public ApiResponse<Long> putReportType(
             @PathVariable Long id,
             @RequestBody AdminCommonCategoryRequest request) {
-        return ApiResponse.success("교수 수정 성공", adminProfessorService.updateProfessor(id, request));
+        return ApiResponse.success("신고 카테고리 수정 성공", adminReportTypeService.updateReportType(id, request));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public ApiResponse<Void> deleteProfessor(
+    public ApiResponse<Void> deleteReportType(
             @PathVariable Long id) {
-        adminProfessorService.deleteProfessor(id);
-        return ApiResponse.success("교수 삭제 성공", null);
+        adminReportTypeService.deleteReportType(id);
+        return ApiResponse.success("신고 카테고리 삭제 성공", null);
     }
 }
