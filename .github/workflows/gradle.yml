@@ -14,7 +14,7 @@ jobs:
 
     services:
       docker:
-        image: docker:20.10.16
+        image: docker:28.1
         options: --privileged
 
     steps:
@@ -23,7 +23,7 @@ jobs:
 
       - name: Set up Docker Compose
         run: |
-          docker-compose -f docker/db-redis/docker-compose.yml up -d
+          docker compose -f docker/db-redis/docker-compose.yml up -d
 
       - name: Checkout config repo
         uses: actions/checkout@v4
