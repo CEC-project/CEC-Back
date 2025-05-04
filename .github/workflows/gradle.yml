@@ -20,7 +20,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: CEC-project/CEC-Back-Settings
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.CEC_PAT }}
         path: src/main/resources/settings
 
     - name: Set up JDK 17
