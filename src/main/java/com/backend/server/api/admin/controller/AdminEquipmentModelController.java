@@ -97,4 +97,19 @@ public class AdminEquipmentModelController {
     public ApiResponse<EquipmentModelResponse> getModelById(@PathVariable Long id) {
         return ApiResponse.success("장비 모델 단건 조회 성공", equipmentModelService.getModel(id));
     }
+
+    @GetMapping("/category/{categoryId}")
+    @Operation(
+        summary = "카테고리에 속한 장비 모델 목록 조회",
+        description = "지정한 카테고리에 속한 모든 장비 모델 목록을 조회합니다."
+    )
+    public ApiResponse<EquipmentModelListResponse> getModelsByCategory(
+            @Parameter(description = "카테고리 ID", example = "1")
+            @PathVariable Long categoryId) {
+        
+        return ApiResponse.success(
+            "카테고리별 장비 모델 조회 성공", 
+            equipmentModelService.getModelsByCategory(categoryId)
+        );
+    }
 }

@@ -1,5 +1,7 @@
 package com.backend.server.api.user.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -36,4 +38,15 @@ public class EquipmentModelService {
                 .orElseThrow(() -> new RuntimeException("장비 모델을 찾을 수 없습니다."));
         return new EquipmentModelResponse(model);
     }
+
+    public EquipmentModelListResponse getModelsByCategory(Long categoryId) {
+        Specification<EquipmentModel> spec = (root, query, cb) ->
+            cb.equal(root.get("category").get("id"), categoryId);
+    
+        List<EquipmentModel> models = equipmentModelRepository.findAll(spec);
+    
+        return new EquipmentModelListResponse(models);
+    }
+
+    
 }
