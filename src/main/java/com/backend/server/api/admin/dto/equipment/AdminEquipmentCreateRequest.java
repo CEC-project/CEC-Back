@@ -49,4 +49,17 @@ public class AdminEquipmentCreateRequest {
                 .restrictionGrade(restrictionGrade)
                 .build();
     }
+
+    public Equipment toEntity() {
+        return Equipment.builder()
+                .imageUrl(imageUrl)
+                .categoryId(categoryId)
+                .modelId(modelId)
+                .managerId(managerId)
+                .description(description)
+                .restrictionGrade(restrictionGrade)
+                .build();
+    }
+
+
 }

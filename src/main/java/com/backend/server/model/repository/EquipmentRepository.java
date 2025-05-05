@@ -17,13 +17,14 @@ import java.util.Optional;
 
 @Repository
 public interface EquipmentRepository extends JpaRepository<Equipment, Long>, JpaSpecificationExecutor<Equipment> {
-    Long countByEquipmentModel_Id(Long id);
+    //Long countByEquipmentModel_Id(Long id);
     // List<Equipment> findByCategoryId(Long categoryId);
     // List<Equipment> findByRenterId(Integer renterId);
     // List<Equipment> findByManagerName(String managerName);
     // List<Equipment> findByRentalStatus(Status rentalStatus);
     // Integer countByRentalStatus(Status rentalStatus);
     // List<Equipment> findByRentalStatusAndName(Status status, String name);
+    Long countByModelId(Long modelId);
 
     // @Lock(LockModeType.PESSIMISTIC_WRITE)
     // @Query("SELECT e FROM Equipment e WHERE e.id = :id")

@@ -16,7 +16,7 @@ import java.util.List;
 
 public class EquipmentModelSpecification {
     
-   //장비 모델 필터링 전체 조회 하하하하하
+   //장비 모델 필터링 전체 조회 \
     public static Specification<EquipmentModel> filterEquipmentModels(EquipmentModelListRequest request) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -35,6 +35,15 @@ public class EquipmentModelSpecification {
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
+    //카테고리 별 조회
+    public static Specification<EquipmentModel> filterEquipmentModelsByCategory(EquipmentModelListRequest request) {
+        return (root, query, cb) -> {
+            if (request.getCategoryId() != null) {
+                return cb.equal(root.get("category").get("id"), request.getCategoryId());
+            }
+            return cb.conjunction(); // 조건 없음 → 전체 조회
+        };
+    }
     
     //페이징 생성
     //프론트에서 페이지 정보 없으면 0 , 10
@@ -50,4 +59,6 @@ public class EquipmentModelSpecification {
             Sort.by(direction, request.getSortBy())
         );
     }
+
+
 } 

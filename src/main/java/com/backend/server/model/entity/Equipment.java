@@ -7,6 +7,7 @@ import com.backend.server.model.entity.enums.Status;
 @Entity
 @Table(name = "equipment")
 @Getter
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)

@@ -29,13 +29,13 @@ public class AdminEquipmentService {
     private final EquipmentModelRepository equipmentModelRepository;
     //어드민 유저 조회
     public List<AdminManagerCandidatesResponse> getAdminUsers() {
-        List<User> users = userRepository.findByRoleIn(Role.ROLE_ADMIN);
-        return users.stream()
+        List<User> adminUsers = userRepository.findByRoleIn(Role.ROLE_ADMIN,Role.ROLE_SUPER_ADMIN);
+        return adminUsers.stream()
             .map(AdminManagerCandidatesResponse::new)
             .collect(Collectors.toList());
     }
 
-    //장비생성성
+    //장비생성
     public AdminEquipmentIdsResponse createEquipment(AdminEquipmentCreateRequest request) {
         String equipmentCategoryName = equipmentCategoryRepository.findById(request.getCategoryId())
             .orElseThrow(() -> new RuntimeException("카테고리 없음"))
@@ -48,7 +48,7 @@ public class AdminEquipmentService {
         String prefixCategoryCode = equipmentCategoryName.substring(0, 3);
         String prefixEquipmentModelCode = equipmentModelName.substring(0, 3);
     
-        Long modelCount = equipmentRepository.countByEquipmentModel_Id(request.getModelId());
+        Long modelCount = equipmentRepository.countByModelId(request.getModelId());
     
         List<Long> savedEquipmentIds = new ArrayList<>();
         //장비 갯수 입력받은 것맨치로 반복함
@@ -66,6 +66,30 @@ public class AdminEquipmentService {
         }
     
         return new AdminEquipmentIdsResponse(savedEquipmentIds);
+    }
+
+    // 장비 업데이트
+    public AdminEquipmentIdResponse updateEquipment(Long id, AdminEquipmentCreateRequest request) {
+        Equipment equipment = equipmentRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
+
+        // toBuilder가 맞는거같아요
+        Equipment updated = equipment.toBuilder()
+            .imageUrl(request.getImageUrl())
+            .managerId(request.getManagerId())
+            .description(request.getDescription())
+            .restrictionGrade(request.getRestrictionGrade())
+            .build();
+
+        equipmentRepository.save(updated); 
+
+        return new AdminEquipmentIdResponse(updated.getId());
+    }
+
+    // 장비 삭제
+    public AdminEquipmentIdResponse deleteEquipment(Long id) {
+        equipmentRepository.deleteById(id);
+        return new AdminEquipmentIdResponse(id);
     }
     
 }
