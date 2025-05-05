@@ -1,4 +1,4 @@
-package com.backend.server.api.admin.dto.professor;
+package com.backend.server.api.admin.dto.category;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
@@ -9,11 +9,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class AdminProfessorResponse {
+public class AdminCommonCategoryResponse {
     private Long id;
     private String name;
     private String description;
-    private Long studentCount;
+    private Long count;
     @JsonFormat(pattern = "yyyy-MM-dd HH시:mm분:ss초")
     private LocalDateTime createdAt;
 }

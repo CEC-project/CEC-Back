@@ -87,7 +87,9 @@ docker stop redis-container
 3. 설정파일 저장용 private 레포지토리를 업데이트 시켰다면, 팀원들에게 알려서 각자 받아가도록 하기
 4. 작업하기 전에, "feature/기능명", "fix/기능명" 처럼 브랜치를 나누고 작업하고, pr을 날릴때 메인 브랜치로 pr 하기 (= GtiHub Flow)
 
-## 코딩 관련 규칙 (4/15 18:30)
-1. 가능하면 DTO 안에 "toEntity 메소드" 처럼 엔티티로 바꾸는 메소드나, "[엔티티로 생성하는 생성자](../src/main/java/com/backend/server/api/admin/dto/user/AdminUserResponse.java)" 를 만들고 최대한 사용하기
-2. 컨트롤러, 서비스, DTO 파일이 admin 패키지 아래에 있으면 "Admin" 을 덧붙이기. common 패키지 아래에 있으면 "Common" 을 덧붙이기
+## 코딩 관련 규칙
+1. 등록용 Request DTO 에 "toEntity 메소드" 처럼 엔티티로 바꾸는 메소드 넣기.
+2. 조회용 Response DTO 에 "[엔티티로 생성하는 생성자](../src/main/java/com/backend/server/api/admin/dto/user/AdminUserResponse.java)" 를 넣기
+3. 수정용 API 를 만들때는 Entity 를 DB 에서 findById() 등으로 조회해와서 entity.toBuilder().setValue(value).build(); 와 같이 수정하고 save(entity) 하기
+4. 컨트롤러, 서비스, DTO 파일이 admin 패키지 아래에 있으면 "Admin" 을 덧붙이기. common 패키지 아래에 있으면 "Common" 을 덧붙이기
    - IDE 자동완성 충돌과, 스프링 빈 이름 충돌을 근본적으로 방지하기 위함
