@@ -22,8 +22,8 @@ public class Equipment extends BaseTimeEntity {
     @Column(name = "model_id", nullable = false)
     private Long modelId;
 
-    @Column(nullable = false)
-    private Long quantity;
+    // @Column(nullable = false)
+    // private Long quantity;
 
     @Column(name = "serial_number", unique = true)
     private Long serialNumber;
@@ -35,7 +35,7 @@ public class Equipment extends BaseTimeEntity {
     private String description;
 
     @Column(name = "restriction_grade")
-    private Long restrictionGrade;
+    private String restrictionGrade;   //이건 1234 이런식으로 입력받을거임 굳이 리스트 할 피룡가?
 
     @Column(name = "image_url")
     private String imageUrl;

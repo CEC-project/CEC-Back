@@ -8,5 +8,5 @@ import com.backend.server.model.entity.EquipmentModel;
 
 @Repository
 public interface EquipmentModelRepository extends JpaRepository<EquipmentModel, Long>, JpaSpecificationExecutor<EquipmentModel> {
-    
+
 }
