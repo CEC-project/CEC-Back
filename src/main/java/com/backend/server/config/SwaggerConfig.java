@@ -22,16 +22,23 @@ public class SwaggerConfig {
     public GroupedOpenApi adminApi() {
         return GroupedOpenApi.builder()
                 .group("admin")
-                .pathsToMatch("/api/admin/**")
+                .packagesToScan("com.backend.server.api.admin")
                 .build();
     }
 
     @Bean
     public GroupedOpenApi userApi() {
         return GroupedOpenApi.builder()
-                .group("user & common")
-                .pathsToMatch("/api/**")
-                .pathsToExclude("/api/admin/**")
+                .group("user")
+                .packagesToScan("com.backend.server.api.user")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi commonApi() {
+        return GroupedOpenApi.builder()
+                .group("common")
+                .packagesToScan("com.backend.server.api.common")
                 .build();
     }
 
