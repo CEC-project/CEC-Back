@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Check if author is allowed
-        if: contains('["qkr10","geniusBrainLsm","leesunuk"]', github.event.pull_request.user.login)
+        if: contains('["qkr10","geniusBrainLsm","leesunuk","GenTaram","klaus9267"]', github.event.pull_request.user.login)
         run: echo "Allowed user"
 
       - name: Checkout this repo
