@@ -1,4 +1,4 @@
-package com.backend.server.api.admin.controller;
+package com.backend.server.api.admin.classRoom;
 
 public class AdminEquipmentCategoryIdResponse {
 
