@@ -18,4 +18,11 @@ public class EquipmentModelListResponse {
         this.content = page.getContent().stream().map(EquipmentModelResponse::new).toList();
         this.pageable = new PageableInfo(page.getNumber(), page.getSize(), page.getTotalPages(), page.getTotalElements());
     }
+    public EquipmentModelListResponse(List<EquipmentModel> models) {
+        this.content = models.stream()
+                .map(EquipmentModelResponse::new)
+                .toList();
+        this.pageable = null; 
+    }
+    
 }
