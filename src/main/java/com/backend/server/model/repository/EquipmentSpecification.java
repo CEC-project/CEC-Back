@@ -1,14 +1,13 @@
 package com.backend.server.model.repository;
 
-import com.backend.server.api.admin.dto.equipment.AdminEquipmentRentalRequestListRequest;
-import com.backend.server.api.admin.dto.equipment.AdminEquipmentListRequest;
-import com.backend.server.api.user.dto.equipment.EquipmentListRequest;
+import com.backend.server.api.admin.equipment.dto.AdminEquipmentRentalRequestListRequest;
+import com.backend.server.api.admin.equipment.dto.AdminEquipmentListRequest;
+import com.backend.server.api.user.equipment.dto.EquipmentListRequest;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.EquipmentCart;
 import com.backend.server.model.entity.EquipmentFavorite;
 import com.backend.server.model.entity.EquipmentRental;
 import com.backend.server.model.entity.User;
-import com.backend.server.model.entity.enums.Status;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

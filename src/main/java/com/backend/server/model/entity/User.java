@@ -1,6 +1,6 @@
 package com.backend.server.model.entity;
 
-import com.backend.server.api.admin.dto.user.AdminUserRequest;
+import com.backend.server.api.admin.user.dto.AdminUserRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;

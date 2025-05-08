@@ -1,7 +1,7 @@
 package com.backend.server.model.repository;
 
-import com.backend.server.api.admin.dto.classroom.AdminClassRoomRentalRequestListRequest;
-import com.backend.server.api.common.dto.classRoom.CommonClassRoomListRequest;
+import com.backend.server.api.admin.classRoom.dto.AdminClassRoomRentalRequestListRequest;
+import com.backend.server.api.common.classRoom.dto.CommonClassRoomListRequest;
 import com.backend.server.model.entity.ClassRoom;
 import com.backend.server.model.entity.ClassRoomRental;
 import com.backend.server.model.entity.enums.Status;
