@@ -2,6 +2,9 @@ package com.backend.server.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
+
 import com.backend.server.model.entity.enums.Status;
 
 @Entity
@@ -45,8 +48,8 @@ public class Equipment extends BaseTimeEntity {
     private boolean available;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "rental_status", nullable = false)
-    private Status rentalStatus;
+    @Column(name = "status", nullable = false)
+    private Status status;
 
     @Column(name = "rental_count", nullable = false)
     private Long rentalCount;
@@ -59,4 +62,10 @@ public class Equipment extends BaseTimeEntity {
 
     @Column(name = "renter_id")
     private Long renterId;
+
+    @Column(name = "start_rent_date")
+    private LocalDateTime startRentDate;
+
+    @Column(name = "end_rent_date")
+    private LocalDateTime endRentDate;
 }

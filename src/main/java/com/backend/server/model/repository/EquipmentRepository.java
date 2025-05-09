@@ -28,7 +28,7 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     Long countByModelId(Long modelId);
     Optional<User> findByRenterId(Long renterId);
 
-    // @Lock(LockModeType.PESSIMISTIC_WRITE)
-    // @Query("SELECT e FROM Equipment e WHERE e.id = :id")
-    // Optional<Equipment> findByIdForUpdate(@Param("id") Long id);
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT e FROM Equipment e WHERE e.id = :id")
+    Optional<Equipment> findByIdForUpdate(@Param("id") Long id);
 } 

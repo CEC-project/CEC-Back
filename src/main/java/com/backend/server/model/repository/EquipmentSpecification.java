@@ -310,5 +310,12 @@ public class EquipmentSpecification {
         return PageRequest.of(page, size, Sort.by(direction, sortBy));
     }
 
-    
+    // 유저용 장비 목록 페이지네이션
+    public static Pageable getPageable(EquipmentListRequest request) {
+        String sortBy = request.getSortBy() != null ? request.getSortBy() : "id";
+        String sortDirection = request.getSortDirection() != null ? request.getSortDirection() : "asc";
+        int page = request.getPage() != null ? request.getPage() : 0;
+        int size = request.getSize() != null ? request.getSize() : 10;
+        return PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
+    }
 } 
