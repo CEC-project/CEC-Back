@@ -56,4 +56,7 @@ public class Equipment extends BaseTimeEntity {
 
     @Column(name = "repair_count", nullable = false)
     private Long repairCount;
+
+    @Column(name = "renter_id")
+    private Long renterId;
 }

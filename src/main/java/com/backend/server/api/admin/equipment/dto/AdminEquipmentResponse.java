@@ -1,47 +1,39 @@
-// package com.backend.server.api.admin.dto.equipment;
+package com.backend.server.api.admin.equipment.dto;
 
-// import com.backend.server.model.entity.Equipment;
-// import com.backend.server.model.entity.enums.Status;
+import com.backend.server.model.entity.Equipment;
+import com.backend.server.model.entity.enums.Status;
 
-// import lombok.AllArgsConstructor;
-// import lombok.Builder;
-// import lombok.Getter;
-// import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-// import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 
-// @Getter
-// @Builder
-// @NoArgsConstructor
-// @AllArgsConstructor
-// public class AdminEquipmentResponse {
-//     private Long id;
-//     private String name;
-//     private Long categoryId;
-//     private String modelName;
-//     private Status rentalStatus;
-//     private Boolean available;
-//     private Integer quantity;
-//     private Integer maxRentalCount;
-//     private String description;
-//     private String imageUrl;
-//     //private Boolean isFavorite;
-//     private LocalDateTime createdAt;
-//     private LocalDateTime updatedAt;
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class AdminEquipmentResponse {
+    private String modelName;
+    private String serialNumber;
+    private Status status;
+    private boolean isAvailable;
+    private Long brokenCount;
+    private Long repairCount;
+    private Long rentalCount;
+    private String renterName;
+    private LocalDateTime createdAt;
     
-//     public AdminEquipmentResponse(Equipment equipment) {
-//         this.id = equipment.getId();
-//         this.name = equipment.getName();
-//         this.categoryId = equipment.getCategoryId();
-//         this.modelName = equipment.getModelName();
-//         this.rentalStatus = equipment.getRentalStatus();
-//         this.available = equipment.getAvailable();
-//         this.quantity = equipment.getQuantity();
-//         this.maxRentalCount = equipment.getMaxRentalCount();
-//         this.description = equipment.getDescription();
-//         this.imageUrl = equipment.getImage_url();
-//         this.createdAt = equipment.getCreatedAt();
-//         this.updatedAt = equipment.getUpdatedAt(); 
-//     }
-
-// }
+    public AdminEquipmentResponse(Equipment equipment, String modelName, String renterName) {
+        this.modelName = modelName;
+        this.serialNumber = equipment.getSerialNumber().toString();
+        this.status = equipment.getRentalStatus();
+        this.isAvailable = equipment.isAvailable();
+        this.brokenCount = equipment.getBrokenCount();
+        this.repairCount = equipment.getRepairCount();
+        this.rentalCount = equipment.getRentalCount();
+        this.renterName = renterName;
+        this.createdAt = equipment.getCreatedAt();
+    }
+}
