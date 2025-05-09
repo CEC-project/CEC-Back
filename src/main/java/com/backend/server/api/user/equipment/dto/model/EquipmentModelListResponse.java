@@ -1,4 +1,4 @@
-package com.backend.server.api.user.equipment.dto.equipment;
+package com.backend.server.api.user.equipment.dto.model;
 
 import java.util.List;
 

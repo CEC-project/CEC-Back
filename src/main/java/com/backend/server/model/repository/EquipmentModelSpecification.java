@@ -1,6 +1,6 @@
 package com.backend.server.model.repository;
 
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentModelListRequest;
+import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
 import com.backend.server.model.entity.EquipmentModel;
 
 import org.springframework.data.domain.PageRequest;
