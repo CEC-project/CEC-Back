@@ -42,4 +42,9 @@ public class AdminNoticeController {
   ) {
     return ApiResponse.success("공지사항 수정 성공", adminNoticeService.updateNotice(id, request));
   }
+
+  @DeleteMapping("/{id}")
+  public ApiResponse<AdminNoticeIdResponse> deleteNotice(@PathVariable Long id) {
+    return ApiResponse.success("공지사항 삭제 성공",adminNoticeService.deleteNotice(id));
+  }
 }

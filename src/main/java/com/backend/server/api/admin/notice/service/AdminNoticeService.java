@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 관리자용 공지사항 서비스
- *
+ * <p>
  * 공지사항의 생성, 수정, 삭제 등 관리자 기능을 처리하는 서비스 클래스입니다.
  * 모든 메소드는 트랜잭션 내에서 실행됩니다.
  */
@@ -27,7 +27,7 @@ public class AdminNoticeService {
 
   /**
    * 공지사항을 생성합니다.
-   *
+   * <p>
    * 동일한 제목의 공지사항이 이미 존재할 경우 예외가 발생합니다.
    * 로그인한 관리자가 공지사항의 작성자로 설정됩니다.
    *
@@ -50,7 +50,7 @@ public class AdminNoticeService {
 
   /**
    * 공지사항을 수정합니다.
-   *
+   * <p>
    * 기존 공지사항의 제목, 내용, 첨부파일 URL, 중요도를 수정합니다.
    * 수정하려는 공지사항이 존재하지 않을 경우 예외가 발생합니다.
    *
@@ -73,5 +73,25 @@ public class AdminNoticeService {
     noticeRepository.save(updated);
 
     return new AdminNoticeIdResponse(updated.getId());
+  }
+
+  /**
+   * 공지사항을 삭제합니다.
+   *
+   * 지정된 ID의 공지사항을 데이터베이스에서 삭제합니다.
+   * 존재하지 않는 ID를 지정할 경우 예외가 발생합니다.
+   *
+   * @param id 삭제할 공지사항의 ID
+   * @return 삭제된 공지사항의 ID를 담은 응답 객체
+   * @throws RuntimeException 삭제하려는 공지사항이 존재하지 않는 경우
+   */
+  public AdminNoticeIdResponse deleteNotice(Long id) {
+    if (!noticeRepository.existsById(id)) {
+      throw new RuntimeException("공지사항을 찾을 수 없습니다.");
+    }
+
+    noticeRepository.deleteById(id);
+
+    return new AdminNoticeIdResponse(id);
   }
 }
