@@ -1,5 +1,7 @@
 package com.backend.server.api.admin.notice.controller;
 
+import com.backend.server.api.admin.equipment.dto.AdminEquipmentCreateRequest;
+import com.backend.server.api.admin.equipment.dto.AdminEquipmentIdResponse;
 import com.backend.server.api.admin.notice.dto.AdminNoticeCreateRequest;
 import com.backend.server.api.admin.notice.dto.AdminNoticeIdResponse;
 import com.backend.server.api.admin.notice.service.AdminNoticeService;
@@ -27,5 +29,17 @@ public class AdminNoticeController {
       @AuthenticationPrincipal LoginUser loginUser
   ) {
     return ApiResponse.success("공지사항 등록 성공", adminNoticeService.createNotice(request, loginUser));
+  }
+
+  @PutMapping("/{id}")
+  @Operation(
+      summary = "공지사항 수정",
+      description = "기존 공지사항을 수정합니다. 제목, 내용, 중요도, 첨부파일 등 정보를 변경할 수 있습니다."
+  )
+  public ApiResponse<AdminNoticeIdResponse> updateNotice(
+      @PathVariable Long id,
+      @Valid @RequestBody AdminNoticeCreateRequest request
+  ) {
+    return ApiResponse.success("공지사항 수정 성공", adminNoticeService.updateNotice(id, request));
   }
 }
