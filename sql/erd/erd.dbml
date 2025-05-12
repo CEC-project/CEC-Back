@@ -1,0 +1,271 @@
+// https://nomadrazor.github.io/dbdiagram-oss-wrep/editor 에서 그림으로 볼수 있음.
+// json 으로 위치 정보까지 export import 가능
+
+Table users {
+  id bigint [primary key]
+  name varchar
+  student_number varchar
+  nickname varchar
+  grade varchar
+  group varchar
+  gender varchar
+  professor varchar
+  phone_number varchar
+  email varchar
+  password varchar
+  profile_picture varchar
+  birth_date date
+  restriction_count int
+  report_count int
+  role varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table classroom {
+  id bigint [primary key]
+  name varchar
+  location varchar
+  status varchar
+  available boolean
+  attachment varchar
+  manager_id bigint
+  start_time time
+  end_time time
+  renter_id bigint
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table semester {
+  id bigint [primary key]
+  name varchar(20)
+  year int
+  start_date date
+  end_date date
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table semester_schedule {
+  id int [primary key]
+  classroom_id bigint
+  semester_id int
+  year int
+  day varchar
+  name varchar(20)
+  start_at time
+  end_at time
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table rental {
+  rental_id bigint [primary key]
+  equipment_id bigint
+  classroom_id bigint
+  type varchar
+  user_id bigint
+  status varchar
+  start_at timestamp
+  end_at timestamp
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table repair {
+  rental_id bigint [primary key]
+  equipment_id bigint
+  classroom_id bigint
+  type varchar
+  user_id bigint
+  status varchar
+  start_at timestamp
+  end_at timestamp
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table notice {
+  id bigint [primary key]
+  title varchar
+  content text
+  important bool
+  author_id bigint
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table notification {
+  id bigint [primary key]
+  type varchar
+  content text
+  author_id bigint
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table community {
+  id bigint [primary key]
+  title varchar
+  nickname varchar
+  author_id bigint
+  community_type_id bigint
+  recommand int
+  view int
+  type varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table community_type {
+  id bigint [primary key]
+  name varchar
+  description varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table inquiry {
+  id bigint [primary key]
+  title varchar
+  content text
+  secret bool
+  author_id bigint
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table inquiry_type {
+  id bigint [primary key]
+  name varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table inquiry_inquiry_type {
+  inquiry_id bigint [primary key]
+  inquiry_type_id bigint [primary key]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table equipment {
+  id bigint [primary key]
+  name varchar
+  model_name varchar
+  status varchar
+  available boolean
+  description text
+  attachment varchar
+  manager_id bigint
+  rental_status varchar
+  renter_id bigint
+  model_id bigint
+  category_id bigint
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table equipment_model {
+  id bigint [primary key]
+  name varchar
+  english_code varchar
+  category_id bigint
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table equipment_category {
+  id bigint [primary key]
+  name varchar
+  max_rental_count int
+  english_code varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table year_schedule {
+  id bigint [primary key]
+  classroom_id bigint [null]
+  date date
+  is_holiday boolean
+  description varchar(20)
+  start_at time
+  end_at time
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table rental_restriction {
+  id int [primary key]
+  user_id int
+  type varchar
+  reason varchar
+  end_at timestamp
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table inquiry_response {
+  id int [primary key]
+  inquiry_id int
+  responder_id int
+  content varchar(1000)
+  attachment_url varchar(200)
+  created_at timestamp
+  updated_at timestamp
+}
+
+TableGroup equipment_group {
+  equipment
+  equipment_category
+  equipment_model
+}
+
+TableGroup inquiry_group {
+  inquiry
+  inquiry_inquiry_type
+  inquiry_type
+  inquiry_response
+}
+
+TableGroup community_group {
+  community
+  community_type
+}
+
+TableGroup classroom_group {
+  classroom
+  semester_schedule
+  semester
+  year_schedule
+}
+
+Ref: "classroom"."renter_id" > "users"."id"
+Ref: "equipment"."renter_id" > "users"."id"
+Ref: "notice"."author_id" > "users"."id"
+Ref: "notification"."author_id" > "users"."id"
+Ref: "inquiry"."author_id" > "users"."id"
+Ref: "inquiry_inquiry_type"."inquiry_id" > "inquiry"."id"
+Ref: "inquiry_inquiry_type"."inquiry_type_id" > "inquiry_type"."id"
+Ref: "community"."author_id" > "users"."id"
+Ref: "community"."community_type_id" > "community_type"."id"
+Ref: "equipment_category"."id" < "equipment"."category_id"
+Ref: "equipment_model"."category_id" > "equipment_category"."id"
+Ref: "equipment"."model_id" > "equipment_model"."id"
+Ref: "rental"."equipment_id" > "equipment"."id"
+Ref: "rental"."classroom_id" > "classroom"."id"
+Ref: "rental"."user_id" > "users"."id"
+Ref: "repair"."equipment_id" > "equipment"."id"
+Ref: "repair"."classroom_id" > "classroom"."id"
+Ref: "repair"."user_id" > "users"."id"
+Ref: "classroom"."manager_id" > "users"."id"
+Ref: "equipment"."manager_id" > "users"."id"
+Ref: "semester_schedule"."semester_id" > "semester"."id"
+Ref: "semester_schedule"."semester_id" > "semester_schedule"."id"
+Ref: "semester_schedule"."classroom_id" > "classroom"."id"
+Ref: "year_schedule"."classroom_id" > "classroom"."id"
+Ref: "rental_restriction"."user_id" > "users"."id"
+Ref: inquiry_response.inquiry_id > inquiry.id
+Ref: inquiry_response.responder_id > users.id
