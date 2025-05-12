@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.server.api.common.dto.ApiResponse;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentModelListRequest;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentModelListResponse;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentModelResponse;
+import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
+import com.backend.server.api.user.equipment.dto.model.EquipmentModelListResponse;
+import com.backend.server.api.user.equipment.dto.model.EquipmentModelResponse;
 import com.backend.server.api.user.equipment.service.EquipmentModelService;
 
 import io.swagger.v3.oas.annotations.Operation;

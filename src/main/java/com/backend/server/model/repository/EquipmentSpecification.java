@@ -1,5 +1,6 @@
 package com.backend.server.model.repository;
-
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import com.backend.server.api.admin.equipment.dto.AdminEquipmentRentalRequestListRequest;
 import com.backend.server.api.admin.equipment.dto.AdminEquipmentListRequest;
 import com.backend.server.api.user.equipment.dto.EquipmentListRequest;
@@ -23,131 +24,56 @@ import java.util.List;
 
 public class EquipmentSpecification {
 
-    public static Pageable getPageable(
-    Integer page, 
-    Integer size, 
-    String sortBy, 
-    String sortDirection
-) {
-    // 정렬 기준 설정
-    String sortField;
-    if ("category".equals(sortBy)) {
-        sortField = "category";
-    } else if ("status".equals(sortBy)) {
-        sortField = "status";
-    } else {
-        sortField = "name"; // 기본값은 이름순
-    }
-
-    // 정렬 방향 설정
-    String direction = (sortDirection == null || !sortDirection.toLowerCase().equals("desc")) 
-        ? "asc" 
-        : "desc";
-
-    // 페이지네이션 설정
-    int pageNumber = page != null ? page - 1 : 0;  // 페이지는 0부터 시작
-    int pageSize = size != null ? size : 17;       // 기본값 17
-
-    return PageRequest.of(
-        pageNumber,
-        pageSize,
-        Sort.by(Direction.fromString(direction), sortField)
-    );
-}
-    
-    // 페이징 및 정렬 정보 생성
-    public static Pageable getPageable(EquipmentListRequest request) {
-        String sortBy;
-        if ("category".equals(request.getSortBy())) {
-            sortBy = "category";
-        } else if ("status".equals(request.getSortBy())) {
-            sortBy = "status";
-        } else {
-            sortBy = "name"; // 기본값은 이름순
-        }
-
-        String sortDirection = request.getSortDirection();
-        if (sortDirection == null || !sortDirection.toLowerCase().equals("desc")) {
-            sortDirection = "asc";
-        }
-
-        int page = request.getPage() != null ? request.getPage() : 0;
-        int size = request.getSize() != null ? request.getSize() : 17;
-
-        return PageRequest.of(
-                page,
-                size,
-                Sort.by(Direction.fromString(sortDirection), sortBy)
-        );
-    }
-    //위와 완전 동일한 코드임. argument로 쓰는 DTO만 다름. 하지만 DTO의 내용도 동일함.
-    public static Pageable getPageable(AdminEquipmentListRequest request) {
-        String sortBy;
-        if ("category".equals(request.getSortBy())) {
-            sortBy = "category";
-        } else if ("status".equals(request.getSortBy())) {
-            sortBy = "status";
-        } else {
-            sortBy = "name"; // 기본값은 이름순
-        }
-
-        String sortDirection = request.getSortDirection();
-        if (sortDirection == null || !sortDirection.toLowerCase().equals("desc")) {
-            sortDirection = "asc";
-        }
-
-        int page = request.getPage() != null ? request.getPage() : 0;
-        int size = request.getSize() != null ? request.getSize() : 17;
-
-        return PageRequest.of(
-                page,
-                size,
-                Sort.by(Direction.fromString(sortDirection), sortBy)
-        );
-    }
-    
     // 장비 목록 필터링 (어드민용)
-    public static Specification<Equipment> AdminfilterEquipments(AdminEquipmentListRequest request) {
-        return (root, query, criteriaBuilder) -> {
+    public static Specification<Equipment> adminFilterEquipments(AdminEquipmentListRequest request) {
+        return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
-            
-            // 카테고리 필터링
+    
+            // 카테고리(장비분류)
             if (request.getCategoryId() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("categoryId"), request.getCategoryId()));
+                predicates.add(cb.equal(root.get("categoryId"), request.getCategoryId()));
             }
-            
-            // 상태 필터링
-            if (request.getRentalStatus() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("rentalStatus"), request.getRentalStatus()));
+            // 모델명
+            if (StringUtils.hasText(request.getModelName())) {
+                predicates.add(cb.like(cb.lower(root.get("modelName")), "%" + request.getModelName().toLowerCase() + "%"));
             }
-            
-            // 대여 가능 여부 필터링
-            if (request.getAvailable() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("available"), request.getAvailable()));
+            // 일련번호
+            if (StringUtils.hasText(request.getSerialNumber())) {
+                predicates.add(cb.like(cb.lower(root.get("serialNumber")), "%" + request.getSerialNumber().toLowerCase() + "%"));
             }
-            
-            // 검색어 필터링
+            // 장비 상태
+            if (StringUtils.hasText(request.getStatus())) {
+                predicates.add(cb.equal(root.get("rentalStatus"), request.getStatus()));
+            }
+            // 대여 가능 여부
+            if (request.getIsAvailable() != null) {
+                predicates.add(cb.equal(root.get("available"), request.getIsAvailable()));
+            }
+            // 현재 대여자 이름 (join 필요)
+            if (StringUtils.hasText(request.getRenterName())) {
+                Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
+                predicates.add(cb.like(cb.lower(renter.get("name")), "%" + request.getRenterName().toLowerCase() + "%"));
+            }
+            // 통합 검색어 (모델명, 일련번호, 대여자 이름 등)
             if (StringUtils.hasText(request.getSearchKeyword())) {
                 String keyword = "%" + request.getSearchKeyword().toLowerCase() + "%";
-                Integer searchType = request.getSearchType();
-                
-                if (searchType == null || searchType == 0) {
-                    // 이름 검색
-                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), keyword));
-                } else if (searchType == 1) {
-                    // 모델명 검색
-                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("modelName")), keyword));
-                } else {
-                    // 기본적으로 이름과 모델명 모두 검색
-                    Predicate namePredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), keyword);
-                    Predicate modelPredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("modelName")), keyword);
-                    predicates.add(criteriaBuilder.or(namePredicate, modelPredicate));
-                }
+                Predicate modelNamePredicate = cb.like(cb.lower(root.get("modelName")), keyword);
+                Predicate serialNumberPredicate = cb.like(cb.lower(root.get("serialNumber")), keyword);
+                Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
+                Predicate renterNamePredicate = cb.like(cb.lower(renter.get("name")), keyword);
+                predicates.add(cb.or(modelNamePredicate, serialNumberPredicate, renterNamePredicate));
             }
-            
-            
-            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+    
+            return cb.and(predicates.toArray(new Predicate[0]));
         };
+    }
+    //어드민 장비 목록 페이지네이션
+    public static Pageable getPageable(AdminEquipmentListRequest request) {
+        String sortBy = request.getSortBy() != null ? request.getSortBy() : "id";
+        String sortDirection = request.getSortDirection() != null ? request.getSortDirection() : "asc";
+        int page = request.getPage() != null ? request.getPage() : 0;
+        int size = request.getSize() != null ? request.getSize() : 17;
+        return PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
     }
     
     //장비 목록 필터링 유저용

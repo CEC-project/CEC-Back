@@ -8,9 +8,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentModelListRequest;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentModelListResponse;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentModelResponse;
+import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
+import com.backend.server.api.user.equipment.dto.model.EquipmentModelListResponse;
+import com.backend.server.api.user.equipment.dto.model.EquipmentModelResponse;
 import com.backend.server.model.entity.EquipmentModel;
 import com.backend.server.model.repository.EquipmentModelRepository;
 import com.backend.server.model.repository.EquipmentModelSpecification;
