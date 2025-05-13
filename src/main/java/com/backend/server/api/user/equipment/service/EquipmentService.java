@@ -101,8 +101,8 @@ public class EquipmentService {
     }
 
     //장비 장바구니 조회
-    public List<EquipmentResponse> getCartItems(Long userId) {
-        List<EquipmentCart> cartItems = equipmentCartRepository.findByUserId(userId);
+    public List<EquipmentResponse> getCartItems(LoginUser loginUser) {
+        List<EquipmentCart> cartItems = equipmentCartRepository.findByUserId(loginUser.getId());
         
         return cartItems.stream()
             .map(cart -> {
@@ -211,13 +211,13 @@ public class EquipmentService {
     }
 
     @Transactional
-    public void cancelReturnRequest(Long userId, List<Long> equipmentIds) {
+    public void cancelReturnRequest(LoginUser loginUser, List<Long> equipmentIds) {
         for (Long equipmentId : equipmentIds) {
             Equipment equipment = equipmentRepository.findById(equipmentId)
                 .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
 
             // 본인의 대여인지 확인
-            if (!userId.equals(equipment.getRenterId())) {
+            if (!loginUser.getId().equals(equipment.getRenterId())) {
                 throw new IllegalStateException("본인의 대여만 반납 요청 취소할 수 있습니다.");
             }
 

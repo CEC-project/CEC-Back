@@ -88,8 +88,8 @@ public class EquipmentController {
     )
     @GetMapping("/cart")
     public ApiResponse<List<EquipmentResponse>> getCartItems(
-            @Parameter(description = "사용자 ID") @RequestParam Long userId) {
-        return ApiResponse.success("장바구니 조회 성공", equipmentService.getCartItems(userId));
+            @Parameter(description = "사용자 ID") @AuthenticationPrincipal LoginUser loginUser) {
+        return ApiResponse.success("장바구니 조회 성공", equipmentService.getCartItems(loginUser));
     }
 
     @Operation(
@@ -146,9 +146,9 @@ public class EquipmentController {
     )
     @PostMapping("/return/cancel")
     public ApiResponse<Void> cancelReturnRequest(
-            @Parameter(description = "사용자 ID") @RequestParam Long userId,
+            @Parameter(description = "사용자 ID") @AuthenticationPrincipal LoginUser loginUser,
             @Parameter(description = "반납 요청 취소할 장비 ID 목록") @RequestBody List<Long> equipmentIds) {
-        equipmentService.cancelReturnRequest(userId, equipmentIds);
+        equipmentService.cancelReturnRequest(loginUser, equipmentIds);
         return ApiResponse.success("반납 요청 취소 성공", null);
     }
 
