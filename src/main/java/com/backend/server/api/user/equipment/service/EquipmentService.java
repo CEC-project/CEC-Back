@@ -186,13 +186,13 @@ public class EquipmentService {
     }
 
     @Transactional
-    public void requestReturn(Long userId, List<Long> equipmentIds) {
+    public void requestReturn(LoginUser loginUser, List<Long> equipmentIds) {
         for (Long equipmentId : equipmentIds) {
             Equipment equipment = equipmentRepository.findById(equipmentId)
                 .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
 
             // 본인의 대여인지 확인
-            if (!userId.equals(equipment.getRenterId())) {
+            if (!loginUser.getId().equals(equipment.getRenterId())) {
                 throw new IllegalStateException("본인의 대여만 반납 요청할 수 있습니다.");
             }
 

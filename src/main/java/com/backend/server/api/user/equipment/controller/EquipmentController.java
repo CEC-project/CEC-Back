@@ -131,9 +131,9 @@ public class EquipmentController {
     )
     @PostMapping("/return")
     public ApiResponse<Void> requestReturn(
-            @Parameter(description = "사용자 ID") @RequestParam Long userId,
+            @Parameter(description = "사용자 ID") @AuthenticationPrincipal LoginUser loginUser,
             @Parameter(description = "반납 요청할 장비 ID 목록") @RequestBody List<Long> equipmentIds) {
-        equipmentService.requestReturn(userId, equipmentIds);
+        equipmentService.requestReturn(loginUser, equipmentIds);
         return ApiResponse.success("반납 요청 성공", null);
     }
 
