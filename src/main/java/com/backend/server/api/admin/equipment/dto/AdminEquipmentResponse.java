@@ -28,7 +28,7 @@ public class AdminEquipmentResponse {
     public AdminEquipmentResponse(Equipment equipment, String modelName, String renterName) {
         this.modelName = modelName;
         this.serialNumber = equipment.getSerialNumber().toString();
-        this.status = equipment.getRentalStatus();
+        this.status = equipment.getStatus();
         this.isAvailable = equipment.isAvailable();
         this.brokenCount = equipment.getBrokenCount();
         this.repairCount = equipment.getRepairCount();

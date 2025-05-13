@@ -10,12 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.api.user.equipment.dto.EquipmentListRequest;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentRentalRequest;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
 import com.backend.server.api.user.equipment.dto.equipment.EquipmentListResponse;
 import com.backend.server.api.user.equipment.dto.equipment.EquipmentResponse;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.EquipmentModel;
 import com.backend.server.model.entity.User;
+import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.EquipmentCart;
 import com.backend.server.model.repository.EquipmentModelRepository;
 import com.backend.server.model.repository.EquipmentRepository;
@@ -33,9 +35,17 @@ public class EquipmentService {
     private final UserRepository userRepository;
     private final EquipmentCartRepository equipmentCartRepository;
 
-    public EquipmentListResponse getEquipments(EquipmentListRequest request) {
+    //장비 하나 호버링시 이미지 보여주기
+    public EquipmentResponse getEquipment(Long id) {
+        Equipment equipment = equipmentRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
+        
+        return new EquipmentResponse(equipment);
+    }
+    //장비목록조회회
+    public EquipmentListResponse getEquipments(LoginUser loginUser,EquipmentListRequest request) {
         // 사용자 학년 정보 조회
-        Integer userGrade = userRepository.findById(request.getUserId()).map(User::getGrade).orElse(null);
+        Integer userGrade = userRepository.findById(loginUser.getId()).map(User::getGrade).orElse(null);
 
         Pageable pageable = EquipmentSpecification.getPageable(request);
         Specification<Equipment> spec = EquipmentSpecification.filterEquipments(request, userGrade);
@@ -58,6 +68,7 @@ public class EquipmentService {
         return new EquipmentListResponse(responses, page);
     }
 
+    //장비 장바구니 추가
     @Transactional
     public void addToCart(LoginUser loginUser, List<Long> equipmentIds) {
         User user = userRepository.findById(loginUser.getId())
@@ -72,29 +83,31 @@ public class EquipmentService {
             }
 
             // 장비가 대여 가능한 상태인지 확인
-            if (!"AVAILABLE".equals(equipment.getStatus())) {
-                throw new IllegalStateException("장비가 대여 불가능한 상태입니다");
+            if (Status.AVAILABLE != equipment.getStatus()) {
+                throw new IllegalStateException("장비가 대여 불가능한 상태입니다: " + equipment.getId());
             }
             Integer userGrade = user.getGrade();
             if(equipment.getRestrictionGrade().contains(userGrade.toString())) {
                 throw new IllegalStateException("장비 대여 제한 학년에 걸려요");
             }
 
-            EquipmentCart cart = new EquipmentCart();
-            cart.setUser(user);
-            cart.setEquipment(equipment);
-            cart.setCreatedAt(LocalDateTime.now());
+            EquipmentCart cart = EquipmentCart.builder()
+                .userId(user.getId())
+                .equipmentId(equipment.getId())
+                .build();
             
             equipmentCartRepository.save(cart);
         }
     }
 
+    //장비 장바구니 조회
     public List<EquipmentResponse> getCartItems(Long userId) {
         List<EquipmentCart> cartItems = equipmentCartRepository.findByUserId(userId);
         
         return cartItems.stream()
             .map(cart -> {
-                Equipment equipment = cart.getEquipment();
+                Equipment equipment = equipmentRepository.findById(cart.getEquipmentId())
+                    .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
                 String modelName = equipmentModelRepository.findById(equipment.getModelId())
                     .map(EquipmentModel::getName)
                     .orElse("장비 모델 분류가 존재하지 않습니다");
@@ -113,56 +126,62 @@ public class EquipmentService {
             .toList();
     }
 
+    //장비 대여 요청
     @Transactional
-    public void requestRental(Long userId, List<Long> equipmentIds, LocalDateTime startDate, LocalDateTime endDate) {
-        User user = userRepository.findById(userId)
+    public void requestRental(LoginUser loginUser, EquipmentRentalRequest request) {
+        User user = userRepository.findById(loginUser.getId())
             .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        for (Long equipmentId : equipmentIds) {
-            Equipment equipment = equipmentRepository.findById(equipmentId)
+        for (Long equipmentId : request.getEquipmentIds()) {
+            Equipment equipment = equipmentRepository.findByIdForUpdate(equipmentId)
                 .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
 
             // 장비가 대여 가능한 상태인지 확인
-            if (!"AVAILABLE".equals(equipment.getState())) {
-                throw new IllegalStateException("장비가 대여 불가능한 상태입니다: " + equipment.getName());
+            if (Status.AVAILABLE != equipment.getStatus()) {
+                throw new IllegalStateException("장비가 대여 불가능한 상태입니다: " + equipment.getId());
             }
-
-            equipment.setState("REQUESTED");
-            equipment.setRenterId(userId);
-            equipment.setStartRentDate(startDate);
-            equipment.setEndRentDate(endDate);
-            equipment.setRequestedAt(LocalDateTime.now());
             
-            equipmentRepository.save(equipment);
+            Equipment updatedEquipment = equipment.toBuilder()
+                .status(Status.RENTAL_PENDING)
+                .renterId(user.getId())
+                .startRentDate(request.getStartDate())
+                .endRentDate(request.getEndDate())
+                .build();
+            
+            equipmentRepository.save(updatedEquipment);
             
             // 장바구니에서 제거
-            equipmentCartRepository.deleteByUserIdAndEquipmentId(userId, equipmentId);
+            equipmentCartRepository.deleteByUserIdAndEquipmentId(user.getId(), equipmentId);
         }
     }
 
     @Transactional
-    public void cancelRentalRequest(Long userId, List<Long> equipmentIds) {
+    public void cancelRentalRequest(LoginUser loginUser, List<Long> equipmentIds) {
+        User user = userRepository.findById(loginUser.getId())
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
         for (Long equipmentId : equipmentIds) {
             Equipment equipment = equipmentRepository.findById(equipmentId)
                 .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
 
             // 본인의 대여 요청인지 확인
-            if (!userId.equals(equipment.getRenterId())) {
+            if (!user.getId().equals(equipment.getRenterId())) {
                 throw new IllegalStateException("본인의 대여 요청만 취소할 수 있습니다.");
             }
 
             // 대여 요청 상태인지 확인
-            if (!"REQUESTED".equals(equipment.getState())) {
+            if (Status.RENTAL_PENDING != equipment.getStatus()) {
                 throw new IllegalStateException("대여 요청 상태인 경우에만 취소할 수 있습니다.");
             }
 
-            equipment.setState("AVAILABLE");
-            equipment.setRenterId(null);
-            equipment.setStartRentDate(null);
-            equipment.setEndRentDate(null);
-            equipment.setRequestedAt(null);
-            
-            equipmentRepository.save(equipment);
+            Equipment updatedEquipment = equipment.toBuilder()
+                .status(Status.AVAILABLE)
+                .renterId(null)
+                .startRentDate(null)
+                .endRentDate(null)
+                .build();   
+
+            equipmentRepository.save(updatedEquipment);
+
         }
     }
 
@@ -178,14 +197,16 @@ public class EquipmentService {
             }
 
             // 대여 중인 상태인지 확인
-            if (!"RENTED".equals(equipment.getState())) {
+            if (!Status.IN_USE.equals(equipment.getStatus())) {
                 throw new IllegalStateException("대여 중인 상태인 경우에만 반납 요청할 수 있습니다.");
             }
 
-            equipment.setState("RETURN_REQUESTED");
-            equipment.setReturnRequestedAt(LocalDateTime.now());
+
+            Equipment updatedEquipment = equipment.toBuilder()
+                .status(Status.AVAILABLE)
+                .build();
             
-            equipmentRepository.save(equipment);
+            equipmentRepository.save(updatedEquipment);
         }
     }
 
@@ -201,18 +222,20 @@ public class EquipmentService {
             }
 
             // 반납 요청 상태인지 확인
-            if (!"RETURN_REQUESTED".equals(equipment.getState())) {
+            if (!Status.RETURN_PENDING.equals(equipment.getStatus())) {
                 throw new IllegalStateException("반납 요청 상태인 경우에만 취소할 수 있습니다.");
             }
 
-            equipment.setState("RENTED");
-            equipment.setReturnRequestedAt(null);
             
-            equipmentRepository.save(equipment);
+            Equipment updatedEquipment = equipment.toBuilder()
+                .status(Status.IN_USE)
+                .build();
+
+            equipmentRepository.save(updatedEquipment);
         }
     }
 
-    public List<Equipment> getMyRentals(Long userId) {
-        return equipmentRepository.findByRenterIdOrderByRequestedAtDesc(userId);
-    }
+    // public List<Equipment> getMyRentals(Long userId) {
+    //     return equipmentRepository.findByRenterIdOrderByRequestedAtDesc(userId);
+    // }
 }
