@@ -12,6 +12,7 @@ public class EquipmentResponse {
     private String renterName;
     private String status;
     private LocalDateTime createdAt;
+    private String imageUrl;
     
     public EquipmentResponse(Equipment equipment, String modelName, String renterName, LocalDateTime startRentDate, LocalDateTime endRentDate) {
         this.modelName = modelName;
@@ -19,7 +20,11 @@ public class EquipmentResponse {
         this.startRentDate = startRentDate;
         this.endRentDate = endRentDate;
         this.renterName = renterName;
-        this.status = equipment.getRentalStatus().name();
+        this.status = equipment.getStatus().name();
         this.createdAt = equipment.getCreatedAt();
+    }
+
+    public EquipmentResponse(Equipment equipment) {
+        this.imageUrl = equipment.getImageUrl();
     }
 }

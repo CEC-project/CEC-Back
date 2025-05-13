@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @Table(name = "equipment_carts")
 public class EquipmentCart extends BaseTimeEntity {
     @Id
