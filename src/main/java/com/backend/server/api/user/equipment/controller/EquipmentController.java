@@ -84,7 +84,7 @@ public class EquipmentController {
     @Operation(
         summary = "장비 장바구니 조회", 
         description = "사용자의 장바구니에 있는 장비 목록을 조회합니다.\n\n" +
-                      "**예시 URL:** http://localhost:8080/api/user/equipments/cart?userId=1"
+                      "**예시 URL:** http://localhost:8080/api/user/equipments/cart"
     )
     @GetMapping("/cart")
     public ApiResponse<List<EquipmentResponse>> getCartItems(
@@ -127,7 +127,7 @@ public class EquipmentController {
         description = "대여 중인 장비의 반납을 요청합니다. 본인이 대여한 장비만 반납 요청할 수 있습니다.\n\n" +
                       "**요청 예시:**\n" +
                       "```\n[1, 2, 3]\n```\n\n" +
-                      "**예시 URL:** http://localhost:8080/api/user/equipments/return?userId=1"
+                      "**예시 URL:** http://localhost:8080/api/user/equipments/return"
     )
     @PostMapping("/return")
     public ApiResponse<Void> requestReturn(
@@ -142,7 +142,7 @@ public class EquipmentController {
         description = "반납 요청 상태인 장비의 반납 요청을 취소합니다. 본인이 요청한 반납만 취소할 수 있습니다.\n\n" +
                       "**요청 예시:**\n" +
                       "```\n[1, 2, 3]\n```\n\n" +
-                      "**예시 URL:** http://localhost:8080/api/user/equipments/return/cancel?userId=1"
+                      "**예시 URL:** http://localhost:8080/api/user/equipments/return/cancel"
     )
     @PostMapping("/return/cancel")
     public ApiResponse<Void> cancelReturnRequest(
