@@ -1,5 +1,6 @@
 package com.backend.server.model.entity;
 
+import com.backend.server.model.entity.enums.InquiryType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -26,22 +27,18 @@ public class Inquiry extends BaseTimeEntity {
     @Column(nullable = false)
     private String title;  // 문의 제목
 
-    @Lob
-    @Column(nullable = false)
+
+    @Column(columnDefinition="TEXT", nullable = false)
     private String content;  // 문의 내용
 
     @Column(name = "author_id", nullable = false)
     private Long authorId;  // 작성자 ID
 
-    @ManyToMany
-    @JoinTable(
-            name = "inquiry_inquiry_type",
-            joinColumns = @JoinColumn(name = "inquiry_id"),
-            inverseJoinColumns = @JoinColumn(name = "inquiry_type_id")
-    )
-    @Default
-    private List<InquiryType> inquiryTypes = new ArrayList<>();  // 문의 유형 ID 리스트
 
     @Column
     private String attachmentUrl;  // 첨부파일 URL
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private InquiryType type;  // 문의 유형 (enum)
 }
