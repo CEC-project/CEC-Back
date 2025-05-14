@@ -2,8 +2,9 @@ package com.backend.server.model.repository;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import com.backend.server.api.admin.equipment.dto.AdminEquipmentRentalRequestListRequest;
+import com.backend.server.api.common.dto.PageableRequest;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
 import com.backend.server.api.admin.equipment.dto.AdminEquipmentListRequest;
-import com.backend.server.api.user.equipment.dto.EquipmentListRequest;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.EquipmentCart;
 import com.backend.server.model.entity.EquipmentFavorite;
@@ -76,95 +77,47 @@ public class EquipmentSpecification {
         return PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
     }
     
-    //장비 목록 필터링 유저용
+    //장비 필터링 유저용 
     public static Specification<Equipment> filterEquipments(EquipmentListRequest request, Integer userGrade) {
-        return (root, query, criteriaBuilder) -> {
+        return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
-            
-            // 기본 필터링 조건은 관리자용과 동일
-            // 카테고리 필터링
+    
+            // 카테고리(장비분류)
             if (request.getCategoryId() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("categoryId"), request.getCategoryId()));
+                predicates.add(cb.equal(root.get("categoryId"), request.getCategoryId()));
             }
-            
-            // 상태 필터링
-            if (request.getRentalStatus() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("rentalStatus"), request.getRentalStatus()));
+            // 모델명
+            if (StringUtils.hasText(request.getModelName())) {
+                predicates.add(cb.like(cb.lower(root.get("modelName")), "%" + request.getModelName().toLowerCase() + "%"));
             }
-            
-            // 대여 가능 여부 필터링
-            if (request.getAvailable() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("available"), request.getAvailable()));
+            // 대여 가능 여부
+            if (request.getIsAvailable() != null) {
+                predicates.add(cb.equal(root.get("available"), request.getIsAvailable()));
             }
-            
-            // 검색어 필터링
+            // 현재 대여자 이름 (join 필요)
+            if (StringUtils.hasText(request.getRenterName())) {
+                Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
+                predicates.add(cb.like(cb.lower(renter.get("name")), "%" + request.getRenterName().toLowerCase() + "%"));
+            }
+            // 통합 검색어 (모델명, 일련번호, 대여자 이름 등)
             if (StringUtils.hasText(request.getSearchKeyword())) {
                 String keyword = "%" + request.getSearchKeyword().toLowerCase() + "%";
-                Integer searchType = request.getSearchType();
-                
-                if (searchType == null || searchType == 0) {
-                    // 이름 검색
-                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), keyword));
-                } else if (searchType == 1) {
-                    // 모델명 검색
-                    predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("modelName")), keyword));
-                } else {
-                    // 기본적으로 이름과 모델명 모두 검색
-                    Predicate namePredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), keyword);
-                    Predicate modelPredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("modelName")), keyword);
-                    predicates.add(criteriaBuilder.or(namePredicate, modelPredicate));
-                }
-            }
-            
-            //사용자 학년이 대여제한학년에 포함되지 않는 장비만 조회
-            if (userGrade != null) {
-                // rentalRestrictedGrades 필드가 null이거나 빈 문자열인 경우 포함
-                Predicate noRestrictions = criteriaBuilder.or(
-                    criteriaBuilder.isNull(root.get("rentalRestrictedGrades")),
-                    criteriaBuilder.equal(root.get("rentalRestrictedGrades"), "")
-                );
-                
-                // userGrade가 rentalRestrictedGrades에 포함되지 않는 경우
-                Predicate notRestrictedForUser = criteriaBuilder.notLike(
-                    root.get("rentalRestrictedGrades"), 
-                    "%" + userGrade + "%"
-                );
-                
-                // 두 조건을 or로 연결 (제한이 없거나, 사용자 학년이 제한에 포함되지 않음)
-                predicates.add(criteriaBuilder.or(noRestrictions, notRestrictedForUser));
-            }
-            
-            // 장바구니 필터링
-            if (request.getInCart() != null && request.getInCart() && request.getUserId() != null) {
-                // 장바구니에 있는 장비만 필터링
-                Subquery<Long> cartSubquery = query.subquery(Long.class);
-                Root<EquipmentCart> cartRoot = cartSubquery.from(EquipmentCart.class);
-                cartSubquery.select(cartRoot.get("equipmentId"))
-                    .where(
-                        criteriaBuilder.equal(cartRoot.get("userId"), request.getUserId())
-                    );
-                
-                // 메인 쿼리에 서브쿼리 조건 추가
-                predicates.add(criteriaBuilder.in(root.get("id")).value(cartSubquery));
+                Predicate modelNamePredicate = cb.like(cb.lower(root.get("modelName")), keyword);
+                Predicate serialNumberPredicate = cb.like(cb.lower(root.get("serialNumber")), keyword);
+                Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
+                Predicate renterNamePredicate = cb.like(cb.lower(renter.get("name")), keyword);
+                predicates.add(cb.or(modelNamePredicate, serialNumberPredicate, renterNamePredicate));
             }
 
-            // 즐겨찾기 필터링
-            if (request.getIsFavorite() != null && request.getIsFavorite() && request.getUserId() != null) {
-                // 즐겨찾기에 있는 장비만 필터링
-                Subquery<Long> favoriteSubquery = query.subquery(Long.class);
-                Root<EquipmentFavorite> favoriteRoot = favoriteSubquery.from(EquipmentFavorite.class);
-                favoriteSubquery.select(favoriteRoot.get("equipmentId"))
-                    .where(
-                        criteriaBuilder.equal(favoriteRoot.get("userId"), request.getUserId())
-                    );
-                
-                // 메인 쿼리에 서브쿼리 조건 추가
-                predicates.add(criteriaBuilder.in(root.get("id")).value(favoriteSubquery));
+            // 대여 제한 학년 필터링 - 유저의 학년이 대여제한학년에 포함되지 않는 장비만 표시
+            if (userGrade != null) {
+                predicates.add(cb.not(cb.like(root.get("restrictionGrade"), "%" + userGrade + "%")));
             }
-            
-            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+    
+            return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
+    
     //카테고리
     public static Specification<Equipment> hasCategory(String category) {
         return (root, query, criteriaBuilder) -> {
@@ -270,6 +223,9 @@ public class EquipmentSpecification {
                     ));
                 }
             }
+
+            //대여 요청 필터링 유저. 자신의 학년이랑 대여제한학년이 겹치는 장비는 안보여줌
+            
             
             // 날짜 범위 필터링
             if (request.getStartDate() != null) {
@@ -308,6 +264,19 @@ public class EquipmentSpecification {
         int size = request.getSize() != null ? request.getSize() : 10;
         
         return PageRequest.of(page, size, Sort.by(direction, sortBy));
+    }
+    // 공통 페이지네이션
+    public static <T extends PageableRequest> Pageable getPageable(T request) {
+        int page = request.getPage() != null ? request.getPage() : 0;
+        int size = request.getSize() != null ? request.getSize() : 17;
+        String sortBy = request.getSortBy() != null ? request.getSortBy() : "id";
+        String direction = request.getSortDirection() != null ? request.getSortDirection() : "DESC";
+    
+        return PageRequest.of(
+            page,
+            size,
+            Sort.by(Sort.Direction.fromString(direction), sortBy)
+        );
     }
 
     

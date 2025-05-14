@@ -45,7 +45,7 @@ public class AdminEquipmentCreateRequest {
                 .categoryId(categoryId)
                 .modelId(modelId)
                 .available(true)
-                .rentalStatus(Status.AVAILABLE)
+                .status(Status.AVAILABLE)
                 .rentalCount(0L)
                 .brokenCount(0L)
                 .repairCount(0L)

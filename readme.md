@@ -27,7 +27,7 @@ Spring Boot 프레임워크를 기반으로 다양한 기술 스택을 활용하
 
 ## 🧮 ERD (Entity-Relationship Diagram)
 
-![📊 ERD](docs/erd.png)
+![📊 ERD](sql/erd/erd.png)
 
 ---
 
