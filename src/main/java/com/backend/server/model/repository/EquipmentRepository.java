@@ -33,5 +33,13 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT e FROM Equipment e WHERE e.id = :id")
     Optional<Equipment> findByIdForUpdate(@Param("id") Long id);
-
+    
+    // 상태별 장비 조회
+    List<Equipment> findByStatus(Status status);
+    
+    // 대여자 ID로 장비 목록 조회 (내림차순)
+    List<Equipment> findByRenterIdOrderByRequestedAtDesc(Long renterId);
+    
+    // 상태별 장비 개수 조회
+    long countByStatus(Status status);
 } 
