@@ -1,57 +1,58 @@
 package com.backend.server.api.common.s3.service;
 
-import com.amazonaws.HttpMethod;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
+import java.time.Duration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
-import java.util.Date;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
 @Service
-@RequiredArgsConstructor
 public class CommonPresignedUrlService {
 
-    @Value("${cloud.aws.s3.bucket:1111}")
+    @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
-    @Value("${cloud.aws.credentials.access-key:1111}")
+    @Value("${cloud.aws.credentials.access-key}")
     private String accessKey;
 
-    @Value("${cloud.aws.credentials.secret-key:1111}")
+    @Value("${cloud.aws.credentials.secret-key}")
     private String secretKey;
 
-    @Value("${cloud.aws.region.static:1111}")
+    @Value("${cloud.aws.region.static}")
     private String region;
 
-    private AmazonS3 s3Client;
+    private S3Presigner s3Presigner;
 
     @PostConstruct
     public void init() {
-        BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
-        s3Client = AmazonS3ClientBuilder.standard()
-                .withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+        AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
+
+        this.s3Presigner = S3Presigner.builder()
+                .region(Region.of(region))
+                .credentialsProvider(StaticCredentialsProvider.create(credentials))
                 .build();
     }
 
     public String generatePresignedUrl(String fileName, String contentType) {
-        // 만료시간: 현재 시간 + 5분
-        Date expiration = new Date();
-        expiration.setTime(expiration.getTime() + 1000 * 60 * 5);
+        PutObjectRequest objectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(fileName)
+                .contentType(contentType)
+                .build();
 
-        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucketName, fileName)
-                .withMethod(HttpMethod.PUT)
-                .withExpiration(expiration);
-        request.addRequestParameter("Content-Type", contentType);
+        PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
+                .signatureDuration(Duration.ofMinutes(5))
+                .putObjectRequest(objectRequest)
+                .build();
 
-        URL url = s3Client.generatePresignedUrl(request);
+        URL url = s3Presigner.presignPutObject(presignRequest).url();
         return url.toString();
     }
 }
