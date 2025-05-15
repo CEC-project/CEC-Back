@@ -6,9 +6,12 @@ import com.backend.server.api.admin.user.dto.AdminUserRequest;
 import com.backend.server.api.admin.user.dto.AdminUserResponse;
 import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.User;
+import com.backend.server.model.entity.enums.Role;
 import com.backend.server.model.repository.UserRepository;
 import com.backend.server.model.repository.UserSpecification;
 import com.backend.server.model.repository.ProfessorRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -62,5 +65,12 @@ public class AdminUserService {
         User user = request.toEntity(professor, passwordEncoder);
         user = userRepository.save(user);
         return new AdminUserResponse(user);
+    }
+
+    public List<AdminUserResponse> getAdmins() {
+        return userRepository.findByRoleInOrderByNameAsc(List.of(Role.ROLE_ADMIN, Role.ROLE_SUPER_ADMIN))
+                .stream()
+                .map(AdminUserResponse::new)
+                .collect(Collectors.toList());
     }
 }
