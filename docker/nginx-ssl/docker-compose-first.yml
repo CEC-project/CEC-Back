@@ -1,0 +1,12 @@
+services:
+  nginx:
+    image: nginx:latest
+    container_name: reverse-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/default-first.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./certs/certbot:/var/www/certbot
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

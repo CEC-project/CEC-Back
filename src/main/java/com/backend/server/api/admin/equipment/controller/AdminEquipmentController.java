@@ -1,0 +1,231 @@
+package com.backend.server.api.admin.equipment.controller;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.backend.server.api.admin.equipment.dto.AdminManagerCandidatesResponse;
+import com.backend.server.api.admin.equipment.dto.AdminEquipmentCreateRequest;
+import com.backend.server.api.admin.equipment.dto.AdminEquipmentIdResponse;
+import com.backend.server.api.admin.equipment.dto.AdminEquipmentIdsResponse;
+import com.backend.server.api.admin.equipment.dto.AdminEquipmentListRequest;
+import com.backend.server.api.admin.equipment.dto.AdminEquipmentListResponse;
+import com.backend.server.api.admin.equipment.dto.AdminEquipmentResponse;
+import com.backend.server.api.admin.equipment.dto.AdminEquipmentStatusUpdateRequest;
+import com.backend.server.api.admin.equipment.dto.AdminEquipmentRentalActionResponse;
+import com.backend.server.api.admin.equipment.service.AdminEquipmentService;
+import com.backend.server.api.common.dto.ApiResponse;
+import com.backend.server.model.entity.enums.Status;
+
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/admin/equipments")
+public class AdminEquipmentController {
+    
+    private final AdminEquipmentService adminEquipmentService;
+    //어드민 유저 조회 
+    @GetMapping("/managers")
+    @Operation(summary = "관리자 목록 조회", description = "등록 가능한 관리자 목록을 조회합니다")
+    public ApiResponse<List<AdminManagerCandidatesResponse>> getAdminUsers() {
+        return ApiResponse.success("관리자 목록 조회 성공", adminEquipmentService.getAdminUsers());
+    }
+
+    //장비 등록
+    @PostMapping
+    @Operation(
+        summary = "장비 등록",
+        description = "새로운 장비를 등록합니다. 이미지, 카테고리, 모델, 수량, 관리자, 설명, 제한 학년 등 정보를 입력할 수 있습니다."
+    )
+    public ApiResponse<AdminEquipmentIdsResponse> createEquipment(@RequestBody AdminEquipmentCreateRequest request) {
+        return ApiResponse.success("장비 등록 성공", adminEquipmentService.createEquipment(request));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(
+        summary = "장비 정보 수정",
+        description = "기존 장비의 정보를 수정합니다. 이미지, 카테고리, 모델, 관리자, 설명, 제한 학년 등 정보를 변경할 수 있습니다."
+    )
+    public ApiResponse<AdminEquipmentIdResponse> updateEquipment(
+        @PathVariable Long id,
+        @RequestBody AdminEquipmentCreateRequest request
+    ) {
+        return ApiResponse.success("장비 수정 성공", adminEquipmentService.updateEquipment(id, request));
+    }
+
+    //장비 삭제
+    @DeleteMapping("/{id}")
+    @Operation(
+        summary = "장비 삭제",
+        description = "장비를 삭제합니다. 삭제된 장비는 복구할 수 없습니다."
+    )
+    public ApiResponse<AdminEquipmentIdResponse> deleteEquipment(@PathVariable Long id) {
+        return ApiResponse.success("장비 삭제 성공", adminEquipmentService.deleteEquipment(id));
+    }
+
+    //장비  리스트 어드민 조회
+    @Operation(
+        summary = "장비 리스트 어드민 조회",
+        description = """
+        다양한 검색, 정렬, 필터 조건으로 장비 리스트를 조회합니다.<br>
+        <b>검색/필터 파라미터:</b><br>
+        - categoryId: 장비 분류(카테고리) ID<br>
+        - modelName: 모델명(부분 일치)<br>
+        - serialNumber: 일련번호(부분 일치)<br>
+        - status: 장비 상태(예: 정상, 고장 등)<br>
+        - isAvailable: 대여 가능 여부(true/false)<br>
+        - renterName: 현재 대여자 이름(부분 일치)<br>
+        - searchKeyword: 모델명, 일련번호, 대여자 이름 통합 검색<br>
+        <br>
+        <b>정렬 파라미터:</b><br>
+        - sortBy: 정렬 기준(id, createdAt, brokenCount, repairCount, rentalCount)<br>
+        - sortDirection: 정렬 방향(asc, desc)<br>
+        <br>
+        <b>페이징 파라미터:</b><br>
+        - page: 페이지 번호(0부터 시작)<br>
+        - size: 한 페이지에 보여줄 개수(기본값 17)<br>
+        """
+    )
+    @Parameters({
+        @Parameter(name = "categoryId", description = "장비 분류(카테고리) ID"),
+        @Parameter(name = "modelName", description = "모델명(부분 일치)"),
+        @Parameter(name = "serialNumber", description = "일련번호(부분 일치)"),
+        @Parameter(name = "status", description = "장비 상태(예: 정상, 고장 등)"),
+        @Parameter(name = "isAvailable", description = "대여 가능 여부(true/false)"),
+        @Parameter(name = "renterName", description = "현재 대여자 이름(부분 일치)"),
+        @Parameter(name = "searchKeyword", description = "모델명, 일련번호, 대여자 이름 통합 검색"),
+        @Parameter(name = "sortBy", description = "정렬 기준(id, createdAt, brokenCount, repairCount, rentalCount)"),
+        @Parameter(name = "sortDirection", description = "정렬 방향(asc, desc)"),
+        @Parameter(name = "page", description = "페이지 번호(0부터 시작)"),
+        @Parameter(name = "size", description = "한 페이지에 보여줄 개수(기본값 17)")
+    })
+    @GetMapping
+    public ApiResponse<AdminEquipmentListResponse> getEquipments(
+        @ModelAttribute AdminEquipmentListRequest request
+    ) {
+        return ApiResponse.success("장비 리스트 조회 성공", adminEquipmentService.getEquipments(request));
+    }
+
+    //장비 단일 상세조회
+    @GetMapping("/{id}")
+    @Operation(
+        summary = "장비 단일 상세 조회",
+        description = "장비 ID로 단일 장비의 상세 정보를 조회합니다."
+    )
+    public ApiResponse<AdminEquipmentResponse> getEquipment(@PathVariable Long id) {
+        return ApiResponse.success("장비 상세조회 성공", adminEquipmentService.getEquipment(id));
+    }
+
+    // 장비 상태 변경
+    @PutMapping("/{id}/status")
+    @Operation(
+        summary = "장비 상태 변경",
+        description = "장비의 상태를 변경합니다. 대여 가능(AVAILABLE), 대여중(IN_USE), 고장(BROKEN) 등으로 변경할 수 있습니다."
+    )
+    public ApiResponse<Void> updateEquipmentStatus(
+        @PathVariable Long id,
+        @RequestBody AdminEquipmentStatusUpdateRequest request
+    ) {
+        return ApiResponse.success("장비 상태 변경 성공", null);
+    }
+    
+    // 대여 요청 승인
+    @PostMapping("/{id}/approve")
+    @Operation(
+        summary = "대여 요청 승인",
+        description = "대여 요청 상태(RENTAL_PENDING)의 장비를 승인하여 대여중(IN_USE) 상태로 변경합니다."
+    )
+    public ApiResponse<Void> approveRentalRequest(@PathVariable Long id) {
+        adminEquipmentService.approveRentalRequest(id);
+        return ApiResponse.success("대여 요청 승인 성공", null);
+    }
+    
+    // 대여 요청 거절
+    @PostMapping("/{id}/reject")
+    @Operation(
+        summary = "대여 요청 거절",
+        description = "대여 요청 상태(RENTAL_PENDING)의 장비를 거절하여 대여 가능(AVAILABLE) 상태로 되돌립니다."
+    )
+    public ApiResponse<Void> rejectRentalRequest(@PathVariable Long id) {
+        adminEquipmentService.rejectRentalRequest(id);
+        return ApiResponse.success("대여 요청 거절 성공", null);
+    }
+    
+    // 반납 처리
+    @PostMapping("/{id}/return")
+    @Operation(
+        summary = "반납 처리",
+        description = "반납 요청 상태(RETURN_PENDING) 또는 대여중(IN_USE) 상태의 장비를 반납 처리하여 대여 가능(AVAILABLE) 상태로 변경합니다."
+    )
+    public ApiResponse<Void> processReturnRequest(@PathVariable Long id) {
+        adminEquipmentService.processReturnRequest(id);
+        return ApiResponse.success("반납 처리 성공", null);
+    }
+    
+    // 장비 고장/파손 처리
+    @PostMapping("/{id}/broken")
+    @Operation(
+        summary = "장비 고장/파손 처리",
+        description = "장비를 고장/파손(BROKEN) 상태로 변경합니다. 파손 이유를 추가할 수 있습니다."
+    )
+    public ApiResponse<Void> markEquipmentAsBroken(
+        @PathVariable Long id,
+        @RequestParam(required = false) String description
+    ) {
+        adminEquipmentService.markEquipmentAsBroken(id, description);
+        return ApiResponse.success("장비 고장/파손 처리 성공", null);
+    }
+    
+    // 장비 복구 처리
+    @PostMapping("/{id}/repair")
+    @Operation(
+        summary = "장비 복구 처리",
+        description = "고장/파손(BROKEN) 상태의 장비를 복구하여 대여 가능(AVAILABLE) 상태로 변경합니다. 복구 내역을 추가할 수 있습니다."
+    )
+    public ApiResponse<AdminEquipmentRentalActionResponse> repairEquipment(
+        @PathVariable Long id,
+        @RequestParam(required = false) String repairNote
+    ) {
+        return ApiResponse.success("장비 복구 처리 성공", adminEquipmentService.repairEquipment(id, repairNote));
+    }
+    
+    // 대여 기간 연장
+    @PostMapping("/{id}/extend")
+    @Operation(
+        summary = "대여 기간 연장",
+        description = "대여 중인 장비의 반납 기한을 연장합니다."
+    )
+    public ApiResponse<Void> extendRentalPeriod(
+        @PathVariable Long id,
+        @RequestParam LocalDateTime newEndDate
+    ) {
+        adminEquipmentService.extendRentalPeriod(id, newEndDate);
+        return ApiResponse.success("대여 기간 연장 성공", null);
+    }
+    
+    // 강제 회수
+    @PostMapping("/{id}/force-return")
+    @Operation(
+        summary = "강제 회수",
+        description = "대여 중인 장비를 강제로 회수하여 대여 가능(AVAILABLE) 상태로 변경합니다. 회수 이유를 추가할 수 있습니다."
+    )
+    public ApiResponse<Void> forceReturnEquipment(@PathVariable Long id) {
+        adminEquipmentService.forceReturnEquipment(id);
+        return ApiResponse.success("강제 회수 성공", null);
+    }
+    
+}

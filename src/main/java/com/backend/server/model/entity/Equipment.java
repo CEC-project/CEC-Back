@@ -1,94 +1,71 @@
 package com.backend.server.model.entity;
+
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import com.backend.server.model.entity.enums.RentalStatus;
+
+import com.backend.server.model.entity.enums.Status;
 
 @Entity
 @Table(name = "equipment")
 @Getter
+
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 public class Equipment extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "category_id", nullable = false)
+    private Long categoryId;
 
-    @Column(nullable = false)
-    private String image_url;
+    @Column(name = "model_id", nullable = false)
+    private Long modelId;
 
-    @Column
-    private String category;
+    // @Column(nullable = false)
+    // private Long quantity;
 
-    @Column(nullable = false)
-    private String modelName;
+    @Column(name = "serial_number", unique = true)
+    private Long serialNumber;
 
-    @Column(nullable = false)
-    private String status;
-
-    @Column
-    private Boolean available;
-
-    @Column
-    private Integer quantity;
+    @Column(name = "manager_id")
+    private Long managerId;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column
-    private String attachment;
+    @Column(name = "restriction_grade")
+    private String restrictionGrade;   //이건 1234 이런식으로 입력받을거임 굳이 리스트 할 피룡가?
 
-    // 관리자 참조
-    @Column(name = "manager_id")
-    private Long managerId;
-    
-    @Column(name = "manager_name")
-    private String managerName;
+    @Column(name = "image_url")
+    private String imageUrl;
 
-    // 대여 제한 학년인데 콤마로 구분해서 넣음
-    @Column(name = "rental_restricted_grades")
-    private String rentalRestrictedGrades;
-    
+    @Column(nullable = false)
+    private boolean available;
 
-    @Column
-    private RentalStatus rentalStatus;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private Status status;
 
-    @Column
-    private LocalDateTime rentalTime;
+    @Column(name = "rental_count", nullable = false)
+    private Long rentalCount;
 
-    @Column
-    private LocalDateTime returnTime;
+    @Column(name = "broken_count", nullable = false)
+    private Long brokenCount;
 
-    @Column
-    private Integer renterId;
+    @Column(name = "repair_count", nullable = false)
+    private Long repairCount;
 
-    // 대여 상태 업데이트를 위한 Setter 메소드
-    public void setRentalStatus(RentalStatus rentalStatus) {
-        this.rentalStatus = rentalStatus;
-    }
-    
-    // 대여자 ID 업데이트를 위한 Setter 메소드
-    public void setRenterId(Integer renterId) {
-        this.renterId = renterId;
-    }
-    
-    // 대여 시간 업데이트를 위한 Setter 메소드
-    public void setRentalTime(LocalDateTime rentalTime) {
-        this.rentalTime = rentalTime;
-    }
-    
-    // 반납 시간 업데이트를 위한 Setter 메소드
-    public void setReturnTime(LocalDateTime returnTime) {
-        this.returnTime = returnTime;
-    }
-    
-    // 대여 가능 여부 업데이트를 위한 Setter 메소드
-    public void setAvailable(Boolean available) {
-        this.available = available;
-    }
-}        
+    @Column(name = "renter_id")
+    private Long renterId;
+
+    @Column(name = "start_rent_date")
+    private LocalDateTime startRentDate;
+
+    @Column(name = "end_rent_date")
+    private LocalDateTime endRentDate;
+}

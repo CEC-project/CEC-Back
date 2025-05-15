@@ -1,6 +1,6 @@
 package com.backend.server.model.repository;
 
-import com.backend.server.api.admin.dto.user.AdminUserListRequest;
+import com.backend.server.api.admin.user.dto.AdminUserListRequest;
 import com.backend.server.model.entity.User;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

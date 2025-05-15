@@ -1,0 +1,28 @@
+package com.backend.server.model.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "classroom_favorites")
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class ClassRoomFavorite extends BaseTimeEntity {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+    
+    @Column
+    private Long classRoomId;
+}

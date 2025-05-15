@@ -1,51 +1,50 @@
 package com.backend.server.model.entity;
 
+import com.backend.server.api.admin.user.dto.AdminUserRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
-import java.util.List;
+
+import com.backend.server.model.entity.enums.Role;
 
 @Entity
 @Table(name = "users")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 public class User extends BaseTimeEntity {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
     @Column
     private String studentNumber;
 
     //닉네임은 엑셀파일에서 가져올 수 없으므로 기본값 = 이름
-    @Column
+    @Column(nullable = false)
     private String nickname;
 
-    // @Column(nullable = false)
-    // private String department;
+    @Column
+    private String department;
 
-    // @Column(nullable = false)
-    // private String major;
+    @Column(nullable = false)
+    private Integer grade;
 
     @Column
-    private String grade;
+    private String major;
 
     @Column(name = "\"group\"")
     private String group;
 
-    @Column
+    @Column(nullable = false)
     private String gender;
 
-    @Column
-    private String professor;
-
-    @Column
+    @Column(nullable = false)
     private String phoneNumber;
 
     @Column
@@ -57,7 +56,7 @@ public class User extends BaseTimeEntity {
     @Column
     private String profilePicture;
 
-    @Column
+    @Column(nullable = false)
     private LocalDate birthDate;
 
     @Column
@@ -72,45 +71,13 @@ public class User extends BaseTimeEntity {
     @Column
     private int reportCount;
 
-    @Column
-    private String role;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-
-    // @OneToMany(mappedBy = "user")
-    // private List<Equipment> equipments = new ArrayList<>();
-    @Column
-    private String equipmentId;
-
-
-    // @OneToMany(mappedBy = "user")
-    // private List<Complaint> complaints = new ArrayList<>();
-    @Column
-    private String complaintId;
-
-    // @OneToMany(mappedBy = "user")
-    // private List<RentalHistory> rentalHistories = new ArrayList<>();
-    @Column
-    private String rentalHistoryId;
-
-    public void changePassword(String password) {
-        this.password = password;
-    }
-
-    public void changeNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public void changePhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public void changeProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
-    }
-
-    public void changeEmail(String email) {
-        this.email = email;
-    }
+    @ManyToOne
+    @JoinColumn(name = "professor_id")
+    private Professor professor;
 
     @PrePersist //닉네임을 이름으로 설정하기 위해 30줄가량 생성자를 일일이 써야하는 문제를 해결
     public void prePersist() {
@@ -119,4 +86,15 @@ public class User extends BaseTimeEntity {
             this.nickname = this.name;
         }
     }
-} 
+
+    public void update(Professor professor, AdminUserRequest request) {
+        this.name = request.getName();
+        this.studentNumber = request.getStudentNumber();
+        this.grade = request.getGrade();
+        this.gender = request.getGender();
+        this.phoneNumber = request.getPhoneNumber();
+        this.professor = professor;
+        this.birthDate = request.parseBirthday();
+        this.profilePicture = request.getProfilePicture();
+    }
+}
