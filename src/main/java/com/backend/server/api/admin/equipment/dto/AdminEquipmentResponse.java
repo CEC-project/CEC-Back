@@ -25,15 +25,15 @@ public class AdminEquipmentResponse {
     private String renterName;
     private LocalDateTime createdAt;
     
-    public AdminEquipmentResponse(Equipment equipment, String modelName, String renterName) {
-        this.modelName = modelName;
+    public AdminEquipmentResponse(Equipment equipment) {
+        this.modelName = equipment.getEquipmentModel().getName();
         this.serialNumber = equipment.getSerialNumber().toString();
         this.status = equipment.getStatus();
         this.isAvailable = equipment.isAvailable();
         this.brokenCount = equipment.getBrokenCount();
         this.repairCount = equipment.getRepairCount();
         this.rentalCount = equipment.getRentalCount();
-        this.renterName = renterName;
+        this.renterName = equipment.getRenter().getName();
         this.createdAt = equipment.getCreatedAt();
     }
 }

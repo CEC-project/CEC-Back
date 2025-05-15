@@ -142,90 +142,92 @@ public class AdminEquipmentController {
     ) {
         return ApiResponse.success("장비 상태 변경 성공", null);
     }
-    
+
     // 대여 요청 승인
-    @PostMapping("/{id}/approve")
+    @PostMapping("/approve")
     @Operation(
-        summary = "대여 요청 승인",
-        description = "대여 요청 상태(RENTAL_PENDING)의 장비를 승인하여 대여중(IN_USE) 상태로 변경합니다."
+            summary = "대여 요청 승인",
+            description = "대여 요청 상태(RENTAL_PENDING)의 장비들을 승인하여 대여중(IN_USE) 상태로 변경합니다."
     )
-    public ApiResponse<Void> approveRentalRequest(@PathVariable Long id) {
-        adminEquipmentService.approveRentalRequest(id);
+    public ApiResponse<Void> approveRentalRequests(@RequestBody List<Long> equipmentIds) {
+        adminEquipmentService.approveRentalRequests(equipmentIds);
         return ApiResponse.success("대여 요청 승인 성공", null);
     }
-    
+
     // 대여 요청 거절
-    @PostMapping("/{id}/reject")
+    @PostMapping("/reject")
     @Operation(
-        summary = "대여 요청 거절",
-        description = "대여 요청 상태(RENTAL_PENDING)의 장비를 거절하여 대여 가능(AVAILABLE) 상태로 되돌립니다."
+            summary = "대여 요청 거절",
+            description = "대여 요청 상태(RENTAL_PENDING)의 장비들을 거절하여 대여 가능(AVAILABLE) 상태로 되돌립니다."
     )
-    public ApiResponse<Void> rejectRentalRequest(@PathVariable Long id) {
-        adminEquipmentService.rejectRentalRequest(id);
+    public ApiResponse<Void> rejectRentalRequests(@RequestBody List<Long> equipmentIds) {
+        adminEquipmentService.rejectRentalRequests(equipmentIds);
         return ApiResponse.success("대여 요청 거절 성공", null);
     }
-    
+
     // 반납 처리
-    @PostMapping("/{id}/return")
+    @PostMapping("/return")
     @Operation(
-        summary = "반납 처리",
-        description = "반납 요청 상태(RETURN_PENDING) 또는 대여중(IN_USE) 상태의 장비를 반납 처리하여 대여 가능(AVAILABLE) 상태로 변경합니다."
+            summary = "반납 처리",
+            description = "반납 요청 상태(RETURN_PENDING) 또는 대여중(IN_USE) 상태의 장비들을 반납 처리하여 대여 가능(AVAILABLE) 상태로 변경합니다."
     )
-    public ApiResponse<Void> processReturnRequest(@PathVariable Long id) {
-        adminEquipmentService.processReturnRequest(id);
+    public ApiResponse<Void> processReturnRequests(@RequestBody List<Long> equipmentIds) {
+        adminEquipmentService.processReturnRequests(equipmentIds);
         return ApiResponse.success("반납 처리 성공", null);
     }
-    
+
     // 장비 고장/파손 처리
-    @PostMapping("/{id}/broken")
+    @PostMapping("/broken")
     @Operation(
-        summary = "장비 고장/파손 처리",
-        description = "장비를 고장/파손(BROKEN) 상태로 변경합니다. 파손 이유를 추가할 수 있습니다."
+            summary = "장비 고장/파손 처리",
+            description = "장비들을 고장/파손(BROKEN) 상태로 변경합니다. 파손 이유를 추가할 수 있습니다."
     )
-    public ApiResponse<Void> markEquipmentAsBroken(
-        @PathVariable Long id,
-        @RequestParam(required = false) String description
+    public ApiResponse<Void> markEquipmentsAsBroken(
+            @RequestParam List<Long> equipmentIds,
+            @RequestParam(required = false) String description
     ) {
-        adminEquipmentService.markEquipmentAsBroken(id, description);
+        adminEquipmentService.markEquipmentsAsBroken(equipmentIds, description);
         return ApiResponse.success("장비 고장/파손 처리 성공", null);
     }
-    
+
     // 장비 복구 처리
-    @PostMapping("/{id}/repair")
+    @PostMapping("/repair")
     @Operation(
-        summary = "장비 복구 처리",
-        description = "고장/파손(BROKEN) 상태의 장비를 복구하여 대여 가능(AVAILABLE) 상태로 변경합니다. 복구 내역을 추가할 수 있습니다."
+            summary = "장비 복구 처리",
+            description = "고장/파손(BROKEN) 상태의 장비들을 복구하여 대여 가능(AVAILABLE) 상태로 변경합니다. 복구 내역을 추가할 수 있습니다."
     )
-    public ApiResponse<AdminEquipmentRentalActionResponse> repairEquipment(
-        @PathVariable Long id,
-        @RequestParam(required = false) String repairNote
+    public ApiResponse<Void> repairEquipments(
+            @RequestParam List<Long> equipmentIds,
+            @RequestParam(required = false) String repairNote
     ) {
-        return ApiResponse.success("장비 복구 처리 성공", adminEquipmentService.repairEquipment(id, repairNote));
+        adminEquipmentService.repairEquipments(equipmentIds, repairNote);
+        return ApiResponse.success("장비 복구 처리 성공", null);
     }
-    
+
     // 대여 기간 연장
-    @PostMapping("/{id}/extend")
+    @PostMapping("/extend")
     @Operation(
-        summary = "대여 기간 연장",
-        description = "대여 중인 장비의 반납 기한을 연장합니다."
+            summary = "대여 기간 연장",
+            description = "대여 중인 장비들의 반납 기한을 연장합니다."
     )
-    public ApiResponse<Void> extendRentalPeriod(
-        @PathVariable Long id,
-        @RequestParam LocalDateTime newEndDate
+    public ApiResponse<Void> extendRentalPeriods(
+            @RequestParam List<Long> equipmentIds,
+            @RequestParam LocalDateTime newEndDate
     ) {
-        adminEquipmentService.extendRentalPeriod(id, newEndDate);
+        adminEquipmentService.extendRentalPeriods(equipmentIds, newEndDate);
         return ApiResponse.success("대여 기간 연장 성공", null);
     }
-    
+
     // 강제 회수
-    @PostMapping("/{id}/force-return")
+    @PostMapping("/force-return")
     @Operation(
-        summary = "강제 회수",
-        description = "대여 중인 장비를 강제로 회수하여 대여 가능(AVAILABLE) 상태로 변경합니다. 회수 이유를 추가할 수 있습니다."
+            summary = "강제 회수",
+            description = "대여 중인 장비들을 강제로 회수하여 대여 가능(AVAILABLE) 상태로 변경합니다."
     )
-    public ApiResponse<Void> forceReturnEquipment(@PathVariable Long id) {
-        adminEquipmentService.forceReturnEquipment(id);
+    public ApiResponse<Void> forceReturnEquipments(@RequestBody List<Long> equipmentIds) {
+        adminEquipmentService.forceReturnEquipments(equipmentIds);
         return ApiResponse.success("강제 회수 성공", null);
     }
-    
+
+
 }

@@ -20,17 +20,19 @@ public class Equipment extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "category_id", nullable = false)
-    private Long categoryId;
+    @ManyToOne
+    @JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private EquipmentCategory equipmentCategory;
 
-    @Column(name = "model_id", nullable = false)
-    private Long modelId;
+    @ManyToOne
+    @JoinColumn(name = "model_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private EquipmentModel equipmentModel;
 
     // @Column(nullable = false)
     // private Long quantity;
 
     @Column(name = "serial_number", unique = true)
-    private Long serialNumber;
+    private String serialNumber;
 
     @Column(name = "manager_id")
     private Long managerId;
@@ -60,8 +62,9 @@ public class Equipment extends BaseTimeEntity {
     @Column(name = "repair_count", nullable = false)
     private Long repairCount;
 
-    @Column(name = "renter_id")
-    private Long renterId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private User renter;
 
     @Column(name = "start_rent_date")
     private LocalDateTime startRentDate;
