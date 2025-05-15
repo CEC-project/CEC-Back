@@ -10,6 +10,7 @@ import com.backend.server.api.common.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -63,5 +64,11 @@ public class AdminUserController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ApiResponse<AdminUserResponse> createUser(@Valid @RequestBody AdminUserRequest request) {
         return ApiResponse.success("사용자 등록 성공", adminUserService.createUser(request));
+    }
+
+    @GetMapping("/admin")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
+    public ApiResponse<List<AdminUserResponse>> getAdmins() {
+        return ApiResponse.success("관리자 목록 조회 성공", adminUserService.getAdmins());
     }
 }
