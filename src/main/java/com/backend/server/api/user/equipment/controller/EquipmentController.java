@@ -84,12 +84,12 @@ public class EquipmentController {
     @Operation(
         summary = "장비 장바구니 조회", 
         description = "사용자의 장바구니에 있는 장비 목록을 조회합니다.\n\n" +
-                      "**예시 URL:** http://localhost:8080/api/user/equipments/cart?userId=1"
+                      "**예시 URL:** http://localhost:8080/api/user/equipments/cart"
     )
     @GetMapping("/cart")
     public ApiResponse<List<EquipmentResponse>> getCartItems(
-            @Parameter(description = "사용자 ID") @RequestParam Long userId) {
-        return ApiResponse.success("장바구니 조회 성공", equipmentService.getCartItems(userId));
+            @Parameter(description = "사용자 ID") @AuthenticationPrincipal LoginUser loginUser) {
+        return ApiResponse.success("장바구니 조회 성공", equipmentService.getCartItems(loginUser));
     }
 
     @Operation(
@@ -127,13 +127,13 @@ public class EquipmentController {
         description = "대여 중인 장비의 반납을 요청합니다. 본인이 대여한 장비만 반납 요청할 수 있습니다.\n\n" +
                       "**요청 예시:**\n" +
                       "```\n[1, 2, 3]\n```\n\n" +
-                      "**예시 URL:** http://localhost:8080/api/user/equipments/return?userId=1"
+                      "**예시 URL:** http://localhost:8080/api/user/equipments/return"
     )
     @PostMapping("/return")
     public ApiResponse<Void> requestReturn(
-            @Parameter(description = "사용자 ID") @RequestParam Long userId,
+            @Parameter(description = "사용자 ID") @AuthenticationPrincipal LoginUser loginUser,
             @Parameter(description = "반납 요청할 장비 ID 목록") @RequestBody List<Long> equipmentIds) {
-        equipmentService.requestReturn(userId, equipmentIds);
+        equipmentService.requestReturn(loginUser, equipmentIds);
         return ApiResponse.success("반납 요청 성공", null);
     }
 
@@ -142,13 +142,13 @@ public class EquipmentController {
         description = "반납 요청 상태인 장비의 반납 요청을 취소합니다. 본인이 요청한 반납만 취소할 수 있습니다.\n\n" +
                       "**요청 예시:**\n" +
                       "```\n[1, 2, 3]\n```\n\n" +
-                      "**예시 URL:** http://localhost:8080/api/user/equipments/return/cancel?userId=1"
+                      "**예시 URL:** http://localhost:8080/api/user/equipments/return/cancel"
     )
     @PostMapping("/return/cancel")
     public ApiResponse<Void> cancelReturnRequest(
-            @Parameter(description = "사용자 ID") @RequestParam Long userId,
+            @Parameter(description = "사용자 ID") @AuthenticationPrincipal LoginUser loginUser,
             @Parameter(description = "반납 요청 취소할 장비 ID 목록") @RequestBody List<Long> equipmentIds) {
-        equipmentService.cancelReturnRequest(userId, equipmentIds);
+        equipmentService.cancelReturnRequest(loginUser, equipmentIds);
         return ApiResponse.success("반납 요청 취소 성공", null);
     }
 
