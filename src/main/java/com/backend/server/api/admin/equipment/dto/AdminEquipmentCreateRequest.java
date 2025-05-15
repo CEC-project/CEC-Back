@@ -1,5 +1,7 @@
 package com.backend.server.api.admin.equipment.dto;
 
+import com.backend.server.model.entity.EquipmentCategory;
+import com.backend.server.model.entity.EquipmentModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,29 +40,18 @@ public class AdminEquipmentCreateRequest {
 
     @Schema(description = "대여 제한 학년 (예: 3학년만 대여 가능)", example = "3")
     private String restrictionGrade;
-    
-    public Equipment toEntity(String serialNumber) {
+
+    public Equipment toEntity(EquipmentCategory category, EquipmentModel model, String serialNumber) {
         return Equipment.builder()
                 .imageUrl(imageUrl)
-                .categoryId(categoryId)
-                .modelId(modelId)
-                .available(true)
+                .equipmentCategory(category)
+                .equipmentModel(model)
+                .serialNumber(serialNumber)  // serialNumber는 문자열로 저장
+                .available(available)
                 .status(Status.AVAILABLE)
                 .rentalCount(0L)
                 .brokenCount(0L)
                 .repairCount(0L)
-                .managerId(managerId)
-                .serialNumber(Long.parseLong(serialNumber))
-                .description(description)
-                .restrictionGrade(restrictionGrade)
-                .build();
-    }
-
-    public Equipment toEntity() {
-        return Equipment.builder()
-                .imageUrl(imageUrl)
-                .categoryId(categoryId)
-                .modelId(modelId)
                 .managerId(managerId)
                 .description(description)
                 .restrictionGrade(restrictionGrade)

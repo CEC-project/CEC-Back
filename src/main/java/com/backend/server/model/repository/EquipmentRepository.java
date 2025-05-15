@@ -27,7 +27,7 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     // List<Equipment> findByRentalStatus(Status rentalStatus);
     // Integer countByRentalStatus(Status rentalStatus);
     // List<Equipment> findByRentalStatusAndName(Status status, String name);
-    Long countByModelId(Long modelId);
+    Long countByEquipmentModel_Id(Long modelId);
     Optional<User> findByRenterId(Long renterId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
@@ -38,7 +38,7 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     List<Equipment> findByStatus(Status status);
     
     // 대여자 ID로 장비 목록 조회 (내림차순)
-    List<Equipment> findByRenterIdOrderByRequestedAtDesc(Long renterId);
+    // List<Equipment> findByRenterIdOrderByRequestedAtDesc(Long renterId);
     
     // 상태별 장비 개수 조회
     long countByStatus(Status status);
