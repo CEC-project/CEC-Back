@@ -18,10 +18,10 @@ public abstract class AbstractPaginationParam {
   @Schema(description = "페이지당 크기 (기본값 = 10)", example = "10")
   protected Integer size;
 
-  @Schema(description = "정렬 기준(기본값 = ID)", example = "ID")
+  @Schema(description = "정렬 기준", implementation = PaginationSortType.class)
   protected PaginationSortType sortBy;
 
-  @Schema(description = "정렬 방법(기본값 = DESC)", example = "DESC")
+  @Schema(description = "정렬 방법", implementation = Sort.Direction.class)
   protected Sort.Direction direction;
 
   public Pageable toPageable() {
