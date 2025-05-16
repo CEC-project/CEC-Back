@@ -14,17 +14,15 @@ public class EquipmentResponse {
     private LocalDateTime createdAt;
     private String imageUrl;
     
-    public EquipmentResponse(Equipment equipment, String modelName, String renterName, LocalDateTime startRentDate, LocalDateTime endRentDate) {
-        this.modelName = modelName;
+    public EquipmentResponse(Equipment equipment) {
+        this.modelName = equipment.getEquipmentModel().getName();
         this.isAvailable = equipment.isAvailable();
-        this.startRentDate = startRentDate;
-        this.endRentDate = endRentDate;
-        this.renterName = renterName;
+        this.startRentDate = equipment.getStartRentDate();
+        this.endRentDate = equipment.getEndRentDate();
+        this.renterName = equipment.getRenter().getName();
         this.status = equipment.getStatus().name();
         this.createdAt = equipment.getCreatedAt();
-    }
-
-    public EquipmentResponse(Equipment equipment) {
         this.imageUrl = equipment.getImageUrl();
     }
+
 }

@@ -6,8 +6,6 @@ import com.backend.server.api.common.dto.PageableRequest;
 import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
 import com.backend.server.api.admin.equipment.dto.AdminEquipmentListRequest;
 import com.backend.server.model.entity.Equipment;
-import com.backend.server.model.entity.EquipmentCart;
-import com.backend.server.model.entity.EquipmentFavorite;
 import com.backend.server.model.entity.EquipmentRental;
 import com.backend.server.model.entity.User;
 import org.springframework.data.domain.PageRequest;

@@ -52,18 +52,7 @@ public class EquipmentService {
         Page<Equipment> page = equipmentRepository.findAll(spec, pageable);
         
         List<EquipmentResponse> responses = page.getContent().stream()
-            .map(equipment -> {
-                String modelName = equipmentModelRepository.findById(equipment.getModelId())
-                    .map(EquipmentModel::getName)
-                    .orElse("장비 모델 분류가 존재하지 않습니다");
-                String renterName = equipmentRepository.findByRenterId(equipment.getRenterId())
-                    .map(User::getName)
-                    .orElse("대여자 이름 없음");
-                LocalDateTime startRentDate = equipment.getStartRentDate();
-                LocalDateTime endRentDate = equipment.getEndRentDate();
-                
-                return new EquipmentResponse(equipment, modelName, renterName, startRentDate, endRentDate);
-            })
+            .map(EquipmentResponse::new)
             .toList();
         return new EquipmentListResponse(responses, page);
     }
@@ -101,27 +90,14 @@ public class EquipmentService {
     }
 
     //장비 장바구니 조회
-    public List<EquipmentResponse> getCartItems(Long userId) {
-        List<EquipmentCart> cartItems = equipmentCartRepository.findByUserId(userId);
+    public List<EquipmentResponse> getCartItems(LoginUser loginUser) {
+        List<EquipmentCart> cartItems = equipmentCartRepository.findByUserId(loginUser.getId());
         
         return cartItems.stream()
             .map(cart -> {
                 Equipment equipment = equipmentRepository.findById(cart.getEquipmentId())
                     .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
-                String modelName = equipmentModelRepository.findById(equipment.getModelId())
-                    .map(EquipmentModel::getName)
-                    .orElse("장비 모델 분류가 존재하지 않습니다");
-                String renterName = equipmentRepository.findByRenterId(equipment.getRenterId())
-                    .map(User::getName)
-                    .orElse("대여자 이름 없음");
-                
-                return new EquipmentResponse(
-                    equipment,
-                    modelName,
-                    renterName,
-                    equipment.getStartRentDate(),
-                    equipment.getEndRentDate()
-                );
+                return new EquipmentResponse(equipment);
             })
             .toList();
     }
@@ -143,7 +119,7 @@ public class EquipmentService {
             
             Equipment updatedEquipment = equipment.toBuilder()
                 .status(Status.RENTAL_PENDING)
-                .renterId(user.getId())
+                .renter(user)
                 .startRentDate(request.getStartDate())
                 .endRentDate(request.getEndDate())
                 .build();
@@ -164,7 +140,7 @@ public class EquipmentService {
                 .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
 
             // 본인의 대여 요청인지 확인
-            if (!user.getId().equals(equipment.getRenterId())) {
+            if (!user.getId().equals(equipment.getRenter().getId())) {
                 throw new IllegalStateException("본인의 대여 요청만 취소할 수 있습니다.");
             }
 
@@ -175,7 +151,7 @@ public class EquipmentService {
 
             Equipment updatedEquipment = equipment.toBuilder()
                 .status(Status.AVAILABLE)
-                .renterId(null)
+                .renter(null)
                 .startRentDate(null)
                 .endRentDate(null)
                 .build();   
@@ -186,13 +162,13 @@ public class EquipmentService {
     }
 
     @Transactional
-    public void requestReturn(Long userId, List<Long> equipmentIds) {
+    public void requestReturn(LoginUser loginUser, List<Long> equipmentIds) {
         for (Long equipmentId : equipmentIds) {
             Equipment equipment = equipmentRepository.findById(equipmentId)
                 .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
 
             // 본인의 대여인지 확인
-            if (!userId.equals(equipment.getRenterId())) {
+            if (!loginUser.getId().equals(equipment.getRenter().getId())) {
                 throw new IllegalStateException("본인의 대여만 반납 요청할 수 있습니다.");
             }
 
@@ -211,13 +187,13 @@ public class EquipmentService {
     }
 
     @Transactional
-    public void cancelReturnRequest(Long userId, List<Long> equipmentIds) {
+    public void cancelReturnRequest(LoginUser loginUser, List<Long> equipmentIds) {
         for (Long equipmentId : equipmentIds) {
             Equipment equipment = equipmentRepository.findById(equipmentId)
                 .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
 
             // 본인의 대여인지 확인
-            if (!userId.equals(equipment.getRenterId())) {
+            if (!loginUser.getId().equals(equipment.getRenter().getId())) {
                 throw new IllegalStateException("본인의 대여만 반납 요청 취소할 수 있습니다.");
             }
 
