@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Schema(description = "공지사항 생성 요청 DTO")
 @Getter
 @Builder
 @NoArgsConstructor
