@@ -42,9 +42,7 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/configuration/ui"),
                 new AntPathRequestMatcher("/configuration/security"),
                 new AntPathRequestMatcher("/api/auth/sign-in"),
-                new AntPathRequestMatcher("/api/auth/token/refresh"),
-                // 아래는 나중에 제거해야할 api 경로
-                new AntPathRequestMatcher("/api/excel/import-users")
+                new AntPathRequestMatcher("/api/auth/token/refresh")
         );
 
         List<String> origins = List.of(
@@ -67,10 +65,8 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(requestMatcher).permitAll()
-                    // 관리자 경로
-                    .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                    // 나머지 모든 요청은 인증 필요
-                    .anyRequest().authenticated()
+                    .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
+                    .anyRequest().hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(configurer ->
