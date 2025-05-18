@@ -5,7 +5,6 @@ import com.backend.server.api.common.s3.service.CommonPresignedUrlService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,7 +27,6 @@ public class CommonPresignedUrlController {
                     + "(file 객체는 &lt;input type=\"file\"&gt; 등으로 얻은 File 타입 객체입니다.)"
     )
     @GetMapping("/presigned-url")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ApiResponse<String> getPresignedUrl(
             @RequestParam String fileName,
             @RequestParam(defaultValue = "application/octet-stream") String contentType) {
