@@ -5,7 +5,6 @@ import com.backend.server.api.user.inquiry.dto.InquiryRequest;
 import com.backend.server.api.user.inquiry.service.InquiryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +16,6 @@ public class InquiryController {
     private final InquiryService inquiryService;
 
     @PostMapping // POST
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')") // User, Admin, SuperAdmin만 가능
     public ResponseEntity<Long> createInquiry(
             @RequestBody InquiryRequest request,
             @AuthenticationPrincipal LoginUser loginUser  // 인증된 사용자 정보 주입

@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +29,6 @@ public class AdminYearScheduleController {
 
     @Operation(summary = "연간 일정 목록 조회 API")
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ApiResponse<List<AdminYearScheduleResponse>> getYearSchedule(AdminYearScheduleSearchRequest request) {
         List<AdminYearScheduleResponse> result = adminYearScheduleService.getYearSchedules(request);
         return ApiResponse.success("연간 일정 목록 조회 성공", result);
@@ -38,7 +36,6 @@ public class AdminYearScheduleController {
 
     @Operation(summary = "연간 일정 등록 API")
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ApiResponse<Long> createYearSchedule(@Valid @RequestBody AdminYearScheduleRequest request) {
         Long id = adminYearScheduleService.createYearSchedule(request);
         return ApiResponse.success("연간 일정 등록 성공", id);
@@ -46,7 +43,6 @@ public class AdminYearScheduleController {
 
     @Operation(summary = "연간 일정 수정 API")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ApiResponse<Long> updateYearSchedule(@PathVariable Long id, @Valid @RequestBody AdminYearScheduleRequest request) {
         Long updatedId = adminYearScheduleService.updateYearSchedule(id, request);
         return ApiResponse.success("연간 일정 수정 성공", updatedId);
@@ -54,7 +50,6 @@ public class AdminYearScheduleController {
 
     @Operation(summary = "연간 일정 삭제 API")
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ApiResponse<Void> deleteYearSchedule(@PathVariable Long id) {
         adminYearScheduleService.deleteYearSchedule(id);
         return ApiResponse.success("연간 일정 삭제 성공", null);
