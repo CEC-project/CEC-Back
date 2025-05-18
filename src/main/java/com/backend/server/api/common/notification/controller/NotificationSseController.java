@@ -53,6 +53,17 @@ public class NotificationSseController {
     }
 
     @PutMapping
+    @Operation(
+            summary = "알람 읽음 처리. 한개씩만 하구요 Response는 성공한 id 반환 .",
+            description = """
+            알람의 상태를 읽음으로 바꿔요.  
+
+            예시 요청:
+            ```
+            PUT /api/notifications
+            ```
+            """
+    )
     public ApiResponse<NotificationIdResponse> changeIsReadTrue(@PathVariable Long id){
         return ApiResponse.success("안읽은 알림 다 봤어요", notificationService.changeIsReadTrue(id));
     }
