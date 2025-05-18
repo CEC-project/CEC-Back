@@ -1,5 +1,8 @@
 package com.backend.server.api.admin.equipment.dto.category;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +24,9 @@ public class AdminEquipmentCategoryCreateRequest {
     private String englishCode;
 
     @Schema(description = "인당 대여 제한 갯수", example = "10")
-    @NotBlank(message = "인당 대여 제한 갯수는 필수 입력 항목입니다.")
+    @NotNull
+    @Min(0)
+    @Max(10)
     private Integer maxRentalCount;
 
     
