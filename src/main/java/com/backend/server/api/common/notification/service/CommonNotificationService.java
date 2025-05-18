@@ -1,6 +1,7 @@
 package com.backend.server.api.common.notification.service;
 import java.util.List;
 
+import com.backend.server.api.common.notification.dto.NotificationIdResponse;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable; 
@@ -41,7 +42,22 @@ public class CommonNotificationService {
         } catch (Exception e) {
             log.error("실시간 알림 발송 실패", e);
         }
-    }   
+    }
+
+    //읽음처리
+    public NotificationIdResponse changeIsReadTrue(Long notificationId) {
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new IllegalArgumentException("그런 알림은 없어요."));
+
+        Notification updated = notification.toBuilder()
+                .read(true)
+                .build();
+
+        notificationRepository.save(updated);
+
+        return new NotificationIdResponse(updated);
+    }
+
 
     //알림조회 안읽음
     public List<CommonNotificationResponse> getAllNotReadNotification(Long userId) {
