@@ -55,6 +55,11 @@ public class AdminEquipmentController {
         return ApiResponse.success("장비 등록 성공", adminEquipmentService.createEquipment(request));
     }
 
+    @Operation(summary = "카테고리 생성", description = "새로운 장비 카테고리를 생성합니다. 첫번쨰로 생성되는 장비의 시리얼넘버만 보여줌")
+    @GetMapping("/get-serial_number")
+    public ApiResponse<String> getSerialNumber(@ModelAttribute AdminEquipmentCreateRequest request){
+        return ApiResponse.success("시리얼넘버 보여주기 성공", adminEquipmentService.generateSerialNumber(request));
+    }
     @PutMapping("/{id}")
     @Operation(
         summary = "장비 정보 수정",

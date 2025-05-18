@@ -41,6 +41,8 @@ public class AdminEquipmentCreateRequest {
     @Schema(description = "대여 제한 학년 (예: 3학년만 대여 가능)", example = "3")
     private String restrictionGrade;
 
+
+
     public Equipment toEntity(EquipmentCategory category, EquipmentModel model, String serialNumber) {
         return Equipment.builder()
                 .imageUrl(imageUrl)

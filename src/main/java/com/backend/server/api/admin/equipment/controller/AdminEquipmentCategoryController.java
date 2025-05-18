@@ -1,12 +1,7 @@
 package com.backend.server.api.admin.equipment.controller;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.backend.server.api.admin.equipment.dto.AdminEquipmentCreateRequest;
+import org.springframework.web.bind.annotation.*;
 
 import com.backend.server.api.admin.equipment.dto.category.AdminEquipmentCategoryCreateRequest;
 import com.backend.server.api.admin.equipment.dto.category.AdminEquipmentCategoryIdResponse;
@@ -40,6 +35,7 @@ public class AdminEquipmentCategoryController {
         @Valid @RequestBody AdminEquipmentCategoryCreateRequest request) {
         return ApiResponse.success("카테고리 생성 성공", adminEquipmentCategoryService.createCategory(request));
     }
+
 
     @Operation(summary = "카테고리 수정", description = "기존 장비 카테고리를 수정합니다.")
     @PutMapping("/{id}")

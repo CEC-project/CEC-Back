@@ -55,7 +55,26 @@ public class AdminEquipmentService {
             .map(AdminManagerCandidatesResponse::new)
             .collect(Collectors.toList());
     }
+    public String generateSerialNumber(AdminEquipmentCreateRequest request){
+        EquipmentCategory category = equipmentCategoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("카테고리 없음"));
 
+        EquipmentModel model = equipmentModelRepository.findById(request.getModelId())
+                .orElseThrow(() -> new RuntimeException("모델 없음"));
+
+        String equipmentCategoryName = category.getEnglishCode();
+        String equipmentModelName = model.getEnglishCode();
+
+        String prefixCategoryCode = equipmentCategoryName.substring(0, 3).toUpperCase();
+        String prefixEquipmentModelCode = equipmentModelName.substring(0, 3).toUpperCase();
+        Long modelCount = equipmentRepository.countByEquipmentModel_Id(request.getModelId());
+
+        String modelCountString = modelCount < 10000
+                ? String.format("%04d", modelCount)
+                : modelCount.toString();
+
+        return prefixCategoryCode + prefixEquipmentModelCode + modelCountString;
+    }
     //장비생성
     public AdminEquipmentIdsResponse createEquipment(AdminEquipmentCreateRequest request) {
         EquipmentCategory category = equipmentCategoryRepository.findById(request.getCategoryId())
