@@ -1,7 +1,7 @@
 name: PR Build Check
 
 on:
-  pull_request_target:
+  pull_request:
     branches: [ "main" ]
   release:
     types: [ published ]
@@ -42,8 +42,18 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build -x test

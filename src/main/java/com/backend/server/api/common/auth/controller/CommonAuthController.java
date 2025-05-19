@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -123,7 +122,6 @@ public class CommonAuthController {
                     + "프론트는 로그아웃 시 엑세스 토큰을 삭제해야 합니다."
     )
     @DeleteMapping("/sign-out")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public CommonResponse<Object> signOut(@AuthenticationPrincipal LoginUser loginUser, HttpServletResponse response) {
         commonAuthService.logout(loginUser, response);
         return CommonResponse.success("로그아웃 성공", null);

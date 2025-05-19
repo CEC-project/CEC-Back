@@ -7,7 +7,6 @@ import com.backend.server.api.common.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,19 +25,16 @@ public class AdminBoardCategoryController {
     private final AdminBoardCategoryService adminBoardCategoryService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ApiResponse<List<AdminBoardCategoryResponse>> getBoardCategories() {
         return ApiResponse.success("게시판 카테고리 목록 조회 성공", adminBoardCategoryService.getBoardCategoryList());
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ApiResponse<Long> postBoardCategory(@RequestBody AdminBoardCategoryRequest request) {
         return ApiResponse.success("게시판 카테고리 등록 성공", adminBoardCategoryService.createBoardCategory(request));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ApiResponse<Long> putBoardCategory(
             @PathVariable Long id,
             @RequestBody AdminBoardCategoryRequest request) {
@@ -46,7 +42,6 @@ public class AdminBoardCategoryController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ApiResponse<Void> deleteBoardCategory(
             @PathVariable Long id) {
         adminBoardCategoryService.deleteBoardCategory(id);
