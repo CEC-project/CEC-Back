@@ -1,10 +1,6 @@
 package com.backend.server.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,8 +17,10 @@ public class EquipmentCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "name", nullable = false)
     private String name;
-  
+    @Column(name = "max_rental_count", nullable = false)
     private Integer maxRentalCount;
+    @Column(name = "english_code", nullable = false)
     private String englishCode; 
 }

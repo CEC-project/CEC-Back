@@ -18,4 +18,5 @@ public class Category extends BaseTimeEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
+
 } 
