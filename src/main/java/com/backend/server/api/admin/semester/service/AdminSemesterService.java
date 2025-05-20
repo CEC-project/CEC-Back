@@ -36,7 +36,7 @@ public class AdminSemesterService {
     public Long updateSemester(Long id, AdminSemesterRequest request) {
         Optional<Semester> optionalSemester = semesterRepository.findById(id);
         if (optionalSemester.isEmpty())
-            throw new IllegalArgumentException("학기id 가 유효하지 않습니다");
+            throw new IllegalArgumentException("학기 id 가 유효하지 않습니다");
 
         Semester semester = optionalSemester.get().toBuilder()
                 .year(request.getYear())
@@ -50,7 +50,7 @@ public class AdminSemesterService {
 
     @Transactional
     public void deleteSemester(Long id) {
-        semesterRepository.findById(id).orElseThrow(() -> new RuntimeException("유효하지 않은 일정 ID입니다."));
+        semesterRepository.findById(id).orElseThrow(() -> new RuntimeException("유효하지 않은 학기 id 입니다."));
         semesterRepository.deleteById(id);
     }
 }
