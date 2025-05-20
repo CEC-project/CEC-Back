@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Tag(name = "[공통] 로그인/로그아웃/리프레시 API", description = "엑세스 토큰 / 리프레시 토큰 관련 API")
+@Tag(name = "로그인/로그아웃/리프레시 API", description = "엑세스 토큰 / 리프레시 토큰 관련 API")
 public class CommonAuthController {
 
     private final CommonAuthService commonAuthService;

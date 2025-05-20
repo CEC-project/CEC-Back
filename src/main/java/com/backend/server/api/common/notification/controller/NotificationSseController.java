@@ -3,7 +3,6 @@ package com.backend.server.api.common.notification.controller;
 import java.util.List;
 
 import com.backend.server.api.common.notification.dto.NotificationIdResponse;
-import com.backend.server.model.entity.Notification;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,7 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@Tag(name = "[공통] 알림", description = "알림 API")
+@Tag(name = "알림", description = "알림 API")
 @RequiredArgsConstructor
 @RequestMapping("/api/notifications")
 public class NotificationSseController {
