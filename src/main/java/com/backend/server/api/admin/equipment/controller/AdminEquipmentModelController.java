@@ -1,12 +1,6 @@
 package com.backend.server.api.admin.equipment.controller;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.backend.server.api.admin.equipment.dto.model.AdminEquipmentModelCreateRequest;
 import com.backend.server.api.admin.equipment.dto.model.AdminEquipmentModelIdResponse;
@@ -19,7 +13,6 @@ import com.backend.server.api.user.equipment.service.EquipmentModelService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +33,7 @@ public class AdminEquipmentModelController {
         description = "새로운 장비 모델을 생성합니다. 모델명, 영문 코드, 가용 여부, 카테고리 ID를 입력받습니다."
     )
     public ApiResponse<AdminEquipmentModelIdResponse> createModel(
-            @Valid @RequestBody 
+            @Valid @RequestBody
             @Parameter(
                 description = "생성할 장비 모델의 정보 (모델명, 영문 코드, 가용 여부, 카테고리 ID)"
             ) AdminEquipmentModelCreateRequest request) {
@@ -77,9 +70,21 @@ public class AdminEquipmentModelController {
     //====================================================유저 서비스스에서 가져옴====================================================
     @GetMapping
     @Operation(
-        summary = "장비 모델 목록 조회",
-        description = "장비 모델을 페이지네이션과 검색 조건(모델명, 영문 코드 등)에 따라 조회합니다. " +
-                    "정렬 기준, 키워드, 페이지 번호, 페이지 크기를 설정할 수 있습니다."
+            summary = "장비 모델 목록 조회",
+            description = """
+            장비 모델 목록을 조건에 따라 조회합니다. 다음과 같은 필터 및 정렬 옵션을 사용할 수 있습니다:
+    
+            - `categoryId`: 특정 장비 카테고리 ID로 필터링합니다. 생략하면 전체 카테고리에서 조회합니다.
+            - `keyword`: 모델명 또는 영문 코드에 해당 키워드가 포함된 장비만 조회합니다. (예: "카메라", "CAM01")
+            - `page`: 페이지 번호 (0부터 시작). 기본값은 0입니다.
+            - `size`: 페이지당 항목 수. 기본값은 10입니다.
+            - `sortBy`: 정렬 기준 필드명 (예: "name", "createdAt", "id" 등).
+            - `sortDirection`: 정렬 방향 ("ASC" 오름차순, "DESC" 내림차순). 기본값은 "DESC"입니다.
+    
+                모든 파라미터는 선택(optional)이며, 조합하여 사용할 수 있습니다.
+    
+            예시: `/api/models?categoryId=1&keyword=카메라&page=0&size=10&sortBy=name&sortDirection=ASC`
+            """
     )
     public ApiResponse<EquipmentModelListResponse> getAllModels(EquipmentModelListRequest request) {
         return ApiResponse.success("장비 모델 전체 조회 성공", equipmentModelService.getAllModels(request));

@@ -89,7 +89,7 @@ public class AdminEquipmentService {
         String prefixCategoryCode = equipmentCategoryName.substring(0, 3).toUpperCase();
         String prefixEquipmentModelCode = equipmentModelName.substring(0, 3).toUpperCase();
 
-        Long modelCount = equipmentRepository.countByEquipmentModel_Id(request.getModelId());
+        Long modelCount = equipmentRepository.countByEquipmentModel_Id(request.getModelId()) + 1;
 
         List<Long> savedEquipmentIds = new ArrayList<>();
 
@@ -135,7 +135,7 @@ public class AdminEquipmentService {
         return new AdminEquipmentIdResponse(id);
     }
 
-    //장비 리스트 어드민 조회
+    //장비 리스트 조회
     public AdminEquipmentListResponse getEquipments(AdminEquipmentListRequest request) {
         Pageable pageable = EquipmentSpecification.getPageable(request);
 
