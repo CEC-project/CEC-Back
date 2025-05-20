@@ -1,5 +1,6 @@
 package com.backend.server.model.entity;
 
+import com.backend.server.model.entity.enums.AnswerStatus;
 import com.backend.server.model.entity.enums.InquiryType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -40,4 +41,9 @@ public class Inquiry extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private InquiryType type;  // 문의 유형 (enum)
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private AnswerStatus status = AnswerStatus.WAITING; // 기본값 답변 대기 설정
 }
