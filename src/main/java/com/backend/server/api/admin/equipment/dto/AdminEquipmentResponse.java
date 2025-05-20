@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdminEquipmentResponse {
+    private Long id;
     private String modelName;
     private String serialNumber;
     private Status status;
@@ -26,8 +27,9 @@ public class AdminEquipmentResponse {
     private LocalDateTime createdAt;
     
     public AdminEquipmentResponse(Equipment equipment) {
+        this.id = equipment.getId();
         this.modelName = equipment.getEquipmentModel().getName();
-        this.serialNumber = equipment.getSerialNumber().toString();
+        this.serialNumber = equipment.getSerialNumber();
         this.status = equipment.getStatus();
         this.isAvailable = equipment.isAvailable();
         this.brokenCount = equipment.getBrokenCount();

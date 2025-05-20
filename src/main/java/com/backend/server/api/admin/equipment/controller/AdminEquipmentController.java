@@ -91,7 +91,7 @@ public class AdminEquipmentController {
             description = """
         관리자 페이지에서 장비 목록을 검색, 필터링, 정렬, 페이징 조건에 따라 조회합니다.
 
-        <b>🔍 검색/필터 조건:</b><br>
+        <b>검색/필터 조건:</b><br>
         - <code>categoryId</code>: 장비 카테고리 ID (예: 1)<br>
         - <code>modelName</code>: 모델명 (부분 일치 검색)<br>
         - <code>serialNumber</code>: 장비 일련번호 (부분 일치 검색)<br>
@@ -100,15 +100,15 @@ public class AdminEquipmentController {
         - <code>renterName</code>: 현재 대여자 이름 (부분 일치 검색)<br>
         - <code>searchKeyword</code>: 모델명, 일련번호, 대여자 이름에 대한 통합 키워드 검색<br>
 
-        <b>⬇️ 정렬 조건:</b><br>
+        <b> 정렬 조건:</b><br>
         - <code>sortBy</code>: 정렬 기준 (예: id, createdAt, rentalCount, repairCount, brokenCount)<br>
         - <code>sortDirection</code>: 정렬 방향 (asc 또는 desc)<br>
 
-        <b>📄 페이징 조건:</b><br>
+        <b>페이징 조건:</b><br>
         - <code>page</code>: 페이지 번호 (0부터 시작)<br>
         - <code>size</code>: 페이지당 항목 수 (기본값: 17)<br>
 
-        ⚠️ 모든 파라미터는 선택(optional)이며, 조건을 조합하여 사용할 수 있습니다.
+        ⚠️ 페이지네이션 관련 파라미터 빼면 다 선택사항이며, 조건을 조합하여 사용할 수 있습니다.
         """
     )
     @Parameters({
@@ -148,11 +148,12 @@ public class AdminEquipmentController {
         summary = "장비 상태 변경",
         description = "장비의 상태를 변경합니다. 대여 가능(AVAILABLE), 대여중(IN_USE), 고장(BROKEN) 등으로 변경할 수 있습니다."
     )
-    public ApiResponse<Void> updateEquipmentStatus(
+    public ApiResponse<Long> updateEquipmentStatus(
         @PathVariable Long id,
         @RequestBody AdminEquipmentStatusUpdateRequest request
     ) {
-        return ApiResponse.success("장비 상태 변경 성공", null);
+        adminEquipmentService.updateEquipmentStatus(id, request);
+        return ApiResponse.success("장비 상태 변경 성공", id);
     }
 
     // 대여 요청 승인
@@ -240,6 +241,4 @@ public class AdminEquipmentController {
         adminEquipmentService.forceReturnEquipments(equipmentIds);
         return ApiResponse.success("강제 회수 성공", null);
     }
-
-
 }

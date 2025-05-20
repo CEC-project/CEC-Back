@@ -81,7 +81,7 @@ public class AdminEquipmentModelController {
             - `sortBy`: 정렬 기준 필드명 (예: "name", "createdAt", "id" 등).
             - `sortDirection`: 정렬 방향 ("ASC" 오름차순, "DESC" 내림차순). 기본값은 "DESC"입니다.
     
-                모든 파라미터는 선택(optional)이며, 조합하여 사용할 수 있습니다.
+               page,size,sortBy,sortDirection을 제외한 파라미터는 선택사항입니다.
     
             예시: `/api/models?categoryId=1&keyword=카메라&page=0&size=10&sortBy=name&sortDirection=ASC`
             """
