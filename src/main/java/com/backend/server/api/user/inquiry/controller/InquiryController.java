@@ -2,11 +2,15 @@ package com.backend.server.api.user.inquiry.controller;
 
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.user.inquiry.dto.InquiryRequest;
+import com.backend.server.api.user.inquiry.dto.InquiryResponse;
 import com.backend.server.api.user.inquiry.service.InquiryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.AccessDeniedException;
 
 @RestController
 @RequestMapping("/api/boards/inquiry")
@@ -15,7 +19,7 @@ public class InquiryController {
 
     private final InquiryService inquiryService;
 
-    @PostMapping // POST
+    @PostMapping // POST, 글 쓰기
     public ResponseEntity<Long> createInquiry(
             @RequestBody InquiryRequest request,
             @AuthenticationPrincipal LoginUser loginUser  // 인증된 사용자 정보 주입
@@ -23,5 +27,16 @@ public class InquiryController {
         Long currentUserId = loginUser.getId(); // 로그인 사용자 ID 가져오기
         Long inquiryId = inquiryService.createInquiry(request, currentUserId); // DB 저장
         return ResponseEntity.ok(inquiryId);
+    }
+
+    @GetMapping("/{id}") //GET, 상세 글 조회
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
+    public ResponseEntity<InquiryResponse> getInquiry(
+            @PathVariable Long id,
+            @AuthenticationPrincipal LoginUser loginUser
+    ) throws AccessDeniedException {
+        Long currentUserId = loginUser.getId();
+        InquiryResponse response = inquiryService.getInquiry(id, currentUserId);
+        return ResponseEntity.ok(response);
     }
 }
