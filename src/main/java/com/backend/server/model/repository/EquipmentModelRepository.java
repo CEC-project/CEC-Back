@@ -10,4 +10,9 @@ import com.backend.server.model.entity.EquipmentModel;
 
 @Repository
 public interface EquipmentModelRepository extends JpaRepository<EquipmentModel, Long>, JpaSpecificationExecutor<EquipmentModel> {
+    boolean existsByName(String name);
+    boolean existsByEnglishCode(String englishCode);
+
+    boolean existsByNameAndIdNot(String name, Long id);
+    boolean existsByEnglishCodeAndIdNot(String englishCode, Long id);
 }

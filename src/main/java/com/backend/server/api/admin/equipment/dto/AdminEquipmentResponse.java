@@ -33,7 +33,9 @@ public class AdminEquipmentResponse {
         this.brokenCount = equipment.getBrokenCount();
         this.repairCount = equipment.getRepairCount();
         this.rentalCount = equipment.getRentalCount();
-        this.renterName = equipment.getRenter().getName();
+        this.renterName = equipment.getRenter() != null
+                ? equipment.getRenter().getName()
+                : null;
         this.createdAt = equipment.getCreatedAt();
     }
 }
