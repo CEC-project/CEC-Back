@@ -1,5 +1,6 @@
 package com.backend.server.api.user.inquiry.dto;
 
+import com.backend.server.model.entity.enums.AnswerStatus;
 import com.backend.server.model.entity.enums.InquiryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,5 +20,6 @@ public class InquiryResponse {
     private String content;         // 내용
     private String attachmentUrl;   // 첨부파일 URL
     private InquiryType type;      // 문의 유형 (enum)
+    private AnswerStatus status;   // 답변 상태
     private String createdAt;       // 생성 일시
 }

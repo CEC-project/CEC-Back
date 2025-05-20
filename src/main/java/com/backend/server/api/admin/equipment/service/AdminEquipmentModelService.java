@@ -14,14 +14,35 @@ import lombok.RequiredArgsConstructor;
 public class AdminEquipmentModelService {
     private final EquipmentModelRepository equipmentModelRepository;
 
+    public void checkExist(AdminEquipmentModelCreateRequest request){
+        if (equipmentModelRepository.existsByName(request.getName())) {
+            throw new IllegalArgumentException("이미 존재하는 카테고리 이름입니다.");
+        }
+        if (equipmentModelRepository.existsByEnglishCode(request.getEnglishCode())) {
+            throw new IllegalArgumentException("이미 존재하는 영문 코드입니다.");
+        }
+    }
+
+    //업데이트 중복검사
+    private void checkExistForUpdate(Long id, AdminEquipmentModelCreateRequest request) {
+        if (equipmentModelRepository.existsByNameAndIdNot(request.getName(), id)) {
+            throw new IllegalArgumentException("이미 존재하는 카테고리 이름입니다.");
+        }
+        if (equipmentModelRepository.existsByEnglishCodeAndIdNot(request.getEnglishCode(), id)) {
+            throw new IllegalArgumentException("이미 존재하는 영문 코드입니다.");
+        }
+    }
+
     //장비 모델 생성
     public AdminEquipmentModelIdResponse createModel(AdminEquipmentModelCreateRequest request) {
+        checkExist(request);
         EquipmentModel savedEquipmentModel = equipmentModelRepository.save(request.toEntity());
         return new AdminEquipmentModelIdResponse(savedEquipmentModel.getId());
     }
 
     //장비 모델 업데이트
     public AdminEquipmentModelIdResponse updateModel(Long id, AdminEquipmentModelCreateRequest request) {
+        checkExistForUpdate(id, request);
         EquipmentModel equipmentModel = equipmentModelRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("해당 장비 모델이 존재하지 않습니다. id=" + id));
 

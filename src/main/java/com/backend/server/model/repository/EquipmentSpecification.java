@@ -51,15 +51,25 @@ public class EquipmentSpecification {
             // 현재 대여자 이름 (join 필요)
             if (StringUtils.hasText(request.getRenterName())) {
                 Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
-                predicates.add(cb.like(cb.lower(renter.get("name")), "%" + request.getRenterName().toLowerCase() + "%"));
+
+                predicates.add(cb.and(
+                        cb.isNotNull(renter.get("name")),  // 핵심 안전 처리
+                        cb.like(cb.lower(renter.get("name")), "%" + request.getRenterName().toLowerCase() + "%")
+                ));
             }
-            // 통합 검색어 (모델명, 일련번호, 대여자 이름 등)
             if (StringUtils.hasText(request.getSearchKeyword())) {
                 String keyword = "%" + request.getSearchKeyword().toLowerCase() + "%";
+
                 Predicate modelNamePredicate = cb.like(cb.lower(root.get("modelName")), keyword);
                 Predicate serialNumberPredicate = cb.like(cb.lower(root.get("serialNumber")), keyword);
+
                 Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
-                Predicate renterNamePredicate = cb.like(cb.lower(renter.get("name")), keyword);
+
+                Predicate renterNamePredicate = cb.and(
+                        cb.isNotNull(renter.get("name")),  // 반드시 null 체크!
+                        cb.like(cb.lower(renter.get("name")), keyword)
+                );
+
                 predicates.add(cb.or(modelNamePredicate, serialNumberPredicate, renterNamePredicate));
             }
     
@@ -95,15 +105,26 @@ public class EquipmentSpecification {
             // 현재 대여자 이름 (join 필요)
             if (StringUtils.hasText(request.getRenterName())) {
                 Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
-                predicates.add(cb.like(cb.lower(renter.get("name")), "%" + request.getRenterName().toLowerCase() + "%"));
+
+                predicates.add(cb.and(
+                        cb.isNotNull(renter.get("name")),  // 핵심 안전 처리
+                        cb.like(cb.lower(renter.get("name")), "%" + request.getRenterName().toLowerCase() + "%")
+                ));
             }
-            // 통합 검색어 (모델명, 일련번호, 대여자 이름 등)
+
             if (StringUtils.hasText(request.getSearchKeyword())) {
                 String keyword = "%" + request.getSearchKeyword().toLowerCase() + "%";
+
                 Predicate modelNamePredicate = cb.like(cb.lower(root.get("modelName")), keyword);
                 Predicate serialNumberPredicate = cb.like(cb.lower(root.get("serialNumber")), keyword);
+
                 Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
-                Predicate renterNamePredicate = cb.like(cb.lower(renter.get("name")), keyword);
+
+                Predicate renterNamePredicate = cb.and(
+                        cb.isNotNull(renter.get("name")),  // 반드시 null 체크!
+                        cb.like(cb.lower(renter.get("name")), keyword)
+                );
+
                 predicates.add(cb.or(modelNamePredicate, serialNumberPredicate, renterNamePredicate));
             }
 

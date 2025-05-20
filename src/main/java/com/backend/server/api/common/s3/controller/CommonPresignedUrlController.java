@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/s3")
-@Tag(name = "[공통] 파일 업로드 API", description = "presigned url 발급 API")
+@Tag(name = "파일 업로드 API", description = "presigned url 발급 API")
 public class CommonPresignedUrlController {
 
     private final CommonPresignedUrlService presignedUrlService;
