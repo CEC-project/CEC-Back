@@ -28,20 +28,28 @@ public class EquipmentModelController {
     // 장비 모델 목록 조회 API
     @GetMapping
     @Operation(
-        summary = "장비 모델 목록 조회",
-        description = "장비 모델을 페이지네이션과 검색 조건(모델명, 영문 코드 등)에 따라 조회합니다. " +
-                    "정렬 기준, 키워드, 페이지 번호, 페이지 크기를 설정할 수 있습니다."
+            summary = "장비 모델 목록 조회",
+            description = """
+        장비 모델을 조건에 따라 조회합니다. 페이징, 정렬, 검색 기능을 함께 사용할 수 있습니다.
+
+        <b>검색 필터:</b><br>
+        - <code>categoryId</code>: 특정 장비 카테고리 ID로 필터링<br>
+        - <code>keyword</code>: 모델명 또는 영문 코드에 대한 검색 키워드 (부분 일치)<br>
+
+        <b>⬇정렬 조건:</b><br>
+        - <code>sortBy</code>: 정렬 기준 필드명 (예: name, createdAt 등)<br>
+        - <code>sortDirection</code>: 정렬 방향 (asc 또는 desc, 기본 asc)<br>
+
+        <b>페이징 조건:</b><br>
+        - <code>page</code>: 페이지 번호 (0부터 시작)<br>
+        - <code>size</code>: 페이지당 항목 수<br>
+
+        모든 파라미터는 선택값이며, 조합하여 사용할 수 있습니다.
+        예시: <code>?categoryId=1&keyword=카메라&sortBy=name&sortDirection=desc&page=0&size=10</code>
+        """
     )
     public ApiResponse<EquipmentModelListResponse> getAllModels(
-            @Parameter(
-                description = "장비 모델 검색 및 페이지네이션 요청 정보\n" +
-                            "- page: 페이지 번호 (0부터 시작)\n" +
-                            "- size: 페이지당 항목 수\n" +
-                            "- keyword: 모델명 또는 영문 코드 검색 키워드\n" +
-                            "- sortBy: 정렬 기준 필드 (예: name)\n" +
-                            "- sortDirection: 정렬 방향 (asc 또는 desc) 지정안하면 asc",
-                example = "page=0&size=10&keyword=카메라&sortBy=name&sortDirection=asc"
-            )
+            @Parameter
             @ModelAttribute EquipmentModelListRequest request
     ) {
         return ApiResponse.success("장비 모델 목록 조회 성공", equipmentModelService.getAllModels(request));

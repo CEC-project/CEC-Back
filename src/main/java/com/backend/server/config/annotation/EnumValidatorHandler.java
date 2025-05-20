@@ -14,7 +14,7 @@ public class EnumValidatorHandler implements ConstraintValidator<EnumValidator, 
     public void initialize(EnumValidator annotation) {
         Class<? extends Enum<?>> enumSelected = annotation.enumClass();
         acceptedValues = Arrays.stream(enumSelected.getEnumConstants())
-                .map(Enum::name)
+                .map(Enum::toString)
                 .collect(Collectors.toSet());
     }
 

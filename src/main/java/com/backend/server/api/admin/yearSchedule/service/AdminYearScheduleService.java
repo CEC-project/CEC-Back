@@ -6,8 +6,6 @@ import com.backend.server.api.admin.yearSchedule.dto.AdminYearScheduleResponse;
 import com.backend.server.api.admin.yearSchedule.dto.AdminYearScheduleSearchRequest;
 import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.classroom.YearSchedule;
-import com.backend.server.model.entity.enums.Status;
-import com.backend.server.model.repository.UserRepository;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
 import com.backend.server.model.repository.classroom.YearScheduleRepository;
 import java.time.LocalDate;
@@ -48,7 +46,7 @@ public class AdminYearScheduleService {
                     .findById(request.getClassroomId())
                     .orElseThrow(()->new IllegalArgumentException("강의실id 가 유효하지 않습니다."));
 
-            if (request.getStartTime().isAfter(request.getEndTime()))
+            if (request.getStartAt().isAfter(request.getEndAt()))
                 throw new IllegalArgumentException("일정 종료 < 일정 시작 입니다.");
         }
 
@@ -60,7 +58,7 @@ public class AdminYearScheduleService {
         YearSchedule yearSchedule = yearScheduleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("유효하지 않은 일정 ID입니다."));
 
-        if (!yearSchedule.getDate().equals(request.getLocalDate()))
+        if (!yearSchedule.getDate().equals(request.getDate()))
             throw new IllegalArgumentException("DB에 저장된 날짜와 다릅니다.");
 
         if (!request.getIsHoliday()) {
@@ -71,15 +69,15 @@ public class AdminYearScheduleService {
                     .findById(request.getClassroomId())
                     .orElseThrow(()->new IllegalArgumentException("강의실id 가 유효하지 않습니다."));
 
-            if (request.getStartTime().isAfter(request.getEndTime()))
+            if (request.getStartAt().isAfter(request.getEndAt()))
                 throw new IllegalArgumentException("일정 종료 < 일정 시작 입니다.");
 
             yearSchedule = yearSchedule.toBuilder()
                     .isHoliday(request.getIsHoliday())
                     .classroom(Classroom.builder().id(request.getClassroomId()).build())
                     .description(request.getDescription())
-                    .startAt(request.getStartTime())
-                    .endAt(request.getEndTime())
+                    .startAt(request.getStartAt())
+                    .endAt(request.getEndAt())
                     .build();
         } else {
             yearSchedule = yearSchedule.toBuilder()

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +36,8 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin/equipments")
+@Tag(name = "관리자 장비 API", description = "장비 모델 조회 관련 API")
+
 public class AdminEquipmentController {
     
     private final AdminEquipmentService adminEquipmentService;
@@ -84,46 +87,50 @@ public class AdminEquipmentController {
 
     //장비  리스트 어드민 조회
     @Operation(
-        summary = "장비 리스트 어드민 조회",
-        description = """
-        다양한 검색, 정렬, 필터 조건으로 장비 리스트를 조회합니다.<br>
-        <b>검색/필터 파라미터:</b><br>
-        - categoryId: 장비 분류(카테고리) ID<br>
-        - modelName: 모델명(부분 일치)<br>
-        - serialNumber: 일련번호(부분 일치)<br>
-        - status: 장비 상태(예: 정상, 고장 등)<br>
-        - isAvailable: 대여 가능 여부(true/false)<br>
-        - renterName: 현재 대여자 이름(부분 일치)<br>
-        - searchKeyword: 모델명, 일련번호, 대여자 이름 통합 검색<br>
-        <br>
-        <b>정렬 파라미터:</b><br>
-        - sortBy: 정렬 기준(id, createdAt, brokenCount, repairCount, rentalCount)<br>
-        - sortDirection: 정렬 방향(asc, desc)<br>
-        <br>
-        <b>페이징 파라미터:</b><br>
-        - page: 페이지 번호(0부터 시작)<br>
-        - size: 한 페이지에 보여줄 개수(기본값 17)<br>
+            summary = "어드민 - 장비 리스트 조회",
+            description = """
+        관리자 페이지에서 장비 목록을 검색, 필터링, 정렬, 페이징 조건에 따라 조회합니다.
+
+        <b>🔍 검색/필터 조건:</b><br>
+        - <code>categoryId</code>: 장비 카테고리 ID (예: 1)<br>
+        - <code>modelName</code>: 모델명 (부분 일치 검색)<br>
+        - <code>serialNumber</code>: 장비 일련번호 (부분 일치 검색)<br>
+        - <code>status</code>: 장비 상태 (예: AVAILABLE, BROKEN 등)<br>
+        - <code>isAvailable</code>: 대여 가능 여부 (true/false)<br>
+        - <code>renterName</code>: 현재 대여자 이름 (부분 일치 검색)<br>
+        - <code>searchKeyword</code>: 모델명, 일련번호, 대여자 이름에 대한 통합 키워드 검색<br>
+
+        <b>⬇️ 정렬 조건:</b><br>
+        - <code>sortBy</code>: 정렬 기준 (예: id, createdAt, rentalCount, repairCount, brokenCount)<br>
+        - <code>sortDirection</code>: 정렬 방향 (asc 또는 desc)<br>
+
+        <b>📄 페이징 조건:</b><br>
+        - <code>page</code>: 페이지 번호 (0부터 시작)<br>
+        - <code>size</code>: 페이지당 항목 수 (기본값: 17)<br>
+
+        ⚠️ 모든 파라미터는 선택(optional)이며, 조건을 조합하여 사용할 수 있습니다.
         """
     )
     @Parameters({
-        @Parameter(name = "categoryId", description = "장비 분류(카테고리) ID"),
-        @Parameter(name = "modelName", description = "모델명(부분 일치)"),
-        @Parameter(name = "serialNumber", description = "일련번호(부분 일치)"),
-        @Parameter(name = "status", description = "장비 상태(예: 정상, 고장 등)"),
-        @Parameter(name = "isAvailable", description = "대여 가능 여부(true/false)"),
-        @Parameter(name = "renterName", description = "현재 대여자 이름(부분 일치)"),
-        @Parameter(name = "searchKeyword", description = "모델명, 일련번호, 대여자 이름 통합 검색"),
-        @Parameter(name = "sortBy", description = "정렬 기준(id, createdAt, brokenCount, repairCount, rentalCount)"),
-        @Parameter(name = "sortDirection", description = "정렬 방향(asc, desc)"),
-        @Parameter(name = "page", description = "페이지 번호(0부터 시작)"),
-        @Parameter(name = "size", description = "한 페이지에 보여줄 개수(기본값 17)")
+            @Parameter(name = "categoryId", description = "장비 카테고리 ID"),
+            @Parameter(name = "modelName", description = "모델명 (부분 일치 검색)"),
+            @Parameter(name = "serialNumber", description = "일련번호 (부분 일치 검색)"),
+            @Parameter(name = "status", description = "장비 상태 (AVAILABLE, BROKEN 등)"),
+            @Parameter(name = "isAvailable", description = "대여 가능 여부 (true/false)"),
+            @Parameter(name = "renterName", description = "현재 대여자 이름 (부분 일치 검색)"),
+            @Parameter(name = "searchKeyword", description = "모델명, 일련번호, 대여자 이름 통합 검색 키워드"),
+            @Parameter(name = "sortBy", description = "정렬 기준 (id, createdAt, rentalCount, repairCount, brokenCount 등)"),
+            @Parameter(name = "sortDirection", description = "정렬 방향 (asc 또는 desc)"),
+            @Parameter(name = "page", description = "페이지 번호 (0부터 시작)"),
+            @Parameter(name = "size", description = "한 페이지당 항목 수 (기본값: 17)")
     })
     @GetMapping
     public ApiResponse<AdminEquipmentListResponse> getEquipments(
-        @ModelAttribute AdminEquipmentListRequest request
+            @ModelAttribute AdminEquipmentListRequest request
     ) {
         return ApiResponse.success("장비 리스트 조회 성공", adminEquipmentService.getEquipments(request));
     }
+
 
     //장비 단일 상세조회
     @GetMapping("/{id}")
