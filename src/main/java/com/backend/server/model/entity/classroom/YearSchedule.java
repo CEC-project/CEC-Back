@@ -30,7 +30,7 @@ public class YearSchedule extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "classroom_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "classroom_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Classroom classroom;
 
     private LocalDate date;

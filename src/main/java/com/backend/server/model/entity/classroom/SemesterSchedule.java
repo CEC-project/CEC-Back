@@ -29,11 +29,11 @@ public class SemesterSchedule extends BaseTimeEntity {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "classroom_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "classroom_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Classroom classroom;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "semester_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "semester_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Semester semester;
 
     private Integer year;
