@@ -1,6 +1,7 @@
 package com.backend.server.model.entity.classroom;
 
 import com.backend.server.model.entity.BaseTimeEntity;
+import com.backend.server.model.entity.Professor;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
@@ -26,7 +27,7 @@ public class SemesterSchedule extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "classroom_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -36,8 +37,12 @@ public class SemesterSchedule extends BaseTimeEntity {
     @JoinColumn(name = "semester_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Semester semester;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "professor_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Professor professor;
+
     private Integer year;
-    private String day;
+    private Integer day;
 
     @Column(length = 20)
     private String name;
