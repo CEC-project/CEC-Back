@@ -23,6 +23,19 @@ import java.util.List;
 
 public class EquipmentSpecification {
 
+    public static <T extends PageableRequest> Pageable getPageable(T request) {
+        int page = request.getPage() != null ? request.getPage() : 0;
+        int size = request.getSize() != null ? request.getSize() : 17;
+        String sortBy = request.getSortBy() != null ? request.getSortBy() : "id";
+        String direction = request.getSortDirection() != null ? request.getSortDirection() : "DESC";
+
+        return PageRequest.of(
+                page,
+                size,
+                Sort.by(Sort.Direction.fromString(direction), sortBy)
+        );
+    }
+
     // 장비 목록 필터링 (어드민용)
     public static Specification<Equipment> adminFilterEquipments(AdminEquipmentListRequest request) {
         return (root, query, cb) -> {
@@ -143,5 +156,6 @@ public class EquipmentSpecification {
     
             return cb.and(predicates.toArray(new Predicate[0]));
         };
+
     }
 } 
