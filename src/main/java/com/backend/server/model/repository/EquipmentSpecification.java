@@ -84,6 +84,14 @@ public class EquipmentSpecification {
         int size = request.getSize() != null ? request.getSize() : 17;
         return PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
     }
+
+    public static Pageable getPageableUser(EquipmentListRequest request) {
+        String sortBy = request.getSortBy() != null ? request.getSortBy() : "id";
+        String sortDirection = request.getSortDirection() != null ? request.getSortDirection() : "asc";
+        int page = request.getPage() != null ? request.getPage() : 0;
+        int size = request.getSize() != null ? request.getSize() : 17;
+        return PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
+    }
     
     //장비 필터링 유저용 
     public static Specification<Equipment> filterEquipments(EquipmentListRequest request, Integer userGrade) {
