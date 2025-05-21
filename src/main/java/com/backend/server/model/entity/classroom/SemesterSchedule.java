@@ -1,6 +1,7 @@
 package com.backend.server.model.entity.classroom;
 
 import com.backend.server.model.entity.BaseTimeEntity;
+import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.Professor;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
@@ -12,7 +13,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.time.LocalTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +43,9 @@ public class SemesterSchedule extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "professor_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Professor professor;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "semesterSchedule")
+    private List<Equipment> equipments;
 
     private Integer year;
     private Integer day;
