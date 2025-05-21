@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.server.api.user.equipment.dto.category.EquipmentCategoryResponse;
 import com.backend.server.model.entity.EquipmentCategory;
-import com.backend.server.model.repository.EquipmentCategoryRepository;
+import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
 
 import lombok.RequiredArgsConstructor;
 

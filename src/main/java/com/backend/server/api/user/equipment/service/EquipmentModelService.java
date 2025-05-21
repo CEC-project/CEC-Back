@@ -12,8 +12,8 @@ import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest
 import com.backend.server.api.user.equipment.dto.model.EquipmentModelListResponse;
 import com.backend.server.api.user.equipment.dto.model.EquipmentModelResponse;
 import com.backend.server.model.entity.EquipmentModel;
-import com.backend.server.model.repository.EquipmentModelRepository;
-import com.backend.server.model.repository.EquipmentModelSpecification;
+import com.backend.server.model.repository.equipment.EquipmentModelRepository;
+import com.backend.server.model.repository.equipment.EquipmentModelSpecification;
 
 import lombok.RequiredArgsConstructor;
 

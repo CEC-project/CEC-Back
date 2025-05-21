@@ -1,6 +1,5 @@
 package com.backend.server.api.user.equipment.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -15,15 +14,14 @@ import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
 import com.backend.server.api.user.equipment.dto.equipment.EquipmentListResponse;
 import com.backend.server.api.user.equipment.dto.equipment.EquipmentResponse;
 import com.backend.server.model.entity.Equipment;
-import com.backend.server.model.entity.EquipmentModel;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.EquipmentCart;
-import com.backend.server.model.repository.EquipmentModelRepository;
-import com.backend.server.model.repository.EquipmentRepository;
-import com.backend.server.model.repository.EquipmentSpecification;
+import com.backend.server.model.repository.equipment.EquipmentModelRepository;
+import com.backend.server.model.repository.equipment.EquipmentRepository;
+import com.backend.server.model.repository.equipment.EquipmentSpecification;
 import com.backend.server.model.repository.UserRepository;
-import com.backend.server.model.repository.EquipmentCartRepository;
+import com.backend.server.model.repository.equipment.EquipmentCartRepository;
 
 import lombok.RequiredArgsConstructor;
 

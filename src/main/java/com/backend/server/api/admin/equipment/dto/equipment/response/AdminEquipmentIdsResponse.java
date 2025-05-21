@@ -1,4 +1,4 @@
-package com.backend.server.api.admin.equipment.dto;
+package com.backend.server.api.admin.equipment.dto.equipment.response;
 
 import java.util.List;
 

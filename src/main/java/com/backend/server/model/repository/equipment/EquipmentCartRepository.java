@@ -1,4 +1,4 @@
-package com.backend.server.model.repository;
+package com.backend.server.model.repository.equipment;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;

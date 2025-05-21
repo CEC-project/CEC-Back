@@ -1,23 +1,19 @@
-package com.backend.server.model.repository;
+package com.backend.server.model.repository.equipment;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
-import com.backend.server.api.admin.equipment.dto.AdminEquipmentRentalRequestListRequest;
 import com.backend.server.api.common.dto.PageableRequest;
 import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
-import com.backend.server.api.admin.equipment.dto.AdminEquipmentListRequest;
+import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentListRequest;
 import com.backend.server.model.entity.Equipment;
-import com.backend.server.model.entity.EquipmentRental;
 import com.backend.server.model.entity.User;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
 import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Subquery;
-import jakarta.persistence.criteria.Root;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +51,7 @@ public class EquipmentSpecification {
             }
             // 장비 상태
             if (StringUtils.hasText(request.getStatus())) {
-                predicates.add(cb.equal(root.get("rentalStatus"), request.getStatus()));
+                predicates.add(cb.equal(root.get("status"), request.getStatus()));
             }
             // 대여 가능 여부
             if (request.getIsAvailable() != null) {
@@ -89,23 +85,7 @@ public class EquipmentSpecification {
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
-    //어드민 장비 목록 페이지네이션
-    public static Pageable getPageable(AdminEquipmentListRequest request) {
-        String sortBy = request.getSortBy() != null ? request.getSortBy() : "id";
-        String sortDirection = request.getSortDirection() != null ? request.getSortDirection() : "asc";
-        int page = request.getPage() != null ? request.getPage() : 0;
-        int size = request.getSize() != null ? request.getSize() : 17;
-        return PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
-    }
 
-    public static Pageable getPageableUser(EquipmentListRequest request) {
-        String sortBy = request.getSortBy() != null ? request.getSortBy() : "id";
-        String sortDirection = request.getSortDirection() != null ? request.getSortDirection() : "asc";
-        int page = request.getPage() != null ? request.getPage() : 0;
-        int size = request.getSize() != null ? request.getSize() : 17;
-        return PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
-    }
-    
     //장비 필터링 유저용 
     public static Specification<Equipment> filterEquipments(EquipmentListRequest request, Integer userGrade) {
         return (root, query, cb) -> {

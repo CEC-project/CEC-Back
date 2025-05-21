@@ -1,7 +1,7 @@
 package com.backend.server.api.admin.equipment.service;
 
 import com.backend.server.model.entity.EquipmentCategory;
-import com.backend.server.model.repository.EquipmentCategoryRepository;
+import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
 import com.backend.server.api.admin.equipment.dto.category.AdminEquipmentCategoryCreateRequest;
 import com.backend.server.api.admin.equipment.dto.category.AdminEquipmentCategoryIdResponse;
 

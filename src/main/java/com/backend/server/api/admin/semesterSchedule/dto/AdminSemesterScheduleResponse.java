@@ -1,6 +1,6 @@
 package com.backend.server.api.admin.semesterSchedule.dto;
 
-import com.backend.server.api.admin.equipment.dto.AdminEquipmentResponse;
+import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentResponse;
 import com.backend.server.api.admin.professor.dto.AdminProfessorSimpleResponse;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.Professor;
