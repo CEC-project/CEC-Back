@@ -1,5 +1,6 @@
 package com.backend.server.api.admin.equipment.service;
 
+import com.backend.server.model.repository.EquipmentCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import com.backend.server.api.admin.equipment.dto.model.AdminEquipmentModelCreateRequest;
@@ -13,23 +14,31 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminEquipmentModelService {
     private final EquipmentModelRepository equipmentModelRepository;
+    private final EquipmentCategoryRepository equipmentCategoryRepository;
 
     public void checkExist(AdminEquipmentModelCreateRequest request){
         if (equipmentModelRepository.existsByName(request.getName())) {
-            throw new IllegalArgumentException("이미 존재하는 카테고리 이름입니다.");
+            throw new IllegalArgumentException("이미 존재하는 모델 이름입니다.");
         }
         if (equipmentModelRepository.existsByEnglishCode(request.getEnglishCode())) {
             throw new IllegalArgumentException("이미 존재하는 영문 코드입니다.");
+        }
+        if (!equipmentCategoryRepository.existsById(request.getCategoryId())) {
+            throw new IllegalArgumentException("존재하지 않는 카테고리입니다. id=" + request.getCategoryId());
         }
     }
 
     //업데이트 중복검사
     private void checkExistForUpdate(Long id, AdminEquipmentModelCreateRequest request) {
         if (equipmentModelRepository.existsByNameAndIdNot(request.getName(), id)) {
-            throw new IllegalArgumentException("이미 존재하는 카테고리 이름입니다.");
+            throw new IllegalArgumentException("이미 존재하는 모델 이름입니다.");
         }
         if (equipmentModelRepository.existsByEnglishCodeAndIdNot(request.getEnglishCode(), id)) {
             throw new IllegalArgumentException("이미 존재하는 영문 코드입니다.");
+        }
+
+        if (!equipmentCategoryRepository.existsById(request.getCategoryId())) {
+            throw new IllegalArgumentException("존재하지 않는 카테고리입니다. id=" + request.getCategoryId());
         }
     }
 

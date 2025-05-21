@@ -158,7 +158,7 @@ public class AdminEquipmentService {
     
     //장비 강제 상태 변경경
     @Transactional
-    public void updateEquipmentStatus(Long equipmentId, AdminEquipmentStatusUpdateRequest request) {
+    public Long updateEquipmentStatus(Long equipmentId, AdminEquipmentStatusUpdateRequest request) {
         Equipment equipment = equipmentRepository.findById(equipmentId)
             .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
         
@@ -167,7 +167,7 @@ public class AdminEquipmentService {
             .build();
         
         equipmentRepository.save(updated);
-        
+        return equipmentId;
     }
     
     //대여 요청 다중 승인
