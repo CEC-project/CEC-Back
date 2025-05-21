@@ -1,7 +1,6 @@
-package com.backend.server.config;
+package com.backend.server.config.security;
 
 import com.backend.server.api.common.dto.ApiResponse;
-import com.backend.server.config.security.JwtAuthenticationFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
