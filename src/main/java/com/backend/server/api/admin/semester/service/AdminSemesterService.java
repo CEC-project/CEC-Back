@@ -5,7 +5,6 @@ import com.backend.server.api.admin.semester.dto.AdminSemesterResponse;
 import com.backend.server.model.entity.classroom.Semester;
 import com.backend.server.model.repository.classroom.SemesterRepository;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,16 +33,15 @@ public class AdminSemesterService {
 
     @Transactional
     public Long updateSemester(Long id, AdminSemesterRequest request) {
-        Optional<Semester> optionalSemester = semesterRepository.findById(id);
-        if (optionalSemester.isEmpty())
-            throw new IllegalArgumentException("학기 id 가 유효하지 않습니다");
-
-        Semester semester = optionalSemester.get().toBuilder()
+        Semester semester = semesterRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("학기 id 가 유효하지 않습니다"))
+                .toBuilder()
                 .year(request.getYear())
                 .name(request.getName())
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
                 .build();
+
         Semester result = semesterRepository.save(semester);
         return result.getId();
     }

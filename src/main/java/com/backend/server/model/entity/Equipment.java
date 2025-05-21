@@ -1,5 +1,6 @@
 package com.backend.server.model.entity;
 
+import com.backend.server.model.entity.classroom.SemesterSchedule;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -65,6 +66,10 @@ public class Equipment extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User renter;
+
+    @ManyToOne
+    @JoinColumn(name = "equipments", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private SemesterSchedule semesterSchedule;
 
     @Column(name = "start_rent_date")
     private LocalDateTime startRentDate;
