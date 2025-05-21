@@ -1,4 +1,4 @@
-package com.backend.server.model.repository;
+package com.backend.server.model.repository.equipment;
 
 import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
 import com.backend.server.model.entity.EquipmentModel;

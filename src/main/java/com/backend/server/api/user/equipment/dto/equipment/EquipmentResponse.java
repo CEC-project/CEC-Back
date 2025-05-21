@@ -4,7 +4,10 @@ import java.time.LocalDateTime;
 
 import com.backend.server.model.entity.Equipment;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Getter;
 
+@Getter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EquipmentResponse {
     private String modelName;
     private boolean isAvailable;

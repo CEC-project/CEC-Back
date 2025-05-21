@@ -1,6 +1,5 @@
 package com.backend.server.api.admin.equipment.controller;
 
-import com.backend.server.api.admin.equipment.dto.AdminEquipmentCreateRequest;
 import org.springframework.web.bind.annotation.*;
 
 import com.backend.server.api.admin.equipment.dto.category.AdminEquipmentCategoryCreateRequest;

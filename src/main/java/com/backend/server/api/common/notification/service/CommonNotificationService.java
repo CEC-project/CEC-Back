@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.dto.CommonNotificationResponse;
 import com.backend.server.model.entity.Notification;
-import com.backend.server.model.repository.NotificationRepository;
+import com.backend.server.model.repository.notification.NotificationRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,12 +1,12 @@
 package com.backend.server.api.admin.equipment.service;
 
-import com.backend.server.model.repository.EquipmentCategoryRepository;
+import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import com.backend.server.api.admin.equipment.dto.model.AdminEquipmentModelCreateRequest;
 import com.backend.server.api.admin.equipment.dto.model.AdminEquipmentModelIdResponse;
 import com.backend.server.model.entity.EquipmentModel;
-import com.backend.server.model.repository.EquipmentModelRepository;
+import com.backend.server.model.repository.equipment.EquipmentModelRepository;
 
 import lombok.RequiredArgsConstructor;
 

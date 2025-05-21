@@ -1,4 +1,4 @@
-package com.backend.server.api.admin.equipment.dto;
+package com.backend.server.api.admin.equipment.dto.equipment.request;
 
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.api.common.dto.PageableRequest;

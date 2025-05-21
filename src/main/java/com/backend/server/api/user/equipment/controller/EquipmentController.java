@@ -30,7 +30,7 @@ public class EquipmentController {
     @Operation(
         summary = "장비 개별 조회", 
         description = "장비 ID를 이용하여 단일 장비의 상세 정보를 조회합니다.\n\n" +
-                      "예시 URL: http://localhost:8080/api/user/equipments/1"
+                      "예시 URL: /api/user/equipments/1"
     )
     @GetMapping("/{id}")
     public ApiResponse<EquipmentResponse> getEquipment(

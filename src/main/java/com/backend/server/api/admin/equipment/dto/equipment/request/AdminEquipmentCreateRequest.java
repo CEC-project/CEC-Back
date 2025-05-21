@@ -1,4 +1,4 @@
-package com.backend.server.api.admin.equipment.dto;
+package com.backend.server.api.admin.equipment.dto.equipment.request;
 
 import com.backend.server.model.entity.EquipmentCategory;
 import com.backend.server.model.entity.EquipmentModel;

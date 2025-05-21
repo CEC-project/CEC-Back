@@ -17,4 +17,9 @@ values  ('2001-03-15', 0, 3, 5, 2, 1,
          '2025-05-16 13:40:26.060319', null, '2025-05-16 13:40:26.060319',
          '학과', 'park@example.com', '남', 'A조', '세부전공',
          '박철수', '철수짱', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
-         '010-3456-7890', 'profile3.png', 'ROLE_SUPER_ADMIN', '202300003');
+         '010-3456-7890', 'profile3.png', 'ROLE_SUPER_ADMIN', '202300003'),
+        ('2000-12-05', 3, 4, 10, 5, 2,
+         '2025-05-16 13:40:26.060319', null, '2025-05-16 13:40:26.060319',
+         '학과', 'park@example.com', '남', 'A조', '세부전공',
+         '유저유저', '유저유저', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
+         '010-3456-7890', 'profile3.png', 'ROLE_USER', '202300004');

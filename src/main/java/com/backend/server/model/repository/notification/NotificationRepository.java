@@ -1,4 +1,4 @@
-package com.backend.server.model.repository;
+package com.backend.server.model.repository.notification;
 
 import java.util.List;
 

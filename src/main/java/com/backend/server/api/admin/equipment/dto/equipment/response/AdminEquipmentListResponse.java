@@ -1,11 +1,10 @@
-package com.backend.server.api.admin.equipment.dto;
+package com.backend.server.api.admin.equipment.dto.equipment.response;
 
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 
 import com.backend.server.api.common.dto.PageInfo;
-import com.backend.server.model.entity.Equipment;
 import lombok.Getter;
 
 @Getter
