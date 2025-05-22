@@ -8,6 +8,7 @@ import com.backend.server.api.user.mypage.service.MyInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/mypage")
 @RequiredArgsConstructor
+@Tag(name = "ℹ\uFE0F 알림", description = "알림 API")
 public class MypageController {
     private final MyInfoService myinfoService;
     //내정보조회

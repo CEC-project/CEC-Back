@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin/equipments")
-@Tag(name = "관리자 장비 API", description = "장비 모델 조회 관련 API")
+@Tag(name = "\uD83D\uDCF7 관리자 장비 API", description = "장비 모델 조회 관련 API")
 
 public class AdminEquipmentController {
     
@@ -84,7 +84,7 @@ public class AdminEquipmentController {
 
     //장비  리스트 어드민 조회
     @Operation(
-            summary = "어드민 - 장비 리스트 조회",
+            summary = "장비 리스트 조회",
             description = """
         관리자 페이지에서 장비 목록을 검색, 필터링, 정렬, 페이징 조건에 따라 조회합니다.
 
@@ -105,14 +105,18 @@ public class AdminEquipmentController {
         - <code>page</code>: 페이지 번호 (0부터 시작)<br>
         - <code>size</code>: 페이지당 항목 수 (기본값: 17)<br>
 
-        ⚠️ 페이지네이션 관련 파라미터 빼면 다 선택사항이며, 조건을 조합하여 사용할 수 있습니다.
+        ⚠️ 파라미터 다 선택사항이며, 조건을 조합하여 사용할 수 있습니다.
         """
     )
     @Parameters({
             @Parameter(name = "categoryId", description = "장비 카테고리 ID"),
             @Parameter(name = "modelName", description = "모델명 (부분 일치 검색)"),
             @Parameter(name = "serialNumber", description = "일련번호 (부분 일치 검색)"),
-            @Parameter(name = "status", description = "장비 상태 (AVAILABLE, BROKEN 등)"),
+            @Parameter(name = "status", description = "장비 상태 (AVAILABLE(\"대여 가능\"),\n" +
+                    "    IN_USE(\"대여중\"),\n" +
+                    "    BROKEN(\"파손\"),\n" +
+                    "    RENTAL_PENDING(\"대여 신청 중\"),\n" +
+                    "    RETURN_PENDING(\"반납 처리중\"))"),
             @Parameter(name = "isAvailable", description = "대여 가능 여부 (true/false)"),
             @Parameter(name = "renterName", description = "현재 대여자 이름 (부분 일치 검색)"),
             @Parameter(name = "searchKeyword", description = "모델명, 일련번호, 대여자 이름 통합 검색 키워드"),

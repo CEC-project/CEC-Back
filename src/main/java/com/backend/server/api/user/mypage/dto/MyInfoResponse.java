@@ -11,6 +11,7 @@ public class MyInfoResponse {
     private String nickname;
     private String profilePicture;
 
+
     public MyInfoResponse(LoginUser user) {
         this.name = user.getName();
         this.phoneNumber = user.getPhoneNumber();
