@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table
+@Table(name = "notice")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,7 +26,7 @@ public class Notice extends BaseTimeEntity {
   @Column(nullable = false)
   private Boolean important;
 
-  @Column
+  @Column(name = "attachment_url")
   private String attachmentUrl;  // 첨부파일 URL
 
   @ManyToOne
