@@ -58,7 +58,7 @@ public class InquiryService {
 
     @Transactional(readOnly = true)
     public List<InquiryResponse> getMyInquiries(Long currentUserId) { // 내 글 전체 조회
-        return inquiryRepository.findAllbyAuthorId(currentUserId).stream()
+        return inquiryRepository.findAllByAuthorId(currentUserId).stream()
                 .map(inquiry -> InquiryResponse.builder()
                         .id(inquiry.getId())
                         .title(inquiry.getTitle())
@@ -66,7 +66,7 @@ public class InquiryService {
                         .attachmentUrl(inquiry.getAttachmentUrl())
                         .type(inquiry.getType())
                         .status(inquiry.getStatus())
-                        .createdAt(inquiry.getCreatedAt().toString())
+                        .createdAt(inquiry.getCreatedAt())
                         .build())
         .toList();
     }
