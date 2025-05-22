@@ -11,20 +11,21 @@ import org.springframework.data.domain.Sort;
  * 하위 클래스에서 구체적인 페이지네이션 파라미터를 정의할 수 있습니다.
  */
 @Getter
-public abstract class AbstractPaginationParam {
-  @Schema(description = "페이지 번호 (기본값 0)", example = "0")
-  protected Integer page;
+public abstract class AbstractPaginationParam<T extends Enum<T> & SortTypeConvertible> {
 
-  @Schema(description = "페이지당 크기 (기본값 = 10)", example = "10")
-  protected Integer size;
+    @Schema(description = "페이지 번호 (기본값 0)", example = "0")
+    protected Integer page = 0;
 
-  @Schema(description = "정렬 기준", implementation = PaginationSortType.class)
-  protected PaginationSortType sortBy;
+    @Schema(description = "페이지당 크기 (기본값 = 10)", example = "10")
+    protected Integer size = 10;
 
-  @Schema(description = "정렬 방법", implementation = Sort.Direction.class)
-  protected Sort.Direction direction;
+    @Schema(description = "정렬 기준")
+    protected T sortBy;
 
-  public Pageable toPageable() {
-    return PageRequest.of(page, size, direction, sortBy.getField());
-  }
+    @Schema(description = "정렬 방법", implementation = Sort.Direction.class)
+    protected Sort.Direction direction = Sort.Direction.ASC;
+
+    public Pageable toPageable() {
+        return PageRequest.of(page, size, direction, sortBy.getField());
+    }
 }
