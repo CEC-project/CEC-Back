@@ -2,6 +2,7 @@ package com.backend.server.api.common.dto.pagination;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Sort;
  * 하위 클래스에서 구체적인 페이지네이션 파라미터를 정의할 수 있습니다.
  */
 @Getter
+@Setter
 public abstract class AbstractPaginationParam<T extends Enum<T> & SortTypeConvertible> {
 
     @Schema(description = "페이지 번호 (기본값 0)", example = "0")

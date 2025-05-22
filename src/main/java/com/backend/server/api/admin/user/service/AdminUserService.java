@@ -4,6 +4,7 @@ import com.backend.server.api.admin.user.dto.AdminUserListRequest;
 import com.backend.server.api.admin.user.dto.AdminUserListResponse;
 import com.backend.server.api.admin.user.dto.AdminUserRequest;
 import com.backend.server.api.admin.user.dto.AdminUserResponse;
+import com.backend.server.api.admin.user.dto.AdminUserSortType;
 import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Role;
@@ -28,7 +29,10 @@ public class AdminUserService {
     private final PasswordEncoder passwordEncoder;
 
     public AdminUserListResponse getUsers(AdminUserListRequest request) {
-        Pageable pageable = UserSpecification.getPageable(request);
+        if (request.getSortBy() == null)
+            request.setSortBy(AdminUserSortType.getDefault());
+        Pageable pageable = request.toPageable();
+
         Specification<User> spec = UserSpecification.filterUsers(request);
 
         Page<User> page = userRepository.findAll(spec, pageable);
