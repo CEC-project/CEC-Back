@@ -48,16 +48,23 @@ public class EquipmentModelSpecification {
     //페이징 생성
     //프론트에서 페이지 정보 없으면 0 , 10
     public static Pageable getPageable(EquipmentModelListRequest request) {
-        Direction direction = request.getSortDirection().equalsIgnoreCase("ASC") ? 
-            Direction.ASC : Direction.DESC;
         int page = request.getPage() != null ? request.getPage() : 0;
-        int size = request.getSize() != null ? request.getSize() : 10;
-            
-        return PageRequest.of(
-            page,
-            size,
-            Sort.by(direction, request.getSortBy())
-        );
+        int size = request.getSize() != null ? request.getSize() : 17;
+        String sortBy = StringUtils.hasText(request.getSortBy()) ? request.getSortBy() : "id";
+
+        String rawDirection = StringUtils.hasText(request.getSortDirection())
+                ? request.getSortDirection()
+                : "DESC";
+
+        // 안전하게 enum으로 변환. 잘못된 값이면 DESC로 폴백
+        Sort.Direction direction;
+        try {
+            direction = Sort.Direction.fromString(rawDirection);
+        } catch (IllegalArgumentException ex) {
+            direction = Sort.Direction.DESC;
+        }
+
+        return PageRequest.of(page, size, Sort.by(direction, sortBy));
     }
 
 

@@ -17,6 +17,7 @@ public class CommonSignInResponse {
     private String role;
     private String department;
     private String accessToken;
+    private String profilePicture;
     @Builder.Default
     private String tokenType = "Bearer";
 
@@ -27,6 +28,7 @@ public class CommonSignInResponse {
         this.role = user.getRole().name();
         this.department = user.getDepartment();
         this.accessToken = access;
+        this.profilePicture = user.getProfilePicture();
         this.tokenType = "Bearer";
     }
 }

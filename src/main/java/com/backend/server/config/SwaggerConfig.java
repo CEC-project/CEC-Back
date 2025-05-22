@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
     @Value("${swagger.server.url:http://localhost:8080}")
+    //@Value("${swagger.server.url:http://api.bmvcec.store}")
     private String url;
 
     @Bean
