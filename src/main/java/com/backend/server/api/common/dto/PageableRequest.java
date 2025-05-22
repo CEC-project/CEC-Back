@@ -7,6 +7,4 @@ public interface PageableRequest {
     Integer getSize();
     String getSortBy();
     String getSortDirection();
-    
-    
 }

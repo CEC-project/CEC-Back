@@ -31,8 +31,8 @@ public class NotificationSseController {
     //구독과 좋아용 그리고 알림설정 부탁드려요요
     @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @Operation(summary = "이거는 신경쓰지 않아도 됩니다", description = "알림 SSE 구독 설정하기")
-    public SseEmitter subscribe(@AuthenticationPrincipal LoginUser loginUser) {
-        return sseEmitterService.createEmitter(loginUser.getId());
+    public SseEmitter subscribe(@AuthenticationPrincipal LoginUser loginUser, @RequestParam("access_token") String token) {
+        return sseEmitterService.createEmitter(loginUser, token);
     }
     //알림 안읽은거 띄움
     @GetMapping
