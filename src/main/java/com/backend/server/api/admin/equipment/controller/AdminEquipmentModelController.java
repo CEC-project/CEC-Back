@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/admin/equipment-models")
 @RequiredArgsConstructor
-@Tag(name = "장비 모델 어드민 API", description = "장비 모델 조회 관련 API")
+@Tag(name = "\uD83D\uDCF7 장비 모델 어드민 API", description = "장비 모델 조회 관련 API")
 public class AdminEquipmentModelController {
 
     private final AdminEquipmentModelService adminEquipmentModelService;
@@ -81,7 +81,7 @@ public class AdminEquipmentModelController {
             - `sortBy`: 정렬 기준 필드명 (예: "name", "createdAt", "id" 등).
             - `sortDirection`: 정렬 방향 ("ASC" 오름차순, "DESC" 내림차순). 기본값은 "DESC"입니다.
     
-               page,size,sortBy,sortDirection을 제외한 파라미터는 선택사항입니다.
+               파라미터는 전부 선택사항입니다
     
             예시: `/api/models?categoryId=1&keyword=카메라&page=0&size=10&sortBy=name&sortDirection=ASC`
             """

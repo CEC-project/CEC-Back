@@ -2,6 +2,7 @@ package com.backend.server.model.repository;
 
 import com.backend.server.api.admin.user.dto.AdminUserListRequest;
 import com.backend.server.model.entity.User;
+import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,22 +17,26 @@ public class UserSpecification {
 
             if (request.getSearchKeyword() != null && request.getSearchType() != null) {
                 switch (request.getSearchType()) {
-                    case 0 -> predicate = cb.and(predicate, cb.like(root.get("name"), "%" + request.getSearchKeyword() + "%"));
-                    case 1 -> predicate = cb.and(predicate, cb.like(root.get("phoneNumber"), "%" + request.getSearchKeyword() + "%"));
-                    case 2 -> predicate = cb.and(predicate, cb.like(root.get("studentNumber"), "%" + request.getSearchKeyword() + "%"));
+                    case 0 -> predicate = cb.and(predicate, cb.like(
+                            root.get("name"), "%" + request.getSearchKeyword() + "%"));
+                    case 1 -> predicate = cb.and(predicate, cb.like(
+                            root.get("phoneNumber"), "%" + request.getSearchKeyword() + "%"));
+                    case 2 -> predicate = cb.and(predicate, cb.like(
+                            root.get("studentNumber"), "%" + request.getSearchKeyword() + "%"));
                 }
             }
 
-            if (request.getYear() != null) {
-                predicate = cb.and(predicate, cb.equal(root.get("year"), request.getYear()));
+            if (request.getGrade() != null) {
+                predicate = cb.and(predicate, cb.equal(root.get("grade"), request.getGrade()));
             }
 
             if (request.getGender() != null) {
                 predicate = cb.and(predicate, cb.equal(root.get("gender"), request.getGender()));
             }
 
-            if (request.getProfessor() != null) {
-                predicate = cb.and(predicate, cb.equal(root.get("professor"), request.getProfessor()));
+            if (request.getProfessorId() != null) {
+                predicate = cb.and(predicate, cb.equal(
+                        root.join("professor", JoinType.LEFT).get("id"), request.getProfessorId()));
             }
 
             return predicate;

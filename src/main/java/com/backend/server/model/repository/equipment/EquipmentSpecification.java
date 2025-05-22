@@ -22,15 +22,23 @@ public class EquipmentSpecification {
     public static <T extends PageableRequest> Pageable getPageable(T request) {
         int page = request.getPage() != null ? request.getPage() : 0;
         int size = request.getSize() != null ? request.getSize() : 17;
-        String sortBy = request.getSortBy() != null ? request.getSortBy() : "id";
-        String direction = request.getSortDirection() != null ? request.getSortDirection() : "DESC";
+        String sortBy = StringUtils.hasText(request.getSortBy()) ? request.getSortBy() : "id";
 
-        return PageRequest.of(
-                page,
-                size,
-                Sort.by(Sort.Direction.fromString(direction), sortBy)
-        );
+        String rawDirection = StringUtils.hasText(request.getSortDirection())
+                ? request.getSortDirection()
+                : "DESC";
+
+        // 안전하게 enum으로 변환. 잘못된 값이면 DESC로 폴백
+        Sort.Direction direction;
+        try {
+            direction = Sort.Direction.fromString(rawDirection);
+        } catch (IllegalArgumentException ex) {
+            direction = Sort.Direction.DESC;
+        }
+
+        return PageRequest.of(page, size, Sort.by(direction, sortBy));
     }
+
 
     // 장비 목록 필터링 (어드민용)
     public static Specification<Equipment> adminFilterEquipments(AdminEquipmentListRequest request) {
