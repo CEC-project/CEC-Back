@@ -32,8 +32,24 @@ public class CommonAuthController {
 
     @Operation(
             summary = "로그인 API",
-            description = "엑세스 토큰을 반환합니다. 엑세스 토큰은 15분만 지속됩니다.<br/>"
-                    + "http 상태 코드는 200 / 500 을 반환합니다. - 아래 응답 예시 참고")
+            description = """
+        사용자가 로그인하면 엑세스 토큰을 반환합니다.<br/>
+
+        <b>엑세스 토큰 정보:</b><br>
+        - JWT 형식의 토큰이 발급됩니다.<br>
+        - 토큰 유효 기간은 <code>15분</code>입니다.<br>
+
+        <b>응답 코드:</b><br>
+        - <code>200 OK</code>: 로그인 성공<br>
+        - <code>500 Internal Server Error</code>: 서버 오류 발생<br>
+
+        <hr/>
+
+        <b>※ 로그인과 관련된 공통 에러 코드 안내</b><br>
+        - <code>401 Unauthorized</code>: 로그인하지 않고 보호된 API에 접근한 경우<br>
+        - <code>408 Request Timeout</code>: JWT 토큰이 만료된 경우<br>
+        """
+    )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "로그인 성공",
                     content = @Content(examples = @ExampleObject(
