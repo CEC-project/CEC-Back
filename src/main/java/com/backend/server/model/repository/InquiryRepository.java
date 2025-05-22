@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
-        List<InquiryResponse> findAllbyAuthorId(Long authorId); //사용자 ID로 조회
+        List<InquiryResponse> findAllByAuthorId(Long authorId); //사용자 ID로 조회
     }
