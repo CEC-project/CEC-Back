@@ -22,7 +22,7 @@ public class InquiryService {
 
 
     @Transactional
-    public Long createInquiry(InquiryRequest request, Long currentUserId) {
+    public Long createInquiry(InquiryRequest request, Long currentUserId) { // 문의 글 쓰기
 
 
         Inquiry inquiry = Inquiry.builder()
@@ -38,7 +38,7 @@ public class InquiryService {
     }
 
     @Transactional(readOnly = true)
-    public InquiryResponse getInquiry(Long id, Long currentUserId) throws AccessDeniedException {
+    public InquiryResponse getInquiry(Long id, Long currentUserId) throws AccessDeniedException { // 게시글 상세 조회
         Inquiry inquiry = inquiryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 문의글이 존재하지 않습니다."));
 
         if (!inquiry.getAuthorId().equals(currentUserId)){
@@ -54,5 +54,20 @@ public class InquiryService {
                 .status(inquiry.getStatus())
                 .createdAt(inquiry.getCreatedAt().toString())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<InquiryResponse> getMyInquiries(Long currentUserId) { // 내 글 전체 조회
+        return inquiryRepository.findAllbyAuthorId(currentUserId).stream()
+                .map(inquiry -> InquiryResponse.builder()
+                        .id(inquiry.getId())
+                        .title(inquiry.getTitle())
+                        .content(inquiry.getContent())
+                        .attachmentUrl(inquiry.getAttachmentUrl())
+                        .type(inquiry.getType())
+                        .status(inquiry.getStatus())
+                        .createdAt(inquiry.getCreatedAt().toString())
+                        .build())
+        .toList();
     }
 }

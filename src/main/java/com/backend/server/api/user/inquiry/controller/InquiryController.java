@@ -6,11 +6,12 @@ import com.backend.server.api.user.inquiry.dto.InquiryResponse;
 import com.backend.server.api.user.inquiry.service.InquiryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+// import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/boards/inquiry")
@@ -30,7 +31,6 @@ public class InquiryController {
     }
 
     @GetMapping("/{id}") //GET, 상세 글 조회
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<InquiryResponse> getInquiry(
             @PathVariable Long id,
             @AuthenticationPrincipal LoginUser loginUser
@@ -38,5 +38,14 @@ public class InquiryController {
         Long currentUserId = loginUser.getId();
         InquiryResponse response = inquiryService.getInquiry(id, currentUserId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<InquiryResponse>> getMyInquiries(
+            @AuthenticationPrincipal LoginUser loginUser
+    ){
+        Long currentUserId = loginUser.getId();
+        List<InquiryResponse> responses = inquiryService.getMyInquiries(currentUserId);
+        return ResponseEntity.ok(responses);
     }
 }
