@@ -20,10 +20,10 @@ public class AdminManagerCandidatesResponse {
     @Schema(description = "사용자 이름", example = "홍길동")
     String name;
     
-    @Schema(description = "사용자 닉네임", example = "hong123")
+    @Schema(description = "사용자 닉네임", example = "길동이")
     String nickname;
     
-    @Schema(description = "사용자 권한", example = "USER")
+    @Schema(description = "사용자 권한", example = "ROLE_USER")
     Role role;
 
     public AdminManagerCandidatesResponse(User user) {

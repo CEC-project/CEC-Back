@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/equipment-models")
 @RequiredArgsConstructor
-@Tag(name = "장비 모델 API", description = "장비 모델 조회 관련 API")
+@Tag(name = "\uD83D\uDCF7 장비 모델 API", description = "장비 모델 조회 관련 API")
 public class EquipmentModelController {
     private final EquipmentModelService equipmentModelService;
 
