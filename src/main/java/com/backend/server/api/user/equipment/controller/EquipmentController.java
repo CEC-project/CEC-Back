@@ -20,7 +20,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 
-@Tag(name = "장비 관리", description = "장비 조회, 대여, 반납 관련 API")
+@Tag(name = "\uD83D\uDCF7 장비 관리", description = "장비 조회, 대여, 반납 관련 API")
 @RestController
 @RequestMapping("/api/user/equipments")
 @RequiredArgsConstructor
