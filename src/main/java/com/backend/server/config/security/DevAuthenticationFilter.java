@@ -2,8 +2,8 @@ package com.backend.server.config.security;
 
 import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.model.entity.enums.Role;
 import com.backend.server.model.entity.User;
+import com.backend.server.model.entity.enums.Role;
 import com.backend.server.model.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -11,6 +11,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -21,16 +23,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.io.IOException;
-import java.util.List;
 
 @Slf4j
-@Profile("prod")
+@Profile("!prod")
 @Component
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter extends AbstractAuthenticationFilter {
+public class DevAuthenticationFilter extends AbstractAuthenticationFilter {
 
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
@@ -46,16 +44,28 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationFilter {
             @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
-        // 엑세스 토큰이 없다면 인증하지 않고 다음 필터로 넘어감
+        // 엑세스 토큰이 없다면 DB 에서 ROLE_SUPER_ADMIN 을 찾아서 인증처리함
         String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
         if (!StringUtils.hasText(authorizationHeader)
                 || !authorizationHeader.startsWith(BEARER_PREFIX)
                 || authorizationHeader.length() == BEARER_PREFIX.length()) {
+
+            List<User> users = userRepository.findByRoleIn(Role.ROLE_SUPER_ADMIN, Role.ROLE_ADMIN);
+            if (users.isEmpty())
+                throw new UsernameNotFoundException("DB 에서 관리자 계정을 찾을수 없음");
+
+            User user = users.get(0);
+            LoginUser loginUser = new LoginUser(user);
+
+            var authorities = List.of(new SimpleGrantedAuthority(user.getRole().name()));
+            var authentication = new UsernamePasswordAuthenticationToken(loginUser, null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 엑세스 토큰이 존재하므로 인증처리함
+        // 엑세스 토큰이 존재하므로 정상적인 인증처리함
         try {
             // ✅ CSRF 방지: Referer 검사
             String referer = request.getHeader("Referer");

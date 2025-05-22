@@ -26,7 +26,7 @@ import org.springframework.web.cors.CorsConfiguration;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AbstractAuthenticationFilter authenticationFilter;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Bean
@@ -67,7 +67,7 @@ public class SecurityConfig {
                     .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                     .anyRequest().hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
             )
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling(configurer ->
                     configurer.accessDeniedHandler(
                                     (req, res, ex) ->
