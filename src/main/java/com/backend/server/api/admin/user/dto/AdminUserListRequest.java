@@ -1,6 +1,5 @@
 package com.backend.server.api.admin.user.dto;
 
-import com.backend.server.api.common.dto.pagination.AbstractPaginationParam;
 import lombok.Getter;
 import lombok.Setter;
 
