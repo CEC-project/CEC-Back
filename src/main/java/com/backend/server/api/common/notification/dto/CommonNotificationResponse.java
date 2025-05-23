@@ -9,12 +9,14 @@ import lombok.Getter;
 
 @Getter
 public class CommonNotificationResponse {
+    private Long id;
     private String totalMessage;
     private String link;
     private LocalDateTime createdAt;
     private boolean read;
 
     public CommonNotificationResponse(Notification notification){
+        this.id = notification.getId();
         this.totalMessage = "[" + notification.getCategory() + "] " + notification.getMessage();
         this.link = notification.getLink();
         this.createdAt = notification.getCreatedAt();

@@ -3,10 +3,14 @@ package com.backend.server.api.admin.equipment.dto.model;
 import com.backend.server.model.entity.EquipmentModel;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class AdminEquipmentModelCreateRequest {
     @Schema(description = "장비 모델명", example = "캐논 EOS R6")
     private String name;

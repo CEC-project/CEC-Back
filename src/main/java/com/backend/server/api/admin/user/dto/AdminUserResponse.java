@@ -36,7 +36,7 @@ public class AdminUserResponse {
         nickname = user.getNickname();
         year = user.getGrade();
         gender = user.getGender();
-        professor = user.getProfessor().getName();
+        professor = user.getProfessor() == null ? null : user.getProfessor().getName();
         phoneNumber = user.getPhoneNumber();
         email = user.getEmail();
         profilePicture = user.getProfilePicture();
