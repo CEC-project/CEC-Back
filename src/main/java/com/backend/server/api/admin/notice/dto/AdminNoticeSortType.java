@@ -7,9 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum AdminNoticeSortType implements SortTypeConvertible {
-    ID("id"),
-    //  NOTICE_AUTHOR("author.id") 연관관계를 사용한 정렬 시 예시코드
-    EMPTY(null);
+    ID("id");
 
     private final String field;
 }
