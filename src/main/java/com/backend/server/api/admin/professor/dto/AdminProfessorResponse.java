@@ -1,6 +1,5 @@
 package com.backend.server.api.admin.professor.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +13,5 @@ public class AdminProfessorResponse {
     private String name;
     private String description;
     private Long count;
-    @JsonFormat(pattern = "yyyy-MM-dd HH시:mm분:ss초")
     private LocalDateTime createdAt;
 }

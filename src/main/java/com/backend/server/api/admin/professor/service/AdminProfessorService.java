@@ -28,11 +28,11 @@ public class AdminProfessorService {
     @Transactional
     public Long updateProfessor(Long id, AdminProfessorRequest request) {
         Professor professor = professorRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        professor.toBuilder()
+        professor = professor.toBuilder()
                 .name(request.getName())
                 .description(request.getDescription())
                 .build();
-        professorRepository.save(professor);
+        professor = professorRepository.save(professor);
         return professor.getId();
     }
 

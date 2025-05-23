@@ -27,13 +27,13 @@ public class AdminBoardCategoryService {
 
     @Transactional
     public Long updateBoardCategory(Long id, AdminBoardCategoryRequest request) {
-        BoardCategory BoardCategory = boardCategoryRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        BoardCategory.toBuilder()
+        BoardCategory boardCategory = boardCategoryRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        boardCategory = boardCategory.toBuilder()
                 .name(request.getName())
                 .description(request.getDescription())
                 .build();
-        boardCategoryRepository.save(BoardCategory);
-        return BoardCategory.getId();
+        boardCategory = boardCategoryRepository.save(boardCategory);
+        return boardCategory.getId();
     }
 
     public void deleteBoardCategory(Long id) {
