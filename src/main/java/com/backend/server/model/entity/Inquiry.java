@@ -46,4 +46,11 @@ public class Inquiry extends BaseTimeEntity {
     @Column(nullable = false)
     @Builder.Default
     private AnswerStatus status = AnswerStatus.WAITING; // 기본값 답변 대기 설정
+
+    public void update(String title, String content, String attachmentUrl, InquiryType type){ // 수정
+        this.title = title;
+        this.content = content;
+        this.attachmentUrl = attachmentUrl;
+        this.type = type;
+    }
 }
