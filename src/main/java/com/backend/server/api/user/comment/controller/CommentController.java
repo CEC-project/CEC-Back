@@ -13,10 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "댓글", description = "댓글 API")
 @RestController
@@ -41,9 +38,10 @@ public class CommentController {
             summary = "댓글 목록 조회",
             description = "댓글 목록 조회 api"
     )
-    @PostMapping
+    @GetMapping
     public ApiResponse<CommentListResponse> getComments(
-            @Parameter(description = "댓글 목록 조회 Parameter") @ParameterObject CommentListRequest request
+            @Parameter(description = "댓글 목록 조회 Parameter")
+            @ParameterObject CommentListRequest request
     ) {
         return ApiResponse.success("댓글 목록 조회 성공", commentService.getComments(request));
     }

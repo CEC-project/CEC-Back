@@ -11,11 +11,11 @@ import com.backend.server.model.entity.enums.TargetType;
 import com.backend.server.model.repository.CommentRepository;
 import com.backend.server.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -34,14 +34,16 @@ public class CommentService {
             throw new RuntimeException("댓글 대상을 찾을 수 없습니다.");
         }
 
-        Comment parentComment = commentRepository.findById(request.parentCommentId()).orElse(null);
+        Comment parentComment = request.parentCommentId() == null ? null
+                : commentRepository.findById(request.parentCommentId())
+                .orElseThrow(() -> new RuntimeException("원본 댓글을를 찾을 수 없습니다."));
         Comment comment = request.toEntity(parentComment, currentuser);
         commentRepository.save(comment);
         return new CommentIdResponse(comment.getId());
     }
 
-    public CommentListResponse getComments(CommentListRequest request) {
-        List<Comment> comments = commentRepository.findAllByTargetId(request.targetId());
-        return new CommentListResponse(comments);
+    public CommentListResponse getComments( CommentListRequest request) {
+        Page<Comment> page = commentRepository.findAllByTargetId(request.getTargetId(), request.toPageable());
+        return CommentListResponse.fromPage(page);
     }
 }

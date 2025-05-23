@@ -1,10 +1,10 @@
 package com.backend.server.model.repository;
 
 import com.backend.server.model.entity.Comment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findAllByTargetId(Long targetId);
+    Page<Comment> findAllByTargetId(Long targetId, Pageable pageable);
 }

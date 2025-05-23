@@ -10,7 +10,7 @@ public record CommentListResponse(
         List<CommentResponse> comments,
         PageableInfo pageable
 ) {
-    public static CommentListResponse from(Page<Comment> page) {
+    public static CommentListResponse fromPage(Page<Comment> page) {
         List<CommentResponse> comments = page.getContent().stream()
                 .map(CommentResponse::from)
                 .toList();
