@@ -22,10 +22,10 @@ public class JwtUtil {
     @Value("${spring.jwt.secret:111111}")
     private String secret;
 
-    @Value("${access-token-validity-in-minutes:15}")
+    @Value("${spring.jwt.access-token-validity-in-minutes:15}")
     private long accessTokenValidityInMinutes;
 
-    @Value("${refresh-token-validity-in-days:14}")
+    @Value("${spring.jwt.refresh-token-validity-in-days:14}")
     private long refreshTokenValidityInDays;
 
     private long accessTokenValidity;
