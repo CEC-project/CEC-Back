@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 @Slf4j
-@Profile("!prod")
+@Profile("dev")
 @Component
 @RequiredArgsConstructor
 public class DevAuthenticationFilter extends AbstractAuthenticationFilter {
