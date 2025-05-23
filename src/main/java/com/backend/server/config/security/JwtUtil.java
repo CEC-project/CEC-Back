@@ -68,7 +68,7 @@ public class JwtUtil {
                 .path("/api/auth/token/refresh")
                 .maxAge(refreshTokenDuration)
                 .build();
-        response.addHeader("Set-Cookie", cookie.getValue());
+        response.addHeader("Set-Cookie", cookie.toString());
     }
 
     public void deleteRefreshCookie(HttpServletResponse response) {
