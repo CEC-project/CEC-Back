@@ -2,10 +2,7 @@ package com.backend.server.api.user.comment.controller;
 
 import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.api.user.comment.dto.CommentIdResponse;
-import com.backend.server.api.user.comment.dto.CommentListRequest;
-import com.backend.server.api.user.comment.dto.CommentListResponse;
-import com.backend.server.api.user.comment.dto.CommentRequest;
+import com.backend.server.api.user.comment.dto.*;
 import com.backend.server.api.user.comment.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,9 +37,19 @@ public class CommentController {
     )
     @GetMapping
     public ApiResponse<CommentListResponse> getComments(
-            @Parameter(description = "댓글 목록 조회 Parameter")
-            @ParameterObject CommentListRequest request
-    ) {
+            @Parameter(description = "댓글 목록 조회 Parameter") @ParameterObject CommentListRequest request) {
         return ApiResponse.success("댓글 목록 조회 성공", commentService.getComments(request));
+    }
+
+    @Operation(
+            summary = "댓글 수정",
+            description = "댓글 수정 api"
+    )
+    @PatchMapping("{id}")
+    public ApiResponse<CommentIdResponse> updateComment(
+            @Parameter(description = "댓글 수정 요청 DTO") @RequestBody CommentUpdateRequest request,
+            @Parameter(description = "댓글 ID") @PathVariable("id") Long commentId,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        return ApiResponse.success("댓글 수정 성공", commentService.updateComment(request, commentId, loginUser));
     }
 }

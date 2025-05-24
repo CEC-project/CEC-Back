@@ -4,15 +4,19 @@ import com.backend.server.api.common.dto.ProfileResponse;
 import com.backend.server.model.entity.Comment;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.TargetType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-public record CommentResponse(
-        Long id,
-        TargetType type,
-        Long targetId,
-        String content,
-        Long parentCommentId,
-        ProfileResponse author
-) {
+@Getter
+@AllArgsConstructor
+public class CommentResponse {
+    private Long id;
+    private TargetType type;
+    private Long targetId;
+    private String content;
+    private Long parentCommentId;
+    private ProfileResponse author;
+
     public static CommentResponse from(Comment comment) {
         User user = comment.getAuthor();
 
