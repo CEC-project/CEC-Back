@@ -52,4 +52,15 @@ public class CommentController {
             @AuthenticationPrincipal LoginUser loginUser) {
         return ApiResponse.success("댓글 수정 성공", commentService.updateComment(request, commentId, loginUser));
     }
+
+    @Operation(
+            summary = "댓글 삭제",
+            description = "댓글 삭제 api"
+    )
+    @DeleteMapping("{id}")
+    public ApiResponse<CommentIdResponse> deleteComment(
+            @Parameter(description = "댓글 ID") @PathVariable("id") Long commentId,
+            @AuthenticationPrincipal LoginUser loginUser) {
+        return ApiResponse.success("댓글 삭제 성공", commentService.deleteComment(commentId, loginUser));
+    }
 }

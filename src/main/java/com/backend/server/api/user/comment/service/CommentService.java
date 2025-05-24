@@ -57,4 +57,13 @@ public class CommentService {
         Comment updated = commentRepository.save(comment);
         return new CommentIdResponse(updated.getId());
     }
+
+    public CommentIdResponse deleteComment(Long commentId, LoginUser loginUser) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다."));
+        comment.validateAuthor(loginUser.getId());
+
+        commentRepository.delete(comment);
+        return new CommentIdResponse(comment.getId());
+    }
 }
