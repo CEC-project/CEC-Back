@@ -1,6 +1,9 @@
 package com.backend.server.api.user.notice.dto;
 
+import com.backend.server.api.common.dto.ProfileResponse;
+import com.backend.server.api.user.mypage.dto.MyInfoResponse;
 import com.backend.server.model.entity.Notice;
+import com.backend.server.model.entity.User;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -15,12 +18,11 @@ public class NoticeResponse {
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
-  private Long authorId;
-  private String authorName;
-  private String authorNickname;
-  private String authorProfilePicture;
+  private ProfileResponse author;
 
   public NoticeResponse(Notice notice) {
+    User user = notice.getAuthor();
+
     this.id = notice.getId();
     this.title = notice.getTitle();
     this.content = notice.getContent();
@@ -29,9 +31,12 @@ public class NoticeResponse {
     this.createdAt = notice.getCreatedAt();
     this.updatedAt = notice.getUpdatedAt();
 
-    this.authorId = notice.getAuthor().getId();
-    this.authorName = notice.getAuthor().getName();
-    this.authorNickname = notice.getAuthor().getNickname();
-    this.authorProfilePicture = notice.getAuthor().getProfilePicture();
+    this.author = new ProfileResponse(
+            user.getId(),
+            user.getName(),
+            user.getNickname(),
+            user.getProfilePicture(),
+            user.getRole().name()
+    );
   }
 }

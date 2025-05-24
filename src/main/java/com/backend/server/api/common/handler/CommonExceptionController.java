@@ -2,11 +2,15 @@ package com.backend.server.api.common.handler;
 
 import com.backend.server.api.common.dto.ApiResponse;
 import io.jsonwebtoken.JwtException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolationException;
+
+import java.nio.file.AccessDeniedException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.method.MethodValidationException;
@@ -20,6 +24,20 @@ public class CommonExceptionController {
     @ExceptionHandler(Exception.class)
     public ApiResponse<Object> handleRuntimeException(HttpServletResponse res, Exception ex) {
         res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        log.error(ex.getMessage(), ex);
+        return ApiResponse.fail(getTimeString() + ex.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ApiResponse<Object> handleAccessDeniedException(HttpServletResponse res, Exception ex) {
+        res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        log.error(ex.getMessage(), ex);
+        return ApiResponse.fail(getTimeString() + ex.getMessage());
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ApiResponse<Object> handleEntityNotFoundException(HttpServletResponse res, Exception ex) {
+        res.setStatus(HttpServletResponse.SC_NOT_FOUND);
         log.error(ex.getMessage(), ex);
         return ApiResponse.fail(getTimeString() + ex.getMessage());
     }
