@@ -14,7 +14,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -41,8 +43,18 @@ public class CommentService {
     }
 
     public CommentListResponse getComments(CommentListRequest request) {
-        Page<Comment> page = commentRepository.findAllByTargetId(request.getTargetId(), request.toPageable());
-        return CommentListResponse.fromPage(page);
+        Page<Comment> parentComments = commentRepository.findAllByTargetIdAndParentCommentIsNullWithAuthor(
+                request.getTargetId(), request.toPageable()
+        );
+
+        List<Long> parentIds = parentComments.getContent().stream()
+                .map(Comment::getId)
+                .toList();
+
+        List<Comment> childComments = parentIds.isEmpty() ? List.of() :
+                commentRepository.findAllByParentCommentIdInWithAuthor(parentIds);
+
+        return CommentListResponse.from(parentComments, childComments);
     }
 
     public CommentIdResponse updateComment(CommentUpdateRequest request, Long commentId, LoginUser loginUser) {

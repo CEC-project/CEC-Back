@@ -18,11 +18,19 @@ public class CommentListResponse {
     private List<CommentResponse> comments;
     private PageableInfo pageable;
 
-    public static CommentListResponse fromPage(Page<Comment> page) {
-        List<CommentResponse> comments = page.getContent().stream()
-                .map(CommentResponse::from)
-                .toList();
-        PageableInfo pageable = new PageableInfo(page.getNumber(), page.getSize(), page.getTotalPages(), page.getTotalElements());
-        return new CommentListResponse(comments, pageable);
+    public static CommentListResponse from(Page<Comment> parentComments, List<Comment> childComments) {
+        List<CommentResponse> responses = CommentResponse.from(
+                parentComments.getContent(),
+                childComments
+        );
+
+        PageableInfo pageable = new PageableInfo(
+                parentComments.getNumber(),
+                parentComments.getSize(),
+                parentComments.getTotalPages(),
+                parentComments.getTotalElements()
+        );
+
+        return new CommentListResponse(responses, pageable);
     }
 }
