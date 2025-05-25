@@ -24,12 +24,24 @@ values  ('2001-03-15', 0, 3, 5, 2, 1,
          '유저유저', '유저유저', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
          '010-3456-7890', 'profile3.png', 'ROLE_USER', '202300004');
 
+-- 강의실 INSERT
+insert into public.classroom (available, end_time, start_time, created_at, id, manager_id, renter_id, updated_at, attachment, location, name, status)
+values
+    (true, '10:00:00', '09:00:00', now(), 2, 2, null, now(), null, '101', '101호', 'AVAILABLE'),
+    (true, '10:00:00', '09:00:00', now(), 3, 2, null, now(), null, '102', '102호', 'AVAILABLE'),
+    (true, '10:00:00', '09:00:00', now(), 4, 2, null, now(), null, '103', '103호', 'AVAILABLE'),
+    (true, '10:00:00', '09:00:00', now(), 5, 2, null, now(), null, '105', '105호', 'AVAILABLE'),
+    (true, '10:00:00', '09:00:00', now(), 6, 2, null, now(), null, '201', '201호', 'AVAILABLE');
+
+-- 교수 INSERT
 insert into public.professor (created_at, id, updated_at, description, name)
-values  ('2025-05-25 16:40:29.496279', 1, '2025-05-25 16:40:29.496279', '자바 담당', '유응구'),
-        ('2025-05-25 16:40:42.255493', 2, '2025-05-25 16:40:42.255493', 'PHP 담당', '윤형태'),
-        ('2025-05-25 16:40:51.089530', 3, '2025-05-25 16:40:51.089530', 'iOS 담당', '한성현'),
-        ('2025-05-25 16:43:52.925451', 5, '2025-05-25 16:43:52.925451', 'C# 담당', '고수정'),
-        ('2025-05-25 16:43:55.884008', 6, '2025-05-25 16:44:02.382902', '122', '12');
+values
+    (now(), 10, now(), '학과장', '최일묵'),
+    (now(), 11, now(), '', '이상봉'),
+    (now(), 12, now(), '', '박규준'),
+    (now(), 13, now(), '', '오강선'),
+    (now(), 14, now(), '', '송현선'),
+    (now(), 15, now(), '', '이정한');
 
  insert into notice (title, content, important, attachment_url, author_id, created_at, updated_at)
        values

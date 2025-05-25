@@ -53,6 +53,7 @@ public class AdminEquipmentController {
     
             입력 항목에는 이미지 경로, 카테고리 ID, 모델 ID, 수량, 관리자 ID, 설명, 제한 학년 등이 포함됩니다.
             """
+
     )
     public ApiResponse<AdminEquipmentIdsResponse> createEquipment(
             @RequestBody AdminEquipmentCreateRequest request) {
@@ -188,6 +189,7 @@ public class AdminEquipmentController {
         return ApiResponse.success("대여 요청 거절 성공", null);
     }
 
+
 //    @PostMapping("/return")
 //    @Operation(
 //            summary = "반납 처리",
@@ -197,6 +199,7 @@ public class AdminEquipmentController {
 //        adminEquipmentService.processReturnRequests(equipmentIds);
 //        return ApiResponse.success("반납 처리 성공", null);
 //    }
+
 
     @PostMapping("/broken")
     @Operation(
