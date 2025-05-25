@@ -41,34 +41,34 @@ public class AdminUserService {
     }
 
     @Transactional
-    public AdminUserResponse updateUser(Long id, AdminUserRequest request) {
+    public Long updateUser(Long id, AdminUserRequest request) {
         User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         Professor professor = professorRepository.findById(request.getProfessorId())
                 .orElseThrow(IllegalArgumentException::new);
         user.update(professor, request);
         user = userRepository.save(user);
-        return new AdminUserResponse(user);
+        return user.getId();
     }
 
     @Transactional
-    public AdminUserResponse resetUserPassword(Long id) {
+    public Long resetUserPassword(Long id) {
         User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         user.toBuilder().password(passwordEncoder.encode(user.getStudentNumber()));
-        userRepository.save(user);
-        return new AdminUserResponse(user);
+        user = userRepository.save(user);
+        return user.getId();
     }
 
     @Transactional
-    public AdminUserResponse createUser(AdminUserRequest request) {
+    public Long createUser(AdminUserRequest request) {
         Professor professor = professorRepository.findById(request.getProfessorId())
                 .orElseThrow(IllegalArgumentException::new);
-        User user = request.toEntity(professor, passwordEncoder);
+        User user = request.toEntity(professor, Role.ROLE_USER, passwordEncoder);
         user = userRepository.save(user);
-        return new AdminUserResponse(user);
+        return user.getId();
     }
 
-    public List<AdminUserResponse> getAdmins() {
-        return userRepository.findByRoleInOrderByNameAsc(List.of(Role.ROLE_ADMIN, Role.ROLE_SUPER_ADMIN))
+    public List<AdminUserResponse> getAdmins(List<Role> roles) {
+        return userRepository.findByRoleInOrderByNameAsc(roles)
                 .stream()
                 .map(AdminUserResponse::new)
                 .collect(Collectors.toList());

@@ -7,6 +7,8 @@ import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
 import com.backend.server.api.admin.classroom.service.AdminClassroomService;
 import com.backend.server.api.common.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -28,9 +30,25 @@ public class AdminClassroomController {
 
     private final AdminClassroomService adminClassroomService;
 
-    @Operation(summary = "강의실 검색 API", description = "검색 조건에 따라 강의실을 조회합니다.")
+    @Operation(
+            summary = "강의실 검색 API",
+            description = """
+        관리자 페이지에서 강의실을 검색 조건에 따라 조회합니다.
+
+        <b>🔍 검색 조건:</b><br>
+        - <code>keyword</code>: 검색 키워드 (검색 타입에 따라 조회 기준이 달라집니다)<br>
+        - <code>type</code>: 검색 타입 (ID: 강의실 ID, NAME: 이름, DESCRIPTION: 설명, ALL: 전부 검색)<br>
+
+        ⚠️ <b>검색 키워드는 생략 가능하지만, 검색시에는 검색 타입도 지정해야 의미 있는 결과가 반환됩니다.</b>
+        """
+    )
+    @Parameters({
+            @Parameter(name = "keyword", description = "검색 키워드 (검색 타입에 따라 다르게 사용됨)"),
+            @Parameter(name = "type", description = "검색 타입 (ID: 강의실 ID, NAME: 이름, DESCRIPTION: 설명, ALL: 전부 검색)")
+    })
     @GetMapping
-    public ApiResponse<List<AdminClassroomResponse>> searchClassrooms(@Valid AdminClassroomSearchRequest request) {
+    public ApiResponse<List<AdminClassroomResponse>> searchClassrooms(
+            @Parameter(hidden = true) @Valid AdminClassroomSearchRequest request) {
         List<AdminClassroomResponse> result = adminClassroomService.searchClassrooms(request);
         return ApiResponse.success("강의실 목록 조회 성공", result);
     }

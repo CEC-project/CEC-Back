@@ -89,6 +89,7 @@ public class User extends BaseTimeEntity {
 
     public void update(Professor professor, AdminUserRequest request) {
         this.name = request.getName();
+        this.nickname = request.getNickname();
         this.studentNumber = request.getStudentNumber();
         this.grade = request.getGrade();
         this.gender = request.getGender();

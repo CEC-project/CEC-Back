@@ -206,7 +206,7 @@ public class EquipmentController {
         return ApiResponse.success("반납 요청 취소 성공", null);
     }
 
-
+    // 추후 활성화 예정
     // @GetMapping("/my-rentals")
     // public ApiResponse<List<Equipment>> getMyRentals(@RequestParam Long userId) {
     //     return ApiResponse.success("내 대여 목록 조회 성공", equipmentService.getMyRentals(userId));

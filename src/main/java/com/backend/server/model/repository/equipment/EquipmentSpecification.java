@@ -46,11 +46,14 @@ public class EquipmentSpecification {
             // 카테고리(장비분류)
             if (request.getCategoryId() != null) {
                 predicates.add(cb.equal(root.get("equipmentCategory").get("id"), request.getCategoryId()));
+
             }
 
             // 모델명
             if (StringUtils.hasText(request.getModelName())) {
+
                 predicates.add(cb.like(cb.lower(root.get("equipmentModel").get("name")), "%" + request.getModelName().toLowerCase() + "%"));
+
             }
 
             // 일련번호
@@ -101,7 +104,9 @@ public class EquipmentSpecification {
 
             // 카테고리(장비분류)
             if (request.getCategoryId() != null) {
+
                 predicates.add(cb.equal(root.get("equipmentCategory").get("id"), request.getCategoryId()));
+
             }
 
             // 모델명

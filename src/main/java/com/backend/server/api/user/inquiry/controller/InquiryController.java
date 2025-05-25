@@ -48,4 +48,25 @@ public class InquiryController {
         List<InquiryResponse> responses = inquiryService.getMyInquiries(currentUserId);
         return ResponseEntity.ok(responses);
     }
+
+    @PutMapping("/{id}") // PUT, 문의글 수정
+    public ResponseEntity<Void> updateInquiry(
+        @PathVariable Long id,
+        @RequestBody InquiryRequest request,
+        @AuthenticationPrincipal LoginUser loginUser
+    ) throws AccessDeniedException {
+        Long currentUserId = loginUser.getId();
+        inquiryService.updateInquiry(id, request, currentUserId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}") // DELETE, 문의글 삭제
+    public ResponseEntity<Void> deleteInquiry(
+            @PathVariable Long id,
+            @AuthenticationPrincipal LoginUser loginUser
+    ) throws AccessDeniedException {
+        Long currentUserId = loginUser.getId();
+        inquiryService.deleteInquiry(id, currentUserId);
+        return ResponseEntity.ok().build();
+    }
 }
