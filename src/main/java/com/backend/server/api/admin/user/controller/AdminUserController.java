@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -113,10 +114,10 @@ public class AdminUserController {
     })
     @GetMapping("/admin")
     public ApiResponse<List<AdminUserResponse>> getAdmins(@RequestParam(required = false) List<Role> roles) {
+        if (roles == null || roles.isEmpty())
+            roles = Collections.singletonList(Role.ROLE_SUPER_ADMIN);
         if (roles.contains(Role.ROLE_USER))
             throw new IllegalArgumentException("유저 권한을 조회하는 API 가 아닙니다.");
-        if (roles.isEmpty())
-            roles.add(Role.ROLE_SUPER_ADMIN);
         return ApiResponse.success("관리자 목록 조회 성공", adminUserService.getAdmins(roles));
     }
 }
