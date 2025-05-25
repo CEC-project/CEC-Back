@@ -7,9 +7,13 @@ import com.backend.server.api.admin.user.dto.AdminUserResponse;
 import com.backend.server.api.admin.user.service.AdminUserService;
 import com.backend.server.api.common.dto.ApiResponse;
 
+import com.backend.server.model.entity.enums.Role;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -70,7 +74,7 @@ public class AdminUserController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<AdminUserResponse> updateUser(
+    public ApiResponse<Long> updateUser(
             @PathVariable Long id,
             @Valid @RequestBody AdminUserRequest request) {
         return ApiResponse.success("사용자 수정 성공", adminUserService.updateUser(id, request));
@@ -79,18 +83,40 @@ public class AdminUserController {
     @Operation(summary = "사용자 비밀번호 초기화 API",
             description = "비밀번호는 학번으로 초기화 됩니다.")
     @PatchMapping("/{id}")
-    public ApiResponse<AdminUserResponse> updateUser(
+    public ApiResponse<Long> updateUser(
             @PathVariable Long id) {
         return ApiResponse.success("비밀번호 초기화 성공", adminUserService.resetUserPassword(id));
     }
 
     @PostMapping
-    public ApiResponse<AdminUserResponse> createUser(@Valid @RequestBody AdminUserRequest request) {
+    public ApiResponse<Long> createUser(@Valid @RequestBody AdminUserRequest request) {
         return ApiResponse.success("사용자 등록 성공", adminUserService.createUser(request));
     }
 
+    @Operation(
+            summary = "관리자 목록 조회",
+            description = """
+    강의실 조회등에서 사용할 관리자 목록 조회기능
+    """
+    )
+    @Parameters({
+            @Parameter(
+                    name = "roles",
+                    description = "조회할 사용자 역할 (중복 선택 가능)<br>"
+                            + "예: roles=ROLE_ADMIN&roles=ROLE_SUPER_ADMIN<br>"
+                            + "생략할시 ROLE_SUPER_ADMIN 조회됨",
+                    example = "ADMIN",
+                    in = ParameterIn.QUERY,
+                    array = @ArraySchema(
+                            schema = @Schema(type = "string", allowableValues = {"ROLE_ADMIN", "ROLE_SUPER_ADMIN"}))
+            )
+    })
     @GetMapping("/admin")
-    public ApiResponse<List<AdminUserResponse>> getAdmins() {
-        return ApiResponse.success("관리자 목록 조회 성공", adminUserService.getAdmins());
+    public ApiResponse<List<AdminUserResponse>> getAdmins(@RequestParam(required = false) List<Role> roles) {
+        if (roles.contains(Role.ROLE_USER))
+            throw new IllegalArgumentException("유저 권한을 조회하는 API 가 아닙니다.");
+        if (roles.isEmpty())
+            roles.add(Role.ROLE_SUPER_ADMIN);
+        return ApiResponse.success("관리자 목록 조회 성공", adminUserService.getAdmins(roles));
     }
 }
