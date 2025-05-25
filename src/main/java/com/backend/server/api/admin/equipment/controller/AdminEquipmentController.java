@@ -49,10 +49,10 @@ public class AdminEquipmentController {
     @Operation(
             summary = "장비 등록",
             description = """
-        새 장비를 시스템에 등록합니다.
-
-        입력 항목에는 이미지 경로, 카테고리 ID, 모델 ID, 수량, 관리자 ID, 설명, 제한 학년 등이 포함됩니다.
-        """
+            새 장비를 시스템에 등록합니다.
+    
+            입력 항목에는 이미지 경로, 카테고리 ID, 모델 ID, 수량, 관리자 ID, 설명, 제한 학년 등이 포함됩니다.
+            """
     )
     public ApiResponse<AdminEquipmentIdsResponse> createEquipment(
             @RequestBody AdminEquipmentCreateRequest request) {
@@ -188,15 +188,15 @@ public class AdminEquipmentController {
         return ApiResponse.success("대여 요청 거절 성공", null);
     }
 
-    @PostMapping("/return")
-    @Operation(
-            summary = "반납 처리",
-            description = "RETURN_PENDING 또는 IN_USE 상태의 장비를 AVAILABLE 상태로 변경합니다."
-    )
-    public ApiResponse<Void> processReturnRequests(@RequestBody List<Long> equipmentIds) {
-        adminEquipmentService.processReturnRequests(equipmentIds);
-        return ApiResponse.success("반납 처리 성공", null);
-    }
+//    @PostMapping("/return")
+//    @Operation(
+//            summary = "반납 처리",
+//            description = "RETURN_PENDING 또는 IN_USE 상태의 장비를 AVAILABLE 상태로 변경합니다."
+//    )
+//    public ApiResponse<Void> processReturnRequests(@RequestBody List<Long> equipmentIds) {
+//        adminEquipmentService.processReturnRequests(equipmentIds);
+//        return ApiResponse.success("반납 처리 성공", null);
+//    }
 
     @PostMapping("/broken")
     @Operation(
