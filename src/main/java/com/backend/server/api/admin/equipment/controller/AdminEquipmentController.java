@@ -84,7 +84,7 @@ public class AdminEquipmentController {
 
     //장비  리스트 어드민 조회
     @Operation(
-            summary = "장비 리스트 조회",
+            summary = "장비 리스트 검색, 분류 조건 조회",
             description = """
         관리자 페이지에서 장비 목록을 검색, 필터링, 정렬, 페이징 조건에 따라 조회합니다.
 
@@ -92,7 +92,7 @@ public class AdminEquipmentController {
         - <code>categoryId</code>: 장비 카테고리 ID (예: 1)<br>
         - <code>modelName</code>: 모델명 (부분 일치 검색)<br>
         - <code>serialNumber</code>: 장비 일련번호 (부분 일치 검색)<br>
-        - <code>status</code>: 장비 상태 (예: AVAILABLE, BROKEN 등)<br>
+        - <code>status</code>: 장비 상태 (예: AVAILABLE, BROKEN, IN_USE,RENTAL_PENDING,RETURN_PENDING 등)<br>
         - <code>isAvailable</code>: 대여 가능 여부 (true/false)<br>
         - <code>renterName</code>: 현재 대여자 이름 (부분 일치 검색)<br>
         - <code>searchKeyword</code>: 모델명, 일련번호, 대여자 이름에 대한 통합 키워드 검색<br>
@@ -106,25 +106,12 @@ public class AdminEquipmentController {
         - <code>size</code>: 페이지당 항목 수 (기본값: 17)<br>
 
         ⚠️ 파라미터 다 선택사항이며, 조건을 조합하여 사용할 수 있습니다.
+        
+        현재 admin페이지에서는 장비 분류에 따른 검색만 보이니까
+                아래와 같은 예시를 사용하면 될 거 같아요
+        예시: `/api/admin/equipments?categoryId=1&modelName=SONY-A7000&keyword=카메라&sortBy=name`
         """
     )
-    @Parameters({
-            @Parameter(name = "categoryId", description = "장비 카테고리 ID"),
-            @Parameter(name = "modelName", description = "모델명 (부분 일치 검색)"),
-            @Parameter(name = "serialNumber", description = "일련번호 (부분 일치 검색)"),
-            @Parameter(name = "status", description = "장비 상태 (AVAILABLE(\"대여 가능\"),\n" +
-                    "    IN_USE(\"대여중\"),\n" +
-                    "    BROKEN(\"파손\"),\n" +
-                    "    RENTAL_PENDING(\"대여 신청 중\"),\n" +
-                    "    RETURN_PENDING(\"반납 처리중\"))"),
-            @Parameter(name = "isAvailable", description = "대여 가능 여부 (true/false)"),
-            @Parameter(name = "renterName", description = "현재 대여자 이름 (부분 일치 검색)"),
-            @Parameter(name = "searchKeyword", description = "모델명, 일련번호, 대여자 이름 통합 검색 키워드"),
-            @Parameter(name = "sortBy", description = "정렬 기준 (id, createdAt, rentalCount, repairCount, brokenCount 등)"),
-            @Parameter(name = "sortDirection", description = "정렬 방향 (asc 또는 desc)"),
-            @Parameter(name = "page", description = "페이지 번호 (0부터 시작)"),
-            @Parameter(name = "size", description = "한 페이지당 항목 수 (기본값: 17)")
-    })
     @GetMapping
     public ApiResponse<AdminEquipmentListResponse> getEquipments(
             @ModelAttribute AdminEquipmentListRequest request
@@ -136,7 +123,7 @@ public class AdminEquipmentController {
     //장비 단일 상세조회
     @GetMapping("/{id}")
     @Operation(
-        summary = "장비 단일 상세 조회",
+        summary = "장비 단일 조회",
         description = "장비 ID로 단일 장비의 상세 정보를 조회합니다."
     )
     public ApiResponse<AdminEquipmentResponse> getEquipment(@PathVariable Long id) {

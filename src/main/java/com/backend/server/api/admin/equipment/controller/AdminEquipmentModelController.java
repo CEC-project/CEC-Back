@@ -82,8 +82,10 @@ public class AdminEquipmentModelController {
             - `sortDirection`: 정렬 방향 ("ASC" 오름차순, "DESC" 내림차순). 기본값은 "DESC"입니다.
     
                파라미터는 전부 선택사항입니다
+               
+              
     
-            예시: `/api/models?categoryId=1&keyword=카메라&page=0&size=10&sortBy=name&sortDirection=ASC`
+            예시: `/api/admin/equipment-models?categoryId=1&keyword=카메라&sortBy=name`
             """
     )
     public ApiResponse<EquipmentModelListResponse> getAllModels(EquipmentModelListRequest request) {
@@ -93,7 +95,7 @@ public class AdminEquipmentModelController {
 
     @GetMapping("/{id}")
     @Operation(
-        summary = "장비 모델 상세 조회",
+        summary = "장비 모델 단건 조회",
         description = "지정한 ID에 해당하는 장비 모델의 상세 정보를 조회합니다. " +
                     "모델명, 영문 코드, 가용성 상태, 관련 카테고리 정보 등을 반환합니다."
     )
@@ -101,18 +103,4 @@ public class AdminEquipmentModelController {
         return ApiResponse.success("장비 모델 단건 조회 성공", equipmentModelService.getModel(id));
     }
 
-    @GetMapping("/category/{categoryId}")
-    @Operation(
-        summary = "카테고리에 속한 장비 모델 목록 조회",
-        description = "지정한 카테고리에 속한 모든 장비 모델 목록을 조회합니다."
-    )
-    public ApiResponse<EquipmentModelListResponse> getModelsByCategory(
-            @Parameter(description = "카테고리 ID", example = "1")
-            @PathVariable Long categoryId) {
-        
-        return ApiResponse.success(
-            "카테고리별 장비 모델 조회 성공", 
-            equipmentModelService.getModelsByCategory(categoryId)
-        );
-    }
 }

@@ -44,7 +44,7 @@ public class EquipmentModelController {
         - <code>page</code>: 페이지 번호 (0부터 시작)<br>
         - <code>size</code>: 페이지당 항목 수<br>
 
-        모든 파라미터는 선택값이며, 조합하여 사용할 수 있습니다.
+        모든 파라미터는 선택값이며, 조합하여 사용할 수 있습니다. 밑에 require는 무시!!
         예시: <code>?categoryId=1&keyword=카메라&sortBy=name&sortDirection=desc&page=0&size=10</code>
         """
     )
@@ -52,7 +52,7 @@ public class EquipmentModelController {
             @Parameter
             @ModelAttribute EquipmentModelListRequest request
     ) {
-        return ApiResponse.success("장비 모델 목록 조회 성공", equipmentModelService.getAllModels(request));
+        return ApiResponse.success("장비 모델 목록 조건데 따른 조회 성공", equipmentModelService.getAllModels(request));
     }
 
     // 장비 모델 단건 조회 API
