@@ -57,11 +57,11 @@ public class AdminEquipmentCategoryController {
 
     //====================================================유저에서 가져옴====================================================
 
-    @Operation(summary = "전체 카테고리 조회", description = "모든 장비 카테고리를 조회합니다.")
-    @GetMapping
-    public ApiResponse<List<EquipmentCategoryResponse>> getAllCategories() {
-        return ApiResponse.success("전체 카테고리 조회 성공", equipmentCategoryService.getAllCategories());
-    }
+//    @Operation(summary = "전체 카테고리 조회", description = "모든 장비 카테고리를 조회합니다.")
+//    @GetMapping
+//    public ApiResponse<List<EquipmentCategoryResponse>> getAllCategories() {
+//        return ApiResponse.success("전체 카테고리 조회 성공", equipmentCategoryService.getAllCategories());
+//    }
 
     @Operation(summary = "카테고리 상세 조회", description = "특정 ID의 장비 카테고리를 조회합니다.")
     @GetMapping("/{id}")
@@ -72,7 +72,7 @@ public class AdminEquipmentCategoryController {
     }
 
     @Operation(summary = "카테고리 전체랑 그에 따른 총 장비, 사용가능장비, 파손된 장비 등등 표시하는거")
-    @GetMapping("/countbycategory")
+    @GetMapping
     public ApiResponse<List<EquipmentCountByCategoryResponse>> countEquipment() {
         return ApiResponse.success("카테고리별 장비 개수 조회 성공",equipmentCategoryService.countAllCategoryWithEquipment());
     }
