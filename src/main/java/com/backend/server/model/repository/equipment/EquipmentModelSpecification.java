@@ -33,7 +33,7 @@ public class EquipmentModelSpecification {
                 predicates.add(cb.or(namePredicate, englishCodePredicate));
             }
             if (request.getCategoryId() != null) {
-                predicates.add(cb.equal(root.get("category").get("id"), request.getCategoryId()));
+                predicates.add(cb.equal(root.get("categoryId"), request.getCategoryId()));
             }
             
             return cb.and(predicates.toArray(new Predicate[0]));
