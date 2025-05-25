@@ -1,6 +1,7 @@
 package com.backend.server.api.common.s3.service;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import java.time.Duration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -40,11 +41,17 @@ public class CommonPresignedUrlService {
                 .build();
     }
 
-    public String generatePresignedUrl(String fileName, String contentType) {
+    @PreDestroy
+    public void shutdown() {
+        if (s3Presigner != null) {
+            s3Presigner.close();
+        }
+    }
+
+    public String generatePresignedUrl(String fileName) {
         PutObjectRequest objectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(fileName)
-                .contentType(contentType)
                 .build();
 
         PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
