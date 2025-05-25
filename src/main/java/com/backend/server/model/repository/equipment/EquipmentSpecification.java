@@ -47,11 +47,11 @@ public class EquipmentSpecification {
     
             // 카테고리(장비분류)
             if (request.getCategoryId() != null) {
-                predicates.add(cb.equal(root.get("categoryId"), request.getCategoryId()));
+                predicates.add(cb.equal(root.get("category").get("id"), request.getCategoryId()));
             }
             // 모델명
             if (StringUtils.hasText(request.getModelName())) {
-                predicates.add(cb.like(cb.lower(root.get("modelName")), "%" + request.getModelName().toLowerCase() + "%"));
+                predicates.add(cb.like(cb.lower(root.get("model").get("name")), "%" + request.getModelName().toLowerCase() + "%"));
             }
             // 일련번호
             if (StringUtils.hasText(request.getSerialNumber())) {
@@ -101,11 +101,11 @@ public class EquipmentSpecification {
     
             // 카테고리(장비분류)
             if (request.getCategoryId() != null) {
-                predicates.add(cb.equal(root.get("categoryId"), request.getCategoryId()));
+                predicates.add(cb.equal(root.get("category").get("id"), request.getCategoryId()));
             }
             // 모델명
             if (StringUtils.hasText(request.getModelName())) {
-                predicates.add(cb.like(cb.lower(root.get("modelName")), "%" + request.getModelName().toLowerCase() + "%"));
+                predicates.add(cb.like(cb.lower(root.get("model").get("name")), "%" + request.getModelName().toLowerCase() + "%"));
             }
             // 대여 가능 여부
             if (request.getIsAvailable() != null) {

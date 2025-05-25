@@ -39,14 +39,9 @@ public class EquipmentModelService {
         return new EquipmentModelResponse(model);
     }
 
-    public EquipmentModelListResponse getModelsByCategory(Long categoryId) {
-        Specification<EquipmentModel> spec = (root, query, cb) ->
-            cb.equal(root.get("category").get("id"), categoryId);
-    
-        List<EquipmentModel> models = equipmentModelRepository.findAll(spec);
-    
-        return new EquipmentModelListResponse(models);
-    }
 
-    
+
+
+
+
 }
