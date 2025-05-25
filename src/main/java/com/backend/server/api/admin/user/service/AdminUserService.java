@@ -62,7 +62,7 @@ public class AdminUserService {
     public AdminUserResponse createUser(AdminUserRequest request) {
         Professor professor = professorRepository.findById(request.getProfessorId())
                 .orElseThrow(IllegalArgumentException::new);
-        User user = request.toEntity(professor, passwordEncoder);
+        User user = request.toEntity(professor, Role.ROLE_USER, passwordEncoder);
         user = userRepository.save(user);
         return new AdminUserResponse(user);
     }
