@@ -70,4 +70,43 @@ public class InquiryService {
                         .build())
         .toList();
     }
+
+    @Transactional
+    public void updateInquiry(Long inquiryId, InquiryRequest request, Long currentUserId) throws AccessDeniedException{ // 내 문의 글 수정
+        Inquiry inquiry = inquiryRepository.findById(inquiryId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 문의글이 존재하지 않습니다."));
+
+        if (!inquiry.getAuthorId().equals(currentUserId)) {
+            throw new AccessDeniedException("본인의 문의글만 수정할 수 있습니다.");
+        }
+
+        // 변경 내용
+        inquiry.toBuilder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .attachmentUrl(request.getAttachmentUrl())
+                .type(request.getType())
+                .build();
+
+        // 객체 수정
+        inquiry.update(
+                request.getTitle(),
+                request.getContent(),
+                request.getAttachmentUrl(),
+                request.getType()
+        );
+
+    }
+
+    @Transactional
+    public void deleteInquiry(Long inquiryId, Long currentUserId) throws AccessDeniedException {
+        Inquiry inquiry = inquiryRepository.findById(inquiryId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 문의글이 존재하지 않습니다."));
+
+        if (!inquiry.getAuthorId().equals(currentUserId)) {
+            throw new AccessDeniedException("본인의 문의글만 삭제할 수 있습니다.");
+        }
+
+        inquiryRepository.delete(inquiry);
+    }
 }

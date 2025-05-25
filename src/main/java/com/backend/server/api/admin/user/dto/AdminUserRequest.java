@@ -2,6 +2,7 @@ package com.backend.server.api.admin.user.dto;
 
 import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.User;
+import com.backend.server.model.entity.enums.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -13,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 @Setter
 public class AdminUserRequest {
-    @NotEmpty
+    @Schema(defaultValue = "1", description = "학년")
     private Integer grade;
 
     @Schema(defaultValue = "남", description = "성별은 '남' 또는 '여'만 입력 가능합니다.")
@@ -27,6 +28,8 @@ public class AdminUserRequest {
     @NotEmpty
     private String name;
     private String nickname;
+
+    @Schema(defaultValue = "1", description = "존재하는 지도교수만 입력가능.")
     private Long professorId;
 
     @Schema(defaultValue = "2024-01-01", description = "생일은 yyyy-MM-dd 형식이어야 합니다.")
@@ -38,7 +41,7 @@ public class AdminUserRequest {
     private String phoneNumber;
     private String profilePicture;
 
-    public User toEntity(Professor professor, PasswordEncoder encoder) {
+    public User toEntity(Professor professor, Role role, PasswordEncoder encoder) {
         return User.builder()
                 .grade(grade)
                 .gender(gender)
@@ -50,6 +53,7 @@ public class AdminUserRequest {
                 .profilePicture(profilePicture)
                 .birthDate(parseBirthday())
                 .phoneNumber(phoneNumber)
+                .role(role)
                 .build();
     }
 
