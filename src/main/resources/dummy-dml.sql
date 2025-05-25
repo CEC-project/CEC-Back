@@ -36,12 +36,12 @@ values
 -- 교수 INSERT
 insert into public.professor (created_at, id, updated_at, description, name)
 values
-    (now(), 10, now(), '학과장', '최일묵'),
-    (now(), 11, now(), '', '이상봉'),
-    (now(), 12, now(), '', '박규준'),
-    (now(), 13, now(), '', '오강선'),
-    (now(), 14, now(), '', '송현선'),
-    (now(), 15, now(), '', '이정한');
+    (now(), 1, now(), '학과장', '최일묵'),
+    (now(), 2, now(), '', '이상봉'),
+    (now(), 3, now(), '', '박규준'),
+    (now(), 4, now(), '', '오강선'),
+    (now(), 5, now(), '', '송현선'),
+    (now(), 6, now(), '', '이정한');
 
  insert into notice (title, content, important, attachment_url, author_id, created_at, updated_at)
        values
