@@ -8,6 +8,8 @@ import com.backend.server.api.admin.user.service.AdminUserService;
 import com.backend.server.api.common.dto.ApiResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -23,7 +25,7 @@ public class AdminUserController {
     private final AdminUserService adminUserService;
 
     @Operation(
-            summary = "어드민 - 사용자 리스트 조회",
+            summary = "사용자 목록 조회",
             description = """
     관리자 페이지에서 사용자 목록을 검색, 필터링, 정렬, 페이징 조건에 따라 조회합니다.
 
@@ -45,8 +47,19 @@ public class AdminUserController {
     ⚠️ <b>검색을 수행하려면 <code>searchType</code>과 <code>searchKeyword</code>가 모두 지정되어야 합니다.</b>
     """
     )
+    @Parameters({
+            @Parameter(name = "page", description = "페이지 번호 (기본값: 0)"),
+            @Parameter(name = "size", description = "페이지당 항목 수 (기본값: 10)"),
+            @Parameter(name = "searchKeyword", description = "검색 키워드"),
+            @Parameter(name = "searchType", description = "검색 유형 (0: 이름, 1: 전화번호, 2: 학번)"),
+            @Parameter(name = "grade", description = "학년 필터 (1~4)"),
+            @Parameter(name = "gender", description = "성별 필터 ('남' 또는 '여')"),
+            @Parameter(name = "professorId", description = "지도 교수 ID"),
+            @Parameter(name = "sortBy", description = "정렬 기준 (0: 이름, 1: 학번, 2: 제재 횟수)"),
+            @Parameter(name = "sortDirection", description = "정렬 방향 (asc 또는 desc)")
+    })
     @GetMapping
-    public ApiResponse<AdminUserListResponse> getUsers(AdminUserListRequest request) {
+    public ApiResponse<AdminUserListResponse> getUsers(@Parameter(hidden = true) AdminUserListRequest request) {
         return ApiResponse.success("사용자 목록 조회 성공", adminUserService.getUsers(request));
     }
 
