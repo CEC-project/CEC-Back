@@ -1,5 +1,9 @@
-package com.backend.server.api.user.equipment.controller;
+package com.backend.server.api.equipment.controller;
 
+import com.backend.server.api.equipment.dto.model.EquipmentModelListRequest;
+import com.backend.server.api.equipment.dto.model.EquipmentModelListResponse;
+import com.backend.server.api.equipment.dto.model.EquipmentModelResponse;
+import com.backend.server.api.equipment.service.EquipmentModelService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -7,10 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.server.api.common.dto.ApiResponse;
-import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
-import com.backend.server.api.user.equipment.dto.model.EquipmentModelListResponse;
-import com.backend.server.api.user.equipment.dto.model.EquipmentModelResponse;
-import com.backend.server.api.user.equipment.service.EquipmentModelService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

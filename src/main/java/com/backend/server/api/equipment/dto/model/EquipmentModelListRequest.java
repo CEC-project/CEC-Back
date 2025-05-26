@@ -1,4 +1,4 @@
-package com.backend.server.api.user.equipment.dto.model;
+package com.backend.server.api.equipment.dto.model;
 
 import com.backend.server.api.common.dto.PageableRequest;
 import io.swagger.v3.oas.annotations.media.Schema;

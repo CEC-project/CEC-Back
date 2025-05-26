@@ -2,6 +2,8 @@ package com.backend.server.api.admin.equipment.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentSerialNumberGenerateRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -61,7 +63,7 @@ public class AdminEquipmentController {
             summary = "시리얼 넘버 생성",
             description = "등록할 장비 조건에 기반해 첫 번째 장비에 부여될 시리얼 넘버를 미리 확인합니다."
     )
-    public ApiResponse<String> getSerialNumber(@ModelAttribute AdminEquipmentCreateRequest request) {
+    public ApiResponse<String> getSerialNumber(@ModelAttribute AdminEquipmentSerialNumberGenerateRequest request) {
         return ApiResponse.success("시리얼넘버 보여주기 성공", adminEquipmentService.generateSerialNumber(request));
     }
 
