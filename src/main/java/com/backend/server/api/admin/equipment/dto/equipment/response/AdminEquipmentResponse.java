@@ -69,7 +69,7 @@ public class AdminEquipmentResponse {
             this.renterName = equipment.getRenter().getName();
         else if (equipment.getSemesterSchedule() != null)
             this.renterName = equipment.getSemesterSchedule().getName();
-
+        this.imageUrl = equipment.getImageUrl();
         this.id = equipment.getId();
         this.modelName = equipment.getEquipmentModel().getName();
         this.serialNumber = equipment.getSerialNumber();

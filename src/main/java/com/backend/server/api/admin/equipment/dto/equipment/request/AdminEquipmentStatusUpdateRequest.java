@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AdminEquipmentStatusUpdateRequest {
     private Status status; // 변경할 장비 상태
-    private String reason; // 상태 변경 이유 (선택 사항)
+//    private String reason; // 상태 변경 이유 (선택 사항)
 } 
