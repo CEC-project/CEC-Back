@@ -50,6 +50,10 @@ public class AdminUserController {
     - <code>size</code>: 페이지당 항목 수 (기본값: 10)<br>
 
     ⚠️ <b>검색을 수행하려면 <code>searchType</code>과 <code>searchKeyword</code>가 모두 지정되어야 합니다.</b>
+    
+    예시1 : /api/admin/user
+    예시2 : /api/admin/user?grade=1
+    예시3 : /api/admin/user?searchType=홍&searchType=0
     """
     )
     @Parameters({
