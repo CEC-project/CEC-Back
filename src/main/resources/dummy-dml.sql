@@ -72,3 +72,12 @@ values  (true, 1, 'CANNON-EOS-R6', '캐논 EOS R6'),
           ('5월 정기 점검 및 이벤트 안내',
            '5월 정기 점검이 예정되어 있습니다. 점검 기간: 2025년 5월 30일 오전 1시~3시. 또한 점검 완료 후 감사 이벤트로 포인트 지급 이벤트를 진행할 예정이니 많은 참여 바랍니다.',
            false, null, 3, '2025-05-22 16:45:00', '2025-05-22 16:45:00');
+
+-- 연간 일정
+insert into public.year_schedule (date, end_at, is_holiday, start_at, classroom_id, created_at, updated_at, description)
+values  ('2025-05-26', null, true, null, null, '2025-05-26 10:52:46.130416', '2025-05-26 10:52:46.130416', 'string'),
+        ('2025-05-26', '14:00:00', false, '13:00:00', 1, '2025-05-26 10:53:50.759813', '2025-05-26 10:53:50.759813', 'string');
+
+-- 학기
+insert into public.semester (end_date, start_date, year, created_at, updated_at, name)
+values  ('2025-06-26', '2025-02-26', 2025, '2025-05-26 11:08:49.943975', '2025-05-26 11:08:49.943975', '1학기');

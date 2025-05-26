@@ -5,6 +5,7 @@ import com.backend.server.api.admin.semesterSchedule.dto.AdminSemesterScheduleRe
 import com.backend.server.api.admin.semesterSchedule.service.AdminSemesterScheduleService;
 import com.backend.server.api.common.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,10 +28,10 @@ public class AdminSemesterScheduleController {
     private final AdminSemesterScheduleService adminSemesterScheduleService;
 
     @Operation(summary = "수업 시간표 목록 조회 API")
-    @GetMapping
+    @GetMapping("/{semesterId}/{classroomId}")
     public ApiResponse<List<AdminSemesterScheduleResponse>> getSemesterSchedule(
-            @RequestParam("semester_id") Long semesterId,
-            @RequestParam("classroom_id") Long classroomId
+            @PathVariable @Parameter(example = "1") Long semesterId,
+            @PathVariable @Parameter(example = "1") Long classroomId
     ) {
         List<AdminSemesterScheduleResponse> result = adminSemesterScheduleService
                 .getSemesterSchedules(semesterId, classroomId);
@@ -39,10 +39,10 @@ public class AdminSemesterScheduleController {
     }
 
     @Operation(summary = "수업 시간표 등록 API")
-    @PostMapping
+    @PostMapping("/{semesterId}/{classroomId}")
     public ApiResponse<Long> createSemesterSchedule(
-            @RequestParam("semester_id") Long semesterId,
-            @RequestParam("classroom_id") Long classroomId,
+            @PathVariable @Parameter(example = "1") Long semesterId,
+            @PathVariable @Parameter(example = "1") Long classroomId,
             @Valid @RequestBody AdminSemesterScheduleRequest request) {
         Long id = adminSemesterScheduleService.createSemesterSchedule(semesterId, classroomId, request);
         return ApiResponse.success("수업 시간표 등록 성공", id);
