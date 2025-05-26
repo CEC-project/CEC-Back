@@ -43,6 +43,21 @@ values
     (now(), now(), '', '송현선'),
     (now(), now(), '', '이정한');
 
+-- 장비 카테고리
+insert into public.equipment_category (max_rental_count, english_code, name)
+values  (10, 'CAMERA', '카메라'),
+        (5, 'MIC', '마이크'),
+        (7, 'TRIPOD', '삼각대'),
+        (3, 'LIGHT', '조명');
+
+-- 장비 모델명
+insert into public.equipment_model (available, category_id, english_code, name)
+values  (true, 1, 'CANNON-EOS-R6', '캐논 EOS R6'),
+        (true, 2, 'SHURE-SM7B', '슈어 SM7B'),
+        (true, 3, 'MANFROTTO-190X', '만프로토 190X'),
+        (false, 4, 'APUTURE-AL-M9', '아푸처 AL-M9');
+
+-- 공지사항
  insert into notice (title, content, important, attachment_url, author_id, created_at, updated_at)
        values
           ('시스템 점검 안내',
