@@ -66,10 +66,7 @@ public class EquipmentSpecification {
                 predicates.add(cb.equal(root.get("status"), request.getStatus()));
             }
 
-            // 대여 가능 여부
-            if (request.getIsAvailable() != null) {
-                predicates.add(cb.equal(root.get("available"), request.getIsAvailable()));
-            }
+
 
             // 현재 대여자 이름
             Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
