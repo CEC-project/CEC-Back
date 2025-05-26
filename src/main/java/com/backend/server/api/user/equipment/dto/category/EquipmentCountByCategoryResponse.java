@@ -1,6 +1,5 @@
 package com.backend.server.api.user.equipment.dto.category;
 
-import com.backend.server.model.entity.Equipment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,6 +9,8 @@ public class EquipmentCountByCategoryResponse {
     private Long id;
 
     private String name;
+
+    private String englishCode;
 
     private Integer totalCount;
 
