@@ -52,7 +52,9 @@ public class AdminEquipmentService {
             .map(AdminManagerCandidatesResponse::new)
             .collect(Collectors.toList());
     }
+
     public String generateSerialNumber(AdminEquipmentSerialNumberGenerateRequest request) {
+
         EquipmentCategory category = equipmentCategoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("카테고리 없음"));
 

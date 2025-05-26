@@ -36,6 +36,7 @@ dependencies {
 		testImplementation 'org.springframework.security:spring-security-test'
 	//specificaion 테스트
 
+
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 		testImplementation platform('org.junit:junit-bom:5.10.0')
 		testImplementation 'org.junit.jupiter:junit-jupiter'
