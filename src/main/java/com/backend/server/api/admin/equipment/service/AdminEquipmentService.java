@@ -108,7 +108,7 @@ public class AdminEquipmentService {
 
 
     // 장비 업데이트
-    public AdminEquipmentIdResponse updateEquipment(Long id, AdminEquipmentCreateRequest request) {
+    public Long updateEquipment(Long id, AdminEquipmentCreateRequest request) {
         Equipment equipment = equipmentRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
 
@@ -120,15 +120,15 @@ public class AdminEquipmentService {
             .restrictionGrade(request.getRestrictionGrade())
             .build();
 
-        equipmentRepository.save(updated); 
+        updated = equipmentRepository.save(updated);
 
-        return new AdminEquipmentIdResponse(updated.getId());
+        return updated.getId();
     }
 
     // 장비 삭제
-    public AdminEquipmentIdResponse deleteEquipment(Long id) {
+    public Long deleteEquipment(Long id) {
         equipmentRepository.deleteById(id);
-        return new AdminEquipmentIdResponse(id);
+        return id;
     }
 
     //장비 리스트 조회

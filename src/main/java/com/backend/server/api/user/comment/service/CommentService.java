@@ -26,7 +26,7 @@ public class CommentService {
     private final UserRepository userRepository;
     private final Map<TargetType, JpaRepository<?, Long>> targetMap;
 
-    public CommentIdResponse createComment(CommentRequest request, LoginUser loginUser) {
+    public Long createComment(CommentRequest request, LoginUser loginUser) {
         User currentuser = userRepository.findById(loginUser.getId())
                 .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
 
@@ -39,7 +39,7 @@ public class CommentService {
                 .orElseThrow(() -> new EntityNotFoundException("원본 댓글을를 찾을 수 없습니다."));
         Comment comment = request.toEntity(parentComment, currentuser);
         commentRepository.save(comment);
-        return new CommentIdResponse(comment.getId());
+        return comment.getId();
     }
 
     public CommentListResponse getComments(CommentListRequest request) {
@@ -57,7 +57,7 @@ public class CommentService {
         return CommentListResponse.from(parentComments, childComments);
     }
 
-    public CommentIdResponse updateComment(CommentUpdateRequest request, Long commentId, LoginUser loginUser) {
+    public Long updateComment(CommentUpdateRequest request, Long commentId, LoginUser loginUser) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다."));
         comment.validateAuthor(loginUser.getId());
@@ -67,15 +67,15 @@ public class CommentService {
                 .build();
 
         Comment updated = commentRepository.save(comment);
-        return new CommentIdResponse(updated.getId());
+        return updated.getId();
     }
 
-    public CommentIdResponse deleteComment(Long commentId, LoginUser loginUser) {
+    public Long deleteComment(Long commentId, LoginUser loginUser) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("댓글을 찾을 수 없습니다."));
         comment.validateAuthor(loginUser.getId());
 
         commentRepository.delete(comment);
-        return new CommentIdResponse(comment.getId());
+        return comment.getId();
     }
 }

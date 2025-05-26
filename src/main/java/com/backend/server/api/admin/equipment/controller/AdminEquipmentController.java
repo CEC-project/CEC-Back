@@ -74,7 +74,7 @@ public class AdminEquipmentController {
             summary = "장비 정보 수정",
             description = "기존 장비의 세부 정보를 수정합니다. 이미지, 모델, 카테고리, 관리자, 설명, 제한 학년 등을 변경할 수 있습니다."
     )
-    public ApiResponse<AdminEquipmentIdResponse> updateEquipment(
+    public ApiResponse<Long> updateEquipment(
             @PathVariable Long id,
             @RequestBody AdminEquipmentCreateRequest request) {
         return ApiResponse.success("장비 수정 성공", adminEquipmentService.updateEquipment(id, request));
@@ -85,7 +85,7 @@ public class AdminEquipmentController {
             summary = "장비 삭제",
             description = "장비를 시스템에서 완전히 삭제합니다. 삭제된 장비는 복구할 수 없습니다."
     )
-    public ApiResponse<AdminEquipmentIdResponse> deleteEquipment(@PathVariable Long id) {
+    public ApiResponse<Long> deleteEquipment(@PathVariable Long id) {
         return ApiResponse.success("장비 삭제 성공", adminEquipmentService.deleteEquipment(id));
     }
 

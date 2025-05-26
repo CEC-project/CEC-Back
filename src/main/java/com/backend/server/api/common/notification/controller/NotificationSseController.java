@@ -63,7 +63,7 @@ public class NotificationSseController {
             ```
             """
     )
-    public ApiResponse<NotificationIdResponse> changeIsReadTrue(@PathVariable Long id){
+    public ApiResponse<Long> changeIsReadTrue(@PathVariable Long id){
         return ApiResponse.success("안읽은 알림 다 봤어요", notificationService.changeIsReadTrue(id));
     }
     @Operation(
