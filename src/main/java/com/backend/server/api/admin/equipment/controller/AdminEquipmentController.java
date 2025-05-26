@@ -2,8 +2,6 @@ package com.backend.server.api.admin.equipment.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminManagerCandidatesResponse;
 import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentCreateRequest;
-import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentIdResponse;
-import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentIdsResponse;
 import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentListRequest;
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentListResponse;
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentResponse;
@@ -55,7 +51,7 @@ public class AdminEquipmentController {
             """
 
     )
-    public ApiResponse<AdminEquipmentIdsResponse> createEquipment(
+    public ApiResponse<List<Long>> createEquipment(
             @RequestBody AdminEquipmentCreateRequest request) {
         return ApiResponse.success("장비 등록 성공", adminEquipmentService.createEquipment(request));
     }

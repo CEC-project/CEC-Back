@@ -16,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminManagerCandidatesResponse;
 import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentCreateRequest;
-import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentIdResponse;
-import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentIdsResponse;
 import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentListRequest;
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentListResponse;
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentResponse;
@@ -72,7 +70,7 @@ public class AdminEquipmentService {
         return prefixCategoryCode + prefixEquipmentModelCode + modelCountString;
     }
     //장비생성
-    public AdminEquipmentIdsResponse createEquipment(AdminEquipmentCreateRequest request) {
+    public List<Long> createEquipment(AdminEquipmentCreateRequest request) {
         EquipmentCategory category = equipmentCategoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("카테고리 없음"));
 
@@ -103,7 +101,7 @@ public class AdminEquipmentService {
             modelCount++;
         }
 
-        return new AdminEquipmentIdsResponse(savedEquipmentIds);
+        return savedEquipmentIds;
     }
 
 
