@@ -47,9 +47,6 @@ public class Equipment extends BaseTimeEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(nullable = false)
-    private boolean available;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private Status status;
