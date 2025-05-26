@@ -28,9 +28,6 @@ public class AdminEquipmentResponse {
     @Schema(description = "장비 상태", example = "AVAILABLE")
     private Status status;
 
-    @Schema(description = "대여 가능 여부", example = "true")
-    private boolean isAvailable;
-
     @Schema(description = "파손 횟수", example = "2")
     private Long brokenCount;
 
@@ -47,17 +44,18 @@ public class AdminEquipmentResponse {
     private LocalDateTime createdAt;
 
     public AdminEquipmentResponse(Equipment equipment) {
+        if (equipment.getRenter() != null)
+            this.renterName = equipment.getRenter().getName();
+        else if (equipment.getSemesterSchedule() != null)
+            this.renterName = equipment.getSemesterSchedule().getName();
+
         this.id = equipment.getId();
         this.modelName = equipment.getEquipmentModel().getName();
         this.serialNumber = equipment.getSerialNumber();
         this.status = equipment.getStatus();
-        this.isAvailable = equipment.isAvailable();
         this.brokenCount = equipment.getBrokenCount();
         this.repairCount = equipment.getRepairCount();
         this.rentalCount = equipment.getRentalCount();
-        this.renterName = equipment.getRenter() != null
-                ? equipment.getRenter().getName()
-                : null;
         this.createdAt = equipment.getCreatedAt();
     }
 }

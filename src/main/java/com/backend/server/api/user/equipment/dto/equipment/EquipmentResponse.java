@@ -9,21 +9,19 @@ import lombok.Getter;
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EquipmentResponse {
-    private String modelName;
-    private boolean isAvailable;
-    private LocalDateTime startRentDate;
-    private LocalDateTime endRentDate;
+    final private String modelName;
+    final private LocalDateTime startRentDate;
+    final private LocalDateTime endRentDate;
 
     //대여 안하면 이거 npe니까 null일때
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String renterName;
-    private String status;
-    private LocalDateTime createdAt;
-    private String imageUrl;
+    final private String renterName;
+    final private String status;
+    final private LocalDateTime createdAt;
+    final private String imageUrl;
     
     public EquipmentResponse(Equipment equipment) {
         this.modelName = equipment.getEquipmentModel().getName();
-        this.isAvailable = equipment.isAvailable();
         this.startRentDate = equipment.getStartRentDate();
         this.endRentDate = equipment.getEndRentDate();
         this.renterName = equipment.getRenter() != null
