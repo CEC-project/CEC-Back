@@ -19,9 +19,6 @@ public class AdminEquipmentResponse {
     @Schema(description = "장비 ID", example = "123")
     private Long id;
 
-    @Schema(description = "장비 이미지", example = "url--")
-    private String imageUrl;
-
     @Schema(description = "장비 모델명", example = "맥북 프로 16인치")
     private String modelName;
 
