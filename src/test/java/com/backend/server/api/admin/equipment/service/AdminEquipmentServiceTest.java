@@ -73,8 +73,8 @@ class AdminEquipmentServiceTest {
     @Test
     void deleteEquipment_shouldReturnId() {
         Long id = 1L;
-        AdminEquipmentIdResponse response = adminEquipmentService.deleteEquipment(id);
-        assertEquals(id, response.getId());
+        Long responseId= adminEquipmentService.deleteEquipment(id);
+        assertEquals(id, responseId);
         verify(equipmentRepository).deleteById(id);
     }
 

@@ -34,12 +34,14 @@ dependencies {
 		annotationProcessor 'org.projectlombok:lombok'
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'
 		testImplementation 'org.springframework.security:spring-security-test'
-		testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	//specificaion 테스트
+		testImplementation 'com.h2database:h2'
+
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 		testImplementation platform('org.junit:junit-bom:5.10.0')
 		testImplementation 'org.junit.jupiter:junit-jupiter'
 		implementation 'org.apache.poi:poi:5.2.3'
 		implementation 'org.apache.poi:poi-ooxml:5.2.3'
-
 		implementation platform('software.amazon.awssdk:bom:2.27.21')
 		implementation 'software.amazon.awssdk:s3'
 		implementation 'software.amazon.awssdk:auth'
