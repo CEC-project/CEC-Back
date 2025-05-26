@@ -43,6 +43,9 @@ public class AdminEquipmentResponse {
     @Schema(description = "장비 등록일", example = "2024-05-20T10:00:00")
     private LocalDateTime createdAt;
 
+    @Schema(description = "장비 사진", example = "https://어쩌구")
+    private String imageUrl;
+
     public AdminEquipmentResponse(Equipment equipment) {
         if (equipment.getRenter() != null)
             this.renterName = equipment.getRenter().getName();
@@ -57,5 +60,6 @@ public class AdminEquipmentResponse {
         this.repairCount = equipment.getRepairCount();
         this.rentalCount = equipment.getRentalCount();
         this.createdAt = equipment.getCreatedAt();
+        this.imageUrl = equipment.getImageUrl();
     }
 }
