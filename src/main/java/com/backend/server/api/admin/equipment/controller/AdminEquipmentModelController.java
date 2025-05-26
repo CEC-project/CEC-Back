@@ -119,7 +119,7 @@ public class AdminEquipmentModelController {
 
     @GetMapping("/{id}")
     @Operation(
-            summary = "장비 모델 단건 조회",
+            summary = "장비 모델 단일 조회",
             description = """
                     특정 ID를 기준으로 장비 모델의 상세 정보를 조회합니다.
 
@@ -133,6 +133,6 @@ public class AdminEquipmentModelController {
     )
     public ApiResponse<EquipmentModelResponse> getModelById(
             @Parameter(description = "조회할 장비 모델의 고유 ID", example = "1") @PathVariable Long id) {
-        return ApiResponse.success("장비 모델 단건 조회 성공", equipmentModelService.getModel(id));
+        return ApiResponse.success("장비 모델 단일 조회 성공", equipmentModelService.getModel(id));
     }
 }

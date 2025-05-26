@@ -1,6 +1,8 @@
 package com.backend.server.api.admin.equipment.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,25 +51,26 @@ public class AdminEquipmentService {
             .map(AdminManagerCandidatesResponse::new)
             .collect(Collectors.toList());
     }
-    public String generateSerialNumber(AdminEquipmentCreateRequest request){
+    public String generateSerialNumber(AdminEquipmentCreateRequest request) {
         EquipmentCategory category = equipmentCategoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("카테고리 없음"));
 
         EquipmentModel model = equipmentModelRepository.findById(request.getModelId())
                 .orElseThrow(() -> new RuntimeException("모델 없음"));
 
-        String equipmentCategoryName = category.getEnglishCode();
-        String equipmentModelName = model.getEnglishCode();
+        // prefix: 카테고리 코드 3자리 + 모델 코드 3자리
+        String prefixCategoryCode = category.getEnglishCode().substring(0, 3).toUpperCase();
+        String prefixEquipmentModelCode = model.getEnglishCode().substring(0, 3).toUpperCase();
+        String prefix = prefixCategoryCode + prefixEquipmentModelCode; // e.g., CAMSON
 
-        String prefixCategoryCode = equipmentCategoryName.substring(0, 3).toUpperCase();
-        String prefixEquipmentModelCode = equipmentModelName.substring(0, 3).toUpperCase();
-        Long modelCount = equipmentRepository.countByEquipmentModel_Id(request.getModelId());
+        // suffix: yyMM + 2자리 일련번호
+        String datePrefix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMM")); // e.g., 2405
+        String serialPrefix = prefix + datePrefix; // e.g., CAMSON2405
 
-        String modelCountString = modelCount < 10000
-                ? String.format("%04d", modelCount)
-                : modelCount.toString();
+        long count = equipmentRepository.countBySerialNumberStartingWith(serialPrefix);
+        String sequence = String.format("%02d", count + 1); // 첫 번째 생성될 순번
 
-        return prefixCategoryCode + prefixEquipmentModelCode + modelCountString;
+        return serialPrefix + sequence; // e.g., CAMSON240501
     }
     //장비생성
     public List<Long> createEquipment(AdminEquipmentCreateRequest request) {
@@ -77,28 +80,27 @@ public class AdminEquipmentService {
         EquipmentModel model = equipmentModelRepository.findById(request.getModelId())
                 .orElseThrow(() -> new RuntimeException("모델 없음"));
 
-        String equipmentCategoryName = category.getEnglishCode();
-        String equipmentModelName = model.getEnglishCode();
 
-        String prefixCategoryCode = equipmentCategoryName.substring(0, 3).toUpperCase();
-        String prefixEquipmentModelCode = equipmentModelName.substring(0, 3).toUpperCase();
+        String prefixCategoryCode = category.getEnglishCode().substring(0, 3).toUpperCase(); // ex: CAM
+        String prefixModelCode = model.getEnglishCode().substring(0, 3).toUpperCase();       // ex: SON
+        String prefix = prefixCategoryCode + prefixModelCode;                                // ex: CAMSON
 
-        Long modelCount = equipmentRepository.countByEquipmentModel_Id(request.getModelId()) + 1;
+        // 날짜 구성: yyMM
+        String datePrefix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMM"));     // ex: 2405
+        String serialPrefix = prefix + datePrefix;                                            // ex: CAMSON2405
+
+        // 기존 시리얼 넘버 개수 파악 (해당 월 기준)
+        long count = equipmentRepository.countBySerialNumberStartingWith(serialPrefix);
 
         List<Long> savedEquipmentIds = new ArrayList<>();
 
         for (int i = 1; i <= request.getQuantity(); i++) {
-            String modelCountString = modelCount < 10000
-                    ? String.format("%04d", modelCount)
-                    : modelCount.toString();
-
-            String serialNumber = prefixCategoryCode + prefixEquipmentModelCode + modelCountString;
+            String sequence = String.format("%02d", count + i);                               // 01 ~ 99
+            String serialNumber = serialPrefix + sequence;                                    // ex: CAMSON240501
 
             Equipment equipment = request.toEntity(category, model, serialNumber);
             Equipment saved = equipmentRepository.save(equipment);
             savedEquipmentIds.add(saved.getId());
-
-            modelCount++;
         }
 
         return savedEquipmentIds;

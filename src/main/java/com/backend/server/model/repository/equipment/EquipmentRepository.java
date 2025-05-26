@@ -31,6 +31,8 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     Long countByEquipmentModel_Id(Long modelId);
     Optional<User> findByRenterId(Long renterId);
 
+    Long countBySerialNumberStartingWith(String prefix);
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT e FROM Equipment e WHERE e.id = :id")
     Optional<Equipment> findByIdForUpdate(@Param("id") Long id);
