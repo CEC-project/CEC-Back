@@ -49,6 +49,24 @@ public class AdminEquipmentResponse {
     @Schema(description = "장비 사진", example = "https://어쩌구")
     private String imageUrl;
 
+    @Schema(description = "관리자 ID", example = "42")
+    private Long managerId;
+
+    @Schema(description = "장비 카테고리명", example = "노트북")
+    private String categoryName;
+
+    @Schema(description = "장비 설명", example = "M2칩 탑재 모델, 16GB RAM")
+    private String description;
+
+    @Schema(description = "이용 제한 학년 (문자열)", example = "1234")
+    private String restrictionGrade;
+
+    @Schema(description = "대여 시작일", example = "2024-05-20T10:00:00")
+    private LocalDateTime startRentDate;
+
+    @Schema(description = "대여 종료일", example = "2024-05-27T10:00:00")
+    private LocalDateTime endRentDate;
+
     public AdminEquipmentResponse(Equipment equipment) {
         if (equipment.getRenter() != null)
             this.renterName = equipment.getRenter().getName();
@@ -64,5 +82,11 @@ public class AdminEquipmentResponse {
         this.rentalCount = equipment.getRentalCount();
         this.createdAt = equipment.getCreatedAt();
         this.imageUrl = equipment.getImageUrl();
+        this.managerId = equipment.getManagerId();
+        this.categoryName = equipment.getEquipmentCategory().getName();
+        this.description = equipment.getDescription();
+        this.restrictionGrade = equipment.getRestrictionGrade();
+        this.startRentDate = equipment.getStartRentDate();
+        this.endRentDate = equipment.getEndRentDate();
     }
 }
