@@ -1,4 +1,4 @@
-package com.backend.server.api.user.equipment.dto.equipment;
+package com.backend.server.api.equipment.dto.equipment;
 
 
 import com.backend.server.api.common.dto.PageableInfo;

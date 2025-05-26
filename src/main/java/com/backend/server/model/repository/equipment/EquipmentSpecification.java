@@ -2,7 +2,7 @@ package com.backend.server.model.repository.equipment;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import com.backend.server.api.common.dto.PageableRequest;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
+import com.backend.server.api.equipment.dto.equipment.EquipmentListRequest;
 import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentListRequest;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.User;

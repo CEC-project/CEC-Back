@@ -35,11 +35,16 @@ dependencies {
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'
 		testImplementation 'org.springframework.security:spring-security-test'
 	//specificaion 테스트
-		testImplementation 'com.h2database:h2'
+
 
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 		testImplementation platform('org.junit:junit-bom:5.10.0')
 		testImplementation 'org.junit.jupiter:junit-jupiter'
+	testImplementation "org.testcontainers:postgresql:1.21.0"
+	testImplementation "org.testcontainers:testcontainers:1.20.5" // testcontainers
+	testImplementation 'org.testcontainers:postgresql:1.20.5' // PostgreSQL 모듈
+	testImplementation "org.testcontainers:junit-jupiter:1.20.5" // JUnit 5 연동
+		testImplementation 'org.testcontainers:postgresql'
 		implementation 'org.apache.poi:poi:5.2.3'
 		implementation 'org.apache.poi:poi-ooxml:5.2.3'
 		implementation platform('software.amazon.awssdk:bom:2.27.21')

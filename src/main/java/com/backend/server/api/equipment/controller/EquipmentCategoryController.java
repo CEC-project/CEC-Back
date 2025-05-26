@@ -1,13 +1,13 @@
-package com.backend.server.api.user.equipment.controller;
+package com.backend.server.api.equipment.controller;
 
 import java.util.List;
 
-import com.backend.server.api.user.equipment.dto.category.EquipmentCountByCategoryResponse;
+import com.backend.server.api.equipment.dto.category.EquipmentCategoryResponse;
+import com.backend.server.api.equipment.dto.category.EquipmentCountByCategoryResponse;
+import com.backend.server.api.equipment.service.EquipmentCategoryService;
 import org.springframework.web.bind.annotation.*;
 
 import com.backend.server.api.common.dto.ApiResponse;
-import com.backend.server.api.user.equipment.dto.category.EquipmentCategoryResponse;
-import com.backend.server.api.user.equipment.service.EquipmentCategoryService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

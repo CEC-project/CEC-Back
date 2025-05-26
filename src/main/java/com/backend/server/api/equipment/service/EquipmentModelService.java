@@ -1,16 +1,14 @@
-package com.backend.server.api.user.equipment.service;
+package com.backend.server.api.equipment.service;
 
-import java.util.List;
-
+import com.backend.server.api.equipment.dto.model.EquipmentModelListRequest;
+import com.backend.server.api.equipment.dto.model.EquipmentModelListResponse;
+import com.backend.server.api.equipment.dto.model.EquipmentModelResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
-import com.backend.server.api.user.equipment.dto.model.EquipmentModelListResponse;
-import com.backend.server.api.user.equipment.dto.model.EquipmentModelResponse;
 import com.backend.server.model.entity.EquipmentModel;
 import com.backend.server.model.repository.equipment.EquipmentModelRepository;
 import com.backend.server.model.repository.equipment.EquipmentModelSpecification;

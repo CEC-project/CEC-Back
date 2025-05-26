@@ -1,17 +1,15 @@
-package com.backend.server.api.user.equipment.controller;
+package com.backend.server.api.equipment.controller;
 
+import com.backend.server.api.equipment.dto.equipment.EquipmentListRequest;
+import com.backend.server.api.equipment.dto.equipment.EquipmentListResponse;
+import com.backend.server.api.equipment.dto.equipment.EquipmentRentalRequest;
+import com.backend.server.api.equipment.dto.equipment.EquipmentResponse;
+import com.backend.server.api.equipment.service.EquipmentService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentListResponse;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentResponse;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentRentalRequest;
-import com.backend.server.api.user.equipment.service.EquipmentService;
-import com.backend.server.model.entity.Equipment;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

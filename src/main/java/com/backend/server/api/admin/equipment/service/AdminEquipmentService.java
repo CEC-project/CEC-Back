@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentSerialNumberGenerateRequest;
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.service.CommonNotificationService;
 import com.backend.server.model.entity.EquipmentCategory;
@@ -51,7 +52,9 @@ public class AdminEquipmentService {
             .map(AdminManagerCandidatesResponse::new)
             .collect(Collectors.toList());
     }
-    public String generateSerialNumber(AdminEquipmentCreateRequest request) {
+
+    public String generateSerialNumber(AdminEquipmentSerialNumberGenerateRequest request) {
+
         EquipmentCategory category = equipmentCategoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("카테고리 없음"));
 
