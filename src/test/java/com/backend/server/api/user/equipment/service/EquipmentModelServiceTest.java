@@ -1,10 +1,9 @@
 package com.backend.server.api.user.equipment.service;
 
-import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
-import com.backend.server.api.user.equipment.dto.model.EquipmentModelListResponse;
-import com.backend.server.api.user.equipment.dto.model.EquipmentModelResponse;
+import com.backend.server.api.equipment.dto.model.EquipmentModelListRequest;
+import com.backend.server.api.equipment.dto.model.EquipmentModelListResponse;
+import com.backend.server.api.equipment.service.EquipmentModelService;
 import com.backend.server.model.entity.EquipmentModel;
-import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
 import com.backend.server.model.repository.equipment.EquipmentModelRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

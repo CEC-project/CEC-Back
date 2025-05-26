@@ -52,7 +52,7 @@ class AdminEquipmentServiceTest {
 
     @Test
     void generateSerialNumber_shouldReturnFormattedCode() {
-        AdminEquipmentCreateRequest request = new AdminEquipmentCreateRequest();
+        AdminEquipmentSerialNumberGenerateRequest request = new AdminEquipmentSerialNumberGenerateRequest();
         request.setCategoryId(1L);
         request.setModelId(1L);
 

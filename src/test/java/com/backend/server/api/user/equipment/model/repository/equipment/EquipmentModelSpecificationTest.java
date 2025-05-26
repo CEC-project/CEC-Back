@@ -1,6 +1,6 @@
 package com.backend.server.api.user.equipment.model.repository.equipment;
 
-import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
+import com.backend.server.api.equipment.dto.model.EquipmentModelListRequest;
 import com.backend.server.model.entity.EquipmentCategory;
 import com.backend.server.model.entity.EquipmentModel;
 import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
@@ -33,7 +33,7 @@ class EquipmentModelSpecificationTest {
         EquipmentCategory c1 = EquipmentCategory.builder().name("카메라").englishCode("CAMERA").maxRentalCount(10).build();
         EquipmentCategory c2 = EquipmentCategory.builder().name("삼각대").englishCode("TRIPOD").maxRentalCount(10).build();
 
-        equipmentCategoryRepository.saveAll(List.of(c1,c2)); // ✅ 먼저 저장
+        equipmentCategoryRepository.saveAll(List.of(c1,c2));
 
         EquipmentModel m1 = EquipmentModel.builder().name("SONY-A7000").englishCode("SON").category(c1).build();
         EquipmentModel m2 = EquipmentModel.builder().name("SONY-A7500").englishCode("SON").category(c1).build();
