@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-@Tag(name = "\uD83D\uDCF7 관리자 장비 카테고리", description = "관리자용 장비 카테고리 관리 API")
+@Tag(name = "관리자 장비 카테고리", description = "관리자용 장비 카테고리 관리 API")
 @RestController
 @RequestMapping("/api/admin/equipment-categories")
 @RequiredArgsConstructor
