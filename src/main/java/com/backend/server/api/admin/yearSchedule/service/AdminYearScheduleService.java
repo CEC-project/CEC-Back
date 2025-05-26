@@ -29,6 +29,8 @@ public class AdminYearScheduleService {
         return yearScheduleRepository.findWithClassroomBetweenDates(startDate, endDate)
                 .stream()
                 .map((entity) -> {
+                    if (entity.getClassroom() == null)
+                        return new AdminYearScheduleResponse(entity, null);
                     AdminClassroomResponse classroom = new AdminClassroomResponse(entity.getClassroom());
                     return new AdminYearScheduleResponse(entity, classroom);
                 })

@@ -64,11 +64,11 @@ public class Equipment extends BaseTimeEntity {
     private Long repairCount;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "renter_user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User renter;
 
     @ManyToOne
-    @JoinColumn(name = "equipments", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "renter_semester_schdule_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private SemesterSchedule semesterSchedule;
 
     @Column(name = "start_rent_date")
