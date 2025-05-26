@@ -29,17 +29,17 @@ public class EquipmentModelController {
     private final EquipmentModelService equipmentModelService;
 
     @PostMapping
-    public ApiResponse<AdminEquipmentModelIdResponse> createModel(@Valid @RequestBody AdminEquipmentModelCreateRequest request) {
+    public ApiResponse<Long> createModel(@Valid @RequestBody AdminEquipmentModelCreateRequest request) {
         return ApiResponse.success("장비 모델 생성 성공", adminEquipmentModelService.createModel(request));
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<AdminEquipmentModelIdResponse> updateModel(@PathVariable Long id, @Valid @RequestBody AdminEquipmentModelCreateRequest request) {
+    public ApiResponse<Long> updateModel(@PathVariable Long id, @Valid @RequestBody AdminEquipmentModelCreateRequest request) {
         return ApiResponse.success("장비 모델 수정 성공", adminEquipmentModelService.updateModel(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<AdminEquipmentModelIdResponse> deleteModel(@PathVariable Long id) {
+    public ApiResponse<Long> deleteModel(@PathVariable Long id) {
         return ApiResponse.success("장비 모델 삭제 성공", adminEquipmentModelService.deleteModel(id));
     }
 

@@ -37,7 +37,7 @@ public class CommentController {
                 """
     )
     @PostMapping
-    public ApiResponse<CommentIdResponse> createComment(
+    public ApiResponse<Long> createComment(
             @Parameter(description = "댓글 생성 요청 DTO") @RequestBody CommentRequest request,
             @Parameter(description = "로그인 유저 정보") @AuthenticationPrincipal LoginUser loginUser) {
         return ApiResponse.success("댓글 작성 성공", commentService.createComment(request, loginUser));
@@ -82,7 +82,7 @@ public class CommentController {
                 """
     )
     @PatchMapping("{id}")
-    public ApiResponse<CommentIdResponse> updateComment(
+    public ApiResponse<Long> updateComment(
             @Parameter(description = "댓글 수정 요청 DTO") @RequestBody CommentUpdateRequest request,
             @Parameter(description = "댓글 ID") @PathVariable("id") Long commentId,
             @AuthenticationPrincipal LoginUser loginUser) {
@@ -113,7 +113,7 @@ public class CommentController {
                 """
     )
     @DeleteMapping("{id}")
-    public ApiResponse<CommentIdResponse> deleteComment(
+    public ApiResponse<Long> deleteComment(
             @Parameter(description = "댓글 ID") @PathVariable("id") Long commentId,
             @AuthenticationPrincipal LoginUser loginUser) {
         return ApiResponse.success("댓글 삭제 성공", commentService.deleteComment(commentId, loginUser));

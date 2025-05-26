@@ -37,14 +37,14 @@ public class AdminEquipmentCategoryService {
         }
     }
     // 카테고리 생성
-    public AdminEquipmentCategoryIdResponse createCategory(AdminEquipmentCategoryCreateRequest request) {
+    public Long createCategory(AdminEquipmentCategoryCreateRequest request) {
         checkExist(request);
         EquipmentCategory savedCategory = categoryRepository.save(request.toEntity());
-        return new AdminEquipmentCategoryIdResponse(savedCategory.getId());
+        return savedCategory.getId();
     }
 
     //카테고리 수정
-    public AdminEquipmentCategoryIdResponse updateCategory(Long id, AdminEquipmentCategoryCreateRequest request) {
+    public Long updateCategory(Long id, AdminEquipmentCategoryCreateRequest request) {
         checkExistForUpdate(id, request);
         EquipmentCategory category = categoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다. id=" + id));
@@ -56,14 +56,14 @@ public class AdminEquipmentCategoryService {
                 .build();
 
         EquipmentCategory savedCategory = categoryRepository.save(category);
-        return new AdminEquipmentCategoryIdResponse(savedCategory.getId());
+        return savedCategory.getId();
     }
 
     //카테고리 삭제
-    public AdminEquipmentCategoryIdResponse deleteCategory(Long id) {
+    public Long deleteCategory(Long id) {
         EquipmentCategory category = categoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다. id=" + id));
         categoryRepository.delete(category);
-        return new AdminEquipmentCategoryIdResponse(category.getId());
+        return category.getId();
     }
 }

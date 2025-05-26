@@ -44,7 +44,7 @@ public class AdminEquipmentModelController {
                     - 카테고리 ID는 존재하는 값이어야 합니다.
                     """
     )
-    public ApiResponse<AdminEquipmentModelIdResponse> createModel(
+    public ApiResponse<Long> createModel(
             @Valid @RequestBody
             @Parameter(description = "생성할 장비 모델 정보") AdminEquipmentModelCreateRequest request) {
         return ApiResponse.success("장비 모델 생성 성공", adminEquipmentModelService.createModel(request));
@@ -67,7 +67,7 @@ public class AdminEquipmentModelController {
                     - 영문 코드는 중복되지 않아야 합니다.
                     """
     )
-    public ApiResponse<AdminEquipmentModelIdResponse> updateModel(
+    public ApiResponse<Long> updateModel(
             @Parameter(description = "수정할 장비 모델의 고유 ID", example = "1")
             @PathVariable Long id,
             @Valid @RequestBody
@@ -86,7 +86,7 @@ public class AdminEquipmentModelController {
                     - 논리 삭제가 아닌 물리 삭제입니다.
                     """
     )
-    public ApiResponse<AdminEquipmentModelIdResponse> deleteModel(
+    public ApiResponse<Long> deleteModel(
             @Parameter(description = "삭제할 장비 모델의 고유 ID", example = "1")
             @PathVariable Long id) {
         return ApiResponse.success("장비 모델 삭제 성공", adminEquipmentModelService.deleteModel(id));

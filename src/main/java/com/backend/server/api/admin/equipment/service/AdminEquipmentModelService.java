@@ -43,14 +43,14 @@ public class AdminEquipmentModelService {
     }
 
     //장비 모델 생성
-    public AdminEquipmentModelIdResponse createModel(AdminEquipmentModelCreateRequest request) {
+    public Long createModel(AdminEquipmentModelCreateRequest request) {
         checkExist(request);
         EquipmentModel savedEquipmentModel = equipmentModelRepository.save(request.toEntity());
-        return new AdminEquipmentModelIdResponse(savedEquipmentModel.getId());
+        return savedEquipmentModel.getId();
     }
 
     //장비 모델 업데이트
-    public AdminEquipmentModelIdResponse updateModel(Long id, AdminEquipmentModelCreateRequest request) {
+    public Long updateModel(Long id, AdminEquipmentModelCreateRequest request) {
         checkExistForUpdate(id, request);
         EquipmentModel equipmentModel = equipmentModelRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("해당 장비 모델이 존재하지 않습니다. id=" + id));
@@ -63,14 +63,14 @@ public class AdminEquipmentModelService {
             .build();
 
         EquipmentModel savedEquipmentModel = equipmentModelRepository.save(equipmentModel);
-        return new AdminEquipmentModelIdResponse(savedEquipmentModel.getId());
+        return savedEquipmentModel.getId();
     }
 
     //장비 모델 삭제
-    public AdminEquipmentModelIdResponse deleteModel(Long id) {
+    public Long deleteModel(Long id) {
         EquipmentModel equipmentModel = equipmentModelRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("해당 장비 모델이 존재하지 않습니다. id=" + id));
         equipmentModelRepository.delete(equipmentModel);
-        return new AdminEquipmentModelIdResponse(equipmentModel.getId());
+        return equipmentModel.getId();
     }
 }

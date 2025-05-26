@@ -34,7 +34,7 @@ public class AdminNoticeController {
           """
   )
   @PostMapping
-  public ApiResponse<AdminNoticeIdResponse> createNotice(
+  public ApiResponse<Long> createNotice(
       @Parameter(description = "공지사항 생성 요청 DTO")
       @Valid @RequestBody AdminNoticeCreateRequest request,
       @AuthenticationPrincipal LoginUser loginUser
@@ -98,7 +98,7 @@ public class AdminNoticeController {
           **예시 URL:** http://localhost:8080/api/admin/notices/1
           """
   )
-  public ApiResponse<AdminNoticeIdResponse> updateNotice(
+  public ApiResponse<Long> updateNotice(
       @Parameter(description = "공지사항 ID")
       @PathVariable Long id,
       @Parameter(description = "공지사항 수정 요청 DTO")
@@ -116,7 +116,7 @@ public class AdminNoticeController {
           **예시 URL:** http://localhost:8080/api/admin/notices/1
           """
   )
-  public ApiResponse<AdminNoticeIdResponse> deleteNotice(
+  public ApiResponse<Long> deleteNotice(
       @Parameter(description = "공지사항 ID")
       @PathVariable Long id
   ) {

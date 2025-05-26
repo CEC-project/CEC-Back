@@ -25,23 +25,23 @@ values  ('2001-03-15', 0, 3, 5, 2, 1,
          '010-3456-7890', 'profile3.png', 'ROLE_USER', '202300004');
 
 -- 강의실 INSERT
-insert into public.classroom (available, end_time, start_time, created_at, id, manager_id, renter_id, updated_at, attachment, location, name, status)
+insert into public.classroom (available, end_time, start_time, created_at, manager_id, renter_id, updated_at, attachment, location, name, status)
 values
-    (true, '10:00:00', '09:00:00', now(), 2, 2, null, now(), null, '101', '101호', 'AVAILABLE'),
-    (true, '10:00:00', '09:00:00', now(), 3, 2, null, now(), null, '102', '102호', 'AVAILABLE'),
-    (true, '10:00:00', '09:00:00', now(), 4, 2, null, now(), null, '103', '103호', 'AVAILABLE'),
-    (true, '10:00:00', '09:00:00', now(), 5, 2, null, now(), null, '105', '105호', 'AVAILABLE'),
-    (true, '10:00:00', '09:00:00', now(), 6, 2, null, now(), null, '201', '201호', 'AVAILABLE');
+    (true, '18:00:00', '09:00:00', now(), 1, null, now(), null, '101', '101호', 'AVAILABLE'),
+    (true, '18:00:00', '09:00:00', now(), 1, null, now(), null, '102', '102호', 'AVAILABLE'),
+    (true, '18:00:00', '09:00:00', now(), 1, null, now(), null, '103', '103호', 'AVAILABLE'),
+    (true, '18:00:00', '09:00:00', now(), 1, null, now(), null, '105', '105호', 'AVAILABLE'),
+    (true, '18:00:00', '09:00:00', now(), 1, null, now(), null, '201', '201호', 'AVAILABLE');
 
 -- 교수 INSERT
-insert into public.professor (created_at, id, updated_at, description, name)
+insert into public.professor (created_at, updated_at, description, name)
 values
-    (now(), 1, now(), '학과장', '최일묵'),
-    (now(), 2, now(), '', '이상봉'),
-    (now(), 3, now(), '', '박규준'),
-    (now(), 4, now(), '', '오강선'),
-    (now(), 5, now(), '', '송현선'),
-    (now(), 6, now(), '', '이정한');
+    (now(), now(), '학과장', '최일묵'),
+    (now(), now(), '', '이상봉'),
+    (now(), now(), '', '박규준'),
+    (now(), now(), '', '오강선'),
+    (now(), now(), '', '송현선'),
+    (now(), now(), '', '이정한');
 
  insert into notice (title, content, important, attachment_url, author_id, created_at, updated_at)
        values
