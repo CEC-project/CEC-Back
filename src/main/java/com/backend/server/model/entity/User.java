@@ -2,6 +2,7 @@ package com.backend.server.model.entity;
 
 import com.backend.server.api.admin.user.dto.AdminUserRequest;
 import jakarta.persistence.*;
+import java.util.*;
 import lombok.*;
 import java.time.LocalDate;
 
@@ -79,9 +80,12 @@ public class User extends BaseTimeEntity {
     @JoinColumn(name = "professor_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Professor professor;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<RentalRestriction> rentalRestrictions = new ArrayList<>();
+
     @PrePersist //닉네임을 이름으로 설정하기 위해 30줄가량 생성자를 일일이 써야하는 문제를 해결
     public void prePersist() {
-        
+
         if (this.nickname == null && this.name != null) {
             this.nickname = this.name;
         }
