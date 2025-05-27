@@ -2,6 +2,8 @@ package com.backend.server.api.admin.equipment.service;
 
 import com.backend.server.api.admin.equipment.dto.model.AdminEquipmentModelCreateRequest;
 import com.backend.server.api.admin.equipment.dto.model.AdminEquipmentModelIdResponse;
+import com.backend.server.model.entity.Category;
+import com.backend.server.model.entity.EquipmentCategory;
 import com.backend.server.model.entity.EquipmentModel;
 import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
 import com.backend.server.model.repository.equipment.EquipmentModelRepository;
@@ -50,21 +52,25 @@ class AdminEquipmentModelServiceTest {
         when(modelRepository.existsByEnglishCode("MX")).thenReturn(false);
         when(categoryRepository.existsById(100L)).thenReturn(true);
 
+        EquipmentCategory savedCategory = EquipmentCategory.builder()
+                .id(1L)
+                .name("카메라")
+                .englishCode("CAMERA").build();
         // 저장 결과 목 설정
         EquipmentModel saved = EquipmentModel.builder()
                 .id(1L)
                 .name("ModelX")
                 .englishCode("MX")
-                .categoryId(100L)
+                .category(savedCategory)
                 .available(true)
                 .build();
         when(modelRepository.save(any(EquipmentModel.class))).thenReturn(saved);
 
         // 실행
-        AdminEquipmentModelIdResponse resp = service.createModel(req);
+        Long responseId = service.createModel(req);
 
         // 검증
-        assertThat(resp.getId()).isEqualTo(1L);
+        assertThat(responseId).isEqualTo(1L);
         verify(modelRepository).existsByName("ModelX");
         verify(modelRepository).existsByEnglishCode("MX");
         verify(categoryRepository).existsById(100L);
@@ -122,13 +128,16 @@ class AdminEquipmentModelServiceTest {
         when(modelRepository.existsByNameAndIdNot("ModelX", id)).thenReturn(false);
         when(modelRepository.existsByEnglishCodeAndIdNot("MX", id)).thenReturn(false);
         when(categoryRepository.existsById(100L)).thenReturn(true);
-
+        EquipmentCategory savedCategory = EquipmentCategory.builder()
+                .id(1L)
+                .name("카메라")
+                .englishCode("CAMERA").build();
         // 기존 엔티티 조회 목 설정
         EquipmentModel existing = EquipmentModel.builder()
                 .id(id)
                 .name("OldModel")
                 .englishCode("OLD")
-                .categoryId(50L)
+                .category(savedCategory)
                 .available(false)
                 .build();
         when(modelRepository.findById(id)).thenReturn(Optional.of(existing));
@@ -137,16 +146,16 @@ class AdminEquipmentModelServiceTest {
         EquipmentModel updated = existing.toBuilder()
                 .name("ModelX")
                 .englishCode("MX")
-                .categoryId(100L)
+                .category(savedCategory)
                 .available(true)
                 .build();
         when(modelRepository.save(any(EquipmentModel.class))).thenReturn(updated);
 
         // 실행
-        AdminEquipmentModelIdResponse resp = service.updateModel(id, req);
+        Long responseId = service.updateModel(id, req);
 
         // 검증
-        assertThat(resp.getId()).isEqualTo(id);
+        assertThat(responseId).isEqualTo(id);
         verify(modelRepository).findById(id);
         verify(modelRepository).existsByNameAndIdNot("ModelX", id);
         verify(modelRepository).existsByEnglishCodeAndIdNot("MX", id);
@@ -175,9 +184,9 @@ class AdminEquipmentModelServiceTest {
         EquipmentModel existing = EquipmentModel.builder().id(id).build();
         when(modelRepository.findById(id)).thenReturn(Optional.of(existing));
 
-        AdminEquipmentModelIdResponse resp = service.deleteModel(id);
+        Long responseId = service.deleteModel(id);
 
-        assertThat(resp.getId()).isEqualTo(id);
+        assertThat(responseId).isEqualTo(id);
         verify(modelRepository).delete(existing);
     }
 

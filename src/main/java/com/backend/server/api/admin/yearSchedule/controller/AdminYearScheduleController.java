@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,19 +30,27 @@ public class AdminYearScheduleController {
 
     @Operation(summary = "연간 일정 목록 조회 API")
     @GetMapping
-    public ApiResponse<List<AdminYearScheduleResponse>> getYearSchedule(AdminYearScheduleSearchRequest request) {
+    public ApiResponse<List<AdminYearScheduleResponse>> getYearSchedule(@ParameterObject AdminYearScheduleSearchRequest request) {
         List<AdminYearScheduleResponse> result = adminYearScheduleService.getYearSchedules(request);
         return ApiResponse.success("연간 일정 목록 조회 성공", result);
     }
 
-    @Operation(summary = "연간 일정 등록 API")
+    @Operation(
+            summary = "연간 일정 등록 API",
+            description = """
+        ⚠️ 공휴일이면 classroomId, startAt, endAt 은 요청에 아예 보내지 않는걸 권장합니다. 에러가 날수 있습니다.
+        """)
     @PostMapping
     public ApiResponse<Long> createYearSchedule(@Valid @RequestBody AdminYearScheduleRequest request) {
         Long id = adminYearScheduleService.createYearSchedule(request);
         return ApiResponse.success("연간 일정 등록 성공", id);
     }
 
-    @Operation(summary = "연간 일정 수정 API")
+    @Operation(
+            summary = "연간 일정 수정 API",
+            description = """
+        연간 일정 등록 API 와 사용법이 비슷합니다.
+        """)
     @PutMapping("/{id}")
     public ApiResponse<Long> updateYearSchedule(@PathVariable Long id, @Valid @RequestBody AdminYearScheduleRequest request) {
         Long updatedId = adminYearScheduleService.updateYearSchedule(id, request);

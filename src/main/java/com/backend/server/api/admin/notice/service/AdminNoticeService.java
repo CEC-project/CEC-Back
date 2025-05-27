@@ -42,7 +42,7 @@ public class AdminNoticeService {
    * @return 생성된 공지사항의 ID를 담은 응답 객체
    * @throws RuntimeException 동일한 제목의 공지사항이 이미 존재하거나 관리자를 찾을 수 없는 경우
    */
-  public AdminNoticeIdResponse createNotice(AdminNoticeCreateRequest request, LoginUser loginUser) {
+  public Long createNotice(AdminNoticeCreateRequest request, LoginUser loginUser) {
     if (noticeRepository.existsByTitle(request.getTitle())) {
       throw new RuntimeException("공지사항 제목 중복");
     }
@@ -51,7 +51,7 @@ public class AdminNoticeService {
         .orElseThrow(() -> new RuntimeException("관리자를 찾을 수 없습니다."));
 
     Notice notice = noticeRepository.save(request.toEntity(author));
-    return new AdminNoticeIdResponse(notice.getId());
+    return notice.getId();
   }
 
   /**
@@ -97,7 +97,7 @@ public class AdminNoticeService {
    * @return 수정된 공지사항의 ID를 담은 응답 객체
    * @throws RuntimeException 수정하려는 공지사항을 찾을 수 없는 경우
    */
-  public AdminNoticeIdResponse updateNotice(Long id, AdminNoticeCreateRequest request) {
+  public Long updateNotice(Long id, AdminNoticeCreateRequest request) {
     Notice notice = noticeRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("공지사항을 찾을 수 없습니다."));
 
@@ -108,9 +108,9 @@ public class AdminNoticeService {
         .important(request.getImportant())
         .build();
 
-    noticeRepository.save(updated);
+    updated = noticeRepository.save(updated);
 
-    return new AdminNoticeIdResponse(updated.getId());
+    return updated.getId();
   }
 
   /**
@@ -123,13 +123,13 @@ public class AdminNoticeService {
    * @return 삭제된 공지사항의 ID를 담은 응답 객체
    * @throws RuntimeException 삭제하려는 공지사항이 존재하지 않는 경우
    */
-  public AdminNoticeIdResponse deleteNotice(Long id) {
+  public Long deleteNotice(Long id) {
     if (!noticeRepository.existsById(id)) {
       throw new RuntimeException("공지사항을 찾을 수 없습니다.");
     }
 
     noticeRepository.deleteById(id);
 
-    return new AdminNoticeIdResponse(id);
+    return id;
   }
 }

@@ -58,15 +58,17 @@ public class AdminSemesterScheduleService {
         SemesterSchedule result = semesterScheduleRepository.save(schedule);
 
         List<Long> equipments = request.getEquipments();
-        if (!equipmentRepository.isAvailableAllByIdIn(equipments, equipments.size(), Status.AVAILABLE))
-            throw new IllegalArgumentException("장비 id 가 유효하지 않습니다");
+        if (equipments != null && !equipments.isEmpty()) {
+            if (!equipmentRepository.isAvailableAllByIdIn(equipments, equipments.size(), Status.AVAILABLE))
+                throw new IllegalArgumentException("장비 id 가 유효하지 않습니다");
 
-        equipmentRepository.rentByIds(
-                equipments,
-                semester.getStartDate(),
-                semester.getEndDate(),
-                result,
-                Status.IN_USE);
+            equipmentRepository.rentByIds(
+                    equipments,
+                    semester.getStartDate().atStartOfDay(),
+                    semester.getEndDate().atStartOfDay(),
+                    result,
+                    Status.IN_USE);
+        }
 
         return result.getId();
     }
@@ -83,8 +85,9 @@ public class AdminSemesterScheduleService {
                 .professor(professor)
                 .day(request.getDay())
                 .name(request.getName())
-                .startAt(request.getStartTime())
-                .endAt(request.getEndTime())
+                .color(request.getColor())
+                .startAt(request.getStartAt())
+                .endAt(request.getEndAt())
                 .build();
         SemesterSchedule result = semesterScheduleRepository.save(schedule);
 
@@ -92,15 +95,19 @@ public class AdminSemesterScheduleService {
                 .orElseThrow(() -> new IllegalArgumentException("학기 id 가 유효하지 않습니다"));
 
         List<Long> equipments = request.getEquipments();
-        if (!equipmentRepository.isAvailableAllByIdIn(equipments, equipments.size(), schedule, Status.AVAILABLE))
-            throw new IllegalArgumentException("장비 id 가 유효하지 않습니다");
+        if (equipments != null && !equipments.isEmpty()) {
+            if (!equipmentRepository.isAvailableAllByIdIn(equipments, equipments.size(), schedule, Status.AVAILABLE))
+                throw new IllegalArgumentException("장비 id 가 유효하지 않습니다");
 
-        equipmentRepository.rentByIds(
-                equipments,
-                semester.getStartDate(),
-                semester.getEndDate(),
-                result,
-                Status.IN_USE);
+            // 제외된 장비는 대여 취소하는 코드 필요
+
+            equipmentRepository.rentByIds(
+                    equipments,
+                    semester.getStartDate().atStartOfDay(),
+                    semester.getEndDate().atStartOfDay(),
+                    result,
+                    Status.IN_USE);
+        }
 
         return result.getId();
     }

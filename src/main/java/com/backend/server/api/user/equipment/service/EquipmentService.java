@@ -1,7 +1,12 @@
 package com.backend.server.api.user.equipment.service;
 
+import java.util.Arrays;
 import java.util.List;
 
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentListResponse;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentRentalRequest;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -9,10 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentRentalRequest;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentListResponse;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentResponse;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Status;
@@ -29,7 +30,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EquipmentService {
     private final EquipmentRepository equipmentRepository;
-    private final EquipmentModelRepository equipmentModelRepository;
     private final UserRepository userRepository;
     private final EquipmentCartRepository equipmentCartRepository;
 
@@ -41,7 +41,7 @@ public class EquipmentService {
         return new EquipmentResponse(equipment);
     }
     //장비목록조회회
-    public EquipmentListResponse getEquipments(LoginUser loginUser,EquipmentListRequest request) {
+    public EquipmentListResponse getEquipments(LoginUser loginUser, EquipmentListRequest request) {
         // 사용자 학년 정보 조회
         Integer userGrade = userRepository.findById(loginUser.getId()).map(User::getGrade).orElse(null);
 
@@ -113,6 +113,14 @@ public class EquipmentService {
             // 장비가 대여 가능한 상태인지 확인
             if (Status.AVAILABLE != equipment.getStatus()) {
                 throw new IllegalStateException("장비가 대여 불가능한 상태입니다: " + equipment.getId());
+            }
+            //대여 제한 학년이면 예외 발생
+            String restriction = equipment.getRestrictionGrade();
+            if (restriction != null) {
+                List<String> restrictedGrades = Arrays.asList(restriction.split(","));
+                if (restrictedGrades.contains(String.valueOf(loginUser.getGrade()))) {
+                    throw new IllegalStateException("대여할 수 없는 유저입니다. (대여 제한 학년): " + equipment.getId());
+                }
             }
             
             Equipment updatedEquipment = equipment.toBuilder()

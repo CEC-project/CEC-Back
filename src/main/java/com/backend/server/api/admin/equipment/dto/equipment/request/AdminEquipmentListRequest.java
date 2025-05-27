@@ -31,8 +31,8 @@ public class AdminEquipmentListRequest implements PageableRequest {
     @Schema(description = "장비 상태 (AVAILABLE, IN_USE, BROKEN, RENTAL_PENDING, RETURN_PENDING)/ 정상, 대여중, 파손, 대여요청중, 반납대기중", example = "AVAILABLE")
     private String status;
 
-    @Schema(description = "대여 가능 여부", example = "true")
-    private Boolean isAvailable;
+//    @Schema(description = "대여 가능 여부", example = "true")
+//    private Boolean isAvailable;
 
     @Schema(description = "모델명, 일련번호, 대여자 이름에 대한 통합 키워드 검색", example = "SONY")
     private String searchKeyword;

@@ -20,7 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@Tag(name = "ℹ\uFE0F 알림", description = "알림 API")
+@Tag(name = "알림", description = "알림 API")
 @RequiredArgsConstructor
 @RequestMapping("/api/notifications")
 public class NotificationSseController {
@@ -63,7 +63,7 @@ public class NotificationSseController {
             ```
             """
     )
-    public ApiResponse<NotificationIdResponse> changeIsReadTrue(@PathVariable Long id){
+    public ApiResponse<Long> changeIsReadTrue(@PathVariable Long id){
         return ApiResponse.success("안읽은 알림 다 봤어요", notificationService.changeIsReadTrue(id));
     }
     @Operation(

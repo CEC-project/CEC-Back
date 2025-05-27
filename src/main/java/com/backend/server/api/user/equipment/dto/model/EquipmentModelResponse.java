@@ -19,6 +19,6 @@ public class EquipmentModelResponse {
         this.name = equipmentModel.getName();
         this.englishCode = equipmentModel.getEnglishCode();
         this.available = equipmentModel.isAvailable();
-        this.categoryId = equipmentModel.getCategoryId();
+        this.categoryId = equipmentModel.getCategory().getId();
     }
 }

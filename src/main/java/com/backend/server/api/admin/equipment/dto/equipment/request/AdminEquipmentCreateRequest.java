@@ -29,9 +29,6 @@ public class AdminEquipmentCreateRequest {
     @Schema(description = "생성할 장비 개수. 입력한 수만큼 장비가 생성됨", example = "5")
     private Long quantity;
 
-    @Schema(description = "대여 가능 여부 (true: 대여 가능, false: 대여 불가)", example = "true")
-    private boolean available;
-
     @Schema(description = "담당 관리자 ID. User의 PK", example = "10")
     private Long managerId;
 
@@ -49,7 +46,6 @@ public class AdminEquipmentCreateRequest {
                 .equipmentCategory(category)
                 .equipmentModel(model)
                 .serialNumber(serialNumber)  // serialNumber는 문자열로 저장
-                .available(available)
                 .status(Status.AVAILABLE)
                 .rentalCount(0L)
                 .brokenCount(0L)

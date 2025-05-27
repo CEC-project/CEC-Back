@@ -28,9 +28,6 @@ public class AdminEquipmentResponse {
     @Schema(description = "장비 상태", example = "AVAILABLE")
     private Status status;
 
-    @Schema(description = "대여 가능 여부", example = "true")
-    private boolean isAvailable;
-
     @Schema(description = "파손 횟수", example = "2")
     private Long brokenCount;
 
@@ -46,18 +43,47 @@ public class AdminEquipmentResponse {
     @Schema(description = "장비 등록일", example = "2024-05-20T10:00:00")
     private LocalDateTime createdAt;
 
+    @Schema(description = "장비 사진", example = "https://어쩌구")
+    private String imageUrl;
+
+    @Schema(description = "관리자 ID", example = "42")
+    private Long managerId;
+
+    @Schema(description = "장비 카테고리명", example = "노트북")
+    private String categoryName;
+
+    @Schema(description = "장비 설명", example = "M2칩 탑재 모델, 16GB RAM")
+    private String description;
+
+    @Schema(description = "이용 제한 학년 (문자열)", example = "1234")
+    private String restrictionGrade;
+
+    @Schema(description = "대여 시작일", example = "2024-05-20T10:00:00")
+    private LocalDateTime startRentDate;
+
+    @Schema(description = "대여 종료일", example = "2024-05-27T10:00:00")
+    private LocalDateTime endRentDate;
+
     public AdminEquipmentResponse(Equipment equipment) {
+        if (equipment.getRenter() != null)
+            this.renterName = equipment.getRenter().getName();
+        else if (equipment.getSemesterSchedule() != null)
+            this.renterName = equipment.getSemesterSchedule().getName();
+        this.imageUrl = equipment.getImageUrl();
         this.id = equipment.getId();
         this.modelName = equipment.getEquipmentModel().getName();
         this.serialNumber = equipment.getSerialNumber();
         this.status = equipment.getStatus();
-        this.isAvailable = equipment.isAvailable();
         this.brokenCount = equipment.getBrokenCount();
         this.repairCount = equipment.getRepairCount();
         this.rentalCount = equipment.getRentalCount();
-        this.renterName = equipment.getRenter() != null
-                ? equipment.getRenter().getName()
-                : null;
         this.createdAt = equipment.getCreatedAt();
+        this.imageUrl = equipment.getImageUrl();
+        this.managerId = equipment.getManagerId();
+        this.categoryName = equipment.getEquipmentCategory().getName();
+        this.description = equipment.getDescription();
+        this.restrictionGrade = equipment.getRestrictionGrade();
+        this.startRentDate = equipment.getStartRentDate();
+        this.endRentDate = equipment.getEndRentDate();
     }
 }

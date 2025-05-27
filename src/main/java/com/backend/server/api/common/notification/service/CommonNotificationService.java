@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CommonNotificationService {
     private final NotificationRepository notificationRepository;
     private final RedisTemplate<String, Object> redisTemplate;
-    
+
     public void createNotification(CommonNotificationDto dto, Long userId){
         Notification notification = Notification.builder()
             .userId(userId)
@@ -30,13 +30,13 @@ public class CommonNotificationService {
             .link(dto.getLink())
             .read(false)
             .build();
-        
+
         notificationRepository.save(notification);
-        
+
         // Redis로 실시간 알림 발송
         try {
             redisTemplate.convertAndSend(
-                "notifications:" + userId, 
+                "notifications:" + userId,
                 notification
             );
         } catch (Exception e) {
@@ -45,7 +45,7 @@ public class CommonNotificationService {
     }
 
     //읽음처리
-    public NotificationIdResponse changeIsReadTrue(Long notificationId) {
+    public Long changeIsReadTrue(Long notificationId) {
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new IllegalArgumentException("그런 알림은 없어요."));
 
@@ -55,7 +55,7 @@ public class CommonNotificationService {
 
         notificationRepository.save(updated);
 
-        return new NotificationIdResponse(updated);
+        return updated.getId();
     }
 
 

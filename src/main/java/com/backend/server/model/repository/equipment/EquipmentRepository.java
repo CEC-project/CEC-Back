@@ -8,7 +8,7 @@ import com.backend.server.model.entity.enums.Status;
 import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.persistence.LockModeType;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Lock;
@@ -30,6 +30,8 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     // List<Equipment> findByRentalStatusAndName(Status status, String name);
     Long countByEquipmentModel_Id(Long modelId);
     Optional<User> findByRenterId(Long renterId);
+
+    Long countBySerialNumberStartingWith(String prefix);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT e FROM Equipment e WHERE e.id = :id")
@@ -72,8 +74,8 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
             + "WHERE e.id IN :ids")
     void rentByIds(
             @Param("ids") List<Long> ids,
-            @Param("start") LocalDate start,
-            @Param("end") LocalDate end,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end,
             @Param("schedule") SemesterSchedule schedule,
             @Param("status") Status status
     );

@@ -61,10 +61,10 @@ class AdminEquipmentCategoryServiceTest {
         when(categoryRepository.save(any())).thenReturn(saved);
 
         // service 호출 (실제 테스트 대상)
-        AdminEquipmentCategoryIdResponse resp = service.createCategory(req);
+        Long responseId = service.createCategory(req);
 
         // 반환된 ID가 1L인지 검증
-        assertThat(resp.getId()).isEqualTo(1L);
+        assertThat(responseId).isEqualTo(1L);
         // 중복 검사 메서드 호출 여부 검증
         verify(categoryRepository).existsByName("Camera");
         verify(categoryRepository).existsByEnglishCode("CAM");
@@ -109,10 +109,10 @@ class AdminEquipmentCategoryServiceTest {
         when(categoryRepository.save(any(EquipmentCategory.class))).thenReturn(updated);
 
         // service 호출
-        AdminEquipmentCategoryIdResponse resp = service.updateCategory(id, req);
+        Long responseId = service.updateCategory(id, req);
 
         // 반환 ID 검증
-        assertThat(resp.getId()).isEqualTo(id);
+        assertThat(responseId).isEqualTo(id);
         // findById, save 호출 여부 검증
         verify(categoryRepository).findById(id);
         verify(categoryRepository).save(any(EquipmentCategory.class));
@@ -127,10 +127,10 @@ class AdminEquipmentCategoryServiceTest {
         when(categoryRepository.findById(id)).thenReturn(Optional.of(existing));
 
         // service 호출
-        AdminEquipmentCategoryIdResponse resp = service.deleteCategory(id);
+        Long responseId = service.deleteCategory(id);
 
         // 반환 ID 검증
-        assertThat(resp.getId()).isEqualTo(id);
+        assertThat(responseId).isEqualTo(id);
         // delete 호출 여부 검증
         verify(categoryRepository).delete(existing);
     }

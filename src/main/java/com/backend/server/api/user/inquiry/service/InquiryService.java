@@ -5,9 +5,11 @@ import com.backend.server.api.user.inquiry.dto.InquiryRequest;
 import com.backend.server.api.user.inquiry.dto.InquiryResponse;
 import com.backend.server.model.entity.Inquiry;
 
+import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.InquiryRepository;
 
 
+import com.backend.server.model.repository.UserRepository;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +21,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class InquiryService {
 
     private final InquiryRepository inquiryRepository;
-
+    private final UserRepository userRepository;
 
     @Transactional
     public Long createInquiry(InquiryRequest request, Long currentUserId) { // 문의 글 쓰기
 
+        User author = userRepository.findById(currentUserId).orElseThrow(
+                () -> new RuntimeException("로그인된 사용자가 DB에 없음"));
 
         Inquiry inquiry = Inquiry.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
                 .attachmentUrl(request.getAttachmentUrl())
-                .authorId(currentUserId)
+                .author(author)
                 .type(request.getType())
                 .build();
 
@@ -41,7 +45,7 @@ public class InquiryService {
     public InquiryResponse getInquiry(Long id, Long currentUserId) throws AccessDeniedException { // 게시글 상세 조회
         Inquiry inquiry = inquiryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 문의글이 존재하지 않습니다."));
 
-        if (!inquiry.getAuthorId().equals(currentUserId)){
+        if (!inquiry.getAuthor().getId().equals(currentUserId)){
             throw new AccessDeniedException("본인의 문의글만 조회할 수 있습니다.");
         }
 
@@ -69,5 +73,44 @@ public class InquiryService {
                         .createdAt(inquiry.getCreatedAt())
                         .build())
         .toList();
+    }
+
+    @Transactional
+    public void updateInquiry(Long inquiryId, InquiryRequest request, Long currentUserId) throws AccessDeniedException{ // 내 문의 글 수정
+        Inquiry inquiry = inquiryRepository.findById(inquiryId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 문의글이 존재하지 않습니다."));
+
+        if (!inquiry.getAuthor().getId().equals(currentUserId)) {
+            throw new AccessDeniedException("본인의 문의글만 수정할 수 있습니다.");
+        }
+
+        // 변경 내용
+        inquiry.toBuilder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .attachmentUrl(request.getAttachmentUrl())
+                .type(request.getType())
+                .build();
+
+        // 객체 수정
+        inquiry.update(
+                request.getTitle(),
+                request.getContent(),
+                request.getAttachmentUrl(),
+                request.getType()
+        );
+
+    }
+
+    @Transactional
+    public void deleteInquiry(Long inquiryId, Long currentUserId) throws AccessDeniedException {
+        Inquiry inquiry = inquiryRepository.findById(inquiryId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 문의글이 존재하지 않습니다."));
+
+        if (!inquiry.getAuthor().getId().equals(currentUserId)) {
+            throw new AccessDeniedException("본인의 문의글만 삭제할 수 있습니다.");
+        }
+
+        inquiryRepository.delete(inquiry);
     }
 }

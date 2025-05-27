@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface YearScheduleRepository extends JpaRepository<YearSchedule, Long> {
 
     @Query("SELECT y FROM YearSchedule y " +
-            "JOIN FETCH y.classroom " +
+            "LEFT JOIN FETCH y.classroom " +
             "WHERE y.date BETWEEN :startDate AND :endDate " +
             "ORDER BY y.date ASC")
     List<YearSchedule> findWithClassroomBetweenDates(

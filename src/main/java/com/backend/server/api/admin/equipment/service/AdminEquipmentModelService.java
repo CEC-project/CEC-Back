@@ -1,10 +1,10 @@
 package com.backend.server.api.admin.equipment.service;
 
+import com.backend.server.model.entity.EquipmentCategory;
 import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import com.backend.server.api.admin.equipment.dto.model.AdminEquipmentModelCreateRequest;
-import com.backend.server.api.admin.equipment.dto.model.AdminEquipmentModelIdResponse;
 import com.backend.server.model.entity.EquipmentModel;
 import com.backend.server.model.repository.equipment.EquipmentModelRepository;
 
@@ -43,34 +43,39 @@ public class AdminEquipmentModelService {
     }
 
     //장비 모델 생성
-    public AdminEquipmentModelIdResponse createModel(AdminEquipmentModelCreateRequest request) {
+    public Long createModel(AdminEquipmentModelCreateRequest request) {
         checkExist(request);
-        EquipmentModel savedEquipmentModel = equipmentModelRepository.save(request.toEntity());
-        return new AdminEquipmentModelIdResponse(savedEquipmentModel.getId());
+        EquipmentCategory equipmentCategory = equipmentCategoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
+        EquipmentModel savedEquipmentModel = equipmentModelRepository.save(request.toEntity(equipmentCategory));
+        return savedEquipmentModel.getId();
     }
 
     //장비 모델 업데이트
-    public AdminEquipmentModelIdResponse updateModel(Long id, AdminEquipmentModelCreateRequest request) {
+    public Long updateModel(Long id, AdminEquipmentModelCreateRequest request) {
         checkExistForUpdate(id, request);
         EquipmentModel equipmentModel = equipmentModelRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("해당 장비 모델이 존재하지 않습니다. id=" + id));
 
+        EquipmentCategory equipmentCategory = equipmentCategoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
+
         equipmentModel = equipmentModel.toBuilder()
             .name(request.getName())
             .available(request.isAvailable())
-            .categoryId(request.getCategoryId())
+            .category(equipmentCategory)
             .englishCode(request.getEnglishCode())
             .build();
 
         EquipmentModel savedEquipmentModel = equipmentModelRepository.save(equipmentModel);
-        return new AdminEquipmentModelIdResponse(savedEquipmentModel.getId());
+        return savedEquipmentModel.getId();
     }
 
     //장비 모델 삭제
-    public AdminEquipmentModelIdResponse deleteModel(Long id) {
+    public Long deleteModel(Long id) {
         EquipmentModel equipmentModel = equipmentModelRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("해당 장비 모델이 존재하지 않습니다. id=" + id));
         equipmentModelRepository.delete(equipmentModel);
-        return new AdminEquipmentModelIdResponse(equipmentModel.getId());
+        return equipmentModel.getId();
     }
 }

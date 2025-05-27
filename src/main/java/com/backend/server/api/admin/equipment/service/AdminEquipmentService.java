@@ -1,10 +1,13 @@
 package com.backend.server.api.admin.equipment.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentSerialNumberGenerateRequest;
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.service.CommonNotificationService;
 import com.backend.server.model.entity.EquipmentCategory;
@@ -16,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminManagerCandidatesResponse;
 import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentCreateRequest;
-import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentIdResponse;
-import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentIdsResponse;
 import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentListRequest;
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentListResponse;
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentResponse;
@@ -51,64 +52,84 @@ public class AdminEquipmentService {
             .map(AdminManagerCandidatesResponse::new)
             .collect(Collectors.toList());
     }
-    public String generateSerialNumber(AdminEquipmentCreateRequest request){
+
+    public String generateSerialNumber(AdminEquipmentSerialNumberGenerateRequest request) {
+
         EquipmentCategory category = equipmentCategoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("카테고리 없음"));
 
         EquipmentModel model = equipmentModelRepository.findById(request.getModelId())
                 .orElseThrow(() -> new RuntimeException("모델 없음"));
 
-        String equipmentCategoryName = category.getEnglishCode();
-        String equipmentModelName = model.getEnglishCode();
+        // prefix: 카테고리 코드 3자리 + 모델 코드 3자리
+        //영문코드가 3자리 이하인 경우 문자열 앞에 _ 를 붙임.
+        //ex - _CA, __A
+        //_CA__A250501 이런식
+        String prefixCategoryCode;
+        String prefixEquipmentModelCode;
 
-        String prefixCategoryCode = equipmentCategoryName.substring(0, 3).toUpperCase();
-        String prefixEquipmentModelCode = equipmentModelName.substring(0, 3).toUpperCase();
-        Long modelCount = equipmentRepository.countByEquipmentModel_Id(request.getModelId());
 
-        String modelCountString = modelCount < 10000
-                ? String.format("%04d", modelCount)
-                : modelCount.toString();
+        String categoryCode = category.getEnglishCode().toUpperCase();
+        if (categoryCode.length() < 3) {
+            prefixCategoryCode = String.format("%3s", categoryCode).replace(' ', '_');
+        } else {
+            prefixCategoryCode = categoryCode.substring(0, 3);
+        }
 
-        return prefixCategoryCode + prefixEquipmentModelCode + modelCountString;
+        String modelCode = model.getEnglishCode().toUpperCase();
+        if (modelCode.length() < 3) {
+            prefixEquipmentModelCode = String.format("%3s", modelCode).replace(' ', '_');
+        } else {
+            prefixEquipmentModelCode = modelCode.substring(0, 3);
+        }
+        String prefix = prefixCategoryCode + prefixEquipmentModelCode; // e.g., CAMSON
+
+        // suffix: yyMM + 2자리 일련번호
+        String datePrefix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMM")); // e.g., 2405
+        String serialPrefix = prefix + datePrefix; // e.g., CAMSON2405
+
+        long count = equipmentRepository.countBySerialNumberStartingWith(serialPrefix);
+        String sequence = String.format("%02d", count + 1); // 첫 번째 생성될 순번
+
+        return serialPrefix + sequence; // e.g., CAMSON240501
     }
     //장비생성
-    public AdminEquipmentIdsResponse createEquipment(AdminEquipmentCreateRequest request) {
+    public List<Long> createEquipment(AdminEquipmentCreateRequest request) {
         EquipmentCategory category = equipmentCategoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("카테고리 없음"));
 
         EquipmentModel model = equipmentModelRepository.findById(request.getModelId())
                 .orElseThrow(() -> new RuntimeException("모델 없음"));
 
-        String equipmentCategoryName = category.getEnglishCode();
-        String equipmentModelName = model.getEnglishCode();
 
-        String prefixCategoryCode = equipmentCategoryName.substring(0, 3).toUpperCase();
-        String prefixEquipmentModelCode = equipmentModelName.substring(0, 3).toUpperCase();
+        String prefixCategoryCode = category.getEnglishCode().substring(0, 3).toUpperCase(); // ex: CAM
+        String prefixModelCode = model.getEnglishCode().substring(0, 3).toUpperCase();       // ex: SON
+        String prefix = prefixCategoryCode + prefixModelCode;                                // ex: CAMSON
 
-        Long modelCount = equipmentRepository.countByEquipmentModel_Id(request.getModelId()) + 1;
+        // 날짜 구성: yyMM
+        String datePrefix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMM"));     // ex: 2405
+        String serialPrefix = prefix + datePrefix;                                            // ex: CAMSON2405
+
+        // 기존 시리얼 넘버 개수 파악 (해당 월 기준)
+        long count = equipmentRepository.countBySerialNumberStartingWith(serialPrefix);
 
         List<Long> savedEquipmentIds = new ArrayList<>();
 
         for (int i = 1; i <= request.getQuantity(); i++) {
-            String modelCountString = modelCount < 10000
-                    ? String.format("%04d", modelCount)
-                    : modelCount.toString();
-
-            String serialNumber = prefixCategoryCode + prefixEquipmentModelCode + modelCountString;
+            String sequence = String.format("%02d", count + i);                               // 01 ~ 99
+            String serialNumber = serialPrefix + sequence;                                    // ex: CAMSON240501
 
             Equipment equipment = request.toEntity(category, model, serialNumber);
             Equipment saved = equipmentRepository.save(equipment);
             savedEquipmentIds.add(saved.getId());
-
-            modelCount++;
         }
 
-        return new AdminEquipmentIdsResponse(savedEquipmentIds);
+        return savedEquipmentIds;
     }
 
 
     // 장비 업데이트
-    public AdminEquipmentIdResponse updateEquipment(Long id, AdminEquipmentCreateRequest request) {
+    public Long updateEquipment(Long id, AdminEquipmentCreateRequest request) {
         Equipment equipment = equipmentRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
 
@@ -120,15 +141,15 @@ public class AdminEquipmentService {
             .restrictionGrade(request.getRestrictionGrade())
             .build();
 
-        equipmentRepository.save(updated); 
+        updated = equipmentRepository.save(updated);
 
-        return new AdminEquipmentIdResponse(updated.getId());
+        return updated.getId();
     }
 
     // 장비 삭제
-    public AdminEquipmentIdResponse deleteEquipment(Long id) {
+    public Long deleteEquipment(Long id) {
         equipmentRepository.deleteById(id);
-        return new AdminEquipmentIdResponse(id);
+        return id;
     }
 
     //장비 리스트 조회
@@ -283,11 +304,14 @@ public class AdminEquipmentService {
                 throw new IllegalStateException("고장/파손 상태인 장비만 복구할 수 있습니다. ID: " + equipmentId);
             }
 
+            Long currentRepairCount = equipment.getRepairCount();
+
             Equipment updated = equipment.toBuilder()
                     .status(Status.AVAILABLE)
                     .description(repairNote != null ?
                             equipment.getDescription() + "\n[" + LocalDateTime.now() + "] 복구: " + repairNote :
                             equipment.getDescription())
+                    .repairCount(currentRepairCount != null ? currentRepairCount + 1L : 1L)
                     .build();
 
             equipmentRepository.save(updated);

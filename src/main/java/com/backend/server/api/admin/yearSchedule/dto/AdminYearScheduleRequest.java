@@ -4,6 +4,7 @@ import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.classroom.YearSchedule;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.LocalDate;
@@ -25,17 +26,21 @@ public class AdminYearScheduleRequest {
     private Boolean isHoliday;
 
     @Positive
+    @Schema(example = "1")
     private Long classroomId;
 
     @Length(max = 20)
     private String description;
+    private String color;
 
     @NotNull
     @JsonFormat(pattern = "HH:mm")
+    @Schema(implementation = String.class, example = "13:00")
     private LocalTime startAt;
 
     @NotNull
     @JsonFormat(pattern = "HH:mm")
+    @Schema(implementation = String.class, example = "14:00")
     private LocalTime endAt;
 
     public YearSchedule toEntity() {
@@ -44,6 +49,7 @@ public class AdminYearScheduleRequest {
                     .date(date)
                     .isHoliday(isHoliday)
                     .description(description)
+                    .color(color)
                     .build();
         }
         return YearSchedule.builder()
@@ -51,6 +57,7 @@ public class AdminYearScheduleRequest {
                 .isHoliday(isHoliday)
                 .classroom(Classroom.builder().id(classroomId).build())
                 .description(description)
+                .color(color)
                 .startAt(startAt)
                 .endAt(endAt)
                 .build();

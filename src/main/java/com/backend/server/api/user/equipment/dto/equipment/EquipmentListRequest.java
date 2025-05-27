@@ -1,10 +1,17 @@
 package com.backend.server.api.user.equipment.dto.equipment;
 
 import com.backend.server.api.common.dto.PageableRequest;
+import com.backend.server.model.entity.enums.Status;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Schema(description = "장비 목록 조회 요청 DTO")
 public class EquipmentListRequest implements PageableRequest {
     @Schema(description = "모델명으로 필터링", example = "SONY")
@@ -16,8 +23,8 @@ public class EquipmentListRequest implements PageableRequest {
     @Schema(description = "카테고리 ID로 필터링", example = "1")
     private Long categoryId;
 
-    @Schema(description = "사용 가능 여부로 필터링", example = "true")
-    private Boolean isAvailable;
+    @Schema(description = "장비 상태로 필터링", example = "AVAILABLE")
+    private String status;
 
     @Schema(description = "키워드 검색", example = "sony")
     private String searchKeyword;

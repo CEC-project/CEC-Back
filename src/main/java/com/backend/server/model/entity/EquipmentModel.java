@@ -1,10 +1,6 @@
 package com.backend.server.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,12 +17,13 @@ public class EquipmentModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name; 
+    private String name;
 
     private String englishCode;
 
     private boolean available;
-    //카테고리 아이디 명시한거임 왜냐면 카테고리 아이디 참조해서 조회해야 하니까
-    private Long categoryId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private EquipmentCategory category;
 }

@@ -1,5 +1,6 @@
 package com.backend.server.api.admin.equipment.dto.model;
 
+import com.backend.server.model.entity.EquipmentCategory;
 import com.backend.server.model.entity.EquipmentModel;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -7,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 @Getter
 @NoArgsConstructor
 @Builder
@@ -24,13 +26,12 @@ public class AdminEquipmentModelCreateRequest {
     @Schema(description = "장비 카테고리 ID", example = "3")
     private Long categoryId;
 
-    public EquipmentModel toEntity() {
+    public EquipmentModel toEntity(EquipmentCategory category) {
         return EquipmentModel.builder()
                 .name(name)
                 .englishCode(englishCode)
                 .available(available)
-                .categoryId(categoryId)
-                
+                .category(category)
                 .build();
     }
 }
