@@ -201,7 +201,7 @@ public class AdminEquipmentController {
 
     @PostMapping("/broken")
     @Operation(
-            summary = "장비 고장/파손 처리",
+            summary = "장비 고장/파손",
             description = "지정된 장비들을 BROKEN 상태로 변경하며, 파손 사유를 함께 기록할 수 있습니다. 사유는 장비의 설명에 추가로 붙습니다"
     )
     public ApiResponse<Void> markEquipmentsAsBroken(
@@ -213,13 +213,16 @@ public class AdminEquipmentController {
 
     @PostMapping("/repair")
     @Operation(
-            summary = "장비 복구 처리",
-            description = "BROKEN 상태의 장비를 AVAILABLE 상태로 변경하며 복구 내용을 기록할 수 있습니다. 내용은 장비의 설명에 추가로 붙습니다"
+            summary = "장비 수리",
+            description = """
+                    BROKEN 상태의 장비를 AVAILABLE 상태로 변경하며 수리 내용을 기록할 수 있습니다. 내용은 장비의 설명에 추가로 붙습니다
+                    
+                    예시 : /api/admin/equipments/repair?equipmentIds=1&equipmentIds=2&description=설명내용"""
     )
     public ApiResponse<Void> repairEquipments(
             @RequestParam List<Long> equipmentIds,
-            @RequestParam(required = false) String repairNote) {
-        adminEquipmentService.repairEquipments(equipmentIds, repairNote);
+            @RequestParam(required = false) String description) {
+        adminEquipmentService.repairEquipments(equipmentIds, description);
         return ApiResponse.success("장비 복구 처리 성공", null);
     }
 
