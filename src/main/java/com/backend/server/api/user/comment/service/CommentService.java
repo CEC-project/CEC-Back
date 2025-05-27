@@ -1,7 +1,10 @@
 package com.backend.server.api.user.comment.service;
 
 import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.api.user.comment.dto.*;
+import com.backend.server.api.user.comment.dto.CommentListRequest;
+import com.backend.server.api.user.comment.dto.CommentListResponse;
+import com.backend.server.api.user.comment.dto.CommentRequest;
+import com.backend.server.api.user.comment.dto.CommentUpdateRequest;
 import com.backend.server.model.entity.Comment;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.TargetType;
@@ -16,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
