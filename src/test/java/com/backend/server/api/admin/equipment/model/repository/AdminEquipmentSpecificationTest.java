@@ -51,25 +51,22 @@ class AdminEquipmentSpecificationTest extends AbstractPostgresContainerTest {
     @Autowired
     private EntityManager em;
 
-    private EquipmentCategory category;
-    private EquipmentModel model;
-    private User user;
 
     @BeforeEach
     void setUp() {
-        category = equipmentCategoryRepository.save(EquipmentCategory.builder()
+        EquipmentCategory category =  equipmentCategoryRepository.save(EquipmentCategory.builder()
                 .name("카메라")
                 .englishCode("CAM")
                 .maxRentalCount(10)
                 .build());
 
-        model = equipmentModelRepository.save(EquipmentModel.builder()
+        EquipmentModel model = equipmentModelRepository.save(EquipmentModel.builder()
                 .name("SONY-A7000")
                 .englishCode("SON")
                 .category(category)
                 .build());
 
-        user = userRepository.save(User.builder()
+        User user = userRepository.save(User.builder()
                 .name("홍길동")
                 .birthDate(LocalDate.of(2000, 1, 1))
                         .group("A반")
