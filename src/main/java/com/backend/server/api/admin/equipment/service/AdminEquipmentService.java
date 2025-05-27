@@ -286,11 +286,14 @@ public class AdminEquipmentService {
                 throw new IllegalStateException("고장/파손 상태인 장비만 복구할 수 있습니다. ID: " + equipmentId);
             }
 
+            Long currentRepairCount = equipment.getRepairCount();
+
             Equipment updated = equipment.toBuilder()
                     .status(Status.AVAILABLE)
                     .description(repairNote != null ?
                             equipment.getDescription() + "\n[" + LocalDateTime.now() + "] 복구: " + repairNote :
                             equipment.getDescription())
+                    .repairCount(currentRepairCount != null ? currentRepairCount + 1L : 1L)
                     .build();
 
             equipmentRepository.save(updated);
