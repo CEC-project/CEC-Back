@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -52,6 +53,7 @@ public class SecurityConfig {
 
         http
             .csrf(AbstractHttpConfigurer::disable)
+
             .cors(cors -> cors.configurationSource(request -> {
                 CorsConfiguration config = new CorsConfiguration();
                 config.setAllowedOrigins(origins); // 모든 Origin 허용
@@ -65,6 +67,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(requestMatcher).permitAll()
                     .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
+                    .requestMatchers("/api/notifications/subscribe").permitAll()
+
                     .anyRequest().hasAnyRole("USER", "ADMIN", "SUPER_ADMIN")
             )
             .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)

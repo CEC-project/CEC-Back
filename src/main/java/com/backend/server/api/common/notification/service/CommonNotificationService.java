@@ -1,7 +1,7 @@
 package com.backend.server.api.common.notification.service;
 import java.util.List;
 
-import com.backend.server.api.common.notification.dto.NotificationIdResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable; 
@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CommonNotificationService {
     private final NotificationRepository notificationRepository;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final ObjectMapper objectMapper;
 
     public void createNotification(CommonNotificationDto dto, Long userId){
         Notification notification = Notification.builder()
@@ -35,12 +36,11 @@ public class CommonNotificationService {
 
         // Redis로 실시간 알림 발송
         try {
-            redisTemplate.convertAndSend(
-                "notifications:" + userId,
-                notification
-            );
+
+            String json = objectMapper.writeValueAsString(notification);
+            redisTemplate.convertAndSend("notifications:" + userId, json);
         } catch (Exception e) {
-            log.error("실시간 알림 발송 실패", e);
+            log.error("알림 전송 실패", e);
         }
     }
 
@@ -52,7 +52,6 @@ public class CommonNotificationService {
         Notification updated = notification.toBuilder()
                 .read(true)
                 .build();
-
         notificationRepository.save(updated);
 
         return updated.getId();

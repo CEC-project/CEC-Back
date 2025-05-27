@@ -1,43 +1,43 @@
 package com.backend.server.config;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.config.security.AccessTokenValidator;
-import com.backend.server.config.security.JwtUtil;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
+import com.backend.server.model.entity.Notification;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.backend.server.model.entity.Notification;
-
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.*;
 
 @Service
 @RequiredArgsConstructor
 public class SseEmitterService {
 
+    // 사용자별 Emitter 저장소
     private final Map<Long, SseEmitter> emitters = new ConcurrentHashMap<>();
-    private final AccessTokenValidator accessTokenValidator;
 
-    public SseEmitter createEmitter(LoginUser loginUser, String token) {
-        if (!accessTokenValidator.validateAccessToken(token)) {
-            throw new BadCredentialsException("유효하지 않은 액세스 토큰입니다.");
-        }
+    // 사용자별 하트비트 executor 저장소
+    private final Map<Long, ScheduledExecutorService> executors = new ConcurrentHashMap<>();
 
-        Long tokenUserId = accessTokenValidator.getUserIdByAccessToken(token);
-        if (!loginUser.getId().equals(tokenUserId)) {
-            throw new IllegalArgumentException("토큰의 사용자 정보가 일치하지 않습니다.");
-        }
+    public SseEmitter createEmitter(Long userId) {
+        // SSE 연결 객체 생성. 10분 지나면 연결 끊음. 클라이언트가 연결되어도 계속 쏘는 데이터 누수 방지
+        SseEmitter emitter = new SseEmitter(10 * 60 * 1000L);
+        emitters.put(userId, emitter);
 
-        SseEmitter emitter = new SseEmitter(60 * 1000L); // 1분 타임아웃
-        emitters.put(loginUser.getId(), emitter);
+        // 하트비트용 executor 설정
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        executors.put(userId, executor);
 
-        emitter.onCompletion(() -> emitters.remove(tokenUserId));
-        emitter.onTimeout(() -> emitters.remove(tokenUserId));
+        executor.scheduleAtFixedRate(() -> {
+            try {
+                emitter.send(SseEmitter.event().name("ping").data("♥"));
+            } catch (IOException e) {
+                cleanup(userId);
+            }
+        }, 0, 30, TimeUnit.SECONDS); // 30초마다 하트비트 전송
+
+        emitter.onCompletion(() -> cleanup(userId));
+        emitter.onTimeout(() -> cleanup(userId));
 
         return emitter;
     }
@@ -46,12 +46,19 @@ public class SseEmitterService {
         SseEmitter emitter = emitters.get(userId);
         if (emitter != null) {
             try {
-                emitter.send(SseEmitter.event()
-                        .name("notification")
-                        .data(notification));
+                emitter.send(SseEmitter.event().name("notification").data(notification));
             } catch (IOException e) {
-                emitters.remove(userId);
+                cleanup(userId);
             }
+        }
+    }
+
+    // 연결 및 스케줄러 정리
+    private void cleanup(Long userId) {
+        emitters.remove(userId);
+        ScheduledExecutorService executor = executors.remove(userId);
+        if (executor != null && !executor.isShutdown()) {
+            executor.shutdown();
         }
     }
 }
