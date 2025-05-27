@@ -5,6 +5,7 @@ import com.backend.server.api.user.equipment.dto.equipment.EquipmentListResponse
 import com.backend.server.api.user.equipment.dto.equipment.EquipmentRentalRequest;
 import com.backend.server.api.user.equipment.dto.equipment.EquipmentResponse;
 import com.backend.server.api.user.equipment.service.EquipmentService;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
@@ -28,16 +29,16 @@ public class EquipmentController {
 
     @GetMapping("/{id}")
     @Operation(
-            summary = "장비 개별 조회",
+            summary = "장비 단일 조회",
             description = """
-        장비 ID를 이용하여 단일 장비의 상세 정보를 조회합니다.
-
-        예시 요청:
-        - `/api/user/equipments/1`
-
-        반환값에는 모델명, 일련번호, 상태, 대여 가능 여부 등 상세 정보가 포함됩니다.
-        """
-    )
+                장비 ID를 이용하여 단일 장비의 상세 정보를 조회합니다.
+        
+                예시 요청:
+                - `/api/user/equipments/1`
+        
+                반환값에는 모델명, 일련번호, 상태, 대여 가능 여부 등 상세 정보가 포함됩니다.
+                """
+            )
     public ApiResponse<EquipmentResponse> getEquipment(
             @Parameter(description = "장비 ID", required = true) @PathVariable Long id) {
         return ApiResponse.success("장비 조회 성공", equipmentService.getEquipment(id));
@@ -45,7 +46,7 @@ public class EquipmentController {
 
     @GetMapping
     @Operation(
-            summary = "장비 목록 조회",
+            summary = "장비 목록 조회 (내가 대여한 장비 목록 보기 이걸로 가능)",
             description = """
         검색, 필터링, 정렬, 페이징 조건에 따라 장비 목록을 조회합니다.
 
@@ -53,24 +54,32 @@ public class EquipmentController {
         - `categoryId` (Long): 장비 카테고리 ID
         - `modelName` (String): 모델명 (부분 일치)
         - `renterName` (String): 현재 대여자 이름 (부분 일치)
-        - `isAvailable` (Boolean): 대여 가능 여부
+        - `status` (String) : 현재 장비 상태 (AVAILABLE(활성화),IN_USE(대여중)
+            ,RENTAL_PENDING(대여 요청중),RETURN_PENDING(반납 대기중), BROKEN(파손))
         - `searchKeyword` (String): 모델명, 일련번호, 대여자 통합 검색
 
+        ---
+        
         정렬 조건:
         - `sortBy` (String): 정렬 기준 필드 (예: id, createdAt)
         - `sortDirection` (String): 정렬 방향 (asc 또는 desc)
-
+        
+        ---
         페이징 조건:
         - `page` (Integer): 페이지 번호 (0부터 시작)
         - `size` (Integer): 한 페이지당 항목 수
-
+        ---
+        내가 대여한 장비 목록 보기 하는법
+        >> renterName 을 자기이름, status를 IN_USE 로 넣으면 됌
+        --- 
+       
         예시 요청:
         - `/api/user/equipments?categoryId=1&isAvailable=true`
         - `/api/user/equipments?searchKeyword=맥북&page=0&size=10&sortBy=id&sortDirection=desc`
         """
     )
     public ApiResponse<EquipmentListResponse> getEquipments(
-            @ModelAttribute EquipmentListRequest request,
+            @ParameterObject @ModelAttribute EquipmentListRequest request,
             @AuthenticationPrincipal LoginUser loginUser) {
         return ApiResponse.success("장비 목록 조회 성공", equipmentService.getEquipments(loginUser, request));
     }
@@ -114,7 +123,7 @@ public class EquipmentController {
 
     @PostMapping("/rental")
     @Operation(
-            summary = "장비 대여 요청",
+            summary = "장비 대여 요청 - 대여 성공시 장바구니에 있는 장비 자동 삭제",
             description = """
         장비 대여를 요청합니다. 장비가 AVAILABLE 상태여야 하며, 요청 시 대여 기간을 지정해야 합니다.
 
@@ -129,6 +138,8 @@ public class EquipmentController {
 
         예시 요청:
         - POST `/api/user/equipments/rental`
+        
+        요청이 성공하면 장바구니에 있는 장비들은 자동 삭제됩니다.
         """
     )
     public ApiResponse<Void> requestRental(
@@ -142,17 +153,17 @@ public class EquipmentController {
     @Operation(
             summary = "장비 대여 요청 취소",
             description = """
-        RENTAL_PENDING 상태인 장비의 대여 요청을 취소합니다. 본인이 요청한 장비만 취소할 수 있습니다.
-
-        요청 형식:
-        ```
-        [1, 2, 3]
-        ```
-
-        예시 요청:
-        - POST `/api/user/equipments/rental/cancel`
-        """
-    )
+                RENTAL_PENDING 상태인 장비의 대여 요청을 취소합니다. 본인이 요청한 장비만 취소할 수 있습니다.
+        
+                요청 형식:
+                ```
+                [1, 2, 3]
+                ```
+        
+                예시 요청:
+                - POST `/api/user/equipments/rental/cancel`
+                """
+            )
     public ApiResponse<Void> cancelRentalRequest(
             @RequestBody List<Long> equipmentIds,
             @AuthenticationPrincipal LoginUser loginUser) {
@@ -186,17 +197,17 @@ public class EquipmentController {
     @Operation(
             summary = "장비 반납 요청 취소",
             description = """
-        RETURN_PENDING 상태의 반납 요청을 취소합니다. 본인이 요청한 장비만 가능합니다.
-
-        요청 형식:
-        ```
-        [1, 2, 3]
-        ```
-
-        예시 요청:
-        - POST `/api/user/equipments/return/cancel`
-        """
-    )
+                RETURN_PENDING 상태의 반납 요청을 취소합니다. 본인이 요청한 장비만 가능합니다.
+        
+                요청 형식:
+                ```
+                [1, 2, 3]
+                ```
+        
+                예시 요청:
+                - POST `/api/user/equipments/return/cancel`
+                """
+            )
     public ApiResponse<Void> cancelReturnRequest(
             @AuthenticationPrincipal LoginUser loginUser,
             @RequestBody List<Long> equipmentIds) {
@@ -204,9 +215,5 @@ public class EquipmentController {
         return ApiResponse.success("반납 요청 취소 성공", null);
     }
 
-    // 추후 활성화 예정
-    // @GetMapping("/my-rentals")
-    // public ApiResponse<List<Equipment>> getMyRentals(@RequestParam Long userId) {
-    //     return ApiResponse.success("내 대여 목록 조회 성공", equipmentService.getMyRentals(userId));
-    // }
+
 }
