@@ -1,12 +1,10 @@
 package com.backend.server.api.admin.yearSchedule.dto;
 
 import com.backend.server.api.admin.classroom.dto.AdminClassroomResponse;
-import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.classroom.YearSchedule;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.Getter;
 
@@ -20,6 +18,7 @@ public class AdminYearScheduleResponse {
 
     private final AdminClassroomResponse classroom;
     private final String description;
+    private final String color;
 
     @JsonFormat(pattern = "HH:mm")
     private final LocalTime startTime;
@@ -32,6 +31,7 @@ public class AdminYearScheduleResponse {
         isHoliday = yearSchedule.getIsHoliday();
         this.classroom = classroom;
         description = yearSchedule.getDescription();
+        color = yearSchedule.getColor();
         startTime = yearSchedule.getStartAt();
         endTime = yearSchedule.getEndAt();
     }

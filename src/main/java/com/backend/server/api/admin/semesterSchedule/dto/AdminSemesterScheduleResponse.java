@@ -17,6 +17,7 @@ public class AdminSemesterScheduleResponse {
     final private AdminProfessorSimpleResponse professor;
     final private Integer day;
     final private String name;
+    final private String color;
     final private LocalTime startTime;
     final private LocalTime endTime;
     final private List<AdminEquipmentResponse> equipmentList;
@@ -29,6 +30,7 @@ public class AdminSemesterScheduleResponse {
         this.professor = new AdminProfessorSimpleResponse(professor);
         this.day = entity.getDay();
         this.name = entity.getName();
+        this.color = entity.getColor();
         this.startTime = entity.getStartAt();
         this.endTime = entity.getEndAt();
         this.equipmentList = equipmentList
