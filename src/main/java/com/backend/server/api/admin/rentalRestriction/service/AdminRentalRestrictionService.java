@@ -5,6 +5,7 @@ import com.backend.server.api.admin.rentalRestriction.dto.AdminRentalRestriction
 import com.backend.server.api.admin.rentalRestriction.dto.AdminRentalRestrictionRequest;
 import com.backend.server.api.admin.rentalRestriction.dto.AdminRentalRestrictionSortType;
 import com.backend.server.api.admin.user.dto.AdminUserListResponse;
+import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.RentalRestriction;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.RentalRestrictionRepository;
@@ -75,7 +76,11 @@ public class AdminRentalRestrictionService {
         Specification<User> spec = UserSpecification.filterUsers(request, false);
 
         Page<User> page = userRepository.findAll(spec, pageable);
+        List<Professor> professors = page.getContent()
+                .stream()
+                .map(User::getProfessor)
+                .toList();
 
-        return new AdminUserListResponse(page);
+        return new AdminUserListResponse(page, professors);
     }
 }

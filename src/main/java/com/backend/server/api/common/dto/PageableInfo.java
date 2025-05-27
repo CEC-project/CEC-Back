@@ -15,7 +15,7 @@ public class PageableInfo {
     public PageableInfo(Page<?> page) {
         Pageable pageable = page.getPageable();
         pageNumber = pageable.getPageNumber();
-        pageSize = pageable.getPageSize();
+        pageSize = page.getNumberOfElements();
         totalPages = page.getTotalPages();
         totalElements = page.getTotalElements();
     }

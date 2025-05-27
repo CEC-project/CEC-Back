@@ -1,5 +1,6 @@
 package com.backend.server.api.admin.user.dto;
 
+import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,14 +30,14 @@ public class AdminUserResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     
-    public AdminUserResponse(User user) {
+    public AdminUserResponse(User user, Professor professor) {
         id = user.getId();
         studentNumber = user.getStudentNumber();
         name = user.getName();
         nickname = user.getNickname();
         year = user.getGrade();
         gender = user.getGender();
-        professor = user.getProfessor() == null ? null : user.getProfessor().getName();
+        this.professor = professor == null ? null : professor.getName();
         phoneNumber = user.getPhoneNumber();
         email = user.getEmail();
         profilePicture = user.getProfilePicture();
