@@ -12,7 +12,6 @@ import com.backend.server.model.repository.UserRepository;
 import com.backend.server.model.repository.UserSpecification;
 import com.backend.server.model.repository.ProfessorRepository;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -36,8 +35,12 @@ public class AdminUserService {
         Specification<User> spec = UserSpecification.filterUsers(request);
 
         Page<User> page = userRepository.findAll(spec, pageable);
+        List<Professor> professors = page.getContent()
+                .stream()
+                .map(User::getProfessor)
+                .toList();
 
-        return new AdminUserListResponse(page);
+        return new AdminUserListResponse(page, professors);
     }
 
     public void deleteUser(Long id) {
@@ -72,9 +75,9 @@ public class AdminUserService {
     }
 
     public List<AdminUserResponse> getAdmins(List<Role> roles) {
-        return userRepository.findByRoleInOrderByNameAsc(roles)
-                .stream()
-                .map(AdminUserResponse::new)
-                .collect(Collectors.toList());
+        List<User> users = userRepository.findByRoleInOrderByNameAsc(roles);
+        return users.stream()
+                .map(user -> new AdminUserResponse(user, user.getProfessor()))
+                .toList();
     }
 }

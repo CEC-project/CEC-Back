@@ -26,5 +26,7 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
     Optional<User> findByStudentNumber(String studentNumber);
     List<User> findByRole(Role role);
     List<User> findByRoleIn(Role... roles);
+
+    @EntityGraph(attributePaths = {"professor"})
     List<User> findByRoleInOrderByNameAsc(Collection<Role> roles);
 }
