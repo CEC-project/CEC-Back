@@ -3,7 +3,7 @@ package com.backend.server.api.admin.equipment.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentSerialNumberGenerateRequest;
+import com.backend.server.api.admin.equipment.dto.equipment.request.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,11 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminManagerCandidatesResponse;
-import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentCreateRequest;
-import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentListRequest;
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentListResponse;
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentResponse;
-import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentStatusUpdateRequest;
 import com.backend.server.api.admin.equipment.service.AdminEquipmentService;
 import com.backend.server.api.common.dto.ApiResponse;
 
@@ -205,24 +202,19 @@ public class AdminEquipmentController {
             description = "지정된 장비들을 BROKEN 상태로 변경하며, 파손 사유를 함께 기록할 수 있습니다. 사유는 장비의 설명에 추가로 붙습니다"
     )
     public ApiResponse<Void> markEquipmentsAsBroken(
-            @RequestParam List<Long> equipmentIds,
-            @RequestParam(required = false) String description) {
-        adminEquipmentService.markEquipmentsAsBroken(equipmentIds, description);
+            @RequestBody MarkEquipmentsAsBrokenRequest request) {
+        adminEquipmentService.markEquipmentsAsBroken(request.getEquipmentIds(), request.getDescription());
         return ApiResponse.success("장비 고장/파손 처리 성공", null);
     }
 
     @PostMapping("/repair")
     @Operation(
             summary = "장비 수리",
-            description = """
-                    BROKEN 상태의 장비를 AVAILABLE 상태로 변경하며 수리 내용을 기록할 수 있습니다. 내용은 장비의 설명에 추가로 붙습니다
-                    
-                    예시 : /api/admin/equipments/repair?equipmentIds=1&equipmentIds=2&description=설명내용"""
+            description = "BROKEN 상태의 장비를 AVAILABLE 상태로 변경하며 수리 내용을 기록할 수 있습니다. 내용은 장비의 설명에 추가로 붙습니다"
     )
     public ApiResponse<Void> repairEquipments(
-            @RequestParam List<Long> equipmentIds,
-            @RequestParam(required = false) String description) {
-        adminEquipmentService.repairEquipments(equipmentIds, description);
+            @RequestBody RepairEquipmentsRequest request) {
+        adminEquipmentService.repairEquipments(request.getEquipmentIds(), request.getDescription());
         return ApiResponse.success("장비 복구 처리 성공", null);
     }
 
@@ -232,11 +224,11 @@ public class AdminEquipmentController {
             description = "대여 중인 장비들의 반납 기한을 새로운 날짜로 연장합니다."
     )
     public ApiResponse<Void> extendRentalPeriods(
-            @RequestParam List<Long> equipmentIds,
-            @RequestParam LocalDateTime newEndDate) {
-        adminEquipmentService.extendRentalPeriods(equipmentIds, newEndDate);
+            @RequestBody ExtendRentalPeriodsRequest request) {
+        adminEquipmentService.extendRentalPeriods(request.getEquipmentIds(), request.getNewEndDate());
         return ApiResponse.success("대여 기간 연장 성공", null);
     }
+
 
     @PostMapping("/force-return")
     @Operation(
