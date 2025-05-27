@@ -1,4 +1,4 @@
-package com.backend.server.api.admin.semesterSchedule.dto;
+package com.backend.server.api.admin.inquiry.dto;
 
 import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.classroom.Classroom;
@@ -18,7 +18,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AdminSemesterScheduleRequest {
+public class AdminInquiryAnswerRequest {
     @NotNull
     @Positive
     @Schema(example = "1")
@@ -31,17 +31,16 @@ public class AdminSemesterScheduleRequest {
 
     @NotEmpty
     private String name;
-    private String color;
 
     @JsonFormat(pattern = "HH:mm")
     @NotNull
     @Schema(implementation = String.class, example = "13:00")
-    private LocalTime startAt;
+    private LocalTime startTime;
 
     @JsonFormat(pattern = "HH:mm")
     @NotNull
     @Schema(implementation = String.class, example = "14:00")
-    private LocalTime endAt;
+    private LocalTime endTime;
 
     @NotNull
     @Schema(example = "[2]")
@@ -56,9 +55,8 @@ public class AdminSemesterScheduleRequest {
                 .professor(professor)
                 .classroom(classroom)
                 .name(name)
-                .color(color)
-                .startAt(startAt)
-                .endAt(endAt)
+                .startAt(startTime)
+                .endAt(endTime)
                 .day(day)
                 .build();
     }

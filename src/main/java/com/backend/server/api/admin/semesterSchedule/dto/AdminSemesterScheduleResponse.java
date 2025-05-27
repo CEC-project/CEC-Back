@@ -5,6 +5,7 @@ import com.backend.server.api.admin.professor.dto.AdminProfessorSimpleResponse;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,8 +18,11 @@ public class AdminSemesterScheduleResponse {
     final private AdminProfessorSimpleResponse professor;
     final private Integer day;
     final private String name;
-    final private LocalTime startTime;
-    final private LocalTime endTime;
+    final private String color;
+    @JsonFormat(pattern = "HH:mm")
+    final private LocalTime startAt;
+    @JsonFormat(pattern = "HH:mm")
+    final private LocalTime endAt;
     final private List<AdminEquipmentResponse> equipmentList;
 
     public AdminSemesterScheduleResponse(
@@ -29,8 +33,9 @@ public class AdminSemesterScheduleResponse {
         this.professor = new AdminProfessorSimpleResponse(professor);
         this.day = entity.getDay();
         this.name = entity.getName();
-        this.startTime = entity.getStartAt();
-        this.endTime = entity.getEndAt();
+        this.color = entity.getColor();
+        this.startAt = entity.getStartAt();
+        this.endAt = entity.getEndAt();
         this.equipmentList = equipmentList
                 .stream()
                 .map(AdminEquipmentResponse::new)

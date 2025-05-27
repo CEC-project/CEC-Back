@@ -22,6 +22,7 @@ public class EquipmentCategoryController {
 
     private final EquipmentCategoryService categoryService;
 
+
 //    @GetMapping
 //    @Operation(
 //            summary = "전체 카테고리 조회",
@@ -50,6 +51,7 @@ public class EquipmentCategoryController {
                         - 카테고리명
                         - 설명 등
                         """
+
     )
     public ApiResponse<EquipmentCategoryResponse> getCategoryById(
             @Parameter(description = "조회할 장비 카테고리의 ID", example = "1")
@@ -59,12 +61,14 @@ public class EquipmentCategoryController {
 
     @GetMapping("/countbycategory")
     @Operation(
+
             summary = "카테고리 전체 조회와 각 카테고리 별 장비 개수 통계",
             description = """
         각 장비 카테고리별로 다음 정보를 통계로 제공합니다:
 
         - 장비 분류 /  총 개수	/ 대여 가능 개수 /  1인당 대여 가능 개수  /	파손된 개수 
         
+
         """
     )
     public ApiResponse<List<EquipmentCountByCategoryResponse>> countEquipment() {
