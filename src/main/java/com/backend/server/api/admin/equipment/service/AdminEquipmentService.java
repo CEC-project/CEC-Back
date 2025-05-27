@@ -62,8 +62,26 @@ public class AdminEquipmentService {
                 .orElseThrow(() -> new RuntimeException("모델 없음"));
 
         // prefix: 카테고리 코드 3자리 + 모델 코드 3자리
-        String prefixCategoryCode = category.getEnglishCode().substring(0, 3).toUpperCase();
-        String prefixEquipmentModelCode = model.getEnglishCode().substring(0, 3).toUpperCase();
+        //영문코드가 3자리 이하인 경우 문자열 앞에 _ 를 붙임.
+        //ex - _CA, __A
+        //_CA__A250501 이런식
+        String prefixCategoryCode;
+        String prefixEquipmentModelCode;
+
+
+        String categoryCode = category.getEnglishCode().toUpperCase();
+        if (categoryCode.length() < 3) {
+            prefixCategoryCode = String.format("%3s", categoryCode).replace(' ', '_');
+        } else {
+            prefixCategoryCode = categoryCode.substring(0, 3);
+        }
+
+        String modelCode = model.getEnglishCode().toUpperCase();
+        if (modelCode.length() < 3) {
+            prefixEquipmentModelCode = String.format("%3s", modelCode).replace(' ', '_');
+        } else {
+            prefixEquipmentModelCode = modelCode.substring(0, 3);
+        }
         String prefix = prefixCategoryCode + prefixEquipmentModelCode; // e.g., CAMSON
 
         // suffix: yyMM + 2자리 일련번호

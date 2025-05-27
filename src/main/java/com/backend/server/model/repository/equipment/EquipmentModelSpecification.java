@@ -1,7 +1,7 @@
 package com.backend.server.model.repository.equipment;
 
 import com.backend.server.api.common.dto.PageableRequest;
-import com.backend.server.api.equipment.dto.model.EquipmentModelListRequest;
+import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
 import com.backend.server.model.entity.EquipmentModel;
 
 import org.springframework.data.domain.PageRequest;
@@ -38,15 +38,7 @@ public class EquipmentModelSpecification {
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
-    //카테고리 별 조회
-//    public static Specification<EquipmentModel> filterEquipmentModelsByCategory(Long categoryId) {
-//        return (root, query, cb) -> {
-//            if (categoryId != null) {
-//                return cb.equal(root.get("category").get("id"), categoryId);
-//            }
-//            return cb.conjunction(); // 조건 없음 → 전체 조회
-//        };
-//    }
+
 
     public static <T extends PageableRequest> Pageable getPageable(T request) {
         int page = request.getPage() != null ? request.getPage() : 0;

@@ -30,6 +30,9 @@ public class Notice extends BaseTimeEntity {
   private String attachmentUrl;  // 첨부파일 URL
 
   @ManyToOne
-  @JoinColumn(name = "author_id")
+  @JoinColumn(
+          name = "author_id",
+          foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)
+  )
   private User author;
 }

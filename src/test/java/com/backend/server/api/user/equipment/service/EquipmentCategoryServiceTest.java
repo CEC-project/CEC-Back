@@ -1,7 +1,6 @@
 package com.backend.server.api.user.equipment.service;
 
-import com.backend.server.api.equipment.dto.category.EquipmentCategoryResponse;
-import com.backend.server.api.equipment.service.EquipmentCategoryService;
+import com.backend.server.api.user.equipment.dto.category.EquipmentCategoryResponse;
 import com.backend.server.model.entity.EquipmentCategory;
 import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
 

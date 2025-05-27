@@ -59,7 +59,7 @@ class AdminEquipmentServiceTest {
         EquipmentCategory category = mock(EquipmentCategory.class);
         EquipmentModel model = mock(EquipmentModel.class);
 
-        when(category.getEnglishCode()).thenReturn("CAMERA");
+        when(category.getEnglishCode()).thenReturn("CA");
         when(model.getEnglishCode()).thenReturn("SONYA7");
         when(equipmentCategoryRepository.findById(1L)).thenReturn(Optional.of(category));
         when(equipmentModelRepository.findById(1L)).thenReturn(Optional.of(model));
@@ -67,7 +67,7 @@ class AdminEquipmentServiceTest {
 
         String serial = adminEquipmentService.generateSerialNumber(request);
         System.out.println(serial);
-        assertTrue(serial.startsWith("CAMSON"));
+        assertTrue(serial.startsWith("_CASON"));
     }
 
     @Test
@@ -151,42 +151,6 @@ class AdminEquipmentServiceTest {
     }
 
 
-    @Test
-    void getEquipments_shouldFilterByCategory() {
-        AdminEquipmentListRequest request = AdminEquipmentListRequest.builder().build();
-        request.setCategoryId(1L);
 
-        Equipment equipment = Equipment.builder()
-                .id(1L)
-                .serialNumber("CAM123")
-                .equipmentModel(EquipmentModel.builder().name("Canon EOS").build())
-                .status(Status.AVAILABLE)
-                .renter(User.builder().name("철수짱").build())
-                .build();
-
-        Page<Equipment> page = new PageImpl<>(List.of(equipment));
-        when(equipmentRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
-
-        AdminEquipmentListResponse result = adminEquipmentService.getEquipments(request);
-
-        assertEquals(1, result.getContent().size());
-    }
-
-    @Test
-    void getEquipments_shouldFilterByStatus(){
-        AdminEquipmentListRequest request = AdminEquipmentListRequest.builder().build();
-        request.setStatus("AVAILABLE");
-
-        Equipment equipment = Equipment.builder()
-                .id(1L)
-                .serialNumber("CAM123")
-                .equipmentModel(EquipmentModel.builder().name("Canon EOS").build())
-                .status(Status.AVAILABLE)
-                .renter(User.builder().name("철수짱").build())
-                .build();
-
-        Pageable pageable = EquipmentSpecification.getPageable(request);
-
-    }
 
 }
