@@ -11,6 +11,7 @@ import lombok.Getter;
 @Getter
 public class AdminYearScheduleResponse {
 
+    private final Long id;
     private final LocalDate date;
 
     @JsonProperty("isHoliday")
@@ -27,6 +28,7 @@ public class AdminYearScheduleResponse {
     private final LocalTime endAt;
 
     public AdminYearScheduleResponse(YearSchedule yearSchedule, AdminClassroomResponse classroom) {
+        id = yearSchedule.getId();
         date = yearSchedule.getDate();
         isHoliday = yearSchedule.getIsHoliday();
         this.classroom = classroom;
