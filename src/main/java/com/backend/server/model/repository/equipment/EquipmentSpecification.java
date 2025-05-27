@@ -1,8 +1,9 @@
 package com.backend.server.model.repository.equipment;
+import com.backend.server.model.entity.enums.Status;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import com.backend.server.api.common.dto.PageableRequest;
-import com.backend.server.api.equipment.dto.equipment.EquipmentListRequest;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
 import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentListRequest;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.User;
@@ -63,9 +64,9 @@ public class EquipmentSpecification {
 
             // 장비 상태
             if (StringUtils.hasText(request.getStatus())) {
-                predicates.add(cb.equal(root.get("status"), request.getStatus()));
+                Status statusEnum = Status.valueOf(request.getStatus().toUpperCase());
+                predicates.add(cb.equal(root.get("status"), statusEnum));
             }
-
 
 
             // 현재 대여자 이름
@@ -111,9 +112,10 @@ public class EquipmentSpecification {
                 predicates.add(cb.like(cb.lower(root.get("equipmentModel").get("name")), "%" + request.getModelName().toLowerCase() + "%"));
             }
 
-            // 대여 가능 여부
-            if (request.getIsAvailable() != null) {
-                predicates.add(cb.equal(root.get("available"), request.getIsAvailable()));
+            // 장비 상태
+            if (StringUtils.hasText(request.getStatus())) {
+                Status statusEnum = Status.valueOf(request.getStatus().toUpperCase());
+                predicates.add(cb.equal(root.get("status"), statusEnum));
             }
 
             // 현재 대여자 이름

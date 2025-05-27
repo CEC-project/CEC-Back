@@ -1,4 +1,4 @@
-package com.backend.server.api.equipment.dto.category;
+package com.backend.server.api.user.equipment.dto.category;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

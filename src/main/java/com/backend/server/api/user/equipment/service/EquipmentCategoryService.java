@@ -1,7 +1,7 @@
-package com.backend.server.api.equipment.service;
+package com.backend.server.api.user.equipment.service;
 
-import com.backend.server.api.equipment.dto.category.EquipmentCategoryResponse;
-import com.backend.server.api.equipment.dto.category.EquipmentCountByCategoryResponse;
+import com.backend.server.api.user.equipment.dto.category.EquipmentCategoryResponse;
+import com.backend.server.api.user.equipment.dto.category.EquipmentCountByCategoryResponse;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.repository.equipment.EquipmentRepository;
 import org.springframework.stereotype.Service;

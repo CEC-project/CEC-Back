@@ -1,56 +1,95 @@
 package com.backend.server.api.user.equipment.model.repository.equipment;
 
-import com.backend.server.api.equipment.dto.model.EquipmentModelListRequest;
+import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
+import com.backend.server.config.AbstractPostgresContainerTest;
 import com.backend.server.model.entity.EquipmentCategory;
 import com.backend.server.model.entity.EquipmentModel;
-import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
-import com.backend.server.model.repository.equipment.EquipmentModelRepository;
-import com.backend.server.model.repository.equipment.EquipmentModelSpecification;
+import com.backend.server.model.repository.equipment.*;
+import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.test.context.TestPropertySource;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-@DataJpaTest //h2 인메모리 활성화 환경 자동 구성하는 어노테이션
-@TestPropertySource(properties = "spring.sql.init.mode=never") //더미데이터 생성 막기
-
-class EquipmentModelSpecificationTest {
+@Testcontainers
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+public class EquipmentModelSpecificationTest extends AbstractPostgresContainerTest {
 
     @Autowired
-    EquipmentModelRepository equipmentModelRepository;
+    private EquipmentCategoryRepository equipmentCategoryRepository;
+
     @Autowired
-    EquipmentCategoryRepository equipmentCategoryRepository;
+    private EquipmentModelRepository equipmentModelRepository;
+
+
+    @Autowired
+    private EntityManager em;
+
+    private EquipmentCategory savedCategory1;
+    private EquipmentCategory savedCategory2;
+
+
+    @BeforeEach
+    void setUp(){
+        savedCategory1 = equipmentCategoryRepository.save(EquipmentCategory.builder()
+                .name("카메라")
+                .englishCode("CAMERA")
+                .maxRentalCount(10)
+                .build());
+
+        savedCategory2 = equipmentCategoryRepository.save(EquipmentCategory.builder()
+                .name("마이크")
+                .englishCode("MIC")
+                .maxRentalCount(10)
+                .build());
+
+        EquipmentModel savedModel1 = equipmentModelRepository.save(EquipmentModel.builder()
+                .name("SONY-A7000")
+                .englishCode("SON")
+                .category(savedCategory1)
+                .build());
+
+        EquipmentModel savedModel2 = equipmentModelRepository.save(EquipmentModel.builder()
+                .name("SONY-A7500")
+                .englishCode("SON")
+                .category(savedCategory1)
+                .build());
+
+        EquipmentModel savedModel3 = equipmentModelRepository.save(EquipmentModel.builder()
+                .name("SHURE-A1000")
+                .englishCode("SHURE")
+                .category(savedCategory2)
+                .build());
+
+        em.flush();
+        em.clear();
+    }
 
     @Test
-    void specification_shouldFilterByKeywordAndCategory() {
+    void specification_shouldFilterAllCondition() {
         // given
-        //카테고리 2개 만들어서 테스트
-        EquipmentCategory c1 = EquipmentCategory.builder().name("카메라").englishCode("CAMERA").maxRentalCount(10).build();
-        EquipmentCategory c2 = EquipmentCategory.builder().name("삼각대").englishCode("TRIPOD").maxRentalCount(10).build();
-
-        equipmentCategoryRepository.saveAll(List.of(c1,c2));
-
-        EquipmentModel m1 = EquipmentModel.builder().name("SONY-A7000").englishCode("SON").category(c1).build();
-        EquipmentModel m2 = EquipmentModel.builder().name("SONY-A7500").englishCode("SON").category(c1).build();
-        EquipmentModel m3 = EquipmentModel.builder().name("CANON-Z5").englishCode("CAN").category(c2).build();
-
-        equipmentModelRepository.saveAll(List.of(m1, m2, m3));
-
         EquipmentModelListRequest request = EquipmentModelListRequest.builder()
-                .categoryId(1L)
-                .keyword("75")
+                .keyword("sony")
+                .categoryId(savedCategory1.getId())
                 .build();
 
         Specification<EquipmentModel> spec = EquipmentModelSpecification.filterEquipmentModels(request);
+
+        // when
         List<EquipmentModel> result = equipmentModelRepository.findAll(spec);
 
         // then
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getName()).isEqualTo("SONY-A7500");
+        assertThat(result).hasSize(2);
+        EquipmentModel found = result.get(0);
+        assertThat(found.getName()).contains("SONY");
+        assertThat(found.getCategory().getId()).isEqualTo(savedCategory1.getId());
     }
 }
