@@ -31,6 +31,7 @@ public class AdminYearScheduleRequest {
 
     @Length(max = 20)
     private String description;
+    private String color;
 
     @NotNull
     @JsonFormat(pattern = "HH:mm")
@@ -48,6 +49,7 @@ public class AdminYearScheduleRequest {
                     .date(date)
                     .isHoliday(isHoliday)
                     .description(description)
+                    .color(color)
                     .build();
         }
         return YearSchedule.builder()
@@ -55,6 +57,7 @@ public class AdminYearScheduleRequest {
                 .isHoliday(isHoliday)
                 .classroom(Classroom.builder().id(classroomId).build())
                 .description(description)
+                .color(color)
                 .startAt(startAt)
                 .endAt(endAt)
                 .build();

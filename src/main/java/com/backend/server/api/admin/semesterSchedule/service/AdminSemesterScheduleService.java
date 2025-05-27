@@ -85,6 +85,7 @@ public class AdminSemesterScheduleService {
                 .professor(professor)
                 .day(request.getDay())
                 .name(request.getName())
+                .color(request.getColor())
                 .startAt(request.getStartTime())
                 .endAt(request.getEndTime())
                 .build();
