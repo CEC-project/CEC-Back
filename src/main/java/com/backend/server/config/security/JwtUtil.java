@@ -38,7 +38,7 @@ public class JwtUtil {
     public void init() {
         accessTokenValidity = accessTokenValidityInMinutes * 60 * 1000;
         refreshTokenValidity = refreshTokenValidityInDays * 24 * 60 * 60 * 1000;
-        refreshTokenDuration = Duration.ofMillis(accessTokenValidity);
+        refreshTokenDuration = Duration.ofMillis(refreshTokenValidity);
 
         byte[] secretBytes = secret.getBytes();
         jwtParser = Jwts.parserBuilder().setSigningKey(secretBytes).build();
