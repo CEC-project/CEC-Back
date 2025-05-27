@@ -21,10 +21,10 @@ public class AdminYearScheduleResponse {
     private final String color;
 
     @JsonFormat(pattern = "HH:mm")
-    private final LocalTime startTime;
+    private final LocalTime startAt;
 
     @JsonFormat(pattern = "HH:mm")
-    private final LocalTime endTime;
+    private final LocalTime endAt;
 
     public AdminYearScheduleResponse(YearSchedule yearSchedule, AdminClassroomResponse classroom) {
         date = yearSchedule.getDate();
@@ -32,7 +32,7 @@ public class AdminYearScheduleResponse {
         this.classroom = classroom;
         description = yearSchedule.getDescription();
         color = yearSchedule.getColor();
-        startTime = yearSchedule.getStartAt();
-        endTime = yearSchedule.getEndAt();
+        startAt = yearSchedule.getStartAt();
+        endAt = yearSchedule.getEndAt();
     }
 }

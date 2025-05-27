@@ -36,12 +36,12 @@ public class AdminSemesterScheduleRequest {
     @JsonFormat(pattern = "HH:mm")
     @NotNull
     @Schema(implementation = String.class, example = "13:00")
-    private LocalTime startTime;
+    private LocalTime startAt;
 
     @JsonFormat(pattern = "HH:mm")
     @NotNull
     @Schema(implementation = String.class, example = "14:00")
-    private LocalTime endTime;
+    private LocalTime endAt;
 
     @NotNull
     @Schema(example = "[2]")
@@ -57,8 +57,8 @@ public class AdminSemesterScheduleRequest {
                 .classroom(classroom)
                 .name(name)
                 .color(color)
-                .startAt(startTime)
-                .endAt(endTime)
+                .startAt(startAt)
+                .endAt(endAt)
                 .day(day)
                 .build();
     }
