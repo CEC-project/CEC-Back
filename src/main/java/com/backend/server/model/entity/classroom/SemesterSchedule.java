@@ -52,6 +52,7 @@ public class SemesterSchedule extends BaseTimeEntity {
 
     @Column(length = 20)
     private String name;
+    private String color;
 
     private LocalTime startAt;
     private LocalTime endAt;

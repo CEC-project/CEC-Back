@@ -78,6 +78,7 @@ public class AdminYearScheduleService {
                     .isHoliday(request.getIsHoliday())
                     .classroom(Classroom.builder().id(request.getClassroomId()).build())
                     .description(request.getDescription())
+                    .color(request.getColor())
                     .startAt(request.getStartAt())
                     .endAt(request.getEndAt())
                     .build();
@@ -86,6 +87,7 @@ public class AdminYearScheduleService {
                     .isHoliday(request.getIsHoliday())
                     .classroom(null)
                     .description(request.getDescription())
+                    .color(request.getColor())
                     .startAt(null)
                     .endAt(null)
                     .build();

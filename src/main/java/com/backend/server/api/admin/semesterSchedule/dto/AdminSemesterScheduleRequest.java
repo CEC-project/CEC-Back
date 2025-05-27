@@ -31,6 +31,7 @@ public class AdminSemesterScheduleRequest {
 
     @NotEmpty
     private String name;
+    private String color;
 
     @JsonFormat(pattern = "HH:mm")
     @NotNull
@@ -55,6 +56,7 @@ public class AdminSemesterScheduleRequest {
                 .professor(professor)
                 .classroom(classroom)
                 .name(name)
+                .color(color)
                 .startAt(startTime)
                 .endAt(endTime)
                 .day(day)
