@@ -1,7 +1,6 @@
-package com.backend.server.api.admin.equipment.model.repository;
+package com.backend.server.api.user.equipment.model.repository.equipment;
 
-
-import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentListRequest;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
 import com.backend.server.config.AbstractPostgresContainerTest;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.EquipmentCategory;
@@ -10,30 +9,25 @@ import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Role;
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.repository.UserRepository;
-import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
-import com.backend.server.model.repository.equipment.EquipmentModelRepository;
-import com.backend.server.model.repository.equipment.EquipmentRepository;
-import com.backend.server.model.repository.equipment.EquipmentSpecification;
+import com.backend.server.model.repository.equipment.*;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @Testcontainers
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class AdminEquipmentSpecificationTest extends AbstractPostgresContainerTest {
+class EquipmentSpecificationTest extends AbstractPostgresContainerTest {
 
     @Autowired
     private EquipmentRepository equipmentRepository;
@@ -115,86 +109,106 @@ class AdminEquipmentSpecificationTest extends AbstractPostgresContainerTest {
                 .repairCount(0L)
                 .build());
 
+        equipmentRepository.save(Equipment.builder()
+                .equipmentCategory(savedCategory)
+                .equipmentModel(savedModel)
+                .serialNumber("CAMSON0003")
+                .status(Status.AVAILABLE)
+                .renter(savedUser)
+                .semesterSchedule(null)
+                .restrictionGrade("4")
+                .brokenCount(0L)
+                .description("테스트")
+                .managerId(1L)
+                .rentalCount(0L)
+                .repairCount(0L)
+                .build());
+
         em.flush();
         em.clear();
-
         // 디버깅을 위한 로그
         System.out.println("Saved Category ID: " + savedCategory.getId());
         System.out.println("Saved Model ID: " + savedModel.getId());
         System.out.println("Saved User ID: " + savedUser.getId());
     }
 
+
     @Test
-    void adminFilterEquipments_shouldReturnFilteredByModelNameAndStatusAndCategoryIdAndSerialNumberAndSearchKeywordAndRenterName() {
-        // 실제 저장된 ID를 사용
-        AdminEquipmentListRequest request = AdminEquipmentListRequest.builder()
-                .modelName("SONY")
-                .status(Status.AVAILABLE.name())
+    void specification_shouldFilterRestrictGrade() {
+        // given - 3학년인 사람
+        Integer userGrade = 3;
+
+        EquipmentListRequest request = EquipmentListRequest.builder()
                 .categoryId(savedCategory.getId())
-                .serialNumber("CAMSON0001")
-                .searchKeyword("sony")
-                .renterName("홍길")
-                .page(0)
-                .size(10)
                 .build();
 
-        Specification<Equipment> spec = EquipmentSpecification.adminFilterEquipments(request);
-
         // when
+        Specification<Equipment> spec = EquipmentSpecification.filterEquipments(request, userGrade);
         List<Equipment> result = equipmentRepository.findAll(spec);
 
         // 디버깅을 위한 로그
-        System.out.println("Result size: " + result.size());
-        if (!result.isEmpty()) {
-            Equipment equipment = result.get(0);
-            System.out.println("Model: " + equipment.getEquipmentModel().getName() +
-                    ", Status: " + equipment.getStatus() +
-                    ", Category ID: " + equipment.getEquipmentCategory().getId() +
-                    ", Serial: " + equipment.getSerialNumber());
+        System.out.println("=== 학년 제한 필터링 테스트 결과 ===");
+        System.out.println("사용자 학년: " + userGrade);
+        System.out.println("필터링된 장비 수: " + result.size());
+
+        for (Equipment equipment : result) {
+            System.out.println("장비 시리얼: " + equipment.getSerialNumber() +
+                    ", 제한학년: " + equipment.getRestrictionGrade());
         }
 
-        // then
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getEquipmentModel().getName()).contains("SONY");
-        assertThat(result.get(0).getStatus().name()).isEqualTo("AVAILABLE");
-        assertThat(result.get(0).getEquipmentCategory().getId()).isEqualTo(savedCategory.getId());
-        assertThat(result.get(0).getSerialNumber()).isEqualTo("CAMSON0001");
+        // then - 4학년 제한 장비만 조회되어야 함
+        assertThat(result).hasSize(1); // 4학년 제한 장비 1개만
+        assertThat(result.get(0).getSerialNumber()).isEqualTo("CAMSON0003");
+        assertThat(result.get(0).getRestrictionGrade()).isEqualTo("4");
+
+        // 3학년 제한 장비들은 결과에 포함되지 않아야 함
+        boolean hasGrade3Equipment = result.stream()
+                .anyMatch(eq -> "3".equals(eq.getRestrictionGrade()));
+        assertThat(hasGrade3Equipment).isFalse();
     }
 
     @Test
-    void adminFilterEquipments_shouldFilterByRenterNameAndKeyword() {
-        // given
-        AdminEquipmentListRequest request = AdminEquipmentListRequest.builder()
-                .renterName("홍길동")
-                .searchKeyword("0001")
+    void specification_shouldShowAllEquipmentWhenUserGradeIsNull() {
+        // given - userGrade가 null인 경우 (관리자 또는 학년 정보 없음)
+        Integer userGrade = null;
+
+        EquipmentListRequest request = EquipmentListRequest.builder()
+                .categoryId(savedCategory.getId())
                 .build();
 
-        Specification<Equipment> spec = EquipmentSpecification.adminFilterEquipments(request);
-
         // when
+        Specification<Equipment> spec = EquipmentSpecification.filterEquipments(request, userGrade);
         List<Equipment> result = equipmentRepository.findAll(spec);
 
         // 디버깅 로그
-        System.out.println("Filter by renter name - Result size: " + result.size());
+        System.out.println("=== 학년 null 테스트 결과 ===");
+        System.out.println("사용자 학년: null");
+        System.out.println("조회된 장비 수: " + result.size());
 
-        // then
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getRenter().getName()).isEqualTo("홍길동");
+        // then - 모든 장비가 조회되어야 함 (학년 제한 없음)
+        assertThat(result).hasSize(3); // 모든 장비
     }
 
     @Test
-    void debugTest_checkAllEquipments() {
-        // 모든 장비 조회해서 실제 데이터 확인
-        List<Equipment> allEquipments = equipmentRepository.findAll();
-        System.out.println("Total equipments: " + allEquipments.size());
+    void filterEquipments_shouldReturnResultMatchingAllConditionsExceptUserGrade(){
+        EquipmentListRequest request = EquipmentListRequest.builder()
+                .categoryId(savedCategory.getId())
+                .modelName("SONY")
+                .status(Status.AVAILABLE.name())
+                .renterName("홍길동")
+                .searchKeyword("CAMSON0001")
+                .build();
 
-        for (Equipment eq : allEquipments) {
-            System.out.println("Equipment - ID: " + eq.getId() +
-                    ", Model: " + eq.getEquipmentModel().getName() +
-                    ", Serial: " + eq.getSerialNumber() +
-                    ", Status: " + eq.getStatus() +
-                    ", Category ID: " + eq.getEquipmentCategory().getId() +
-                    ", Renter: " + (eq.getRenter() != null ? eq.getRenter().getName() : "null"));
-        }
+        Specification<Equipment> spec = EquipmentSpecification.filterEquipments(request, null);
+        List<Equipment> result = equipmentRepository.findAll(spec);
+
+        // then
+        assertThat(result).hasSize(1);
+        Equipment found = result.get(0);
+        assertThat(found.getEquipmentCategory().getId()).isEqualTo(savedCategory.getId());
+        assertThat(found.getEquipmentModel().getName()).contains("SONY");
+        assertThat(found.getStatus()).isEqualTo(Status.AVAILABLE);
+        assertThat(found.getRenter().getName()).isEqualTo("홍길동");
+        assertThat(found.getSerialNumber()).isEqualTo("CAMSON0001");
     }
 }

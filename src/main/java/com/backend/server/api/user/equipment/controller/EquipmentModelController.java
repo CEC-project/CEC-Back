@@ -1,9 +1,9 @@
-package com.backend.server.api.equipment.controller;
+package com.backend.server.api.user.equipment.controller;
 
-import com.backend.server.api.equipment.dto.model.EquipmentModelListRequest;
-import com.backend.server.api.equipment.dto.model.EquipmentModelListResponse;
-import com.backend.server.api.equipment.dto.model.EquipmentModelResponse;
-import com.backend.server.api.equipment.service.EquipmentModelService;
+import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
+import com.backend.server.api.user.equipment.dto.model.EquipmentModelListResponse;
+import com.backend.server.api.user.equipment.dto.model.EquipmentModelResponse;
+import com.backend.server.api.user.equipment.service.EquipmentModelService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
