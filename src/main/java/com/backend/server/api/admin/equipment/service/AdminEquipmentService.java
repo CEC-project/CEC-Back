@@ -1,5 +1,6 @@
 package com.backend.server.api.admin.equipment.service;
 
+import java.sql.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentSerialNumberGenerateRequest;
+import com.backend.server.api.admin.equipment.dto.equipment.request.*;
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.service.CommonNotificationService;
 import com.backend.server.model.entity.EquipmentCategory;
@@ -18,11 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminManagerCandidatesResponse;
-import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentCreateRequest;
-import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentListRequest;
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentListResponse;
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentResponse;
-import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentStatusUpdateRequest;
 import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.EquipmentModel;
 import com.backend.server.model.entity.User;
@@ -185,6 +183,19 @@ public class AdminEquipmentService {
         
         equipmentRepository.save(updated);
         return equipmentId;
+    }
+
+    //장비 상태 변경 다중
+    @Transactional
+    public List<Long> updateMultipleEquipmentStatus(AdminEquipmentStatusMultipleUpdateRequest request) {
+        try {
+            equipmentRepository.bulkUpdateStatus(request.getStatus().name(), request.getEquipmentIds());
+        } catch (Exception e) {
+            throw new IllegalArgumentException(
+                    "장비 상태 일괄 업데이트에 실패했습니다. 대상 ID: " + request.getEquipmentIds(),
+                    e
+            );        }
+        return request.getEquipmentIds();
     }
     
     //대여 요청 다중 승인

@@ -89,4 +89,10 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
             + "e.semesterSchedule = null "
             + "WHERE e IN :equipments")
     void cancelRent(List<Equipment> equipments, Status status);
+
+    //관리자 장비 상태 다중 업데이트
+    @Modifying
+    @Query("UPDATE Equipment e SET e.status = :status WHERE e.id IN :ids")
+    void bulkUpdateStatus(@Param("status") String status, @Param("ids") List<Long> ids);
+
 }
