@@ -81,3 +81,11 @@ values  ('2025-05-26', null, true, null, null, '2025-05-26 10:52:46.130416', '20
 -- 학기
 insert into public.semester (end_date, start_date, year, created_at, updated_at, name)
 values  ('2025-06-26', '2025-02-26', 2025, '2025-05-26 11:08:49.943975', '2025-05-26 11:08:49.943975', '1학기');
+
+-- 장비
+insert into public.equipment (broken_count, category_id, created_at, end_rent_date, manager_id, model_id, rental_count, renter_semester_schdule_id, renter_user_id, repair_count, start_rent_date, updated_at, description, image_url, restriction_grade, serial_number, status)
+values  (0, 1, '2025-05-28 17:44:19.441547', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.441547', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250501', 'AVAILABLE'),
+        (0, 1, '2025-05-28 17:44:19.504248', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.504248', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250502', 'AVAILABLE'),
+        (0, 1, '2025-05-28 17:44:19.513947', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.513947', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250503', 'AVAILABLE'),
+        (0, 1, '2025-05-28 17:44:19.520992', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.520992', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250504', 'AVAILABLE'),
+        (0, 1, '2025-05-28 17:44:19.526169', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.526169', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250505', 'AVAILABLE');
