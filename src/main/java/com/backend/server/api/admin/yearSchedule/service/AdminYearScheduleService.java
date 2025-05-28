@@ -31,7 +31,9 @@ public class AdminYearScheduleService {
                 .map((entity) -> {
                     if (entity.getClassroom() == null)
                         return new AdminYearScheduleResponse(entity, null);
-                    AdminClassroomResponse classroom = new AdminClassroomResponse(entity.getClassroom());
+                    AdminClassroomResponse classroom = new AdminClassroomResponse(
+                            entity.getClassroom(),
+                            entity.getClassroom().getManager());
                     return new AdminYearScheduleResponse(entity, classroom);
                 })
                 .collect(Collectors.toList());

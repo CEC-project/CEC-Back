@@ -28,7 +28,6 @@ public class Inquiry extends BaseTimeEntity {
     @Column(nullable = false)
     private String title;  // 문의 제목
 
-    @Lob
     @Column(nullable = false)
     private String content;  // 문의 내용
 

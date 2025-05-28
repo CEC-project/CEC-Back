@@ -55,7 +55,6 @@ public class AdminClassroomRequest {
                 .manager(manager)
                 .status(Status.AVAILABLE)
                 .attachment(attachment)
-                .available(true)
                 .build();
     }
 }
