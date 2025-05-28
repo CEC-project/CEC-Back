@@ -85,8 +85,9 @@ public class AdminSemesterScheduleService {
                 .professor(professor)
                 .day(request.getDay())
                 .name(request.getName())
-                .startAt(request.getStartTime())
-                .endAt(request.getEndTime())
+                .color(request.getColor())
+                .startAt(request.getStartAt())
+                .endAt(request.getEndAt())
                 .build();
         SemesterSchedule result = semesterScheduleRepository.save(schedule);
 

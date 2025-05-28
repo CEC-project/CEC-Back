@@ -18,7 +18,7 @@ public class ClassroomSpecification {
 
             String trimmedKeyword = "%" + keyword.trim() + "%";
 
-            switch (request.getSearchType()) {
+            switch (request.getType()) {
                 case ID:
                     if (keyword.matches("\\d+")) {
                         return cb.equal(root.get("id"), Long.parseLong(keyword));

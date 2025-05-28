@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,8 +30,9 @@ public class Inquiry extends BaseTimeEntity {
     @Column(nullable = false)
     private String content;  // 문의 내용
 
-    @Column(name = "author_id", nullable = false)
-    private Long authorId;  // 작성자 ID
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private User author;
 
     @Column
     private String attachmentUrl;  // 첨부파일 URL
@@ -45,6 +45,10 @@ public class Inquiry extends BaseTimeEntity {
     @Column(nullable = false)
     @Builder.Default
     private AnswerStatus status = AnswerStatus.WAITING; // 기본값 답변 대기 설정
+
+    @OneToMany(mappedBy = "inquiry")
+    @Builder.Default
+    private List<InquiryAnswer> answers = new ArrayList<>();
 
     public void update(String title, String content, String attachmentUrl, InquiryType type){ // 수정
         this.title = title;
