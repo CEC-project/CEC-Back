@@ -33,7 +33,4 @@ public class InquiryAnswer extends BaseTimeEntity {
 
     @Column(length = 1000, nullable = false)
     private String content;
-
-    @Column(name = "attachment_url", length = 200)
-    private String attachmentUrl;
 }

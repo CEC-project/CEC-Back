@@ -1,5 +1,6 @@
 package com.backend.server.api.admin.classroom.dto;
 
+import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.classroom.Classroom;
 import lombok.Getter;
 
@@ -15,13 +16,13 @@ public class AdminClassroomResponse {
     private final String status;
     private final String attachment;
 
-    public AdminClassroomResponse(Classroom classroom) {
+    public AdminClassroomResponse(Classroom classroom, User manager) {
         this.id = classroom.getId();
         this.name = classroom.getName();
         this.description = classroom.getLocation();
         this.startTime = classroom.getStartTime().toString();
         this.endTime = classroom.getEndTime().toString();
-        this.managerName = classroom.getManager().getName(); // User의 name 필드 기준
+        this.managerName = manager.getName(); // User의 name 필드 기준
         this.status = classroom.getStatus().name();
         this.attachment = classroom.getAttachment();
     }

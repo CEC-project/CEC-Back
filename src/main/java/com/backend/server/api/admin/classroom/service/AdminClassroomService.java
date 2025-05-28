@@ -32,7 +32,7 @@ public class AdminClassroomService {
         Sort sort = ClassroomSpecification.getSort();
         return classroomRepository.findAll(spec, sort)
                 .stream()
-                .map(AdminClassroomResponse::new)
+                .map((e) -> new AdminClassroomResponse(e, e.getManager()))
                 .collect(Collectors.toList());
     }
 

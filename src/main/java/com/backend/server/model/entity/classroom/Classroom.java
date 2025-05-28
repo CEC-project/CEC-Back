@@ -14,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,7 +38,6 @@ public class Classroom extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private Boolean available;
     private String attachment;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,6 +46,7 @@ public class Classroom extends BaseTimeEntity {
 
     private LocalTime startTime;
     private LocalTime endTime;
+    private LocalDateTime requestedTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "renter_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
