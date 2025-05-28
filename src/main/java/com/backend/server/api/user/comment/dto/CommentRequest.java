@@ -33,11 +33,11 @@ public class CommentRequest {
 
     public Comment toEntity(Comment parentComment, User author) {
         return Comment.builder()
-                .content(content)
-                .type(type)
-                .targetId(targetId)
-                .author(author)
-                .parentComment(parentComment)
-                .build();
+            .content(content)
+            .type(type)
+            .targetId(targetId)
+            .author(author)
+            .parentComment(parentComment)
+            .build();
     }
 }
