@@ -57,6 +57,14 @@ values  (true, 1, 'CANNON-EOS-R6', '캐논 EOS R6'),
         (true, 3, 'MANFROTTO-190X', '만프로토 190X'),
         (false, 4, 'APUTURE-AL-M9', '아푸처 AL-M9');
 
+-- 장비
+insert into public.equipment (broken_count, category_id, created_at, end_rent_date, manager_id, model_id, rental_count, renter_semester_schdule_id, renter_user_id, repair_count, start_rent_date, updated_at, description, image_url, restriction_grade, serial_number, status)
+values  (0, 1, '2025-05-28 17:44:19.441547', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.441547', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250501', 'AVAILABLE'),
+        (0, 1, '2025-05-28 17:44:19.504248', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.504248', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250502', 'AVAILABLE'),
+        (0, 1, '2025-05-28 17:44:19.513947', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.513947', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250503', 'AVAILABLE'),
+        (0, 1, '2025-05-28 17:44:19.520992', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.520992', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250504', 'AVAILABLE'),
+        (0, 1, '2025-05-28 17:44:19.526169', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.526169', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250505', 'AVAILABLE');
+
 -- 공지사항
  insert into notice (title, content, important, attachment_url, author_id, created_at, updated_at)
        values
@@ -82,10 +90,40 @@ values  ('2025-05-26', null, true, null, null, '2025-05-26 10:52:46.130416', '20
 insert into public.semester (end_date, start_date, year, created_at, updated_at, name)
 values  ('2025-06-26', '2025-02-26', 2025, '2025-05-26 11:08:49.943975', '2025-05-26 11:08:49.943975', '1학기');
 
--- 장비
-insert into public.equipment (broken_count, category_id, created_at, end_rent_date, manager_id, model_id, rental_count, renter_semester_schdule_id, renter_user_id, repair_count, start_rent_date, updated_at, description, image_url, restriction_grade, serial_number, status)
-values  (0, 1, '2025-05-28 17:44:19.441547', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.441547', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250501', 'AVAILABLE'),
-        (0, 1, '2025-05-28 17:44:19.504248', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.504248', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250502', 'AVAILABLE'),
-        (0, 1, '2025-05-28 17:44:19.513947', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.513947', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250503', 'AVAILABLE'),
-        (0, 1, '2025-05-28 17:44:19.520992', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.520992', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250504', 'AVAILABLE'),
-        (0, 1, '2025-05-28 17:44:19.526169', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.526169', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250505', 'AVAILABLE');
+-- 수업 시간표
+insert into public.semester_schedule (day, end_at, start_at, year, classroom_id, created_at, professor_id, semester_id, updated_at, name, color)
+values  (3, '14:00:00', '13:00:00', null, 2, '2025-05-28 18:28:36.555480', 1, 1, '2025-05-28 18:28:36.555480', 'string', '#112233'),
+        (5, '14:00:00', '13:00:00', null, 1, '2025-05-28 18:28:00.099899', 1, 1, '2025-05-28 18:28:00.099899', 'string', '#998877');
+
+-- 게시판 카테고리
+insert into public.board_category (created_at, updated_at, description, name)
+values
+    (now(), now(), '자유로운 대화가 가능합니다.', '자유게시판'),
+    (now(), now(), '사용자끼리 자유로운 질문 답변이 가능합니다.', '질문게시판'),
+    (now(), now(), '관리자 공지사항을 안내합니다.', '공지사항');
+
+-- 게시판
+insert into public.board (author_id, board_category_id, created_at, updated_at, attachment_url, title, content)
+values
+    (1, 1, now(), now(), null, '제목1', '내용1'),
+    (3, 2, now(), now(), null, '제목2', '내용2'),
+    (2, 1, now(), now(), null, '이번 주말에 뭐하세요?', '같이 농구할 사람 모집합니다.'),
+    (4, 2, now(), now(), null, 'MySQL과 PostgreSQL 차이점?', '두 DBMS의 차이를 정리해주실 수 있나요?'),
+    (1, 3, now(), now(), null, '서비스 점검 안내', '이번 주 토요일 오전 2시부터 4시까지 점검이 있을 예정입니다.');
+
+-- 문의
+insert into public.inquiry (id, author_id, created_at, updated_at, attachment_url, status, title, type, content)
+values
+    (1, 1, now(), now(), null, 'WAITING', '문의1', '문의내용1'),
+    (2, 3, now(), now(), null, 'ANSWERED', '문의2', '문의내용2'),
+    (3, 2, now(), now(), null, 'WAITING', '로그인이 안돼요', '로그인 시도 시 계속 실패합니다. 원인을 모르겠어요.'),
+    (4, 4, now(), now(), null, 'WAITING', '비밀번호 변경 문의', '비밀번호 변경 이메일이 오지 않습니다.'),
+    (5, 1, now(), now(), null, 'ANSWERED', '기능 제안', '장비 대여 시 반납 알림 기능이 있었으면 좋겠습니다.');
+
+-- 문의 답변
+insert into public.inquiry_answer (created_at, inquiry_id, responder_id, updated_at, content)
+values
+    (now(), 2, 2, now(), '문의2에 대한 답변'),
+    (now(), 5, 3, now(), '기능 제안에 대한 답변 감사합니다. 검토해보겠습니다.'),
+    (now(), 3, 1, now(), '로그인 문제는 현재 해결되었습니다. 다시 시도해 주세요.'),
+    (now(), 4, 2, now(), '비밀번호 변경 메일이 발송되지 않는 문제는 현재 확인 중입니다.');
