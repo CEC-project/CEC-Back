@@ -10,7 +10,6 @@ public class AdminInquiryAnswerResponse {
 
     private final Long id;
     private final String content;
-    private final String attachmentUrl;
     private final String responderName;
     private final Long responderId;
     private final Role responderRole;
@@ -18,7 +17,6 @@ public class AdminInquiryAnswerResponse {
     public AdminInquiryAnswerResponse(InquiryAnswer answer, User responder) {
         id = answer.getId();
         content = answer.getContent();
-        attachmentUrl = answer.getAttachmentUrl();
         responderName = responder.getName();
         responderId = responder.getId();
         responderRole = responder.getRole();
