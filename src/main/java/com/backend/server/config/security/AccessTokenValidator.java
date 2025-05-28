@@ -8,14 +8,14 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 
 @Component
-
 public class AccessTokenValidator {
     private JwtParser jwtParser;
 
     @Value("${spring.jwt.secret:111111}")
     private String secret;
 
-    //이거는 왜 만들었냐? 쿼리파라미터로 부득이하게 넘겨야 하는 상황 sse 등.. 에서 쓰려고 만들었어요
+    @Value("${test.token:test-token}")
+    private String testToken;
 
     @PostConstruct
     public void init() {
@@ -24,20 +24,28 @@ public class AccessTokenValidator {
                 .setSigningKey(secretBytes)
                 .build();
     }
+
     public boolean validateAccessToken(String accessToken) {
+        // 테스트 토큰이면 true
+        if (accessToken != null && accessToken.equals(testToken)) {
+            return true;
+        }
+
         try {
             jwtParser.parseClaimsJws(accessToken);
             return true;
         } catch (ExpiredJwtException e) {
-            // 만료된 토큰이라면 false 혹은 예외 재던지기
             return false;
         } catch (JwtException e) {
-            // 서명 불일치 등
             return false;
         }
     }
 
     public Long getUserIdByAccessToken(String token) {
+        if (token.equals(testToken)) {
+            return 1L; //테스트 아이디 1임
+        }
+
         Claims claims = jwtParser.parseClaimsJws(token).getBody();
         return Long.parseLong(claims.getSubject());
     }

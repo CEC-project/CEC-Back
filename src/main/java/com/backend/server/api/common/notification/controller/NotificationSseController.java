@@ -3,8 +3,10 @@ package com.backend.server.api.common.notification.controller;
 import java.util.List;
 
 import com.backend.server.api.common.notification.dto.NotificationIdResponse;
+import com.backend.server.config.security.AccessTokenValidator;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -27,12 +29,23 @@ public class NotificationSseController {
 
     private final SseEmitterService sseEmitterService;
     private final CommonNotificationService notificationService;
-
+    private final AccessTokenValidator accessTokenValidator;
     //구독과 좋아용 그리고 알림설정 부탁드려요요
     @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    @Operation(summary = "이거는 신경쓰지 않아도 됩니다", description = "알림 SSE 구독 설정하기")
-    public SseEmitter subscribe(@AuthenticationPrincipal LoginUser loginUser, @RequestParam("access_token") String token) {
-        return sseEmitterService.createEmitter(loginUser, token);
+    public SseEmitter subscribe(@RequestParam("access_token") String token) {
+        try {
+            if (!accessTokenValidator.validateAccessToken(token)) {
+                throw new BadCredentialsException("유효하지 않은 토큰입니다.");
+            }
+
+            Long userId = accessTokenValidator.getUserIdByAccessToken(token);
+            return sseEmitterService.createEmitter(userId);
+        } catch (Exception e) {
+            // 실패해도 빈 emitter로 연결은 끊어지지 않게 함
+            SseEmitter emitter = new SseEmitter(1000L);
+            emitter.completeWithError(e);
+            return emitter;
+        }
     }
     //알림 안읽은거 띄움
     @GetMapping
