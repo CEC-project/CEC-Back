@@ -1,6 +1,5 @@
 package com.backend.server.api.admin.equipment.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.backend.server.api.admin.equipment.dto.equipment.request.*;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminManagerCandidatesResponse;
@@ -162,6 +160,17 @@ public class AdminEquipmentController {
             @RequestBody AdminEquipmentStatusUpdateRequest request) {
         adminEquipmentService.updateEquipmentStatus(id, request);
         return ApiResponse.success("장비 상태 변경 성공", id);
+    }
+
+    @PutMapping("/status")
+    @Operation(
+            summary = "장비 상태 다중 변경",
+            description = "지정한 장비들의 상태를 변경합니다. (예: AVAILABLE, IN_USE, BROKEN 등)"
+    )
+    public ApiResponse<List<Long>> updateMultipleEquipmentStatus(
+            @RequestBody AdminEquipmentStatusMultipleUpdateRequest request) {
+
+        return ApiResponse.success("장비 상태 변경 성공", adminEquipmentService.updateMultipleEquipmentStatus(request));
     }
 
     @PostMapping("/approve")

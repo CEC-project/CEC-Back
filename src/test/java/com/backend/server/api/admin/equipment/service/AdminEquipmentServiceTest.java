@@ -97,6 +97,23 @@ class AdminEquipmentServiceTest {
         ));
     }
 
+    @Test
+    void multipleUpdateEquipmentStatus_shouldUpdateStatuses() {
+        // given
+        List<Long> ids = List.of(1L, 2L);
+        AdminEquipmentStatusMultipleUpdateRequest request = AdminEquipmentStatusMultipleUpdateRequest.builder()
+                .equipmentIds(ids)
+                .status(Status.BROKEN)
+                .build();
+
+        // when
+        List<Long> result = adminEquipmentService.updateMultipleEquipmentStatus(request);
+
+        // then
+        assertEquals(ids, result);
+        verify(equipmentRepository).bulkUpdateStatus("BROKEN", ids); // Enum → String 변환 주의
+    }
+
 
     @Test
     void approveRentalRequests_shouldSendNotification() {
