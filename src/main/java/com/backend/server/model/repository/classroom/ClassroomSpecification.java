@@ -43,4 +43,8 @@ public class ClassroomSpecification {
     public static Sort getSort() {
         return Sort.by(Direction.ASC, "name", "id");
     }
+
+    public static Sort getRequestedTimeSort() {
+        return Sort.by(Direction.ASC, "requestedTime");
+    }
 }
