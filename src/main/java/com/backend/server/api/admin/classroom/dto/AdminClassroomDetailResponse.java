@@ -4,6 +4,8 @@ import com.backend.server.api.admin.user.dto.AdminUserResponse;
 import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.classroom.Classroom;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.Getter;
@@ -15,7 +17,12 @@ public class AdminClassroomDetailResponse {
     private final String name;
     private final String description;
 
+    @JsonFormat(pattern = "HH:mm")
+    @Schema(example = "13:00", implementation = String.class)
     private final LocalTime startTime;
+
+    @JsonFormat(pattern = "HH:mm")
+    @Schema(example = "13:00", implementation = String.class)
     private final LocalTime endTime;
 
     private final String managerName;

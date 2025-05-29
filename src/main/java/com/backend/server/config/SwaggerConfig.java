@@ -6,8 +6,6 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.models.GroupedOpenApi;
@@ -49,11 +47,8 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
-        String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-
         Info info = new Info()
-                .title("CEC API Documentation")
-                .description("**서버가 시작된 시각 : %s**".formatted(now));
+                .title("CEC API Documentation");
 
         String jwtSchemeName = "JWT";
         SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwtSchemeName);
