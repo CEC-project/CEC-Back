@@ -45,7 +45,7 @@ public class AdminRentalRestrictionService {
     public AdminRentalRestrictionListResponse getRestrictedUsers(AdminRentalRestrictionListRequest request) {
         if (request.getSortBy() == null)
             request.setSortBy(AdminRentalRestrictionSortType.getDefault());
-        Pageable pageable = request.toPageable();
+        Pageable pageable = request.toPageable(false);
 
         Specification<RentalRestriction> spec = RentalRestrictionSpecification.filter(request);
 
@@ -63,7 +63,7 @@ public class AdminRentalRestrictionService {
     public AdminUserListResponse getAllowedUsers(AdminRentalRestrictionListRequest request) {
         if (request.getSortBy() == null)
             request.setSortBy(AdminRentalRestrictionSortType.getDefault());
-        Pageable pageable = request.toPageable();
+        Pageable pageable = request.toPageable(true);
 
         Specification<User> spec = UserSpecification.filterUsers(request);
 

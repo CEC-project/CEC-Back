@@ -7,13 +7,14 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum AdminRentalRestrictionSortType implements SortTypeConvertible {
-    NAME("name"),
-    STUDENT_NUMBER("studentNumber"),
-    RESTRICTION_COUNT("restrictionCount"),
-    RESTRICTION_START_TIME("rentalRestriction.createdAt"),
-    RESTRICTION_END_TIME("rentalRestriction.endAt");
+    NAME("name", true),
+    STUDENT_NUMBER("studentNumber", true),
+    RESTRICTION_COUNT("restrictionCount", true),
+    RESTRICTION_START_TIME("createdAt", false),
+    RESTRICTION_END_TIME("endAt", false);
 
     private final String field;
+    private final boolean userTable;
 
     public static AdminRentalRestrictionSortType getDefault() {
         return AdminRentalRestrictionSortType.NAME;

@@ -2,6 +2,7 @@ package com.backend.server.model.repository;
 
 import com.backend.server.api.admin.rentalRestriction.dto.AdminRentalRestrictionListRequest;
 import com.backend.server.model.entity.RentalRestriction;
+import com.backend.server.model.entity.User;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -14,8 +15,7 @@ public class RentalRestrictionSpecification {
         return (root, query, cb) -> {
             var predicate = cb.conjunction();
 
-            query.distinct(true);
-            Join<Object, Object> user = root.join("user");
+            Join<RentalRestriction, User> user = root.join("user");
 
             Predicate endAt = cb.greaterThanOrEqualTo(root.get("endAt"), LocalDateTime.now());
             cb.and(predicate, endAt);

@@ -5,6 +5,8 @@ import com.backend.server.model.entity.enums.RestrictionReason;
 import com.backend.server.model.entity.enums.RestrictionType;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @Getter
 @Setter
@@ -16,4 +18,13 @@ public class AdminRentalRestrictionListRequest extends AbstractPaginationParam<A
     private RestrictionType type;
     private RestrictionReason reason;
     private Long professorId; // 교수 테이블의 id or null
+
+    public Pageable toPageable(boolean isUserTable) {
+        if (isUserTable) {
+            String field = sortBy.isUserTable() ? sortBy.getField() : "rentalRestriction." + sortBy.getField();
+            return PageRequest.of(page, size, direction, field);
+        }
+        String field = sortBy.isUserTable() ? "user." + sortBy.getField() : sortBy.getField();
+        return PageRequest.of(page, size, direction, field);
+    }
 }
