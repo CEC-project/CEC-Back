@@ -28,8 +28,8 @@ import lombok.NoArgsConstructor;
 public class RentalRestriction extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -15,6 +15,7 @@ public class NoticeResponse {
   private String content;
   private Boolean isImportant;
   private String attachmentUrl;
+  private Integer view;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
@@ -28,6 +29,7 @@ public class NoticeResponse {
     this.content = notice.getContent();
     this.isImportant = notice.getImportant();
     this.attachmentUrl = notice.getAttachmentUrl();
+    this.view = notice.getView();
     this.createdAt = notice.getCreatedAt();
     this.updatedAt = notice.getUpdatedAt();
 

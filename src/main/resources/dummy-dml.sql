@@ -1,28 +1,48 @@
 -- 아래 계정들의 비밀번호는 asdf1234! 임
 
-insert into users (birth_date, damage_count, grade, rental_count, report_count, restriction_count, created_at,
+insert into users (user_id, birth_date, damage_count, grade, rental_count, report_count, restriction_count, created_at,
                           professor_id, updated_at, department, email, gender, "group", major, name, nickname,
                           password, phone_number, profile_picture, role, student_number)
-values  ('2001-03-15', 0, 3, 5, 2, 1,
+values  (1, '2001-03-15', 0, 3, 5, 2, 1,
          '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
          '학과', 'hong@example.com', '남', 'A조', '세부전공',
          '슈퍼어드민', '길동이', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
          '010-1234-5678', 'profile1.jpg', 'ROLE_SUPER_ADMIN', '000'),
-        ('2002-06-22', 1, 2, 2, 1, 0,
+        (2, '2002-06-22', 1, 2, 2, 1, 0,
          '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
          '학과', 'kim@example.com', '여', 'B조', '세부전공',
          '김영희', '김영희', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
          '010-2345-6789', null, 'ROLE_SUPER_ADMIN', '20230002'),
-        ('2000-12-05', 3, 4, 10, 5, 2,
+        (3, '2000-12-05', 3, 4, 10, 5, 2,
          '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
          '학과', 'park@example.com', '남', 'A조', '세부전공',
          '박철수', '철수짱', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
          '010-3456-7890', 'profile3.png', 'ROLE_SUPER_ADMIN', '202300003'),
-        ('2000-12-05', 3, 4, 10, 5, 2,
+        (4, '2000-12-05', 3, 4, 10, 5, 2,
          '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
          '학과', 'park@example.com', '남', 'A조', '세부전공',
          '유저유저', '유저유저', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
-         '010-3456-7890', 'profile3.png', 'ROLE_USER', '202300004');
+         '010-3456-7890', 'profile3.png', 'ROLE_USER', '202300004'),
+        (5, '2001-07-20', 0, 1, 1, 0, 0,
+         '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
+         '컴퓨터공학과', 'lee@example.com', '여', 'C조', '인공지능',
+         '이서연', '서연이', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
+         '010-4567-8901', 'profile4.jpg', 'ROLE_USER', '202300005'),
+        (6, '1999-09-09', 2, 3, 3, 1, 0,
+         '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
+         '전자공학과', 'choi@example.com', '남', 'D조', '반도체',
+         '최민수', '민수형', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
+         '010-5678-9012', 'profile5.png', 'ROLE_USER', '202300006'),
+        (7, '2003-02-28', 0, 1, 0, 0, 0,
+         '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
+         '기계공학과', 'jang@example.com', '여', 'E조', '자동차',
+         '장지우', '지우지우', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
+         '010-6789-0123', 'profile6.jpg', 'ROLE_USER', '202300007'),
+        (8, '2002-11-11', 1, 2, 4, 0, 0,
+         '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
+         '건축학과', 'kang@example.com', '남', 'F조', '도시계획',
+         '강한결', '한결이', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
+         '010-7890-1234', 'profile7.png', 'ROLE_USER', '202300008');;
 
 -- 강의실 INSERT
 insert into public.classroom (end_time, start_time, created_at, manager_id, renter_id, updated_at, attachment, location, name, status)
@@ -66,18 +86,18 @@ values  (0, 1, '2025-05-28 17:44:19.441547', null, 10, 1, 0, null, null, 0, null
         (0, 1, '2025-05-28 17:44:19.526169', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.526169', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250505', 'AVAILABLE');
 
 -- 공지사항
- insert into notice (title, content, important, attachment_url, author_id, created_at, updated_at)
+ insert into public.notice (view, title, content, important, attachment_url, author_id, created_at, updated_at)
        values
-          ('시스템 점검 안내',
+          (0,'시스템 점검 안내',
            '안녕하세요. 서버 시스템 점검으로 인해 2025년 5월 25일 오전 2시~4시까지 서비스 이용이 일시 중단됩니다. 이용에 불편을 드려 죄송합니다.',
            true, null, 3, '2025-05-20 09:00:00', '2025-05-20 09:00:00'),
-          ('신규 기능 업데이트 소식',
+          (0,'신규 기능 업데이트 소식',
            '안녕하세요! 많은 분들이 요청해주신 댓글 기능이 추가되었습니다. 이제 게시글에 댓글을 작성하고 다른 사용자들과 소통할 수 있습니다. 많은 이용 부탁드립니다.',
            false, 'https://example.com/update-guide.pdf', 2, '2025-05-18 14:30:00', '2025-05-18 14:30:00'),
-          ('개인정보 처리방침 변경 안내',
+          (0,'개인정보 처리방침 변경 안내',
            '개인정보보호법 개정에 따라 개인정보 처리방침이 일부 변경되었습니다. 주요 변경사항을 확인하시고 동의 절차를 진행해주시기 바랍니다. 미동의 시 서비스 이용에 제한이 있을 수 있습니다.',
            true, 'https://example.com/privacy-policy.pdf', 1, '2025-05-15 11:00:00', '2025-05-15 11:00:00'),
-          ('5월 정기 점검 및 이벤트 안내',
+          (0,'5월 정기 점검 및 이벤트 안내',
            '5월 정기 점검이 예정되어 있습니다. 점검 기간: 2025년 5월 30일 오전 1시~3시. 또한 점검 완료 후 감사 이벤트로 포인트 지급 이벤트를 진행할 예정이니 많은 참여 바랍니다.',
            false, null, 3, '2025-05-22 16:45:00', '2025-05-22 16:45:00');
 
@@ -128,3 +148,11 @@ values
     (now(), 5, 3, now(), '기능 제안에 대한 답변 감사합니다. 검토해보겠습니다.'),
     (now(), 3, 1, now(), '로그인 문제는 현재 해결되었습니다. 다시 시도해 주세요.'),
     (now(), 4, 2, now(), '비밀번호 변경 메일이 발송되지 않는 문제는 현재 확인 중입니다.');
+
+-- 유저 4명 (id : 5,6,7,8) 제재 시키기
+insert into rental_restriction (created_at, end_at, updated_at, user_id, reason, type)
+values
+    (now(), now() + (random() * interval '5 days'), now(), 5, 'OVERDUE', 'EQUIPMENT'),
+    (now(), now() + (random() * interval '5 days'), now(), 6, 'DAMAGED', 'EQUIPMENT'),
+    (now(), now() + (random() * interval '5 days'), now(), 7, 'DAMAGED', 'CLASSROOM'),
+    (now(), now() + (random() * interval '5 days'), now(), 8, 'LOST', 'CLASSROOM');

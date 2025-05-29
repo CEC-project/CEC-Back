@@ -98,6 +98,7 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     @Query("UPDATE Equipment e SET e.status = :status WHERE e.id IN :ids")
     void bulkUpdateStatus(@Param("status") String status, @Param("ids") List<Long> ids);
 
+
     @Modifying
     @Transactional
     @Query("UPDATE Equipment e SET e.status = :newStatus WHERE e.status = :targetStatus AND e.startRentDate < :now")
@@ -127,6 +128,7 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
             @Param("inUseStatus") Status inUseStatus,
             @Param("availableStatus") Status availableStatus
     );
+
 
 
 }

@@ -9,12 +9,10 @@ import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.RentalRestriction;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.RentalRestrictionRepository;
+import com.backend.server.model.repository.RentalRestrictionSpecification;
 import com.backend.server.model.repository.UserRepository;
 import com.backend.server.model.repository.UserSpecification;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,33 +45,27 @@ public class AdminRentalRestrictionService {
     public AdminRentalRestrictionListResponse getRestrictedUsers(AdminRentalRestrictionListRequest request) {
         if (request.getSortBy() == null)
             request.setSortBy(AdminRentalRestrictionSortType.getDefault());
-        Pageable pageable = request.toPageable();
+        Pageable pageable = request.toPageable(false);
 
-        Specification<User> spec = UserSpecification.filterUsers(request, true);
+        Specification<RentalRestriction> spec = RentalRestrictionSpecification.filter(request);
 
-        Page<User> page = userRepository.findAll(spec, pageable);
-        List<RentalRestriction> list = rentalRestrictionRepository.findAllInUser(page.getContent());
+        Page<RentalRestriction> page = rentalRestrictionRepository.findAll(spec, pageable);
 
-        Map<Long, RentalRestriction> restrictionMap = list.stream()
-                .collect(Collectors.toMap(
-                        r -> r.getUser().getId(),
-                        Function.identity()
-                ));
-        List<RentalRestriction> sortedRestrictions = page.getContent()
+        List<User> users = page.getContent()
                 .stream()
-                .map(user -> restrictionMap.get(user.getId()))
+                .map(RentalRestriction::getUser)
                 .toList();
 
-        return new AdminRentalRestrictionListResponse(page, sortedRestrictions);
+        return new AdminRentalRestrictionListResponse(page, users);
     }
 
     @Transactional
     public AdminUserListResponse getAllowedUsers(AdminRentalRestrictionListRequest request) {
         if (request.getSortBy() == null)
             request.setSortBy(AdminRentalRestrictionSortType.getDefault());
-        Pageable pageable = request.toPageable();
+        Pageable pageable = request.toPageable(true);
 
-        Specification<User> spec = UserSpecification.filterUsers(request, false);
+        Specification<User> spec = UserSpecification.filterUsers(request);
 
         Page<User> page = userRepository.findAll(spec, pageable);
         List<Professor> professors = page.getContent()
