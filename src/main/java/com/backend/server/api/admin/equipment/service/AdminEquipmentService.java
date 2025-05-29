@@ -149,6 +149,11 @@ public class AdminEquipmentService {
         equipmentRepository.deleteById(id);
         return id;
     }
+    //장비배치처리할때
+    public void deleteAllEquipment(Long id) {
+        equipmentRepository.deleteById(id);
+
+    }
 
     //장비 리스트 조회
     public AdminEquipmentListResponse getEquipments(AdminEquipmentListRequest request) {

@@ -3,6 +3,8 @@ package com.backend.server.api.user.equipment.service;
 import java.util.Arrays;
 import java.util.List;
 
+import com.backend.server.api.common.notification.dto.CommonNotificationDto;
+import com.backend.server.api.common.notification.service.CommonNotificationService;
 import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
 import com.backend.server.api.user.equipment.dto.equipment.EquipmentListResponse;
 import com.backend.server.api.user.equipment.dto.equipment.EquipmentRentalRequest;
@@ -18,7 +20,6 @@ import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.EquipmentCart;
-import com.backend.server.model.repository.equipment.EquipmentModelRepository;
 import com.backend.server.model.repository.equipment.EquipmentRepository;
 import com.backend.server.model.repository.equipment.EquipmentSpecification;
 import com.backend.server.model.repository.UserRepository;
@@ -32,6 +33,7 @@ public class EquipmentService {
     private final EquipmentRepository equipmentRepository;
     private final UserRepository userRepository;
     private final EquipmentCartRepository equipmentCartRepository;
+    private final CommonNotificationService notificationService;
 
     //장비 하나 호버링시 이미지 보여주기
     public EquipmentResponse getEquipment(Long id) {
@@ -134,6 +136,15 @@ public class EquipmentService {
             
             // 장바구니에서 제거
             equipmentCartRepository.deleteByUserIdAndEquipmentId(user.getId(), equipmentId);
+
+            CommonNotificationDto dto = CommonNotificationDto.builder()
+                    .category("장비")
+                    .title("장비 대여 요청이 있습니다.")
+                    .message(loginUser.getName() + "님의 장비 대여 요청이 있습니다.")
+                    .link("/approval/" + equipmentId)
+                    .build();
+
+            notificationService.createNotificationToAdmins(dto);
         }
     }
 

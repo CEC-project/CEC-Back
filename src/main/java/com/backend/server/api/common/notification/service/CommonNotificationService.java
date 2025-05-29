@@ -1,6 +1,8 @@
 package com.backend.server.api.common.notification.service;
 import java.util.List;
 
+import com.backend.server.model.entity.User;
+import com.backend.server.model.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import com.backend.server.model.repository.notification.NotificationRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import com.backend.server.model.entity.enums.Role;
 
 @Slf4j
 @Service
@@ -21,6 +24,7 @@ public class CommonNotificationService {
     private final NotificationRepository notificationRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
+    private final UserRepository userRepository;
 
     public void createNotification(CommonNotificationDto dto, Long userId){
         Notification notification = Notification.builder()
@@ -36,13 +40,41 @@ public class CommonNotificationService {
 
         // Redis로 실시간 알림 발송
         try {
-
             String json = objectMapper.writeValueAsString(notification);
             redisTemplate.convertAndSend("notifications:" + userId, json);
         } catch (Exception e) {
             log.error("알림 전송 실패", e);
         }
     }
+
+    public void createNotificationToAdmins(CommonNotificationDto dto) {
+        // 1. 관리자 전체 조회
+        List<User> allAdmins = userRepository.findAllByRole(Role.ROLE_ADMIN);
+        List<User> superAdmins = userRepository.findAllByRole(Role.ROLE_SUPER_ADMIN);
+        allAdmins.addAll(superAdmins);
+
+        // 2. 각 관리자에게 알림 생성 및 전송
+        for (User admin : allAdmins) {
+            Notification notification = Notification.builder()
+                    .userId(admin.getId())
+                    .category(dto.getCategory())
+                    .title(dto.getTitle())
+                    .message(dto.getMessage())
+                    .link(dto.getLink())
+                    .read(false)
+                    .build();
+
+            notificationRepository.save(notification);
+
+            try {
+                String json = objectMapper.writeValueAsString(notification);
+                redisTemplate.convertAndSend("notifications:" + admin.getId(), json);
+            } catch (Exception e) {
+                log.error("알림 전송 실패 (관리자 ID: " + admin.getId() + ")", e);
+            }
+        }
+    }
+
 
     //읽음처리
     public Long changeIsReadTrue(Long notificationId) {

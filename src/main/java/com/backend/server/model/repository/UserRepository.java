@@ -24,7 +24,8 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     Optional<User> findByEmail(String email);
     Optional<User> findByStudentNumber(String studentNumber);
-    List<User> findByRole(Role role);
+    List<User> findAllByRole(Role role);
+
     List<User> findByRoleIn(Role... roles);
 
     @EntityGraph(attributePaths = {"professor"})

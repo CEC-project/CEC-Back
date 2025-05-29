@@ -1,5 +1,6 @@
 package com.backend.server.model.repository.classroom;
 
+import com.backend.server.model.entity.classroom.Semester;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,6 @@ public interface SemesterScheduleRepository extends JpaRepository<SemesterSchedu
             + "AND ss.classroom.id = :classroomId "
             + "ORDER BY ss.day asc, ss.startAt asc")
     List<SemesterSchedule> getSemesterScheduleBySemesterAndClassroom(Long semesterId, Long classroomId);
+
+    List<SemesterSchedule> findAllBySemester(Semester semester);
 }
