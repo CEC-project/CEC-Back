@@ -1,28 +1,48 @@
 -- 아래 계정들의 비밀번호는 asdf1234! 임
 
-insert into users (birth_date, damage_count, grade, rental_count, report_count, restriction_count, created_at,
+insert into users (user_id, birth_date, damage_count, grade, rental_count, report_count, restriction_count, created_at,
                           professor_id, updated_at, department, email, gender, "group", major, name, nickname,
                           password, phone_number, profile_picture, role, student_number)
-values  ('2001-03-15', 0, 3, 5, 2, 1,
+values  (1, '2001-03-15', 0, 3, 5, 2, 1,
          '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
          '학과', 'hong@example.com', '남', 'A조', '세부전공',
          '슈퍼어드민', '길동이', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
          '010-1234-5678', 'profile1.jpg', 'ROLE_SUPER_ADMIN', '000'),
-        ('2002-06-22', 1, 2, 2, 1, 0,
+        (2, '2002-06-22', 1, 2, 2, 1, 0,
          '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
          '학과', 'kim@example.com', '여', 'B조', '세부전공',
          '김영희', '김영희', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
          '010-2345-6789', null, 'ROLE_SUPER_ADMIN', '20230002'),
-        ('2000-12-05', 3, 4, 10, 5, 2,
+        (3, '2000-12-05', 3, 4, 10, 5, 2,
          '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
          '학과', 'park@example.com', '남', 'A조', '세부전공',
          '박철수', '철수짱', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
          '010-3456-7890', 'profile3.png', 'ROLE_SUPER_ADMIN', '202300003'),
-        ('2000-12-05', 3, 4, 10, 5, 2,
+        (4, '2000-12-05', 3, 4, 10, 5, 2,
          '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
          '학과', 'park@example.com', '남', 'A조', '세부전공',
          '유저유저', '유저유저', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
-         '010-3456-7890', 'profile3.png', 'ROLE_USER', '202300004');
+         '010-3456-7890', 'profile3.png', 'ROLE_USER', '202300004'),
+        (5, '2001-07-20', 0, 1, 1, 0, 0,
+         '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
+         '컴퓨터공학과', 'lee@example.com', '여', 'C조', '인공지능',
+         '이서연', '서연이', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
+         '010-4567-8901', 'profile4.jpg', 'ROLE_USER', '202300005'),
+        (6, '1999-09-09', 2, 3, 3, 1, 0,
+         '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
+         '전자공학과', 'choi@example.com', '남', 'D조', '반도체',
+         '최민수', '민수형', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
+         '010-5678-9012', 'profile5.png', 'ROLE_USER', '202300006'),
+        (7, '2003-02-28', 0, 1, 0, 0, 0,
+         '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
+         '기계공학과', 'jang@example.com', '여', 'E조', '자동차',
+         '장지우', '지우지우', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
+         '010-6789-0123', 'profile6.jpg', 'ROLE_USER', '202300007'),
+        (8, '2002-11-11', 1, 2, 4, 0, 0,
+         '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
+         '건축학과', 'kang@example.com', '남', 'F조', '도시계획',
+         '강한결', '한결이', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
+         '010-7890-1234', 'profile7.png', 'ROLE_USER', '202300008');;
 
 -- 강의실 INSERT
 insert into public.classroom (end_time, start_time, created_at, manager_id, renter_id, updated_at, attachment, location, name, status)
@@ -128,3 +148,11 @@ values
     (now(), 5, 3, now(), '기능 제안에 대한 답변 감사합니다. 검토해보겠습니다.'),
     (now(), 3, 1, now(), '로그인 문제는 현재 해결되었습니다. 다시 시도해 주세요.'),
     (now(), 4, 2, now(), '비밀번호 변경 메일이 발송되지 않는 문제는 현재 확인 중입니다.');
+
+-- 유저 4명 (id : 5,6,7,8) 제재 시키기
+insert into rental_restriction (created_at, end_at, updated_at, user_id, reason, type)
+values
+    (now(), now() + (random() * interval '5 days'), now(), 5, 'OVERDUE', 'EQUIPMENT'),
+    (now(), now() + (random() * interval '5 days'), now(), 6, 'DAMAGED', 'EQUIPMENT'),
+    (now(), now() + (random() * interval '5 days'), now(), 7, 'DAMAGED', 'CLASSROOM'),
+    (now(), now() + (random() * interval '5 days'), now(), 8, 'LOST', 'CLASSROOM');

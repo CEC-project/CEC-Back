@@ -15,17 +15,22 @@ import org.springframework.data.domain.Sort;
 @Setter
 public abstract class AbstractPaginationParam<T extends Enum<T> & SortTypeConvertible> {
 
-    @Schema(description = "페이지 번호 (기본값 0)", example = "0")
-    protected Integer page = 0;
+    @Schema(description = "페이지 번호 (기본값 0)", type = "Integer", example = "0")
+    protected Integer page;
 
-    @Schema(description = "페이지당 크기 (기본값 = 10)", example = "10")
-    protected Integer size = 10;
+    @Schema(description = "페이지당 크기 (기본값 = 10)", type = "Integer", example = "10")
+    protected Integer size;
 
     @Schema(description = "정렬 기준")
     protected T sortBy;
 
     @Schema(description = "정렬 방법", implementation = Sort.Direction.class)
     protected Sort.Direction direction = Sort.Direction.ASC;
+
+    public AbstractPaginationParam() {
+        page = 0;
+        size = 10;
+    }
 
     public Pageable toPageable() {
         return PageRequest.of(page, size, direction, sortBy.getField());
