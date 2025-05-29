@@ -6,6 +6,7 @@ import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,10 +20,15 @@ public class AdminSemesterScheduleResponse {
     final private Integer day;
     final private String name;
     final private String color;
+
     @JsonFormat(pattern = "HH:mm")
+    @Schema(example = "13:00", implementation = String.class)
     final private LocalTime startAt;
+
     @JsonFormat(pattern = "HH:mm")
+    @Schema(example = "13:00", implementation = String.class)
     final private LocalTime endAt;
+
     final private List<AdminEquipmentResponse> equipmentList;
 
     public AdminSemesterScheduleResponse(

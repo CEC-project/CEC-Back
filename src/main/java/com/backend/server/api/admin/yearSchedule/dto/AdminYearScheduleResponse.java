@@ -4,6 +4,7 @@ import com.backend.server.api.admin.classroom.dto.AdminClassroomResponse;
 import com.backend.server.model.entity.classroom.YearSchedule;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import lombok.Getter;
@@ -22,9 +23,11 @@ public class AdminYearScheduleResponse {
     private final String color;
 
     @JsonFormat(pattern = "HH:mm")
+    @Schema(example = "13:00", implementation = String.class)
     private final LocalTime startAt;
 
     @JsonFormat(pattern = "HH:mm")
+    @Schema(example = "13:00", implementation = String.class)
     private final LocalTime endAt;
 
     public AdminYearScheduleResponse(YearSchedule yearSchedule, AdminClassroomResponse classroom) {

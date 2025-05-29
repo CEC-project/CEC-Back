@@ -26,11 +26,11 @@ public class ScheduleResponse {
     private final LocalDate date;
 
     @JsonFormat(pattern = "HH:mm")
-    @Schema(example = "13:00")
+    @Schema(example = "13:00", implementation = String.class)
     private final LocalTime startAt;
 
     @JsonFormat(pattern = "HH:mm")
-    @Schema(example = "14:00")
+    @Schema(example = "13:00", implementation = String.class)
     private final LocalTime endAt;
 
     private final String color;
