@@ -1,5 +1,6 @@
 package com.backend.server.model.repository.classroom;
 
+import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.classroom.Semester;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
 import java.util.List;
@@ -18,4 +19,6 @@ public interface SemesterScheduleRepository extends JpaRepository<SemesterSchedu
     List<SemesterSchedule> getSemesterScheduleBySemesterAndClassroom(Long semesterId, Long classroomId);
 
     List<SemesterSchedule> findAllBySemester(Semester semester);
+
+    List<SemesterSchedule> findByClassroomAndSemesterIn(Classroom classroom, List<Semester> semesters);
 }
