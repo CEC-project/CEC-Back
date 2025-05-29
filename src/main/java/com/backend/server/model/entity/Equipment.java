@@ -73,4 +73,8 @@ public class Equipment extends BaseTimeEntity {
 
     @Column(name = "end_rent_date")
     private LocalDateTime endRentDate;
+
+    public void changeStatus(Status status) {
+        this.status = status;
+    }
 }

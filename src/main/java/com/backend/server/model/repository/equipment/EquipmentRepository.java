@@ -8,7 +8,10 @@ import com.backend.server.model.entity.enums.Status;
 import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.persistence.LockModeType;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Lock;
@@ -94,5 +97,38 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     @Modifying
     @Query("UPDATE Equipment e SET e.status = :status WHERE e.id IN :ids")
     void bulkUpdateStatus(@Param("status") String status, @Param("ids") List<Long> ids);
+
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Equipment e SET e.status = :newStatus WHERE e.status = :targetStatus AND e.startRentDate < :now")
+    void updateStatusByStartRentDateBefore(@Param("targetStatus") Status targetStatus,
+                                           @Param("newStatus") Status newStatus,
+                                           @Param("now") LocalDateTime now);
+
+
+    @Modifying
+    @Transactional
+    //특정 학기(semesterId)에 등록된 강의 시간표(SemesterSchedule)에 포함된 장비들 중,
+    //현재 상태가 IN_USE인 장비만 골라서
+    //AVAILABLE 상태로 일괄 변경합니다.
+    @Query("""
+    UPDATE Equipment e
+    SET e.status = :availableStatus
+    WHERE e.status = :inUseStatus
+    AND e.id IN (
+        SELECT eq.id
+        FROM Equipment eq
+        JOIN eq.semesterSchedule ss
+        WHERE ss.semester.id = :semesterId
+    )
+""")
+    void updateEquipmentStatusToAvailableBySemester(
+            @Param("semesterId") Long semesterId,
+            @Param("inUseStatus") Status inUseStatus,
+            @Param("availableStatus") Status availableStatus
+    );
+
+
 
 }
