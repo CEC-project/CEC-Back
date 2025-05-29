@@ -47,6 +47,7 @@ public class NoticeService {
     public NoticeResponse getNotice(Long noticeId) {
         Notice notice = noticeRepository.findById(noticeId)
                 .orElseThrow(() -> new IllegalArgumentException("공지사항을 찾을 수 없습니다."));
+        notice.increaseViewCount();
 
         return new NoticeResponse(notice);
     }

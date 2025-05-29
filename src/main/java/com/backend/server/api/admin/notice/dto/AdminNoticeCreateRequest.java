@@ -37,6 +37,7 @@ public class AdminNoticeCreateRequest {
         .content(content)
         .important(important)
         .attachmentUrl(attachmentUrl)
+        .view(0)
         .author(author)
         .build();
   }
