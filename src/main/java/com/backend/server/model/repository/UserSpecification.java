@@ -40,7 +40,7 @@ public class UserSpecification {
         };
     }
 
-    public static Specification<User> filterUsers(AdminRentalRestrictionListRequest request, boolean restricted) {
+    public static Specification<User> filterUsers(AdminRentalRestrictionListRequest request) {
         return (root, query, cb) -> {
             var predicate = cb.conjunction();
 
@@ -48,9 +48,7 @@ public class UserSpecification {
             Join<Object, Object> rentalRestrictions = root.join("rentalRestrictions");
 
             Predicate endAt = cb.greaterThanOrEqualTo(rentalRestrictions.get("endAt"), LocalDateTime.now());
-            if (!restricted)
-                endAt = endAt.not();
-            cb.and(predicate, endAt);
+            cb.and(predicate, endAt.not());
 
             if (request.getSearchKeyword() != null && request.getSearchType() != null) {
                 switch (request.getSearchType()) {
