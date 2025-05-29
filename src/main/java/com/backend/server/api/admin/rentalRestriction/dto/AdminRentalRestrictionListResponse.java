@@ -16,10 +16,12 @@ public class AdminRentalRestrictionListResponse {
     private List<AdminRentalRestrictionResponse> content;
     private PageableInfo pageable;
 
-    public AdminRentalRestrictionListResponse(Page<User> page, List<RentalRestriction> restrictions) {
+    public AdminRentalRestrictionListResponse(
+            Page<RentalRestriction> page,
+            List<User> users) {
         pageable = new PageableInfo(page);
-        content = IntStream.range(0, restrictions.size())
-                .mapToObj(i -> new AdminRentalRestrictionResponse(page.getContent().get(i), restrictions.get(i)))
+        content = IntStream.range(0, page.getNumberOfElements())
+                .mapToObj(i -> new AdminRentalRestrictionResponse(users.get(i), page.getContent().get(i)))
                 .collect(Collectors.toList());
     }
 }
