@@ -12,6 +12,7 @@ import com.backend.server.model.repository.classroom.ClassroomRepository;
 import com.backend.server.model.repository.classroom.ClassroomSpecification;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -66,6 +67,20 @@ public class AdminClassroomRentalService {
     }
 
     @Transactional
+    public List<Long> changeStatus(AdminClassroomDetailRequest request) {
+        BiFunction<Long, String, Long> operator = switch (request.getStatus()) {
+            case ACCEPT -> (l, s) -> rentalAccept(l);
+            case RETURN -> (l, s) -> rentalReturn(l);
+            case CANCEL -> this::rentalCancel;
+            case BROKEN -> this::rentalBroken;
+            case REJECT -> this::rentalReject;
+        };
+        for (Long classroomId : request.getClassroomIds())
+            operator.apply(classroomId, request.getDetail());
+        return request.getClassroomIds();
+    }
+
+    @Transactional
     public Long rentalAccept(Long classroomId) {
         // 강의실 조회
         Classroom classroom = classroomRepository.findById(classroomId)
@@ -86,7 +101,7 @@ public class AdminClassroomRentalService {
     }
 
     @Transactional
-    public Long rentalReject(Long classroomId, AdminClassroomDetailRequest request) {
+    public Long rentalReject(Long classroomId, String detail) {
         // 강의실 조회
         Classroom classroom = classroomRepository.findById(classroomId)
                 .orElseThrow(() -> new IllegalArgumentException("강의실 id가 유효하지 않습니다."));
@@ -105,7 +120,7 @@ public class AdminClassroomRentalService {
         classroomRepository.save(classroom);
 
         // 알림 전송
-        notificationProcess(classroom, "대여 반려", "\n반려 사유 : " + request.getDetail());
+        notificationProcess(classroom, "대여 반려", "\n반려 사유 : " + detail);
 
         return classroomId;
     }
@@ -136,7 +151,7 @@ public class AdminClassroomRentalService {
     }
 
     @Transactional
-    public Long rentalBroken(Long classroomId, AdminClassroomDetailRequest request) {
+    public Long rentalBroken(Long classroomId, String detail) {
         // 강의실 조회
         Classroom classroom = classroomRepository.findById(classroomId)
                 .orElseThrow(() -> new IllegalArgumentException("강의실 id가 유효하지 않습니다."));
@@ -155,13 +170,13 @@ public class AdminClassroomRentalService {
         classroomRepository.save(classroom);
 
         // 알림 전송
-        notificationProcess(classroom, "반납시 파손처리", "\n파손 내용 : " + request.getDetail());
+        notificationProcess(classroom, "반납시 파손처리", "\n파손 내용 : " + detail);
 
         return classroomId;
     }
 
     @Transactional
-    public Long rentalCancel(Long classroomId, AdminClassroomDetailRequest request) {
+    public Long rentalCancel(Long classroomId, String detail) {
         // 강의실 조회
         Classroom classroom = classroomRepository.findById(classroomId)
                 .orElseThrow(() -> new IllegalArgumentException("강의실 id가 유효하지 않습니다."));
@@ -177,7 +192,7 @@ public class AdminClassroomRentalService {
         classroomRepository.save(classroom);
 
         // 알림 전송
-        notificationProcess(classroom, "대여 취소", "\n대여 취소 사유 : " + request.getDetail());
+        notificationProcess(classroom, "대여 취소", "\n대여 취소 사유 : " + detail);
 
         return classroomId;
     }
