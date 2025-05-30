@@ -61,6 +61,16 @@ public class AdminEquipmentController {
     public ApiResponse<String> getSerialNumber(@ModelAttribute AdminEquipmentSerialNumberGenerateRequest request) {
         return ApiResponse.success("시리얼넘버 보여주기 성공", adminEquipmentService.generateSerialNumber(request));
     }
+    @PostMapping("/repair")
+    @Operation(
+            summary = "장비 수리",
+            description = "BROKEN 상태의 장비를 AVAILABLE 상태로 변경하며 수리 내용을 기록할 수 있습니다. 내용은 장비의 설명에 추가로 붙습니다"
+    )
+    public ApiResponse<Void> repairEquipments(
+            @RequestBody RepairEquipmentsRequest request) {
+        adminEquipmentService.repairEquipments(request.getEquipmentIds(), request.getDescription());
+        return ApiResponse.success("장비 복구 처리 성공", null);
+    }
 
     @PutMapping("/{id}")
     @Operation(
