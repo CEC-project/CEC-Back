@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum AdminInquirySortType implements SortTypeConvertible {
-    NAME("name"),
-    STUDENT_NUMBER("studentNumber"),
+    NAME("author.name"),
+    STUDENT_NUMBER("author.studentNumber"),
     CREATION_TIME("createdAt");
 
     private final String field;

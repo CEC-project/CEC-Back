@@ -24,7 +24,7 @@ public class AdminInquiryListResponse {
             List<User> authors,
             List<Professor> professors) {
         pageable = new PageableInfo(inquiries);
-        content = IntStream.range(0, inquiries.getSize())
+        content = IntStream.range(0, inquiries.getNumberOfElements())
                 .mapToObj(i -> new AdminInquiryResponse(
                         inquiries.getContent().get(i),
                         answers.get(i),
