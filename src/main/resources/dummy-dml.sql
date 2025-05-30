@@ -49,8 +49,8 @@ insert into public.classroom (end_time, start_time, created_at, manager_id, rent
 values
     ('18:00:00', '09:00:00', now(), 1, null, now(), null, '101', '101호', 'AVAILABLE'),
     ('18:00:00', '09:00:00', now(), 1, null, now(), null, '102', '102호', 'AVAILABLE'),
-    ('18:00:00', '09:00:00', now(), 1, null, now(), null, '103', '103호', 'AVAILABLE'),
-    ('18:00:00', '09:00:00', now(), 1, null, now(), null, '105', '105호', 'AVAILABLE'),
+    ('18:00:00', '09:00:00', now(), 1, 1, now(), null, '103', '103호', 'RENTAL_PENDING'),
+    ('18:00:00', '09:00:00', now(), 1, 1, now(), null, '105', '105호', 'RENTAL_PENDING'),
     ('18:00:00', '09:00:00', now(), 1, null, now(), null, '201', '201호', 'AVAILABLE');
 
 -- 교수 INSERT
