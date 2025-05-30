@@ -45,10 +45,11 @@ public class UserSpecification {
             var predicate = cb.conjunction();
 
             query.distinct(true);
-            Join<Object, Object> rentalRestrictions = root.join("rentalRestrictions");
+            Join<Object, Object> rentalRestrictions = root.join("rentalRestrictions", JoinType.LEFT);
 
-            Predicate endAt = cb.greaterThanOrEqualTo(rentalRestrictions.get("endAt"), LocalDateTime.now());
-            cb.and(predicate, endAt.not());
+            Predicate endAt = cb.lessThan(rentalRestrictions.get("endAt"), LocalDateTime.now());
+            Predicate isNull = cb.isNull(rentalRestrictions);
+            predicate = cb.and(predicate, cb.or(isNull, endAt));
 
             if (request.getSearchKeyword() != null && request.getSearchType() != null) {
                 switch (request.getSearchType()) {
