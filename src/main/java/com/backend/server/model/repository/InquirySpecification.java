@@ -14,26 +14,7 @@ public class InquirySpecification {
 
             Join<Inquiry, User> author = root.join("author", JoinType.LEFT);
 
-            if (request.getSearchKeyword() != null && request.getSearchType() != null) {
-                switch (request.getSearchType()) {
-                    case 0 -> predicate = cb.and(predicate, cb.like(
-                            author.get("name"), "%" + request.getSearchKeyword() + "%"));
-                    case 1 -> predicate = cb.and(predicate, cb.like(
-                            author.get("phoneNumber"), "%" + request.getSearchKeyword() + "%"));
-                    case 2 -> predicate = cb.and(predicate, cb.like(
-                            author.get("studentNumber"), "%" + request.getSearchKeyword() + "%"));
-                }
-            }
-
-            if (request.getGrade() != null)
-                predicate = cb.and(predicate, cb.equal(author.get("grade"), request.getGrade()));
-
-            if (request.getGender() != null)
-                predicate = cb.and(predicate, cb.equal(author.get("gender"), request.getGender()));
-
-            if (request.getProfessorId() != null)
-                predicate = cb.and(predicate, cb.equal(
-                        author.join("professor", JoinType.LEFT).get("id"), request.getProfessorId()));
+            predicate = UserSpecification.searchAndFilterUsers(author, cb, predicate, request.toAdminUserListRequest());
 
             Join<?, ?> answers = root.join("answers", JoinType.LEFT);
             if (request.getAnswered() != null) {
