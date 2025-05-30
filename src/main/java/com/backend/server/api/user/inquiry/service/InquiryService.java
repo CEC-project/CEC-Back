@@ -12,6 +12,8 @@ import com.backend.server.model.repository.InquiryRepository;
 import com.backend.server.model.repository.UserRepository;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,9 +72,9 @@ public class InquiryService {
                         .attachmentUrl(inquiry.getAttachmentUrl())
                         .type(inquiry.getType())
                         .status(inquiry.getStatus())
-                        .createdAt(inquiry.getCreatedAt())
+                        .createdAt(inquiry.getCreatedAt().toString())
                         .build())
-        .toList();
+        .collect(Collectors.toList());
     }
 
     @Transactional
@@ -83,14 +85,6 @@ public class InquiryService {
         if (!inquiry.getAuthor().getId().equals(currentUserId)) {
             throw new AccessDeniedException("본인의 문의글만 수정할 수 있습니다.");
         }
-
-        // 변경 내용
-        inquiry.toBuilder()
-                .title(request.getTitle())
-                .content(request.getContent())
-                .attachmentUrl(request.getAttachmentUrl())
-                .type(request.getType())
-                .build();
 
         // 객체 수정
         inquiry.update(
