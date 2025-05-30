@@ -6,9 +6,10 @@ import com.backend.server.api.user.inquiry.dto.InquiryResponse;
 import com.backend.server.api.user.inquiry.service.InquiryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-// import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -22,15 +23,15 @@ public class InquiryController {
 
     @PostMapping // POST, 글 쓰기
     public ResponseEntity<Long> createInquiry(
-            @RequestBody InquiryRequest request,
-            @AuthenticationPrincipal LoginUser loginUser  // 인증된 사용자 정보 주입
+            @Valid @RequestBody InquiryRequest request, // 유효성 검사 적용
+            @AuthenticationPrincipal LoginUser loginUser
     ) {
-        Long currentUserId = loginUser.getId(); // 로그인 사용자 ID 가져오기
-        Long inquiryId = inquiryService.createInquiry(request, currentUserId); // DB 저장
+        Long currentUserId = loginUser.getId();
+        Long inquiryId = inquiryService.createInquiry(request, currentUserId);
         return ResponseEntity.ok(inquiryId);
     }
 
-    @GetMapping("/{id}") //GET, 상세 글 조회
+    @GetMapping("/{id}") // GET, 상세 글 조회
     public ResponseEntity<InquiryResponse> getInquiry(
             @PathVariable Long id,
             @AuthenticationPrincipal LoginUser loginUser
@@ -40,10 +41,10 @@ public class InquiryController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
+    @GetMapping // GET, 내 문의글 전체 조회
     public ResponseEntity<List<InquiryResponse>> getMyInquiries(
             @AuthenticationPrincipal LoginUser loginUser
-    ){
+    ) {
         Long currentUserId = loginUser.getId();
         List<InquiryResponse> responses = inquiryService.getMyInquiries(currentUserId);
         return ResponseEntity.ok(responses);
@@ -51,9 +52,9 @@ public class InquiryController {
 
     @PutMapping("/{id}") // PUT, 문의글 수정
     public ResponseEntity<Void> updateInquiry(
-        @PathVariable Long id,
-        @RequestBody InquiryRequest request,
-        @AuthenticationPrincipal LoginUser loginUser
+            @PathVariable Long id,
+            @Valid @RequestBody InquiryRequest request, // 유효성 검사 적용
+            @AuthenticationPrincipal LoginUser loginUser
     ) throws AccessDeniedException {
         Long currentUserId = loginUser.getId();
         inquiryService.updateInquiry(id, request, currentUserId);
