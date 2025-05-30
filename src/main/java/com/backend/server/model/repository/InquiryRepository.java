@@ -14,7 +14,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface InquiryRepository extends JpaRepository<Inquiry, Long>, JpaSpecificationExecutor<Inquiry> {
 
-    @EntityGraph(attributePaths = {"answers", "user", "user.professor"})
+    @EntityGraph(attributePaths = {"answers", "author", "author.professor"})
     Page<Inquiry> findAll(Specification<Inquiry> spec, Pageable pageable);
 
     List<InquiryResponse> findAllByAuthorId(Long authorId); //사용자 ID로 조회
