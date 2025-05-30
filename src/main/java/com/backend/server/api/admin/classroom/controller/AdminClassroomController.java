@@ -53,14 +53,20 @@ public class AdminClassroomController {
         return ApiResponse.success("강의실 목록 조회 성공", result);
     }
 
-    @Operation(summary = "강의실 등록 API")
+    @Operation(
+            summary = "강의실 등록 API",
+            description = """
+        <b>$.attachment : 길이제한 255입니다. 생략 가능합니다. 빈 문자열이 들어가면 에러가 나므로, 대신 null을 넣어주세요.</b>""")
     @PostMapping
     public ApiResponse<Long> createClassroom(@Valid @RequestBody AdminClassroomRequest request) {
         Long id = adminClassroomService.createClassroom(request);
         return ApiResponse.success("강의실 등록 성공", id);
     }
 
-    @Operation(summary = "강의실 수정 API")
+    @Operation(
+            summary = "강의실 수정 API",
+            description = """
+        <b>$.attachment : 길이제한 255입니다. 생략 가능합니다. 빈 문자열이 들어가면 에러가 나므로, 대신 null을 넣어주세요.</b>""")
     @PutMapping("/{id}")
     public ApiResponse<Long> updateClassroom(@PathVariable Long id, @Valid @RequestBody AdminClassroomRequest request) {
         Long updatedId = adminClassroomService.updateClassroom(id, request);
