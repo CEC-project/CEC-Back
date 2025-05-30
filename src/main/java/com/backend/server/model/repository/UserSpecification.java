@@ -3,6 +3,8 @@ package com.backend.server.model.repository;
 import com.backend.server.api.admin.rentalRestriction.dto.AdminRentalRestrictionListRequest;
 import com.backend.server.api.admin.user.dto.AdminUserListRequest;
 import com.backend.server.model.entity.User;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.From;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -15,26 +17,7 @@ public class UserSpecification {
         return (root, query, cb) -> {
             var predicate = cb.conjunction();
 
-            if (request.getSearchKeyword() != null && request.getSearchType() != null) {
-                switch (request.getSearchType()) {
-                    case 0 -> predicate = cb.and(predicate, cb.like(
-                            root.get("name"), "%" + request.getSearchKeyword() + "%"));
-                    case 1 -> predicate = cb.and(predicate, cb.like(
-                            root.get("phoneNumber"), "%" + request.getSearchKeyword() + "%"));
-                    case 2 -> predicate = cb.and(predicate, cb.like(
-                            root.get("studentNumber"), "%" + request.getSearchKeyword() + "%"));
-                }
-            }
-
-            if (request.getGrade() != null)
-                predicate = cb.and(predicate, cb.equal(root.get("grade"), request.getGrade()));
-
-            if (request.getGender() != null)
-                predicate = cb.and(predicate, cb.equal(root.get("gender"), request.getGender()));
-
-            if (request.getProfessorId() != null)
-                predicate = cb.and(predicate, cb.equal(
-                        root.join("professor", JoinType.LEFT).get("id"), request.getProfessorId()));
+            predicate = searchAndFilterUsers(root, cb, predicate, request);
 
             return predicate;
         };
@@ -51,26 +34,7 @@ public class UserSpecification {
             Predicate isNull = cb.isNull(rentalRestrictions);
             predicate = cb.and(predicate, cb.or(isNull, endAt));
 
-            if (request.getSearchKeyword() != null && request.getSearchType() != null) {
-                switch (request.getSearchType()) {
-                    case 0 -> predicate = cb.and(predicate, cb.like(
-                            root.get("name"), "%" + request.getSearchKeyword() + "%"));
-                    case 1 -> predicate = cb.and(predicate, cb.like(
-                            root.get("phoneNumber"), "%" + request.getSearchKeyword() + "%"));
-                    case 2 -> predicate = cb.and(predicate, cb.like(
-                            root.get("studentNumber"), "%" + request.getSearchKeyword() + "%"));
-                }
-            }
-
-            if (request.getGrade() != null)
-                predicate = cb.and(predicate, cb.equal(root.get("grade"), request.getGrade()));
-
-            if (request.getGender() != null)
-                predicate = cb.and(predicate, cb.equal(root.get("gender"), request.getGender()));
-
-            if (request.getProfessorId() != null)
-                predicate = cb.and(predicate, cb.equal(
-                        root.join("professor", JoinType.LEFT).get("id"), request.getProfessorId()));
+            predicate = searchAndFilterUsers(root, cb, predicate, request.toAdminUserListRequest());
 
             if (request.getReason() != null)
                 predicate = cb.and(predicate, cb.equal(rentalRestrictions.get("reason"), request.getReason()));
@@ -80,5 +44,43 @@ public class UserSpecification {
 
             return predicate;
         };
+    }
+
+    public static Predicate searchAndFilterUsers(
+            From<?, User> root, CriteriaBuilder cb, Predicate predicate, AdminUserListRequest request) {
+
+        // 이름, 전번, 학번, 닉네임 으로 검색합니다.
+        String keyword = "%" + request.getSearchKeyword() + "%";
+        if (request.getSearchKeyword() == null || request.getSearchKeyword().isEmpty())
+            keyword = "%";
+
+        Predicate name = cb.like(root.get("name"), keyword);
+        Predicate phoneNumber = cb.like(root.get("phoneNumber"), keyword);
+        Predicate studentNumber = cb.like(root.get("studentNumber"), keyword);
+        Predicate nickname = cb.like(root.get("nickname"), keyword);
+        Predicate all = cb.or(name, phoneNumber, studentNumber, nickname);
+
+        if (request.getSearchType() == null)
+            request.setSearchType(3);
+        switch (request.getSearchType()) {
+            case 0 -> predicate = cb.and(predicate, name);
+            case 1 -> predicate = cb.and(predicate, phoneNumber);
+            case 2 -> predicate = cb.and(predicate, studentNumber);
+            case 3 -> predicate = cb.and(predicate, nickname);
+            default -> predicate = cb.and(predicate, all);
+        }
+
+        // 필터링 합니다.
+        if (request.getGrade() != null)
+            predicate = cb.and(predicate, cb.equal(root.get("grade"), request.getGrade()));
+
+        if (request.getGender() != null)
+            predicate = cb.and(predicate, cb.equal(root.get("gender"), request.getGender()));
+
+        if (request.getProfessorId() != null)
+            predicate = cb.and(predicate, cb.equal(
+                    root.join("professor", JoinType.LEFT).get("id"), request.getProfessorId()));
+
+        return predicate;
     }
 }

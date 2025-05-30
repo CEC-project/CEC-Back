@@ -57,8 +57,8 @@ public class AdminRentalRestrictionController {
             summary = "현재 제재된 유저 목록 조회 API",
             description = """
     검색 조건:
-    - searchKeyword: 검색어 (searchType에 따라 검색 대상 필드 결정)
-    - searchType: 검색 유형 (0: 이름, 1: 전화번호, 2: 학번)
+    - searchKeyword: 검색 키워드 (아래 searchType 기준에 따라 검색) (생략시 전체 검색)
+    - searchType: 검색 유형 (0: 이름, 1: 전화번호, 2: 학번, 3: 닉네임, 4: 전체) (생략시 전체)
     - grade: 학년 (1~4 또는 미지정)
     - gender: 성별 ('남' 또는 '여')
     - type: 제한 종류 (EQUIPMENT, CLASSROOM)
@@ -82,8 +82,8 @@ public class AdminRentalRestrictionController {
             summary = "현재 제재되지 \"않은\" 유저 목록 조회 API",
             description = """
     검색 조건:
-    - searchKeyword: 검색어 (searchType에 따라 검색 대상 필드 결정)
-    - searchType: 검색 유형 (0: 이름, 1: 전화번호, 2: 학번)
+    - searchKeyword: 검색 키워드 (아래 searchType 기준에 따라 검색) (생략시 전체 검색)
+    - searchType: 검색 유형 (0: 이름, 1: 전화번호, 2: 학번, 3: 닉네임, 4: 전체) (생략시 전체)
     - grade: 학년 (1~4 또는 미지정)
     - gender: 성별 ('남' 또는 '여')
     - type: 제한 종류 (EQUIPMENT, CLASSROOM)
