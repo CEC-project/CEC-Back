@@ -18,7 +18,7 @@ public class RentalRestrictionSpecification {
             Join<RentalRestriction, User> user = root.join("user");
 
             Predicate endAt = cb.greaterThanOrEqualTo(root.get("endAt"), LocalDateTime.now());
-            cb.and(predicate, endAt);
+            predicate = cb.and(predicate, endAt);
 
             if (request.getSearchKeyword() != null && request.getSearchType() != null) {
                 switch (request.getSearchType()) {
