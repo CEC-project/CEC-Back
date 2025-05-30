@@ -40,7 +40,7 @@ public class InquiryController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
+    @GetMapping // GET, 전체 글 조회
     public ResponseEntity<List<InquiryResponse>> getMyInquiries(
             @AuthenticationPrincipal LoginUser loginUser
     ){

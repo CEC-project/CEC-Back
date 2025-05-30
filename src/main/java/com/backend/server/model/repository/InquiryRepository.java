@@ -17,5 +17,5 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long>, JpaSpec
     @EntityGraph(attributePaths = {"answers", "user", "user.professor"})
     Page<Inquiry> findAll(Specification<Inquiry> spec, Pageable pageable);
 
-    List<InquiryResponse> findAllByAuthorId(Long authorId); //사용자 ID로 조회
+    List<Inquiry> findAllByAuthorId(Long authorId); //사용자 ID로 조회
 }
