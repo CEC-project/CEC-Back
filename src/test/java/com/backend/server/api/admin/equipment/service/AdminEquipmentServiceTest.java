@@ -22,6 +22,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -126,7 +127,44 @@ class AdminEquipmentServiceTest {
         verify(notificationService).createNotification(any(CommonNotificationDto.class), eq(10L));
     }
 
-    @Test
+    @Test //장비가 대여요청중이 아닌게 껴있을떄 알림이 가는지? 트랜젝션 잘 동작하는지
+    void approveRentalRequests_shouldNotSendNotification_whenInvalidStatus() {
+        // given
+        Long id = 1L;
+        // 상태가 RENTAL_PENDING이 아닌 장비를 미리 생성
+        Equipment invalidEquipment = Equipment.builder()
+                .id(id)
+                .status(Status.AVAILABLE) // 유효하지 않은 상태
+                .renter(User.builder().id(10L).build())
+                .equipmentModel(EquipmentModel.builder().name("ModelX").build())
+                .build();
+
+        when(equipmentRepository.findById(id)).thenReturn(Optional.of(invalidEquipment));
+
+        // when & then
+        assertThatThrownBy(() -> adminEquipmentService.approveRentalRequests(List.of(id)))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("대여 요청 상태인 장비만 승인할 수 있습니다");
+
+        // 알림이 전송되지 않아야 함
+        verify(notificationService, never()).createNotification(any(), anyLong());
+    }
+
+    @Test  //대여승인할떄 없는거 하려고 하면 트랜잭션은 어캐될까요
+    void approveRentalRequests_shouldNotSendNotification_whenEquipmentNotFound() {
+        Long id = 1L;
+        when(equipmentRepository.findById(id)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> adminEquipmentService.approveRentalRequests(List.of(id)))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("장비를 찾을 수 없습니다");
+
+        verify(notificationService, never()).createNotification(any(), anyLong());
+    }
+
+
+        @Test
     void markEquipmentsAsBroken_shouldUpdateStatus() {
         Long id = 1L;
         Equipment equipment = Equipment.builder().status(Status.AVAILABLE).description("Desc").brokenCount(0L).build();
