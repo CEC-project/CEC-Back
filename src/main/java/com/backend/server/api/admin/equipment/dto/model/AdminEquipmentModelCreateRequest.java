@@ -1,7 +1,7 @@
 package com.backend.server.api.admin.equipment.dto.model;
 
-import com.backend.server.model.entity.EquipmentCategory;
-import com.backend.server.model.entity.EquipmentModel;
+import com.backend.server.model.entity.equipment.EquipmentCategory;
+import com.backend.server.model.entity.equipment.EquipmentModel;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

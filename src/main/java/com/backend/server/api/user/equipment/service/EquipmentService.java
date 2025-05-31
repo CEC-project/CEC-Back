@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.model.entity.Equipment;
+import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Status;
-import com.backend.server.model.entity.EquipmentCart;
+import com.backend.server.model.entity.equipment.EquipmentCart;
 import com.backend.server.model.repository.equipment.EquipmentRepository;
 import com.backend.server.model.repository.equipment.EquipmentSpecification;
 import com.backend.server.model.repository.UserRepository;

@@ -1,6 +1,6 @@
 package com.backend.server.api.admin.equipment.dto.equipment.response;
 
-import com.backend.server.model.entity.Equipment;
+import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.enums.Status;
 
 import io.swagger.v3.oas.annotations.media.Schema;

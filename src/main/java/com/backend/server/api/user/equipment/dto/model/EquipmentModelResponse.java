@@ -1,6 +1,6 @@
 package com.backend.server.api.user.equipment.dto.model;
 
-import com.backend.server.model.entity.EquipmentModel;
+import com.backend.server.model.entity.equipment.EquipmentModel;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

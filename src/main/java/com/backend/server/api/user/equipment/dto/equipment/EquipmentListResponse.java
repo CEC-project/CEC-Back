@@ -2,7 +2,7 @@ package com.backend.server.api.user.equipment.dto.equipment;
 
 
 import com.backend.server.api.common.dto.PageableInfo;
-import com.backend.server.model.entity.Equipment;
+import com.backend.server.model.entity.equipment.Equipment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.domain.Page;

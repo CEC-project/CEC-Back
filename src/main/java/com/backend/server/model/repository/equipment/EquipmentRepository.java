@@ -1,6 +1,6 @@
 package com.backend.server.model.repository.equipment;
 
-import com.backend.server.model.entity.Equipment;
+import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
 import com.backend.server.model.entity.enums.Status;
@@ -8,7 +8,6 @@ import com.backend.server.model.entity.enums.Status;
 import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.persistence.LockModeType;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.transaction.Transactional;

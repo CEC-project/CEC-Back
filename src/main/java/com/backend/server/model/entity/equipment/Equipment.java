@@ -1,5 +1,7 @@
-package com.backend.server.model.entity;
+package com.backend.server.model.entity.equipment;
 
+import com.backend.server.model.entity.BaseTimeEntity;
+import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
 import jakarta.persistence.*;
 import lombok.*;

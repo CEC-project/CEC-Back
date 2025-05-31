@@ -2,9 +2,9 @@ package com.backend.server.api.user.equipment.model.repository.equipment;
 
 import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
 import com.backend.server.config.AbstractPostgresContainerTest;
-import com.backend.server.model.entity.Equipment;
-import com.backend.server.model.entity.EquipmentCategory;
-import com.backend.server.model.entity.EquipmentModel;
+import com.backend.server.model.entity.equipment.Equipment;
+import com.backend.server.model.entity.equipment.EquipmentCategory;
+import com.backend.server.model.entity.equipment.EquipmentModel;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Role;
 import com.backend.server.model.entity.enums.Status;

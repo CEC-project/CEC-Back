@@ -1,17 +1,18 @@
 package com.backend.server.api.admin.equipment.service;
 
-import java.sql.Array;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+
 import com.backend.server.api.admin.equipment.dto.equipment.request.*;
-import com.backend.server.api.common.notification.dto.CommonNotificationDto;
-import com.backend.server.api.common.notification.service.CommonNotificationService;
-import com.backend.server.model.entity.EquipmentCategory;
+import com.backend.server.api.common.dto.LoginUser;
+import com.backend.server.model.entity.enums.BrokenType;
+import com.backend.server.model.entity.equipment.*;
+import com.backend.server.model.repository.equipment.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,15 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminManagerCandidatesResponse;
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentListResponse;
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentResponse;
-import com.backend.server.model.entity.Equipment;
-import com.backend.server.model.entity.EquipmentModel;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Role;
 import com.backend.server.model.entity.enums.Status;
-import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
-import com.backend.server.model.repository.equipment.EquipmentModelRepository;
-import com.backend.server.model.repository.equipment.EquipmentRepository;
-import com.backend.server.model.repository.equipment.EquipmentSpecification;
 import com.backend.server.model.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -41,7 +36,8 @@ public class AdminEquipmentService {
     private final EquipmentRepository equipmentRepository;
     private final EquipmentCategoryRepository equipmentCategoryRepository;
     private final EquipmentModelRepository equipmentModelRepository;
-    private final CommonNotificationService notificationService;
+    private final EquipmentBrokenHistoryRepository equipmentBrokenHistoryRepository;
+    private final EquipmentRepairHistoryRepository equipmentRepairHistoryRepository;
     
     //어드민 유저 조회
     public List<AdminManagerCandidatesResponse> getAdminUsers() {
@@ -149,11 +145,7 @@ public class AdminEquipmentService {
         equipmentRepository.deleteById(id);
         return id;
     }
-    //장비배치처리할때
-    public void deleteAllEquipment(Long id) {
-        equipmentRepository.deleteById(id);
 
-    }
 
     //장비 리스트 조회
     public AdminEquipmentListResponse getEquipments(AdminEquipmentListRequest request) {
@@ -190,206 +182,87 @@ public class AdminEquipmentService {
         return equipmentId;
     }
 
-    //장비 상태 변경 다중
+
+    //장비 파손 수리 등록
     @Transactional
-    public List<Long> updateMultipleEquipmentStatus(AdminEquipmentStatusMultipleUpdateRequest request) {
-        try {
-            equipmentRepository.bulkUpdateStatus(request.getStatus().name(), request.getEquipmentIds());
-        } catch (Exception e) {
-            throw new IllegalArgumentException(
-                    "장비 상태 일괄 업데이트에 실패했습니다. 대상 ID: " + request.getEquipmentIds(),
-                    e
-            );        }
+    public List<Long> changeStatus(AdminEquipmentBrokenOrRepairRequest request, LoginUser loginUser) {
+        BiFunction<Long, String, Long> operator;
+
+        switch (request.getStatus()) {
+            case BROKEN -> operator = (id, detail) -> changeToBrokenStatus(id, detail, loginUser);
+            case REPAIR -> operator = (id, detail) -> changeToRepairStatus(id, detail, loginUser);
+            default -> throw new IllegalArgumentException("지원하지 않는 상태입니다: " + request.getStatus());
+        }
+
+        for (Long equipmentId : request.getEquipmentIds()) {
+            operator.apply(equipmentId, request.getDetail());
+        }
+
         return request.getEquipmentIds();
     }
-    
-    //대여 요청 다중 승인
+
+    //장비 상태 파손 처리
     @Transactional
-    public void approveRentalRequests(List<Long> equipmentIds) {
-        for (Long equipmentId : equipmentIds) {
-            Equipment equipment = equipmentRepository.findById(equipmentId)
-                    .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다. ID: " + equipmentId));
+    public Long changeToBrokenStatus(Long equipmentId, String detail, LoginUser loginUser){
+        Equipment equipment = equipmentRepository.findById(equipmentId)
+                .orElseThrow(()-> new IllegalArgumentException("장비를 찾을 수 없습니다"+equipmentId));
+        User user = userRepository.findById(loginUser.getId())
+                .orElseThrow(()->new IllegalArgumentException("관리자를 찾을 수 없습니다"));
 
-            if (equipment.getStatus() != Status.RENTAL_PENDING) {
-                throw new IllegalStateException("대여 요청 상태인 장비만 승인할 수 있습니다. ID: " + equipmentId);
-            }
+        EquipmentBrokenHistory history = EquipmentBrokenHistory.builder()
+                .equipment(equipment)
+                .brokenBy(user)
+                .brokenType(BrokenType.ADMIN_DAMAGED)
+                .brokenDetail(detail)
+                .build();
 
-            // 상태 업데이트
-            Equipment updated = equipment.toBuilder()
-                    .status(Status.IN_USE)
-                    .build();
+        equipmentBrokenHistoryRepository.save(history);
 
-            equipmentRepository.save(updated);
+        equipment = equipment.toBuilder()
+                .status(Status.BROKEN)
+                .renter(null)
+                .startRentDate(null)
+                .endRentDate(null)
+                .build();
 
-            // 대여자 정보 추출
-            Long userId = equipment.getRenter().getId(); // 또는 getUser().getId()
-
-            // 알림 전송
-            CommonNotificationDto dto = CommonNotificationDto.builder()
-                    .category("장비 대여 승인")
-                    .title("장비 대여가 승인되었습니다.")
-                    .message("요청하신 장비 [" + equipment.getEquipmentModel().getName() + "]의 대여가 승인되었습니다.")
-                    .link("/equipment/" + equipmentId)
-                    .build();
-
-            notificationService.createNotification(dto, userId);
-        }
+        equipmentRepository.save(equipment);
+        return  equipmentId;
     }
-
-
-    //대여요청 거절절
+    //장비 상태 수리 처리
     @Transactional
-    public void rejectRentalRequests(List<Long> equipmentIds) {
-        for (Long equipmentId : equipmentIds) {
-            Equipment equipment = equipmentRepository.findById(equipmentId)
-                    .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다. ID: " + equipmentId));
+    public Long changeToRepairStatus(Long equipmentId, String detail, LoginUser loginUser) {
+        Equipment equipment = equipmentRepository.findById(equipmentId)
+                .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다: " + equipmentId));
 
-            if (equipment.getStatus() != Status.RENTAL_PENDING) {
-                throw new IllegalStateException("대여 요청 상태인 장비만 거절할 수 있습니다. ID: " + equipmentId);
-            }
-
-            Long userId = equipment.getRenter().getId(); // null 설정 전
-            Equipment updated = equipment.toBuilder()
-                    .status(Status.AVAILABLE)
-                    .renter(null)
-                    .startRentDate(null)
-                    .endRentDate(null)
-                    .build();
-
-            equipmentRepository.save(updated);
-
-            CommonNotificationDto dto = CommonNotificationDto.builder()
-                    .category("장비 대여 거절")
-                    .title("장비 대여가 거절되었습니다.")
-                    .message("요청하신 장비 [" + equipment.getEquipmentModel().getName() + "]의 대여가 거절되었습니다.")
-                    .link(null)
-                    .build();
-
-            notificationService.createNotification(dto, userId);
-        }
-    }
-
-    @Transactional
-    public void processReturnRequests(List<Long> equipmentIds) {
-        for (Long equipmentId : equipmentIds) {
-            Equipment equipment = equipmentRepository.findById(equipmentId)
-                    .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다. ID: " + equipmentId));
-
-            if (Status.RETURN_PENDING != equipment.getStatus() && Status.IN_USE != equipment.getStatus()) {
-                throw new IllegalStateException("반납 요청 상태 또는 대여중인 장비만 반납 처리할 수 있습니다. ID: " + equipmentId);
-            }
-
-            Equipment updated = equipment.toBuilder()
-                    .status(Status.AVAILABLE)
-                    .renter(null)
-                    .startRentDate(null)
-                    .endRentDate(null)
-                    .build();
-
-            equipmentRepository.save(updated);
-        }
-    }
-
-    @Transactional
-    public void markEquipmentsAsBroken(List<Long> equipmentIds, String description) {
-        for (Long equipmentId : equipmentIds) {
-            Equipment equipment = equipmentRepository.findById(equipmentId)
-                    .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다. ID: " + equipmentId));
-
-            Long currentBrokenCount = equipment.getBrokenCount();
-
-            Equipment updated = equipment.toBuilder()
-                    .status(Status.BROKEN)
-                    .description(description != null ?
-                            equipment.getDescription() + "\n[" + LocalDateTime.now() + "] 고장/파손: " + description :
-                            equipment.getDescription())
-                    .brokenCount(currentBrokenCount != null ? currentBrokenCount + 1L : 1L)
-                    .build();
-
-            equipmentRepository.save(updated);
-        }
-    }
-
-    @Transactional
-    public void repairEquipments(List<Long> equipmentIds, String repairNote) {
-        for (Long equipmentId : equipmentIds) {
-            Equipment equipment = equipmentRepository.findById(equipmentId)
-                    .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다. ID: " + equipmentId));
-
-            if (Status.BROKEN != equipment.getStatus()) {
-                throw new IllegalStateException("고장/파손 상태인 장비만 복구할 수 있습니다. ID: " + equipmentId);
-            }
-
-            Long currentRepairCount = equipment.getRepairCount();
-
-            Equipment updated = equipment.toBuilder()
-                    .status(Status.AVAILABLE)
-                    .description(repairNote != null ?
-                            equipment.getDescription() + "\n[" + LocalDateTime.now() + "] 복구: " + repairNote :
-                            equipment.getDescription())
-                    .repairCount(currentRepairCount != null ? currentRepairCount + 1L : 1L)
-                    .build();
-
-            equipmentRepository.save(updated);
-        }
-    }
-
-    @Transactional
-    public void extendRentalPeriods(List<Long> equipmentIds, LocalDateTime newEndDate) {
-        if (newEndDate.isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("연장 날짜는 현재 시간보다 이후여야 합니다.");
+        if (equipment.getStatus() != Status.BROKEN) {
+            throw new IllegalArgumentException("고장(BROKEN) 상태의 장비만 수리할 수 있습니다.");
         }
 
-        for (Long equipmentId : equipmentIds) {
-            Equipment equipment = equipmentRepository.findById(equipmentId)
-                    .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다. ID: " + equipmentId));
+        // 최근 고장 이력 찾기
+        EquipmentBrokenHistory brokenHistory = equipmentBrokenHistoryRepository
+                .findTopByEquipmentOrderByCreatedAtDesc(equipment)
+                .orElseThrow(() -> new IllegalStateException("고장 이력이 존재하지 않습니다."));
 
-            if (Status.IN_USE != equipment.getStatus()) {
-                throw new IllegalStateException("대여 중인 장비만 기간을 연장할 수 있습니다. ID: " + equipmentId);
-            }
+        // 수리 이력 기록
+        EquipmentRepairHistory repairHistory = EquipmentRepairHistory.builder()
+                .equipment(equipment)
+                .equipmentBrokenHistory(brokenHistory)
+                .repairDetail(detail)
+                .build();
 
-            Equipment updated = equipment.toBuilder()
-                    .endRentDate(newEndDate)
-                    .build();
+        equipmentRepairHistoryRepository.save(repairHistory);
 
-            equipmentRepository.save(updated);
-        }
-    }
+        // 장비 상태 변경
+        Equipment updated = equipment.toBuilder()
+                .status(Status.AVAILABLE)
+                .build();
 
-    @Transactional
-    public void forceReturnEquipments(List<Long> equipmentIds) {
-        for (Long equipmentId : equipmentIds) {
-            Equipment equipment = equipmentRepository.findById(equipmentId)
-                    .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다. ID: " + equipmentId));
+        equipmentRepository.save(updated);
 
-            if (Status.IN_USE != equipment.getStatus()) {
-                throw new IllegalStateException("대여 중인 장비만 강제 회수할 수 있습니다. ID: " + equipmentId);
-            }
-
-            Equipment updated = equipment.toBuilder()
-                    .status(Status.AVAILABLE)
-                    .renter(null)
-                    .startRentDate(null)
-                    .endRentDate(null)
-                    .build();
-
-            equipmentRepository.save(updated);
-        }
+        return equipmentId;
     }
 
 
-    /**
-     * 대여 중인 장비 일괄 조회
-     */
-    public AdminEquipmentListResponse getRentedEquipments() {
-        List<Equipment> rentedEquipments = equipmentRepository.findByStatus(Status.IN_USE);
-        
-        List<AdminEquipmentResponse> responses = rentedEquipments.stream()
-            .map(AdminEquipmentResponse::new)
-            .toList();
-        
-        return new AdminEquipmentListResponse(responses, rentedEquipments.size());
-    }
     
     
 }

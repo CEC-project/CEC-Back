@@ -3,8 +3,10 @@ package com.backend.server.api.admin.equipment.controller;
 import java.util.List;
 
 import com.backend.server.api.admin.equipment.dto.equipment.request.*;
+import com.backend.server.api.common.dto.LoginUser;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -61,16 +63,7 @@ public class AdminEquipmentController {
     public ApiResponse<String> getSerialNumber(@ModelAttribute AdminEquipmentSerialNumberGenerateRequest request) {
         return ApiResponse.success("시리얼넘버 보여주기 성공", adminEquipmentService.generateSerialNumber(request));
     }
-    @PostMapping("/repair")
-    @Operation(
-            summary = "장비 수리",
-            description = "BROKEN 상태의 장비를 AVAILABLE 상태로 변경하며 수리 내용을 기록할 수 있습니다. 내용은 장비의 설명에 추가로 붙습니다"
-    )
-    public ApiResponse<Void> repairEquipments(
-            @RequestBody RepairEquipmentsRequest request) {
-        adminEquipmentService.repairEquipments(request.getEquipmentIds(), request.getDescription());
-        return ApiResponse.success("장비 복구 처리 성공", null);
-    }
+
 
     @PutMapping("/{id}")
     @Operation(
@@ -172,15 +165,22 @@ public class AdminEquipmentController {
         return ApiResponse.success("장비 상태 변경 성공", id);
     }
 
-    @PutMapping("/status")
+    @PostMapping("/status")
     @Operation(
-            summary = "장비 상태 다중 변경",
-            description = "지정한 장비들의 상태를 변경합니다. (예: AVAILABLE, IN_USE, BROKEN 등)"
+            summary = "장비 상태 변경 (고장 또는 수리)",
+            description = """
+            지정된 장비들의 상태를 BROKEN 또는 REPAIR 처리합니다.
+        
+            - BROKEN: 장비를 고장 상태로 전환하고, 고장 내용을 기록합니다.
+            - REPAIR: 고장 상태의 장비를 수리하여 AVAILABLE 상태로 전환하고, 수리 내용을 기록합니다.
+            """
     )
-    public ApiResponse<List<Long>> updateMultipleEquipmentStatus(
-            @RequestBody AdminEquipmentStatusMultipleUpdateRequest request) {
+    public ApiResponse<List<Long>> changeEquipmentStatus(
+            @RequestBody AdminEquipmentBrokenOrRepairRequest request,
+            @AuthenticationPrincipal LoginUser loginUser) {
 
-        return ApiResponse.success("장비 상태 변경 성공", adminEquipmentService.updateMultipleEquipmentStatus(request));
+        List<Long> updatedIds = adminEquipmentService.changeStatus(request, loginUser);
+        return ApiResponse.success("장비 상태 변경 성공", updatedIds);
     }
 
 

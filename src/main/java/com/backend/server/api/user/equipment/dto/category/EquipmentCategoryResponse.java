@@ -1,6 +1,6 @@
 package com.backend.server.api.user.equipment.dto.category;
 
-import com.backend.server.model.entity.EquipmentCategory;
+import com.backend.server.model.entity.equipment.EquipmentCategory;
 import lombok.Getter;
 
 @Getter
