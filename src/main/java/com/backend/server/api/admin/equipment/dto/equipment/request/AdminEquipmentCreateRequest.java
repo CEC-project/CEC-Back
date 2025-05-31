@@ -1,14 +1,14 @@
 package com.backend.server.api.admin.equipment.dto.equipment.request;
 
-import com.backend.server.model.entity.EquipmentCategory;
-import com.backend.server.model.entity.EquipmentModel;
+import com.backend.server.model.entity.equipment.EquipmentCategory;
+import com.backend.server.model.entity.equipment.EquipmentModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.backend.server.model.entity.Equipment;
+import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.enums.Status;
 
 @Data

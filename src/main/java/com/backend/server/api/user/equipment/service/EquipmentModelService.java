@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.backend.server.model.entity.EquipmentModel;
+import com.backend.server.model.entity.equipment.EquipmentModel;
 import com.backend.server.model.repository.equipment.EquipmentModelRepository;
 import com.backend.server.model.repository.equipment.EquipmentModelSpecification;
 

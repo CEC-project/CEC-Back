@@ -1,10 +1,8 @@
 package com.backend.server.api.admin.equipment.service;
 
 import com.backend.server.api.admin.equipment.dto.model.AdminEquipmentModelCreateRequest;
-import com.backend.server.api.admin.equipment.dto.model.AdminEquipmentModelIdResponse;
-import com.backend.server.model.entity.Category;
-import com.backend.server.model.entity.EquipmentCategory;
-import com.backend.server.model.entity.EquipmentModel;
+import com.backend.server.model.entity.equipment.EquipmentCategory;
+import com.backend.server.model.entity.equipment.EquipmentModel;
 import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
 import com.backend.server.model.repository.equipment.EquipmentModelRepository;
 import org.junit.jupiter.api.BeforeEach;

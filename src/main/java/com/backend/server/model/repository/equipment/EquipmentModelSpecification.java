@@ -2,7 +2,7 @@ package com.backend.server.model.repository.equipment;
 
 import com.backend.server.api.common.dto.PageableRequest;
 import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
-import com.backend.server.model.entity.EquipmentModel;
+import com.backend.server.model.entity.equipment.EquipmentModel;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

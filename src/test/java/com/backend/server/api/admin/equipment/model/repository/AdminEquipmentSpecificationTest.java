@@ -3,9 +3,9 @@ package com.backend.server.api.admin.equipment.model.repository;
 
 import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentListRequest;
 import com.backend.server.config.AbstractPostgresContainerTest;
-import com.backend.server.model.entity.Equipment;
-import com.backend.server.model.entity.EquipmentCategory;
-import com.backend.server.model.entity.EquipmentModel;
+import com.backend.server.model.entity.equipment.Equipment;
+import com.backend.server.model.entity.equipment.EquipmentCategory;
+import com.backend.server.model.entity.equipment.EquipmentModel;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Role;
 import com.backend.server.model.entity.enums.Status;
@@ -20,9 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDate;

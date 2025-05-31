@@ -8,16 +8,15 @@ import com.backend.server.api.common.notification.service.CommonNotificationServ
 import com.backend.server.model.entity.*;
 import com.backend.server.model.entity.enums.Role;
 import com.backend.server.model.entity.enums.Status;
+import com.backend.server.model.entity.equipment.Equipment;
+import com.backend.server.model.entity.equipment.EquipmentCategory;
+import com.backend.server.model.entity.equipment.EquipmentModel;
 import com.backend.server.model.repository.UserRepository;
 import com.backend.server.model.repository.equipment.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
 import java.util.*;

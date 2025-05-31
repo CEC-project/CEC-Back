@@ -2,8 +2,8 @@ package com.backend.server.api.user.equipment.model.repository.equipment;
 
 import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
 import com.backend.server.config.AbstractPostgresContainerTest;
-import com.backend.server.model.entity.EquipmentCategory;
-import com.backend.server.model.entity.EquipmentModel;
+import com.backend.server.model.entity.equipment.EquipmentCategory;
+import com.backend.server.model.entity.equipment.EquipmentModel;
 import com.backend.server.model.repository.equipment.*;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;

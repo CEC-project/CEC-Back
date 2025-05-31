@@ -1,22 +1,16 @@
 package com.backend.server.batch;
 
-import com.backend.server.api.admin.equipment.service.AdminEquipmentService;
-import com.backend.server.model.entity.Equipment;
 import com.backend.server.model.entity.classroom.Semester;
-import com.backend.server.model.entity.classroom.SemesterSchedule;
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
 import com.backend.server.model.repository.classroom.SemesterRepository;
-import com.backend.server.model.repository.classroom.SemesterScheduleRepository;
 import com.backend.server.model.repository.equipment.EquipmentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 
 
 @Component

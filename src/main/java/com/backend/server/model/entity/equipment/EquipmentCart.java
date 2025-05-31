@@ -1,5 +1,6 @@
-package com.backend.server.model.entity;
+package com.backend.server.model.entity.equipment;
 
+import com.backend.server.model.entity.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;

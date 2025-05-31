@@ -2,7 +2,7 @@ package com.backend.server.api.user.equipment.dto.equipment;
 
 import java.time.LocalDateTime;
 
-import com.backend.server.model.entity.Equipment;
+import com.backend.server.model.entity.equipment.Equipment;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 

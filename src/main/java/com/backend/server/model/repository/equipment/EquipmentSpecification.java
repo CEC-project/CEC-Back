@@ -5,7 +5,7 @@ import jakarta.persistence.criteria.JoinType;
 import com.backend.server.api.common.dto.PageableRequest;
 import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
 import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentListRequest;
-import com.backend.server.model.entity.Equipment;
+import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.User;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

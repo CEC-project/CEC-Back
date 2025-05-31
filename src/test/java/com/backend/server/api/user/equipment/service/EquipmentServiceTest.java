@@ -5,6 +5,10 @@ import com.backend.server.api.user.equipment.dto.equipment.EquipmentRentalReques
 import com.backend.server.api.user.equipment.dto.equipment.EquipmentResponse;
 import com.backend.server.model.entity.*;
 import com.backend.server.model.entity.enums.Status;
+import com.backend.server.model.entity.equipment.Equipment;
+import com.backend.server.model.entity.equipment.EquipmentCart;
+import com.backend.server.model.entity.equipment.EquipmentCategory;
+import com.backend.server.model.entity.equipment.EquipmentModel;
 import com.backend.server.model.repository.UserRepository;
 import com.backend.server.model.repository.equipment.EquipmentCartRepository;
 import com.backend.server.model.repository.equipment.EquipmentRepository;

@@ -1,7 +1,7 @@
 package com.backend.server.model.entity.classroom;
 
 import com.backend.server.model.entity.BaseTimeEntity;
-import com.backend.server.model.entity.Equipment;
+import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.Professor;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
