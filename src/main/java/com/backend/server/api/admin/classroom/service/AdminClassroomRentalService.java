@@ -5,17 +5,16 @@ import com.backend.server.api.admin.classroom.dto.AdminClassroomDetailResponse;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.service.CommonNotificationService;
+import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.repository.UserRepository;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
 import com.backend.server.model.repository.classroom.ClassroomSpecification;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,40 +28,14 @@ public class AdminClassroomRentalService {
     private final CommonNotificationService notificationService;
 
     @Transactional(readOnly = true)
-    public List<AdminClassroomDetailResponse> getAcceptableClassrooms(AdminClassroomSearchRequest request) {
-        Specification<Classroom> spec = ClassroomSpecification.searchAndOrderBy(request);
-        Sort sort = ClassroomSpecification.getRequestedTimeSort();
-        return classroomRepository.findAll(spec, sort)
+    public List<AdminClassroomDetailResponse> getClassrooms(AdminClassroomSearchRequest request) {
+        Specification<Classroom> spec = ClassroomSpecification.searchAndFilter(request);
+        return classroomRepository.findAll(spec, request.toSort())
                 .stream()
-                .filter((c) -> c.getStatus() == Status.RENTAL_PENDING)
-                .map((c) -> new AdminClassroomDetailResponse(
-                        c, c.getManager(), c.getRenter(), c.getRenter().getProfessor()))
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public List<AdminClassroomDetailResponse> getReturnableClassrooms(AdminClassroomSearchRequest request) {
-        Specification<Classroom> spec = ClassroomSpecification.searchAndOrderBy(request);
-        Sort sort = ClassroomSpecification.getRequestedTimeSort();
-        return classroomRepository.findAll(spec, sort)
-                .stream()
-                .filter((c) -> c.getStatus() == Status.RENTAL_PENDING)
-                .filter((c) -> LocalTime.now().isAfter(c.getStartTime()))
-                .map((c) -> new AdminClassroomDetailResponse(
-                        c, c.getManager(), c.getRenter(), c.getRenter().getProfessor()))
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public List<AdminClassroomDetailResponse> getCancelableClassrooms(AdminClassroomSearchRequest request) {
-        Specification<Classroom> spec = ClassroomSpecification.searchAndOrderBy(request);
-        Sort sort = ClassroomSpecification.getRequestedTimeSort();
-        return classroomRepository.findAll(spec, sort)
-                .stream()
-                .filter((c) -> c.getStatus() == Status.RENTAL_PENDING)
-                .filter((c) -> LocalTime.now().isBefore(c.getStartTime()))
-                .map((c) -> new AdminClassroomDetailResponse(
-                        c, c.getManager(), c.getRenter(), c.getRenter().getProfessor()))
+                .map((c) -> {
+                    User renter = c.getRenter();
+                    return new AdminClassroomDetailResponse(
+                            c, c.getManager(), renter, renter == null ? null : renter.getProfessor());})
                 .collect(Collectors.toList());
     }
 
