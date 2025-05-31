@@ -26,17 +26,19 @@ public class ScheduleResponse {
     private final LocalDate date;
 
     @JsonFormat(pattern = "HH:mm")
-    @Schema(example = "13:00", implementation = String.class)
+    @Schema(example = "13:00", implementation = String.class, description = "일정 시작 시간")
     private final LocalTime startAt;
 
     @JsonFormat(pattern = "HH:mm")
-    @Schema(example = "13:00", implementation = String.class)
+    @Schema(example = "13:00", implementation = String.class, description = "일정 종료 시간")
     private final LocalTime endAt;
 
     private final String color;
+
+    @Schema(description = "강의실의 경우, 이 값은 항상 대여 됨 입니다.")
     private final String content;
 
-    @Schema(description = "대여 취소할때는 이 값을 보내면 됨.")
+    @Schema(description = "대여 취소할때는 이 값을 보내면 됩니다.")
     private final Long id;
 
     public ScheduleResponse(YearSchedule schedule) {
@@ -75,8 +77,8 @@ public class ScheduleResponse {
         type = ScheduleType.RENTAL;
         day = LocalDate.now().getDayOfWeek().getValue();
         date = LocalDate.now();
-        startAt = classroom.getStartTime();
-        endAt = classroom.getEndTime();
+        startAt = classroom.getStartRentTime();
+        endAt = classroom.getEndRentTime();
         color = null;
         content = "대여됨";
         id = renter.getId();
