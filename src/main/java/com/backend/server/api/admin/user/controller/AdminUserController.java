@@ -19,6 +19,7 @@ import jakarta.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -54,19 +55,8 @@ public class AdminUserController {
     예시3 : /api/admin/user?searchType=민
     """
     )
-    @Parameters({
-            @Parameter(name = "page", description = "페이지 번호 (기본값: 0)"),
-            @Parameter(name = "size", description = "페이지당 항목 수 (기본값: 10)"),
-            @Parameter(name = "searchKeyword", description = "검색 키워드"),
-            @Parameter(name = "searchType", description = "검색 유형 (0: 이름, 1: 전화번호, 2: 학번)"),
-            @Parameter(name = "grade", description = "학년 필터 (1~4)"),
-            @Parameter(name = "gender", description = "성별 필터 ('남' 또는 '여')"),
-            @Parameter(name = "professorId", description = "지도 교수 ID"),
-            @Parameter(name = "sortBy", description = "정렬 기준 (0: 이름, 1: 학번, 2: 제재 횟수)"),
-            @Parameter(name = "sortDirection", description = "정렬 방향 (asc 또는 desc)")
-    })
     @GetMapping
-    public ApiResponse<AdminUserListResponse> getUsers(@Parameter(hidden = true) AdminUserListRequest request) {
+    public ApiResponse<AdminUserListResponse> getUsers(@ParameterObject AdminUserListRequest request) {
         return ApiResponse.success("사용자 목록 조회 성공", adminUserService.getUsers(request));
     }
 
