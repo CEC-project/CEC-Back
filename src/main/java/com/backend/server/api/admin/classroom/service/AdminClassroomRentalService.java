@@ -64,7 +64,7 @@ public class AdminClassroomRentalService {
             throw new IllegalStateException("대여 요청 상태인 강의실만 승인할 수 있습니다. ID: " + classroomId);
 
         // 상태 변경
-        classroom = classroom.toBuilder().status(Status.IN_USE).build();
+        classroom.makeInUse();
         classroomRepository.save(classroom);
 
         // 알림 전송
@@ -84,12 +84,7 @@ public class AdminClassroomRentalService {
             throw new IllegalStateException("대여 요청 상태인 강의실만 반려할 수 있습니다. ID: " + classroomId);
 
         // 상태 변경
-        classroom = classroom.toBuilder()
-                .status(Status.AVAILABLE)
-                .renter(null)
-                .startTime(null)
-                .endTime(null)
-                .build();
+        classroom.makeAvailable();
         classroomRepository.save(classroom);
 
         // 알림 전송
@@ -109,12 +104,7 @@ public class AdminClassroomRentalService {
             throw new IllegalStateException("대여된 강의실만 반납할 수 있습니다. ID: " + classroomId);
 
         // 상태 변경
-        classroom = classroom.toBuilder()
-                .status(Status.AVAILABLE)
-                .renter(null)
-                .startTime(null)
-                .endTime(null)
-                .build();
+        classroom.makeAvailable();
         classroomRepository.save(classroom);
 
         // 알림 전송
@@ -134,12 +124,7 @@ public class AdminClassroomRentalService {
             throw new IllegalStateException("대여된 강의실만 반납시 파손처리 할 수 있습니다. ID: " + classroomId);
 
         // 상태 변경
-        classroom = classroom.toBuilder()
-                .status(Status.BROKEN)
-                .renter(null)
-                .startTime(null)
-                .endTime(null)
-                .build();
+        classroom.makeBroken(detail);
         classroomRepository.save(classroom);
 
         // 알림 전송
@@ -159,9 +144,7 @@ public class AdminClassroomRentalService {
             throw new IllegalStateException("대여된 강의실만 대여 취소 할 수 있습니다. ID: " + classroomId);
 
         // 상태 변경
-        classroom = classroom.toBuilder()
-                .status(Status.RENTAL_PENDING)
-                .build();
+        classroom.makeAvailable();
         classroomRepository.save(classroom);
 
         // 알림 전송

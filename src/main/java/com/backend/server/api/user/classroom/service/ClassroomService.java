@@ -47,8 +47,8 @@ public class ClassroomService {
 
         LocalDateTime now = LocalDateTime.now();
         Integer day = now.getDayOfWeek().getValue();
-        LocalTime startAt = request.getStartAt();
-        LocalTime endAt = request.getEndAt();
+        LocalTime startRentTime = request.getStartRentTime();
+        LocalTime endRentTime = request.getEndRentTime();
 
         // 연간 일정과 겹치는지 체크
         List<YearSchedule> yearSchedules = yearScheduleRepository.findWithRenterByDate(now.toLocalDate());
@@ -58,7 +58,7 @@ public class ClassroomService {
             throw new IllegalArgumentException("휴일에는 강의실을 대여 할 수 없습니다.");
 
         boolean hasIntersectionWithSchedule = yearSchedules.stream().anyMatch(ys -> CompareUtils
-                .hasIntersectionInclusive(ys.getStartAt(), ys.getEndAt(), startAt, endAt));
+                .hasIntersectionInclusive(ys.getStartAt(), ys.getEndAt(), startRentTime, endRentTime));
         if (hasIntersectionWithSchedule)
             throw new IllegalArgumentException("특강과 강의실 대여 시간이 겹칩니다.");
 
@@ -69,16 +69,11 @@ public class ClassroomService {
                 .stream()
                 .filter((ss) -> Objects.equals(ss.getDay(), day))
                 .anyMatch((ss) -> CompareUtils.hasIntersectionExclusive(
-                        ss.getStartAt(), ss.getEndAt(), startAt, endAt));
+                        ss.getStartAt(), ss.getEndAt(), startRentTime, endRentTime));
         if (hasIntersectionWithAnyLecture)
             throw new IllegalArgumentException("수업과 강의실 대여 시간이 겹칩니다.");
 
-        classroom.toBuilder()
-                .renter(renter)
-                .startTime(startAt)
-                .endTime(endAt)
-                .status(Status.RENTAL_PENDING)
-                .build();
+        classroom.makeRentalPending(startRentTime, endRentTime, renter);
 
         classroomRepository.save(classroom);
         return classroom.getId();
@@ -95,12 +90,7 @@ public class ClassroomService {
         if (classroom.getStatus() != Status.RENTAL_PENDING)
             throw new IllegalArgumentException("대여 신청중이 아니면 대여 신청을 취소할수 없습니다.");
 
-        classroom.toBuilder()
-                .renter(null)
-                .startTime(null)
-                .endTime(null)
-                .status(Status.AVAILABLE)
-                .build();
+        classroom.makeAvailable();
 
         classroomRepository.save(classroom);
         return classroom.getId();
