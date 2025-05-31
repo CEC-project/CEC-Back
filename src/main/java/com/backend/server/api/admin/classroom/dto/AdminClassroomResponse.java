@@ -2,6 +2,7 @@ package com.backend.server.api.admin.classroom.dto;
 
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.classroom.Classroom;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
@@ -10,7 +11,9 @@ public class AdminClassroomResponse {
     private final Long id;
     private final String name;
     private final String description;
+    @Schema(description = "운영 시작 시각")
     private final String startTime;
+    @Schema(description = "운영 종료 시각")
     private final String endTime;
     private final String managerName;
     private final String status;

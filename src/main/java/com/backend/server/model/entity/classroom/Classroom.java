@@ -44,8 +44,12 @@ public class Classroom extends BaseTimeEntity {
     @JoinColumn(name = "manager_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User manager;
 
+    private LocalTime startRentTime;
+    private LocalTime endRentTime;
+
     private LocalTime startTime;
     private LocalTime endTime;
+
     private LocalDateTime requestedTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
