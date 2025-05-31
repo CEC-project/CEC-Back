@@ -12,11 +12,11 @@ import lombok.Setter;
 public class ClassroomRentalRequest {
     @JsonFormat(pattern = "HH:mm")
     @NotNull
-    @Schema(implementation = String.class, example = "13:00")
-    private LocalTime startAt;
+    @Schema(implementation = String.class, example = "13:00", description = "대여 시작 시간")
+    private LocalTime startRentTime;
 
     @JsonFormat(pattern = "HH:mm")
     @NotNull
-    @Schema(implementation = String.class, example = "14:00")
-    private LocalTime endAt;
+    @Schema(implementation = String.class, example = "14:00", description = "대여 종료 시간")
+    private LocalTime endRentTime;
 }
