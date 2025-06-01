@@ -1,7 +1,6 @@
 package com.backend.server.api.admin.notice.controller;
 
 import com.backend.server.api.admin.notice.dto.AdminNoticeCreateRequest;
-import com.backend.server.api.admin.notice.dto.AdminNoticeIdResponse;
 import com.backend.server.api.admin.notice.dto.AdminNoticeListRequest;
 import com.backend.server.api.admin.notice.service.AdminNoticeService;
 import com.backend.server.api.common.dto.ApiResponse;
