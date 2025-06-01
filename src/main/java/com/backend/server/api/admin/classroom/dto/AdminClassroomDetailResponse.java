@@ -19,11 +19,11 @@ public class AdminClassroomDetailResponse {
 
     @JsonFormat(pattern = "HH:mm")
     @Schema(example = "14:00", description = "대여 시작 시간", implementation = String.class)
-    private final LocalTime startTime;
+    private final LocalTime startRentTime;
 
     @JsonFormat(pattern = "HH:mm")
     @Schema(example = "16:00", description = "대여 종료 시간", implementation = String.class)
-    private final LocalTime endTime;
+    private final LocalTime endRentTime;
 
     private final String managerName;
     private final String status;
@@ -36,8 +36,8 @@ public class AdminClassroomDetailResponse {
         this.id = classroom.getId();
         this.name = classroom.getName();
         this.description = classroom.getLocation();
-        this.startTime = classroom.getStartRentTime();
-        this.endTime = classroom.getEndRentTime();
+        this.startRentTime = classroom.getStartRentTime();
+        this.endRentTime = classroom.getEndRentTime();
         this.status = classroom.getStatus().name();
         this.attachment = classroom.getAttachment();
         this.requestedTime = classroom.getRequestedTime();
