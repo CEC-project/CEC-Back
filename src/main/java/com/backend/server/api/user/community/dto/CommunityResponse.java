@@ -1,11 +1,10 @@
 package com.backend.server.api.user.community.dto;
 
-import java.time.LocalDateTime;
-
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.model.entity.Community;
-
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Getter
 public class CommunityResponse {

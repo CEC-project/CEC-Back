@@ -7,7 +7,6 @@ import com.backend.server.api.user.community.dto.CreatePostRequest;
 import com.backend.server.api.user.community.dto.UpdatePostRequest;
 import com.backend.server.api.user.community.service.CommunityService;
 import com.backend.server.model.entity.Community;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;

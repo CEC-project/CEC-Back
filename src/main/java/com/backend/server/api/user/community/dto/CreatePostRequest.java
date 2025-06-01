@@ -1,8 +1,6 @@
 // CreatePostRequest.java
 package com.backend.server.api.user.community.dto;
 
-import com.backend.server.api.admin.notice.dto.AdminNoticeSearchType;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
