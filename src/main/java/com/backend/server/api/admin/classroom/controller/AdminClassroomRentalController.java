@@ -51,7 +51,7 @@ public class AdminClassroomRentalController {
               - **sortDirection** : 정렬 순서 (nullable)
                 - **ASC** : 오름차순 (기본값)
                 - **DESC** : 내림차순""")
-    @GetMapping("/")
+    @GetMapping("")
     public ApiResponse<List<AdminClassroomDetailResponse>> getReturnableClassrooms(
             @ParameterObject AdminClassroomSearchRequest request) {
         List<AdminClassroomDetailResponse> result = rentalService.getClassrooms(request);
