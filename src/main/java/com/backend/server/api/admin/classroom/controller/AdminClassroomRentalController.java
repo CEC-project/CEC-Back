@@ -48,7 +48,7 @@ public class AdminClassroomRentalController {
                 - **name** : 강의실 이름
                 - **id** : 강의실 id
                 - **description** : 강의실 설명
-              - **sortDir** : 정렬 순서 (nullable)
+              - **sortDirection** : 정렬 순서 (nullable)
                 - **ASC** : 오름차순 (기본값)
                 - **DESC** : 내림차순""")
     @GetMapping("/")

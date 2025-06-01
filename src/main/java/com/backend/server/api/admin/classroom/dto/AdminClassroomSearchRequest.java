@@ -31,7 +31,7 @@ public class AdminClassroomSearchRequest {
         }
     }
 
-    public enum SortDir {
+    public enum SortDirection {
         ASC, DESC
     }
 
@@ -47,10 +47,10 @@ public class AdminClassroomSearchRequest {
     @Schema(description = "정렬 기준", implementation = SortBy.class)
     private SortBy sortBy = SortBy.REQUESTED_TIME;
 
-    @Schema(description = "정렬 방향", implementation = SortDir.class)
-    private SortDir sortDir = SortDir.ASC;
+    @Schema(description = "정렬 방향", implementation = SortDirection.class)
+    private SortDirection sortDirection = SortDirection.ASC;
 
     public Sort toSort() {
-        return Sort.by(Direction.valueOf(sortDir.name()), sortBy.getField());
+        return Sort.by(Direction.valueOf(sortDirection.name()), sortBy.getField());
     }
 }
