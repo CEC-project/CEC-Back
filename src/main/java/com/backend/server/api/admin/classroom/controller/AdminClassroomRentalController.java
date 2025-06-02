@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/admin/classroom-rental")
 @RequiredArgsConstructor
-@Tag(name = "강의실 대여 관리 API", description = "강의실 대여 관리 어드민 API")
+@Tag(name = "5-1 대여 관리 / 강의실 관리", description = "수정 필요")
 public class AdminClassroomRentalController {
 
     private final AdminClassroomRentalService rentalService;

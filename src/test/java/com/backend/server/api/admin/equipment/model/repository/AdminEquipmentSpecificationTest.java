@@ -76,7 +76,7 @@ class AdminEquipmentSpecificationTest extends AbstractPostgresContainerTest {
                 .department("테스트학부")
                 .nickname("테스트쟁이")
                 .grade(4)
-                .gender("남")
+                .gender("M")
                 .professor(null)
                 .phoneNumber("010-2312-1234")
                 .role(Role.ROLE_SUPER_ADMIN)

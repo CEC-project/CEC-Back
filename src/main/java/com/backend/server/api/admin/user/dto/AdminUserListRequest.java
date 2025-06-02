@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @Getter
 @Setter
@@ -15,7 +17,7 @@ import lombok.Setter;
 @Builder
 public class AdminUserListRequest extends AbstractPaginationParam<AdminUserSortType> {
 
-    public enum SearchType {
+    public enum AdminUserSearchType {
         NAME, PHONE_NUMBER, STUDENT_NUMBER, NICKNAME, ALL
     }
 
@@ -27,7 +29,7 @@ public class AdminUserListRequest extends AbstractPaginationParam<AdminUserSortT
     private String searchKeyword;
 
     @Schema(description = "검색 유형 NAME, PHONE_NUMBER, STUDENT_NUMBER, NICKNAME, ALL", example = "ALL", nullable = true)
-    private SearchType searchType;
+    private AdminUserSearchType searchType;
 
     @Schema(description = "학년 (1, 2, 3, 4 중 하나)", example = "2", nullable = true, implementation = Integer.class)
     private Integer grade;
@@ -38,13 +40,18 @@ public class AdminUserListRequest extends AbstractPaginationParam<AdminUserSortT
     @Schema(description = "교수 ID (professor 테이블의 PK)", example = "102", nullable = true)
     private Long professorId;
 
-    public SearchType getSearchType() {
-        return searchType == null ? SearchType.ALL : searchType;
+    public AdminUserSearchType getSearchType() {
+        return searchType == null ? AdminUserSearchType.ALL : searchType;
     }
 
     @Override
     @Schema(implementation = AdminUserSortType.class)
     public AdminUserSortType getSortBy() {
-        return sortBy;
+        return sortBy == null ? AdminUserSortType.getDefault() : sortBy;
+    }
+
+    @Override
+    public Pageable toPageable() {
+        return PageRequest.of(page, size, direction, getSortBy().getField());
     }
 }

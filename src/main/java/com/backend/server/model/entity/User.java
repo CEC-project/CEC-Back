@@ -96,7 +96,7 @@ public class User extends BaseTimeEntity {
         this.nickname = request.getNickname();
         this.studentNumber = request.getStudentNumber();
         this.grade = request.getGrade();
-        this.gender = request.getGender();
+        this.gender = request.getGender().name();
         this.phoneNumber = request.getPhoneNumber();
         this.professor = professor;
         this.birthDate = request.parseBirthday();
