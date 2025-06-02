@@ -35,11 +35,6 @@
     - ex) 검색어 파라미터는 searchKeyword 로 통일
     - ex) 사용자 이름 기준으로 검색할시, 검색 유형은 searchType=NAME 로 통일
     - ex) 통합 검색은 searchType=ALL 또는 생략으로 통일
-4. LocalTime, LocalDate, LocalDateTime 등 시간 타입을 응답할떄는 스웨거에서 잘 뜨는지 확인하고 조치하기
-    - LocalDateTime 은 기본 형식(ISO-8601)으로 넘겨주면 프론트에서 알아서 파싱하기로 합의됨.
-    - LocalTime 은 별도 설정하지 않으면 스웨거에 잘못 표시되므로 주의.
-        - [AdminClassroomDetailResponse](/src/main/java/com/backend/server/api/admin/classroom/dto/AdminClassroomDetailResponse.java) 참고
-5. 모든 요청/응답 필드가 스웨거에서 정상적으로 보이는지 확인해야함.
 
 ### 3. 스웨거 설명 작성 규칙
 1. 요청/응답 필드별 설명
@@ -48,10 +43,15 @@
         - 목적 : 수정하거나 복붙하고 관리가 안되는 경우가 많기 떄문.
     - 요청/응답 필드에 대한 설명을 DTO에 @Schema(description="설명") 이용해서 적기
         - 이름/타입/ENUM값 만으로 의도가 충분히 전달된다면 적지 않아도 괜찮음.
+    - LocalTime, LocalDate, LocalDateTime 등 시간 타입으로 응답할떄는 스웨거에서 잘 뜨는지 확인하고 조치하기
+        - LocalDateTime 은 기본 형식(ISO-8601)으로 넘겨주면 프론트에서 알아서 파싱하기로 합의됨.
+        - LocalTime 은 별도 설정하지 않으면 스웨거에 잘못 표시되므로 주의.
+            - [AdminClassroomDetailResponse](/src/main/java/com/backend/server/api/admin/classroom/dto/AdminClassroomDetailResponse.java) 참고
+    - 모든 요청/응답 필드가 스웨거에서 정상적으로 보이는지 확인해야함.
 2. 컨트롤러별 설명
-    - @Tag(name="상위메뉴번호-하위메뉴번호 \[상위 메뉴명] \[하위 메뉴명]", description="작업 완료 or 수정 필요")
-    - ex) @Tag(name="3-2 \[강의실/장비 관리] \[강의실 관리]", description="작업 완료")
-    - ex) @Tag(name="4-2 \[사용자 관리] \[제재 목록]", description="수정 필요")
+    - @Tag(name="`상위메뉴번호`-`하위메뉴번호`. `상위메뉴명` / `하위메뉴명`", description="`작업 완료` or `수정 필요`")
+    - ex) @Tag(name="3-2. 강의실/장비 관리 / 강의실 관리", description="작업 완료")
+    - ex) @Tag(name="4-2. 사용자 관리 / 제재 목록", description="수정 필요")
     - 메뉴별 이름과 번호는 프론트의 메뉴를 기준으로 함.
         - [관리자 웹](https://admin.bmvcec.store/)
         - [사용자 웹](https://bmvcec.store/)
