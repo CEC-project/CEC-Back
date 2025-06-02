@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/admin/professor")
 @RequiredArgsConstructor
-@Tag(name = "2-1. 카테고리 관리 / 교수 관리", description = "수정 필요")
+@Tag(name = "1-1. 카테고리 관리 / 교수 관리", description = "수정 필요")
 public class AdminProfessorController {
 
     private final AdminProfessorService adminProfessorService;
