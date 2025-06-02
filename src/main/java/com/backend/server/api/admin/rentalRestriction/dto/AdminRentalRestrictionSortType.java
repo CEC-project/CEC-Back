@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum AdminRentalRestrictionSortType implements SortTypeConvertible {
+    ID("id", false),
     NAME("name", true),
     STUDENT_NUMBER("studentNumber", true),
     RESTRICTION_COUNT("restrictionCount", true),
