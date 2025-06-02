@@ -6,6 +6,7 @@ import com.backend.server.api.user.community.dto.CommunityResponse;
 import com.backend.server.api.user.community.dto.UpdatePostRequest;
 import com.backend.server.api.user.community.service.CommunityService;
 import com.backend.server.model.entity.Community;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -45,24 +46,26 @@ public class AdminCommunityController {
     }
 
     // 관리자용 단일 게시글 상세 조회
-    // GET /api/admin/community/{postId}
-    @GetMapping("/{postId}")
+    // GET /api/admin/community/{id}
+    @Operation(summary = "게시글 상세 조회", description = "게시글 상세 조회.")
+    @GetMapping("/{id}")
     public ResponseEntity<CommunityResponse> getCommunityPostByIdForAdmin(
-        @PathVariable Long postId,
+        @PathVariable Long id,
         @AuthenticationPrincipal LoginUser adminUser // 실제 환경에서 관리자 정보 주입 필요
     ) {
         // Service 레이어의 단일 게시글 조회 메소드를 호출합니다.
         // 조회수 증가 로직 포함 (관리자 조회 시 조회수 증가 정책은 결정 필요)
         // DTO 변환 시 Admin LoginUser 정보를 넘겨 authorName 표시를 결정합니다.
-        CommunityResponse response = communityService.getPostById(postId, adminUser);
+        CommunityResponse response = communityService.getPostById(id, adminUser);
         return ResponseEntity.ok(response);
     }
 
     // 관리자용 게시글 수정 엔드포인트
-    // PUT /api/admin/community/{postId}
-    @PutMapping("/{postId}")
+    // PUT /api/admin/community/{id}
+    @Operation(summary = "게시글 수정", description = "게시글 수정.")
+    @PutMapping("/{id}")
     public ResponseEntity<CommunityResponse> updateCommunityPostByAdmin(
-        @PathVariable Long postId,
+        @PathVariable Long id,
         @RequestBody UpdatePostRequest request// 사용자용과 동일한 요청 DTO 사용
     ) {
         // UpdatePostRequest -> Community 엔티티로 변환
@@ -75,17 +78,18 @@ public class AdminCommunityController {
 
         // Service 레이어의 관리자용 수정 메소드를 호출합니다. (작성자 권한 체크 없음)
         // 반환되는 DTO 생성 시 Admin LoginUser 정보가 필요할 수 있습니다.
-        CommunityResponse response = communityService.adminUpdatePost(postId, communityDetailsToUpdate); // 여기서는 adminUpdatePost 호출
+        CommunityResponse response = communityService.adminUpdatePost(id, communityDetailsToUpdate); // 여기서는 adminUpdatePost 호출
 
         return ResponseEntity.ok(response);
     }
 
     // 관리자용 게시글 삭제 엔드포인트
-    // DELETE /api/admin/community/{postId}
-    @DeleteMapping("/{postId}")
-    public ResponseEntity<Void> deleteCommunityPostByAdmin(@PathVariable Long postId) {
+    // DELETE /api/admin/community/{id}
+    @Operation(summary = "게시글 삭제", description = "게시글 삭제.")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCommunityPostByAdmin(@PathVariable Long id) {
         // Service 레이어의 관리자용 삭제 메소드를 호출합니다. (작성자 권한 체크 없음)
-        communityService.adminDeletePost(postId); // 여기서는 adminDeletePost 호출
+        communityService.adminDeletePost(id); // 여기서는 adminDeletePost 호출
 
         return ResponseEntity.noContent().build(); // 삭제 성공 시 204 No Content 반환
     }
