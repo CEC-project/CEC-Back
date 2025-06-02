@@ -4,6 +4,7 @@ import com.backend.server.api.admin.user.dto.AdminUserListRequest;
 import com.backend.server.api.admin.user.dto.AdminUserListResponse;
 import com.backend.server.api.admin.user.dto.AdminUserRequest;
 import com.backend.server.api.admin.user.dto.AdminUserResponse;
+import com.backend.server.api.admin.user.service.AdminImportExcelService;
 import com.backend.server.api.admin.user.service.AdminUserService;
 import com.backend.server.api.common.dto.ApiResponse;
 
@@ -16,11 +17,14 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/admin/user")
@@ -29,6 +33,16 @@ import org.springframework.web.bind.annotation.*;
 public class AdminUserController {
 
     private final AdminUserService adminUserService;
+    private final AdminImportExcelService excelService;
+
+    @PostMapping(value = "/excel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(
+            summary = "엑셀 파일로 사용자 정보 일괄 등록",
+            description = "엑셀 파일을 업로드하여 사용자 정보를 일괄 등록합니다."
+    )
+    public ApiResponse<Integer> importUsers(@RequestParam("file") MultipartFile file) throws IOException {
+        return ApiResponse.success("사용자 정보가 성공적으로 등록되었습니다.", excelService.importUsersFromExcel(file));
+    }
 
     @Operation(summary = "사용자 목록 조회")
     @GetMapping
