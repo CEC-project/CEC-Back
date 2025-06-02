@@ -4,6 +4,7 @@ import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.user.inquiry.dto.InquiryRequest;
 import com.backend.server.api.user.inquiry.dto.InquiryResponse;
 import com.backend.server.api.user.inquiry.service.InquiryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/boards/inquiry")
 @RequiredArgsConstructor
+@Tag(name = "3-2. 유저 프로필 / 1:1 문의하기", description = "수정 필요")
 public class InquiryController {
 
     private final InquiryService inquiryService;

@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/equipment-models")
 @RequiredArgsConstructor
-@Tag(name = "장비 모델 API", description = "장비 모델 목록 및 단일 모델 조회 기능을 제공합니다.")
+@Tag(name = "1-2. 대여 신청 / 장비 모델", description = "수정 필요")
 public class EquipmentModelController {
 
     private final EquipmentModelService equipmentModelService;
