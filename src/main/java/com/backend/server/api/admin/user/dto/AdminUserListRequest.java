@@ -15,22 +15,36 @@ import lombok.Setter;
 @Builder
 public class AdminUserListRequest extends AbstractPaginationParam<AdminUserSortType> {
 
+    public enum SearchType {
+        NAME, PHONE_NUMBER, STUDENT_NUMBER, NICKNAME, ALL
+    }
+
+    public enum Gender {
+        M, F
+    }
+
     @Schema(description = "검색 키워드", example = "홍길동", nullable = true)
     private String searchKeyword;
 
-    @Schema(description = "검색 유형 (0: 이름, 1: 전화번호, 2: 학번, 3: 닉네임, 4 또는 생략: 전체)", example = "0", nullable = true)
-    private Integer searchType;
+    @Schema(description = "검색 유형 NAME, PHONE_NUMBER, STUDENT_NUMBER, NICKNAME, ALL", example = "ALL", nullable = true)
+    private SearchType searchType;
 
-    @Schema(description = "학년 (1, 2, 3, 4 중 하나)", example = "2", nullable = true)
+    @Schema(description = "학년 (1, 2, 3, 4 중 하나)", example = "2", nullable = true, implementation = Integer.class)
     private Integer grade;
 
-    @Schema(description = "성별 ('남' 또는 '여')", example = "남", nullable = true)
-    private String gender;
+    @Schema(description = "성별 M/F", nullable = true)
+    private Gender gender;
 
     @Schema(description = "교수 ID (professor 테이블의 PK)", example = "102", nullable = true)
     private Long professorId;
 
-    public Integer getSearchType() {
-        return searchType == null ? 4 : searchType;
+    public SearchType getSearchType() {
+        return searchType == null ? SearchType.ALL : searchType;
+    }
+
+    @Override
+    @Schema(implementation = AdminUserSortType.class)
+    public AdminUserSortType getSortBy() {
+        return sortBy;
     }
 }
