@@ -73,7 +73,7 @@ public class UserSpecification {
             predicate = cb.and(predicate, cb.equal(root.get("grade"), request.getGrade()));
 
         if (request.getGender() != null)
-            predicate = cb.and(predicate, cb.equal(root.get("gender"), request.getGender()));
+            predicate = cb.and(predicate, cb.equal(root.get("gender"), request.getGender().name()));
 
         if (request.getProfessorId() != null)
             predicate = cb.and(predicate, cb.equal(

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 // Spring Security 사용 시 관리자 권한 체크를 위한 어노테이션 또는 설정 필요
 // @PreAuthorize("hasRole('ADMIN')") // 예시: 메소드 실행 전 ADMIN 역할 확인
 
-@Tag(name = "6-2. 게시판 관리 / 게시글", description = "수정 필요")
+@Tag(name = "5-2. 게시판 관리 / 게시글", description = "수정 필요")
 @RestController
 @RequestMapping("/api/admin/community") // 관리자용 기본 URL 경로
 public class AdminCommunityController {

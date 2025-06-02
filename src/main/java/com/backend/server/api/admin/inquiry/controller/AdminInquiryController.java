@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/admin/inquiry")
 @RequiredArgsConstructor
-@Tag(name = "3-3. 사용자 관리 / 1:1 문의 목록", description = "수정 필요")
+@Tag(name = "2-3. 사용자 관리 / 1:1 문의 목록", description = "수정 필요")
 public class AdminInquiryController {
 
     private final AdminInquiryService adminInquiryService;
