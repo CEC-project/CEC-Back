@@ -26,7 +26,7 @@ public class InquiryResponse {
     @Schema(description = "첨부파일 URL", example = "https://example.com/image.png")
     private String attachmentUrl;   // 첨부파일 URL
 
-    @Schema(description = "문의 유형", example = "RENTAL", implementation = InquiryType.class))
+    @Schema(description = "문의 유형", example = "RENTAL", implementation = InquiryType.class)
     private InquiryType type;      // 문의 유형 (enum)
 
     @Schema(description = "답변 상태", example = "WAITING", implementation = AnswerStatus.class)

@@ -49,10 +49,10 @@ public class InquiryController {
     @GetMapping // GET, 내 문의글 전체 조회 (페이지네이션 적용)
     public ResponseEntity<Page<InquiryResponse>> getMyInquiries( // 🔧 반환 타입 Page<>
                                                                  @AuthenticationPrincipal LoginUser loginUser,
-                                                                 @RequestParam(defaultValue = "0") int page, // 🔧 page: 0부터 시작
-                                                                 @RequestParam(defaultValue = "10") int size, // 🔧 size: 페이지당 개수
-                                                                 @RequestParam(defaultValue = "createdAt") String sortBy, // 🔧 정렬 기준
-                                                                 @RequestParam(defaultValue = "DESC") String sortDirection // 🔧 정렬 방향
+                                                                 @RequestParam(defaultValue = "1") int page, // page: 1부터 시작
+                                                                 @RequestParam(defaultValue = "10") int size, // size: 페이지당 개수
+                                                                 @RequestParam(defaultValue = "createdAt") String sortBy, // 정렬 기준
+                                                                 @RequestParam(defaultValue = "DESC") String sortDirection // 정렬 방향
     ) {
         Long currentUserId = loginUser.getId();
         Page<InquiryResponse> responses = inquiryService.getMyInquiries(
