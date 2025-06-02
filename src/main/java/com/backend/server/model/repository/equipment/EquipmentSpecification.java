@@ -44,104 +44,99 @@ public class EquipmentSpecification {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            // 카테고리(장비분류)
+            // 카테고리 필터
             if (request.getCategoryId() != null) {
                 predicates.add(cb.equal(root.get("equipmentCategory").get("id"), request.getCategoryId()));
-
             }
 
-            // 모델명
-            if (StringUtils.hasText(request.getModelName())) {
-
-                predicates.add(cb.like(cb.lower(root.get("equipmentModel").get("name")), "%" + request.getModelName().toLowerCase() + "%"));
-
+            // 상태 필터
+            if (request.getStatus() != null) {
+                predicates.add(cb.equal(root.get("status"), request.getStatus()));
             }
 
-            // 일련번호
-            if (StringUtils.hasText(request.getSerialNumber())) {
-                predicates.add(cb.like(cb.lower(root.get("serialNumber")), "%" + request.getSerialNumber().toLowerCase() + "%"));
-            }
-
-            // 장비 상태
-            if (StringUtils.hasText(request.getStatus())) {
-                Status statusEnum = Status.valueOf(request.getStatus().toUpperCase());
-                predicates.add(cb.equal(root.get("status"), statusEnum));
-            }
-
-
-            // 현재 대여자 이름
-            Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
-            if (StringUtils.hasText(request.getRenterName())) {
-                predicates.add(cb.and(
-                        cb.isNotNull(renter.get("name")),
-                        cb.like(cb.lower(renter.get("name")), "%" + request.getRenterName().toLowerCase() + "%")
-                ));
-            }
-
-            // 키워드 검색
+            // 검색 키워드 필터
             if (StringUtils.hasText(request.getSearchKeyword())) {
                 String keyword = "%" + request.getSearchKeyword().toLowerCase() + "%";
+                AdminEquipmentListRequest.SearchType type = request.getSearchType() != null
+                        ? request.getSearchType()
+                        : AdminEquipmentListRequest.SearchType.ALL;
 
-                Predicate modelNamePredicate = cb.like(cb.lower(root.get("equipmentModel").get("name")), keyword);
-                Predicate serialNumberPredicate = cb.like(cb.lower(root.get("serialNumber")), keyword);
-                Predicate renterNamePredicate = cb.and(
-                        cb.isNotNull(renter.get("name")),
-                        cb.like(cb.lower(renter.get("name")), keyword)
-                );
+                Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
 
-                predicates.add(cb.or(modelNamePredicate, serialNumberPredicate, renterNamePredicate));
+                switch (type) {
+                    case MODEL_NAME -> predicates.add(
+                            cb.like(cb.lower(root.get("equipmentModel").get("name")), keyword));
+                    case SERIAL_NUMBER -> predicates.add(
+                            cb.like(cb.lower(root.get("serialNumber")), keyword));
+                    case RENTER_NAME -> predicates.add(cb.and(
+                            cb.isNotNull(renter.get("name")),
+                            cb.like(cb.lower(renter.get("name")), keyword)));
+                    case CATEGORY_NAME -> predicates.add(cb.like(
+                            cb.lower(root.get("equipmentCategory").get("name")), keyword));
+                    case ALL -> {
+                        Predicate modelNamePredicate = cb.like(cb.lower(root.get("equipmentModel").get("name")), keyword);
+                        Predicate serialNumberPredicate = cb.like(cb.lower(root.get("serialNumber")), keyword);
+                        Predicate renterNamePredicate = cb.and(
+                                cb.isNotNull(renter.get("name")),
+                                cb.like(cb.lower(renter.get("name")), keyword));
+                        Predicate categoryNamePredicate = cb.like(cb.lower(root.get("equipmentCategory").get("name")), keyword);
+
+                        predicates.add(cb.or(modelNamePredicate, serialNumberPredicate, renterNamePredicate, categoryNamePredicate));
+                    }
+                }
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
 
+
     public static Specification<Equipment> filterEquipments(EquipmentListRequest request, Integer userGrade) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            // 카테고리(장비분류)
+            // 카테고리 필터
             if (request.getCategoryId() != null) {
-
                 predicates.add(cb.equal(root.get("equipmentCategory").get("id"), request.getCategoryId()));
-
             }
 
-            // 모델명
-            if (StringUtils.hasText(request.getModelName())) {
-                predicates.add(cb.like(cb.lower(root.get("equipmentModel").get("name")), "%" + request.getModelName().toLowerCase() + "%"));
+            String keyword = request.getKeyword();
+            EquipmentListRequest.SearchType searchType = request.getSearchType() != null
+                    ? request.getSearchType()
+                    : EquipmentListRequest.SearchType.ALL;
+
+            if (StringUtils.hasText(keyword)) {
+                String likeKeyword = "%" + keyword.toLowerCase() + "%";
+
+                switch (searchType) {
+                    case MODEL_NAME -> predicates.add(cb.like(cb.lower(root.get("equipmentModel").get("name")), likeKeyword));
+                    case CATEGORY_NAME -> predicates.add(cb.like(cb.lower(root.get("equipmentCategory").get("name")), likeKeyword));
+                    case RENTER_NAME -> {
+                        Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
+                        predicates.add(cb.and(
+                                cb.isNotNull(renter.get("name")),
+                                cb.like(cb.lower(renter.get("name")), likeKeyword)
+                        ));
+                    }
+                    case ALL -> {
+                        List<Predicate> keywordPredicates = new ArrayList<>();
+                        keywordPredicates.add(cb.like(cb.lower(root.get("equipmentModel").get("name")), likeKeyword));
+                        keywordPredicates.add(cb.like(cb.lower(root.get("equipmentCategory").get("name")), likeKeyword));
+                        Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
+                        keywordPredicates.add(cb.and(
+                                cb.isNotNull(renter.get("name")),
+                                cb.like(cb.lower(renter.get("name")), likeKeyword)
+                        ));
+                        predicates.add(cb.or(keywordPredicates.toArray(new Predicate[0])));
+                    }
+                }
             }
 
-            // 장비 상태
-            if (StringUtils.hasText(request.getStatus())) {
-                Status statusEnum = Status.valueOf(request.getStatus().toUpperCase());
-                predicates.add(cb.equal(root.get("status"), statusEnum));
+            if (request.getStatus() != null) {
+                predicates.add(cb.equal(root.get("status"), request.getStatus()));
             }
 
-            // 현재 대여자 이름
-            Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
-            if (StringUtils.hasText(request.getRenterName())) {
-                predicates.add(cb.and(
-                        cb.isNotNull(renter.get("name")),
-                        cb.like(cb.lower(renter.get("name")), "%" + request.getRenterName().toLowerCase() + "%")
-                ));
-            }
-
-            // 키워드 검색
-            if (StringUtils.hasText(request.getSearchKeyword())) {
-                String keyword = "%" + request.getSearchKeyword().toLowerCase() + "%";
-
-                Predicate modelNamePredicate = cb.like(cb.lower(root.get("equipmentModel").get("name")), keyword);
-                Predicate serialNumberPredicate = cb.like(cb.lower(root.get("serialNumber")), keyword);
-                Predicate renterNamePredicate = cb.and(
-                        cb.isNotNull(renter.get("name")),
-                        cb.like(cb.lower(renter.get("name")), keyword)
-                );
-
-                predicates.add(cb.or(modelNamePredicate, serialNumberPredicate, renterNamePredicate));
-            }
-
-            // 대여 제한 학년 필터링
+            // 대여 제한 학년이 걸리는 장비는 조회 제외
             if (userGrade != null) {
                 predicates.add(cb.not(cb.like(root.get("restrictionGrade"), "%" + userGrade + "%")));
             }
@@ -149,4 +144,6 @@ public class EquipmentSpecification {
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
+
+
 } 

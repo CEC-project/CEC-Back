@@ -81,6 +81,7 @@ public class User extends BaseTimeEntity {
     private Professor professor;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<RentalRestriction> rentalRestrictions = new ArrayList<>();
 
     @PrePersist //닉네임을 이름으로 설정하기 위해 30줄가량 생성자를 일일이 써야하는 문제를 해결
