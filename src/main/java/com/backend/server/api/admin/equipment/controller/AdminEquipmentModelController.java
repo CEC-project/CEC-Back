@@ -28,20 +28,7 @@ public class AdminEquipmentModelController {
 
     @PostMapping
     @Operation(
-            summary = "장비 모델 생성",
-            description = """
-                    새로운 장비 모델을 등록합니다.
-
-                    필수 입력값:
-                    - name: 장비 모델명 (예: 소니 미러리스 A7M4)
-                    - englishCode: 장비의 고유 영문 코드 (예: SONY_A7M4)
-                    - available: true/false 여부 (현재 장비 모델 사용 가능 여부)
-                    - categoryId: 장비가 속한 카테고리의 ID
-
-                    주의:
-                    - 같은 영문 코드는 중복 등록이 불가능합니다.
-                    - 카테고리 ID는 존재하는 값이어야 합니다.
-                    """
+            summary = "장비 모델 생성"
     )
     public ApiResponse<Long> createModel(
             @Valid @RequestBody
@@ -51,20 +38,7 @@ public class AdminEquipmentModelController {
 
     @PutMapping("/{id}")
     @Operation(
-            summary = "장비 모델 수정",
-            description = """
-                    기존 장비 모델 정보를 수정합니다.
-
-                    수정 가능한 항목:
-                    - 모델명(name)
-                    - 영문 코드(englishCode)
-                    - 사용 가능 여부(available)
-                    - 카테고리 ID(categoryId)
-
-                    주의:
-                    - 수정 대상 모델이 존재해야 합니다.
-                    - 영문 코드는 중복되지 않아야 합니다.
-                    """
+            summary = "장비 모델 수정"
     )
     public ApiResponse<Long> updateModel(
             @Parameter(description = "수정할 장비 모델의 고유 ID", example = "1")
@@ -76,14 +50,7 @@ public class AdminEquipmentModelController {
 
     @DeleteMapping("/{id}")
     @Operation(
-            summary = "장비 모델 삭제",
-            description = """
-                    지정한 ID에 해당하는 장비 모델을 삭제합니다.
-
-                    삭제 전 유의사항:
-                    - 해당 모델에 등록된 장비가 하나라도 존재하면 삭제가 불가할 수 있습니다.
-                    - 논리 삭제가 아닌 물리 삭제입니다.
-                    """
+            summary = "장비 모델 삭제"
     )
     public ApiResponse<Long> deleteModel(
             @Parameter(description = "삭제할 장비 모델의 고유 ID", example = "1")
@@ -102,17 +69,7 @@ public class AdminEquipmentModelController {
 
     @GetMapping("/{id}")
     @Operation(
-            summary = "장비 모델 단일 조회",
-            description = """
-                    특정 ID를 기준으로 장비 모델의 상세 정보를 조회합니다.
-
-                    반환 항목:
-                    - 모델명
-                    - 영문 코드
-                    - 사용 가능 여부
-                    - 소속 카테고리 정보
-                    - 등록일 및 기타 부가 정보
-                    """
+            summary = "장비 모델 단일 조회"
     )
     public ApiResponse<EquipmentModelResponse> getModelById(
             @Parameter(description = "조회할 장비 모델의 고유 ID", example = "1") @PathVariable Long id) {

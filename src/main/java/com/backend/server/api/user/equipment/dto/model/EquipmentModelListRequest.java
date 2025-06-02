@@ -14,7 +14,7 @@ import org.springdoc.core.converters.models.Sort;
 @Builder
 public class EquipmentModelListRequest implements PageableRequest {
 
-    @Schema(description = "장비 카테고리 ID (선택)", example = "1")
+    @Schema(description = "장비 카테고리 ID", example = "1")
     private Long categoryId;
 
     @Schema(description = "검색어 (모델명 또는 영문코드에 대해 부분 일치 검색)", example = "카메라")

@@ -29,15 +29,7 @@ public class EquipmentController {
 
     @GetMapping("/{id}")
     @Operation(
-            summary = "장비 단일 조회",
-            description = """
-                장비 ID를 이용하여 단일 장비의 상세 정보를 조회합니다.
-        
-                예시 요청:
-                - `/api/user/equipments/1`
-        
-                반환값에는 모델명, 일련번호, 상태, 대여 가능 여부 등 상세 정보가 포함됩니다.
-                """
+            summary = "장비 단일 조회"
             )
     public ApiResponse<EquipmentResponse> getEquipment(
             @Parameter(description = "장비 ID", required = true) @PathVariable Long id) {
@@ -56,18 +48,7 @@ public class EquipmentController {
 
     @PostMapping("/cart")
     @Operation(
-            summary = "장비 장바구니 추가",
-            description = """
-        장비를 장바구니에 추가합니다. 이미 추가된 장비는 무시됩니다.
-
-        요청 형식:
-        ```
-        [1, 2, 3]
-        ```
-
-        예시 요청:
-        - POST `/api/user/equipments/cart`
-        """
+            summary = "장비 장바구니 추가"
     )
     public ApiResponse<Void> addToCart(
             @RequestBody List<Long> equipmentIds,
@@ -78,39 +59,16 @@ public class EquipmentController {
 
     @GetMapping("/cart")
     @Operation(
-            summary = "장비 장바구니 조회",
-            description = """
-        현재 로그인한 사용자의 장바구니에 추가된 장비 목록을 조회합니다.
-
-        예시 요청:
-        - GET `/api/user/equipments/cart`
-        """
+            summary = "장비 장바구니 조회"
     )
     public ApiResponse<List<EquipmentResponse>> getCartItems(
             @AuthenticationPrincipal LoginUser loginUser) {
         return ApiResponse.success("장바구니 조회 성공", equipmentService.getCartItems(loginUser));
     }
 
-    @PostMapping("/rental")
+    @PatchMapping("/rental")
     @Operation(
-            summary = "장비 대여 요청 - 대여 성공시 장바구니에 있는 장비 자동 삭제",
-            description = """
-        장비 대여를 요청합니다. 장비가 AVAILABLE 상태여야 하며, 요청 시 대여 기간을 지정해야 합니다.
-
-        요청 형식:
-        ```
-        {
-          "equipmentIds": [1, 2, 3],
-          "startDate": "2023-06-01T09:00:00",
-          "endDate": "2023-06-10T18:00:00"
-        }
-        ```
-
-        예시 요청:
-        - POST `/api/user/equipments/rental`
-        
-        요청이 성공하면 장바구니에 있는 장비들은 자동 삭제됩니다.
-        """
+            summary = "장비 대여 요청 - 대여 성공시 장바구니에 있는 장비 자동 삭제"
     )
     public ApiResponse<Void> requestRental(
             @RequestBody EquipmentRentalRequest request,
@@ -119,20 +77,9 @@ public class EquipmentController {
         return ApiResponse.success("대여 요청 성공", null);
     }
 
-    @PostMapping("/rental/cancel")
+    @PatchMapping("/rental/cancel")
     @Operation(
-            summary = "장비 대여 요청 취소",
-            description = """
-                RENTAL_PENDING 상태인 장비의 대여 요청을 취소합니다. 본인이 요청한 장비만 취소할 수 있습니다.
-        
-                요청 형식:
-                ```
-                [1, 2, 3]
-                ```
-        
-                예시 요청:
-                - POST `/api/user/equipments/rental/cancel`
-                """
+            summary = "장비 대여 요청 취소"
             )
     public ApiResponse<Void> cancelRentalRequest(
             @RequestBody List<Long> equipmentIds,
@@ -141,20 +88,9 @@ public class EquipmentController {
         return ApiResponse.success("대여 요청 취소 성공", null);
     }
 
-    @PostMapping("/return")
+    @PatchMapping("/return")
     @Operation(
-            summary = "장비 반납 요청",
-            description = """
-        사용 중인 장비를 반납 요청합니다. 본인이 대여한 장비만 요청할 수 있습니다.
-
-        요청 형식:
-        ```
-        [1, 2, 3]
-        ```
-
-        예시 요청:
-        - POST `/api/user/equipments/return`
-        """
+            summary = "장비 반납 요청"
     )
     public ApiResponse<Void> requestReturn(
             @AuthenticationPrincipal LoginUser loginUser,
@@ -163,20 +99,9 @@ public class EquipmentController {
         return ApiResponse.success("반납 요청 성공", null);
     }
 
-    @PostMapping("/return/cancel")
+    @PatchMapping("/return/cancel")
     @Operation(
-            summary = "장비 반납 요청 취소",
-            description = """
-                RETURN_PENDING 상태의 반납 요청을 취소합니다. 본인이 요청한 장비만 가능합니다.
-        
-                요청 형식:
-                ```
-                [1, 2, 3]
-                ```
-        
-                예시 요청:
-                - POST `/api/user/equipments/return/cancel`
-                """
+            summary = "장비 반납 요청 취소"
             )
     public ApiResponse<Void> cancelReturnRequest(
             @AuthenticationPrincipal LoginUser loginUser,
