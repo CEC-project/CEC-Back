@@ -21,47 +21,14 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/equipment-models")
 @RequiredArgsConstructor
-@Tag(name = "장비 모델 API", description = "장비 모델 목록 및 단일 모델 조회 기능을 제공합니다.")
+@Tag(name = "1-2. 대여 신청 / 장비 모델", description = "수정 필요")
 public class EquipmentModelController {
 
     private final EquipmentModelService equipmentModelService;
 
     @GetMapping
     @Operation(
-            summary = "장비 모델 목록 조회",
-            description = """
-            장비 모델 목록을 조회합니다. 카테고리별, 키워드 검색, 정렬, 페이징 등의 조건을 조합하여 사용할 수 있습니다.
-            
-            ---
-            
-            ### 🔍 검색 필터 (선택)
-            
-            - `categoryId` (Long): 장비 모델의 카테고리 ID로 필터링
-            - `keyword` (String): 모델명 또는 영문 코드에 포함된 텍스트 검색
-            
-            ---
-            
-            ### 📌 정렬 조건
-            
-            - `sortBy` (String): 정렬 기준 필드명 (`name`, `createdAt`, `id` 등)
-            - `sortDirection` (String): 정렬 방향 (`asc` 또는 `desc`, 기본값: asc)
-            
-            ---
-            
-            ### 📄 페이징 조건
-            
-            - `page` (Integer): 페이지 번호 (0부터 시작)
-            - `size` (Integer): 한 페이지에 조회할 항목 수
-            
-            ---
-            
-            ### ✅ 예시 요청
-            
-            GET /api/equipment-models?categoryId=1&keyword=카메라&sortBy=name&sortDirection=desc&page=0&size=10
-            
-            
-            위 요청은 카테고리 ID가 1인 모델 중 `카메라` 키워드가 포함된 항목을 이름 기준 내림차순 정렬로 0페이지부터 10개씩 조회합니다.
-            """
+            summary = "장비 모델 목록 조회"
     )
     public ApiResponse<EquipmentModelListResponse> getAllModels(
             @ParameterObject @ModelAttribute EquipmentModelListRequest request

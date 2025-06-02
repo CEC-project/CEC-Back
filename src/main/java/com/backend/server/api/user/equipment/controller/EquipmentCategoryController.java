@@ -14,7 +14,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "장비 카테고리", description = "장비 분류 정보 조회 API입니다. 전체 카테고리 목록, 특정 카테고리 조회, 카테고리별 장비 수를 확인할 수 있습니다.")
+@Tag(name = "1-1. 대여 신청 / 장비 분류", description = "수정 필요")
 @RestController
 @RequestMapping("/api/equipment-categories")
 @RequiredArgsConstructor

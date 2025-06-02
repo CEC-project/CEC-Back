@@ -1,7 +1,6 @@
 package com.backend.server.api.admin.notice.controller;
 
 import com.backend.server.api.admin.notice.dto.AdminNoticeCreateRequest;
-import com.backend.server.api.admin.notice.dto.AdminNoticeIdResponse;
 import com.backend.server.api.admin.notice.dto.AdminNoticeListRequest;
 import com.backend.server.api.admin.notice.service.AdminNoticeService;
 import com.backend.server.api.common.dto.ApiResponse;
@@ -17,7 +16,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "관리자 공지사항", description = "관리자용 공지사항 관리 API")
+@Tag(name = "5-1. 게시판 관리 / 공지사항", description = "수정 필요")
 @RestController
 @RequestMapping("/api/admin/notices")
 @RequiredArgsConstructor

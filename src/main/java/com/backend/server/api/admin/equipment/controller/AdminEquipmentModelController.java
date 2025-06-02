@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/admin/equipment-models")
 @RequiredArgsConstructor
-@Tag(name = "장비 모델 어드민 API", description = "어드민 권한으로 장비 모델을 생성, 수정, 삭제하거나 목록을 조회할 수 있는 API입니다.")
+@Tag(name = "3-1. 강의실/장비 관리 / 장비 관리 / 모델", description = "수정 필요")
 public class AdminEquipmentModelController {
 
     private final AdminEquipmentModelService adminEquipmentModelService;
@@ -93,23 +93,7 @@ public class AdminEquipmentModelController {
 
     @GetMapping
     @Operation(
-            summary = "장비 모델 목록 조회",
-            description = """
-                    장비 모델 목록을 조건에 따라 조회합니다. 다음과 같은 필터 및 정렬 옵션을 사용할 수 있습니다:
-                        
-                    - `categoryId`: 특정 장비 카테고리 ID로 필터링합니다. 생략하면 전체 카테고리에서 조회합니다.
-                    - `keyword`: 모델명 또는 영문 코드에 해당 키워드가 포함된 장비만 조회합니다. (예: "카메라", "CAM01")
-                    - `page`: 페이지 번호 (0부터 시작). 기본값은 0입니다.
-                    - `size`: 페이지당 항목 수. 기본값은 10입니다.
-                    - `sortBy`: 정렬 기준 필드명 (예: "name", "createdAt", "id" 등).
-                    - `sortDirection`: 정렬 방향 ("ASC" 오름차순, "DESC" 내림차순). 기본값은 "DESC"입니다.
-                        
-                       파라미터는 전부 선택사항입니다
-                       
-                      
-                        
-                    예시: `/api/admin/equipment-models?categoryId=1&keyword=카메라&sortBy=name`
-                    """
+            summary = "장비 모델 목록 조회"
     )
     public ApiResponse<EquipmentModelListResponse> getAllModels(
             @ParameterObject EquipmentModelListRequest request) {

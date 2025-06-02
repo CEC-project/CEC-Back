@@ -14,7 +14,6 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,9 +27,8 @@ public class AdminClassroomService {
 
     @Transactional(readOnly = true)
     public List<AdminClassroomResponse> searchClassrooms(AdminClassroomSearchRequest request) {
-        Specification<Classroom> spec = ClassroomSpecification.searchAndOrderBy(request);
-        Sort sort = ClassroomSpecification.getSort();
-        return classroomRepository.findAll(spec, sort)
+        Specification<Classroom> spec = ClassroomSpecification.searchAndFilter(request);
+        return classroomRepository.findAll(spec, request.toSort())
                 .stream()
                 .map((e) -> new AdminClassroomResponse(e, e.getManager()))
                 .collect(Collectors.toList());

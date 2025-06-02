@@ -89,7 +89,8 @@ docker stop redis-container
 
 ## 코딩 관련 규칙
 1. 등록용 Request DTO 에 "toEntity 메소드" 처럼 엔티티로 바꾸는 메소드 넣기.
-2. 조회용 Response DTO 에 "[엔티티로 생성하는 생성자](../src/main/java/com/backend/server/api/admin/dto/user/AdminUserResponse.java)" 를 넣기
+2. 조회용 Response DTO 에 "[엔티티로 생성하는 생성자](/src/main/java/com/backend/server/api/admin/user/dto/AdminUserResponse.java)" 를 넣기
 3. 수정용 API 를 만들때는 Entity 를 DB 에서 findById() 등으로 조회해와서 entity.toBuilder().setValue(value).build(); 와 같이 수정하고 save(entity) 하기
 4. 컨트롤러, 서비스, DTO 파일이 admin 패키지 아래에 있으면 "Admin" 을 덧붙이기. common 패키지 아래에 있으면 "Common" 을 덧붙이기
    - IDE 자동완성 충돌과, 스프링 빈 이름 충돌을 근본적으로 방지하기 위함
+5. [프론트와의 협업을 위한 규칙 추가](api-rule.md)

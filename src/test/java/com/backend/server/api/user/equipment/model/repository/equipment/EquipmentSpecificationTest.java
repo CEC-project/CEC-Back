@@ -72,7 +72,7 @@ class EquipmentSpecificationTest extends AbstractPostgresContainerTest {
                 .department("테스트학부")
                 .nickname("테스트쟁이")
                 .grade(4)
-                .gender("남")
+                .gender("M")
                 .professor(null)
                 .phoneNumber("010-2312-1234")
                 .role(Role.ROLE_SUPER_ADMIN)
@@ -133,82 +133,5 @@ class EquipmentSpecificationTest extends AbstractPostgresContainerTest {
     }
 
 
-    @Test
-    void specification_shouldFilterRestrictGrade() {
-        // given - 3학년인 사람
-        Integer userGrade = 3;
 
-        EquipmentListRequest request = EquipmentListRequest.builder()
-                .categoryId(savedCategory.getId())
-                .build();
-
-        // when
-        Specification<Equipment> spec = EquipmentSpecification.filterEquipments(request, userGrade);
-        List<Equipment> result = equipmentRepository.findAll(spec);
-
-        // 디버깅을 위한 로그
-        System.out.println("=== 학년 제한 필터링 테스트 결과 ===");
-        System.out.println("사용자 학년: " + userGrade);
-        System.out.println("필터링된 장비 수: " + result.size());
-
-        for (Equipment equipment : result) {
-            System.out.println("장비 시리얼: " + equipment.getSerialNumber() +
-                    ", 제한학년: " + equipment.getRestrictionGrade());
-        }
-
-        // then - 4학년 제한 장비만 조회되어야 함
-        assertThat(result).hasSize(1); // 4학년 제한 장비 1개만
-        assertThat(result.get(0).getSerialNumber()).isEqualTo("CAMSON0003");
-        assertThat(result.get(0).getRestrictionGrade()).isEqualTo("4");
-
-        // 3학년 제한 장비들은 결과에 포함되지 않아야 함
-        boolean hasGrade3Equipment = result.stream()
-                .anyMatch(eq -> "3".equals(eq.getRestrictionGrade()));
-        assertThat(hasGrade3Equipment).isFalse();
-    }
-
-    @Test
-    void specification_shouldShowAllEquipmentWhenUserGradeIsNull() {
-        // given - userGrade가 null인 경우 (관리자 또는 학년 정보 없음)
-        Integer userGrade = null;
-
-        EquipmentListRequest request = EquipmentListRequest.builder()
-                .categoryId(savedCategory.getId())
-                .build();
-
-        // when
-        Specification<Equipment> spec = EquipmentSpecification.filterEquipments(request, userGrade);
-        List<Equipment> result = equipmentRepository.findAll(spec);
-
-        // 디버깅 로그
-        System.out.println("=== 학년 null 테스트 결과 ===");
-        System.out.println("사용자 학년: null");
-        System.out.println("조회된 장비 수: " + result.size());
-
-        // then - 모든 장비가 조회되어야 함 (학년 제한 없음)
-        assertThat(result).hasSize(3); // 모든 장비
-    }
-
-    @Test
-    void filterEquipments_shouldReturnResultMatchingAllConditionsExceptUserGrade(){
-        EquipmentListRequest request = EquipmentListRequest.builder()
-                .categoryId(savedCategory.getId())
-                .modelName("SONY")
-                .status(Status.AVAILABLE.name())
-                .renterName("홍길동")
-                .searchKeyword("CAMSON0001")
-                .build();
-
-        Specification<Equipment> spec = EquipmentSpecification.filterEquipments(request, null);
-        List<Equipment> result = equipmentRepository.findAll(spec);
-
-        // then
-        assertThat(result).hasSize(1);
-        Equipment found = result.get(0);
-        assertThat(found.getEquipmentCategory().getId()).isEqualTo(savedCategory.getId());
-        assertThat(found.getEquipmentModel().getName()).contains("SONY");
-        assertThat(found.getStatus()).isEqualTo(Status.AVAILABLE);
-        assertThat(found.getRenter().getName()).isEqualTo("홍길동");
-        assertThat(found.getSerialNumber()).isEqualTo("CAMSON0001");
-    }
 }

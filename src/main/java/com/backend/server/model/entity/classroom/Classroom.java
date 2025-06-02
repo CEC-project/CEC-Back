@@ -44,11 +44,42 @@ public class Classroom extends BaseTimeEntity {
     @JoinColumn(name = "manager_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User manager;
 
+    private LocalTime startRentTime;
+    private LocalTime endRentTime;
+
     private LocalTime startTime;
     private LocalTime endTime;
+
     private LocalDateTime requestedTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "renter_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User renter;
+
+    public void makeAvailable() {
+        this.status = Status.AVAILABLE;
+        this.startRentTime = null;
+        this.endRentTime = null;
+        this.requestedTime = null;
+        this.renter = null;
+    }
+
+    public void makeRentalPending(LocalTime startRentTime, LocalTime endRentTime, User renter) {
+        this.status = Status.RENTAL_PENDING;
+        this.startRentTime = startRentTime;
+        this.endRentTime = endRentTime;
+        this.requestedTime = LocalDateTime.now();
+        this.renter = renter;
+    }
+
+    public void makeInUse() {
+        this.status = Status.IN_USE;
+    }
+
+    public void makeBroken(String detail) {
+        makeAvailable();
+        this.status = Status.BROKEN;
+
+        // 파손 테이블에 저장
+    }
 }

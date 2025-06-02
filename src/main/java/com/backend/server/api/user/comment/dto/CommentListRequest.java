@@ -2,6 +2,7 @@ package com.backend.server.api.user.comment.dto;
 
 import com.backend.server.api.common.dto.pagination.AbstractPaginationParam;
 import com.backend.server.model.entity.enums.TargetType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import org.springframework.data.domain.Sort;
 
@@ -9,6 +10,9 @@ import org.springframework.data.domain.Sort;
 public class CommentListRequest extends AbstractPaginationParam<CommentSortType> {
     private TargetType type;
     private Long targetId;
+
+    @Schema(description = "정렬 기준", implementation = CommentSortType.class)
+    private CommentSortType sortBy;
 
     public CommentListRequest(
             TargetType type,

@@ -7,12 +7,11 @@ import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
 import com.backend.server.api.admin.classroom.service.AdminClassroomService;
 import com.backend.server.api.common.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,30 +24,42 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/admin/classroom")
 @RequiredArgsConstructor
-@Tag(name = "강의실 관리 API", description = "강의실 관리 어드민 API")
+@Tag(name = "3-2. 강의실/장비 관리 / 강의실 관리", description = "수정 필요")
 public class AdminClassroomController {
 
     private final AdminClassroomService adminClassroomService;
 
     @Operation(
-            summary = "강의실 검색 API",
+            summary = "강의실 목록 조회 API",
             description = """
-        관리자 페이지에서 강의실을 검색 조건에 따라 조회합니다.
-
-        <b>🔍 검색 조건:</b><br>
-        - <code>keyword</code>: 검색 키워드 (검색 타입에 따라 조회 기준이 달라집니다)<br>
-        - <code>type</code>: 검색 타입 (ID: 강의실 ID, NAME: 이름, DESCRIPTION: 설명, ALL: 전부 검색)<br>
-
-        ⚠️ <b>검색 키워드는 생략 가능하지만, 검색시에는 검색 타입도 지정해야 의미 있는 결과가 반환됩니다.</b>
-        """
-    )
-    @Parameters({
-            @Parameter(name = "keyword", description = "검색 키워드 (검색 타입에 따라 다르게 사용됨)"),
-            @Parameter(name = "type", description = "검색 타입 (ID: 강의실 ID, NAME: 이름, DESCRIPTION: 설명, ALL: 전부 검색)")
-    })
+            **강의실 대여 관리의 목록 조회 API 와 응답 DTO가 다릅니다.**
+            
+            - **요청 파라미터**
+              - **keyword** : 검색 키워드 (nullable)
+              - **type** : 검색 타입 (nullable)
+                - **ALL** : 모든 항목에 대해 검색 (기본값)
+                - **ID** : 강의실 ID로 검색
+                - **NAME** : 강의실 이름으로 검색
+                - **DESCRIPTION** : 강의실 설명으로 검색
+              - **status** : 상태 필터 (nullable)
+                - **ALL** : 모든 상태에 대해 검색 (기본값)
+                - **AVAILABLE** : 대여 가능 상태
+                - **IN_USE** : 대여 승인된 상태
+                - **CANCELABLE** : 취소 가능 상태 (IN_USE 상태중에 아직 대여 시작시간이 되지 않은것)
+                - **BROKEN** : 파손 상태
+                - **RENTAL_PENDING** : 대여 신청 상태
+              - **sortBy** : 정렬 기준 (nullable)
+                - **status** : 강의실 상태 (기본값)
+                - **requestedTime** : 대여 신청한 시각
+                - **name** : 강의실 이름
+                - **id** : 강의실 id
+                - **description** : 강의실 설명
+              - **sortDirection** : 정렬 순서 (nullable)
+                - **ASC** : 오름차순 (기본값)
+                - **DESC** : 내림차순""")
     @GetMapping
     public ApiResponse<List<AdminClassroomResponse>> searchClassrooms(
-            @Parameter(hidden = true) @Valid AdminClassroomSearchRequest request) {
+            @ParameterObject @Valid AdminClassroomSearchRequest request) {
         List<AdminClassroomResponse> result = adminClassroomService.searchClassrooms(request);
         return ApiResponse.success("강의실 목록 조회 성공", result);
     }

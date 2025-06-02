@@ -20,67 +20,42 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/admin/classroom-rental")
 @RequiredArgsConstructor
-@Tag(name = "강의실 대여 관리 API", description = "강의실 대여 관리 어드민 API")
+@Tag(name = "4-1. 대여 관리 / 강의실 관리", description = "수정 필요")
 public class AdminClassroomRentalController {
 
     private final AdminClassroomRentalService rentalService;
 
     @Operation(
-            summary = "강의실 대여 승인 시킬 목록 조회 API",
+            summary = "강의실 목록 조회 API",
             description = """
-            **사용자가 대여 요청 날린 시간 기준 정렬**
-            
-            - **요청 바디**
-              - **keyword** : 검색 키워드 (nullable, 예: "컴퓨터실")
-              - **type** : 검색 타입 (nullable, 아래 중 하나)
+            - **요청 파라미터**
+              - **keyword** : 검색 키워드 (nullable)
+              - **type** : 검색 타입 (nullable)
+                - **ALL** : 모든 항목에 대해 검색 (기본값)
                 - **ID** : 강의실 ID로 검색
                 - **NAME** : 강의실 이름으로 검색
                 - **DESCRIPTION** : 강의실 설명으로 검색
-                - **ALL** : 모든 항목에 대해 검색""")
-    @GetMapping("/acceptable")
-    public ApiResponse<List<AdminClassroomDetailResponse>> getAcceptableClassrooms(
-            @ParameterObject AdminClassroomSearchRequest request) {
-        List<AdminClassroomDetailResponse> result = rentalService.getAcceptableClassrooms(request);
-        return ApiResponse.success("강의실 대여 승인 시킬 목록 조회 성공", result);
-    }
-
-    @Operation(
-            summary = "강의실 반납시킬 목록 조회 API",
-            description = """
-            **사용자가 대여 요청 날린 시간 기준 정렬**
-            
-            - **요청 바디**
-              - **keyword** : 검색 키워드 (nullable, 예: "컴퓨터실")
-              - **type** : 검색 타입 (nullable, 아래 중 하나)
-                - **ID** : 강의실 ID로 검색
-                - **NAME** : 강의실 이름으로 검색
-                - **DESCRIPTION** : 강의실 설명으로 검색
-                - **ALL** : 모든 항목에 대해 검색""")
-    @GetMapping("/returnable")
+              - **status** : 상태 필터 (nullable)
+                - **ALL** : 모든 상태에 대해 검색 (기본값)
+                - **AVAILABLE** : 대여 가능 상태
+                - **IN_USE** : 대여 승인된 상태
+                - **CANCELABLE** : 취소 가능 상태 (IN_USE 상태중에 아직 대여 시작시간이 되지 않은것)
+                - **BROKEN** : 파손 상태
+                - **RENTAL_PENDING** : 대여 신청 상태
+              - **sortBy** : 정렬 기준 (nullable)
+                - **status** : 강의실 상태 (기본값)
+                - **requestedTime** : 대여 신청한 시각
+                - **name** : 강의실 이름
+                - **id** : 강의실 id
+                - **description** : 강의실 설명
+              - **sortDirection** : 정렬 순서 (nullable)
+                - **ASC** : 오름차순 (기본값)
+                - **DESC** : 내림차순""")
+    @GetMapping("")
     public ApiResponse<List<AdminClassroomDetailResponse>> getReturnableClassrooms(
             @ParameterObject AdminClassroomSearchRequest request) {
-        List<AdminClassroomDetailResponse> result = rentalService.getReturnableClassrooms(request);
+        List<AdminClassroomDetailResponse> result = rentalService.getClassrooms(request);
         return ApiResponse.success("강의실 반납시킬 목록 조회 성공", result);
-    }
-
-    @Operation(
-            summary = "강의실 승인 취소시킬 목록 조회 API",
-            description = """
-            **사용자가 대여 요청 날린 시간 기준 정렬**
-            **대여 시작시간이 아직 안된 것만 뜹니다.**
-            
-            - **요청 바디**
-              - **keyword** : 검색 키워드 (nullable, 예: "컴퓨터실")
-              - **type** : 검색 타입 (nullable, 아래 중 하나)
-                - **ID** : 강의실 ID로 검색
-                - **NAME** : 강의실 이름으로 검색
-                - **DESCRIPTION** : 강의실 설명으로 검색
-                - **ALL** : 모든 항목에 대해 검색""")
-    @GetMapping("/cancelable")
-    public ApiResponse<List<AdminClassroomDetailResponse>> getCancelableClassrooms(
-            @ParameterObject AdminClassroomSearchRequest request) {
-        List<AdminClassroomDetailResponse> result = rentalService.getCancelableClassrooms(request);
-        return ApiResponse.success("강의실 승인 취소시킬 목록 조회 성공", result);
     }
 
     @Operation(
