@@ -68,7 +68,6 @@ public class EquipmentSpecification {
                 predicates.add(cb.equal(root.get("status"), statusEnum));
             }
 
-
             // 현재 대여자 이름
             Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
             if (StringUtils.hasText(request.getRenterName())) {
