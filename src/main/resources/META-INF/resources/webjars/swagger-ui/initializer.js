@@ -28,7 +28,9 @@ window.onload = function() {
     defaultModelExpandDepth: 10,
     persistAuthorization: true,
     docExpansion: docExpansion,
-    defaultModelRendering: defaultModelRendering
+    defaultModelRendering: defaultModelRendering,
+    tagsSorter: (a, b) => a.localeCompare(b),
+    operationsSorter: 'method'
   });
 
   //</editor-fold>
