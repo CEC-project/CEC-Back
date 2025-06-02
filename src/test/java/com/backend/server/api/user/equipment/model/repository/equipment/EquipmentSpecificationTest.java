@@ -74,7 +74,7 @@ class EquipmentSpecificationTest extends AbstractPostgresContainerTest {
                 .grade(4)
                 .gender("M")
                 .professor(null)
-                .phoneNumber("010-2312-1234")
+                .phoneNumber("01023121234")
                 .role(Role.ROLE_SUPER_ADMIN)
                 .studentNumber("202300003")
                 .build());
