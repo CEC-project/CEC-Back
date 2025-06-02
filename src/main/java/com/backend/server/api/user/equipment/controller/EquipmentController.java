@@ -46,37 +46,7 @@ public class EquipmentController {
 
     @GetMapping
     @Operation(
-            summary = "장비 목록 조회 (내가 대여한 장비 목록 보기 이걸로 가능)",
-            description = """
-        검색, 필터링, 정렬, 페이징 조건에 따라 장비 목록을 조회합니다.
-
-        필터 조건:
-        - `categoryId` (Long): 장비 카테고리 ID
-        - `modelName` (String): 모델명 (부분 일치)
-        - `renterName` (String): 현재 대여자 이름 (부분 일치)
-        - `status` (String) : 현재 장비 상태 (AVAILABLE(활성화),IN_USE(대여중)
-            ,RENTAL_PENDING(대여 요청중),RETURN_PENDING(반납 대기중), BROKEN(파손))
-        - `searchKeyword` (String): 모델명, 일련번호, 대여자 통합 검색
-
-        ---
-        
-        정렬 조건:
-        - `sortBy` (String): 정렬 기준 필드 (예: id, createdAt)
-        - `sortDirection` (String): 정렬 방향 (asc 또는 desc)
-        
-        ---
-        페이징 조건:
-        - `page` (Integer): 페이지 번호 (0부터 시작)
-        - `size` (Integer): 한 페이지당 항목 수
-        ---
-        내가 대여한 장비 목록 보기 하는법
-        >> renterName 을 자기이름, status를 IN_USE 로 넣으면 됌
-        --- 
-       
-        예시 요청:
-        - `/api/user/equipments?categoryId=1&isAvailable=true`
-        - `/api/user/equipments?searchKeyword=맥북&page=0&size=10&sortBy=id&sortDirection=desc`
-        """
+            summary = "장비 목록 조회 (내가 대여한 장비 목록 보기 이걸로 가능)"
     )
     public ApiResponse<EquipmentListResponse> getEquipments(
             @ParameterObject @ModelAttribute EquipmentListRequest request,

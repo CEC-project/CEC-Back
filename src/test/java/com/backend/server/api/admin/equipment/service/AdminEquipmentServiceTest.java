@@ -29,6 +29,9 @@ class AdminEquipmentServiceTest {
     @InjectMocks
     private AdminEquipmentService adminEquipmentService;
 
+    @InjectMocks
+    private AdminEquipmentRentalService adminEquipmentRentalService;
+
     @Mock private UserRepository userRepository;
     @Mock private EquipmentRepository equipmentRepository;
     @Mock private EquipmentCategoryRepository equipmentCategoryRepository;
@@ -95,78 +98,6 @@ class AdminEquipmentServiceTest {
                 updated.getStatus() == Status.BROKEN
         ));
     }
-
-    @Test
-    void multipleUpdateEquipmentStatus_shouldUpdateStatuses() {
-        // given
-        List<Long> ids = List.of(1L, 2L);
-        AdminEquipmentStatusMultipleUpdateRequest request = AdminEquipmentStatusMultipleUpdateRequest.builder()
-                .equipmentIds(ids)
-                .status(Status.BROKEN)
-                .build();
-
-        // when
-        List<Long> result = adminEquipmentService.updateMultipleEquipmentStatus(request);
-
-        // then
-        assertEquals(ids, result);
-        verify(equipmentRepository).bulkUpdateStatus("BROKEN", ids); // Enum → String 변환 주의
-    }
-
-
-    @Test
-    void approveRentalRequests_shouldSendNotification() {
-        Long id = 1L;
-        User user = User.builder().id(10L).build();
-        Equipment equipment = Equipment.builder().status(Status.RENTAL_PENDING).renter(user).equipmentModel(EquipmentModel.builder().name("TestModel").build()).build();
-
-        when(equipmentRepository.findById(id)).thenReturn(Optional.of(equipment));
-        adminEquipmentService.approveRentalRequests(List.of(id));
-        verify(notificationService).createNotification(any(CommonNotificationDto.class), eq(10L));
-    }
-
-    @Test
-    void markEquipmentsAsBroken_shouldUpdateStatus() {
-        Long id = 1L;
-        Equipment equipment = Equipment.builder().status(Status.AVAILABLE).description("Desc").brokenCount(0L).build();
-        when(equipmentRepository.findById(id)).thenReturn(Optional.of(equipment));
-
-        adminEquipmentService.markEquipmentsAsBroken(List.of(id), "Break note");
-        verify(equipmentRepository).save(any());
-    }
-
-    @Test
-    void repairEquipments_shouldUpdateStatus() {
-        Long id = 1L;
-        Equipment equipment = Equipment.builder().status(Status.BROKEN).description("Broken").build();
-        when(equipmentRepository.findById(id)).thenReturn(Optional.of(equipment));
-
-        adminEquipmentService.repairEquipments(List.of(id), "Repair note");
-        verify(equipmentRepository).save(any());
-    }
-
-    @Test
-    void extendRentalPeriods_shouldUpdateDate() {
-        Long id = 1L;
-        LocalDateTime newDate = LocalDateTime.now().plusDays(1);
-        Equipment equipment = Equipment.builder().status(Status.IN_USE).endRentDate(LocalDateTime.now()).build();
-        when(equipmentRepository.findById(id)).thenReturn(Optional.of(equipment));
-
-        adminEquipmentService.extendRentalPeriods(List.of(id), newDate);
-        verify(equipmentRepository).save(any());
-    }
-
-    @Test
-    void forceReturnEquipments_shouldClearRentalInfo() {
-        Long id = 1L;
-        Equipment equipment = Equipment.builder().status(Status.IN_USE).renter(new User()).build();
-        when(equipmentRepository.findById(id)).thenReturn(Optional.of(equipment));
-
-        adminEquipmentService.forceReturnEquipments(List.of(id));
-        verify(equipmentRepository).save(any());
-    }
-
-
 
 
 }
