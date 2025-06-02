@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/admin/equipment-models")
 @RequiredArgsConstructor
-@Tag(name = "장비 모델 어드민 API", description = "어드민 권한으로 장비 모델을 생성, 수정, 삭제하거나 목록을 조회할 수 있는 API입니다.")
+@Tag(name = "4-1. 강의실/장비 관리 / 장비 관리 / 모델", description = "수정 필요")
 public class AdminEquipmentModelController {
 
     private final AdminEquipmentModelService adminEquipmentModelService;

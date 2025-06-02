@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/admin/semester-schedule")
 @RequiredArgsConstructor
-@Tag(name = "수업 시간표 관리 API", description = "수업 시간표 관리 어드민 API")
+@Tag(name = "4-4. 강의실/장비 관리 / 수업 시간표 관리 / 수업 시간표", description = "수정 필요")
 public class AdminSemesterScheduleController {
 
     private final AdminSemesterScheduleService adminSemesterScheduleService;
