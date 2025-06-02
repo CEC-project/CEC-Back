@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin/equipments")
-@Tag(name = "관리자 장비 API", description = "관리자 권한으로 장비 등록, 수정, 삭제, 검색 및 상태 변경 등을 처리하는 API입니다.")
+@Tag(name = "4-1. 강의실/장비 관리 / 장비 관리 / 장비", description = "수정 필요")
 public class AdminEquipmentController {
 
     private final AdminEquipmentService adminEquipmentService;

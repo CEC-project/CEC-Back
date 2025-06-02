@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin/equipments-rental")
-@Tag(name = "장비 대여 관리 API", description = "관리자 권한으로 대여에 관한 항목을 처리하는 API입니다.")
+@Tag(name = "5-1. 대여 신청/반납 관리 / 장비 관리", description = "수정 필요")
 public class AdminEquipmentRentalController {
     private final AdminEquipmentService adminEquipmentService;
     private final AdminEquipmentRentalService adminEquipmentRentalService;
