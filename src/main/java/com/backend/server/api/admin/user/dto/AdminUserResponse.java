@@ -24,7 +24,7 @@ public class AdminUserResponse {
     private String profilePicture;
     private LocalDate birthDate;
     private int rentalCount;
-    private int damageCount;
+    private int brokenCount;
     private int restrictionCount;
     private int reportCount;
     private LocalDateTime createdAt;
@@ -43,7 +43,7 @@ public class AdminUserResponse {
         profilePicture = user.getProfilePicture();
         birthDate = user.getBirthDate();
         rentalCount = user.getRentalCount();
-        damageCount = user.getDamageCount();
+        brokenCount = user.getDamageCount();
         restrictionCount = user.getRestrictionCount();
         reportCount = user.getReportCount();
         createdAt = user.getCreatedAt();
