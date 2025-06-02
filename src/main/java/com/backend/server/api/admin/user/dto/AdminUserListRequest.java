@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @Getter
 @Setter
@@ -15,22 +17,38 @@ import lombok.Setter;
 @Builder
 public class AdminUserListRequest extends AbstractPaginationParam<AdminUserSortType> {
 
+    public enum AdminUserSearchType {
+        NAME, PHONE_NUMBER, STUDENT_NUMBER, NICKNAME, ALL
+    }
+
+    public enum Gender {
+        M, F
+    }
+
     @Schema(description = "검색 키워드", example = "홍길동", nullable = true)
     private String searchKeyword;
 
-    @Schema(description = "검색 유형 (0: 이름, 1: 전화번호, 2: 학번, 3: 닉네임, 4 또는 생략: 전체)", example = "0", nullable = true)
-    private Integer searchType;
+    @Schema(description = "검색 유형 : 생략시 ALL", implementation = AdminUserSearchType.class)
+    private AdminUserSearchType searchType;
 
-    @Schema(description = "학년 (1, 2, 3, 4 중 하나)", example = "2", nullable = true)
+    @Schema(description = "학년 (1, 2, 3, 4 중 하나)", example = "2", nullable = true, implementation = Integer.class)
     private Integer grade;
 
-    @Schema(description = "성별 ('남' 또는 '여')", example = "남", nullable = true)
-    private String gender;
+    @Schema(description = "성별 M/F", implementation = Gender.class)
+    private Gender gender;
 
-    @Schema(description = "교수 ID (professor 테이블의 PK)", example = "102", nullable = true)
+    @Schema(description = "교수 ID (professor 테이블의 PK)", implementation = Integer.class)
     private Long professorId;
 
-    public Integer getSearchType() {
-        return searchType == null ? 4 : searchType;
+    @Schema(description = "정렬 기준", implementation = AdminUserSortType.class)
+    private AdminUserSortType sortBy;
+
+    public AdminUserSearchType getSearchType() {
+        return searchType == null ? AdminUserSearchType.ALL : searchType;
+    }
+
+    @Override
+    public Pageable toPageable() {
+        return PageRequest.of(page, size, direction, getSortBy().getField());
     }
 }

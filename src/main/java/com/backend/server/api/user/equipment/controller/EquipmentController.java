@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 
-@Tag(name = "장비 관리", description = "사용자 장비 조회, 대여, 반납 기능을 제공하는 API입니다.")
+@Tag(name = "1-3. 대여 신청 / 장비", description = "수정 필요")
 @RestController
 @RequestMapping("/api/user/equipments")
 @RequiredArgsConstructor

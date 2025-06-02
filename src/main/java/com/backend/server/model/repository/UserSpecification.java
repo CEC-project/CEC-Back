@@ -61,11 +61,11 @@ public class UserSpecification {
         Predicate all = cb.or(name, phoneNumber, studentNumber, nickname);
 
         switch (request.getSearchType()) {
-            case 0 -> predicate = cb.and(predicate, name);
-            case 1 -> predicate = cb.and(predicate, phoneNumber);
-            case 2 -> predicate = cb.and(predicate, studentNumber);
-            case 3 -> predicate = cb.and(predicate, nickname);
-            case 4 -> predicate = cb.and(predicate, all);
+            case NAME -> predicate = cb.and(predicate, name);
+            case PHONE_NUMBER -> predicate = cb.and(predicate, phoneNumber);
+            case STUDENT_NUMBER -> predicate = cb.and(predicate, studentNumber);
+            case NICKNAME -> predicate = cb.and(predicate, nickname);
+            case ALL -> predicate = cb.and(predicate, all);
         }
 
         // 필터링 합니다.
@@ -73,7 +73,7 @@ public class UserSpecification {
             predicate = cb.and(predicate, cb.equal(root.get("grade"), request.getGrade()));
 
         if (request.getGender() != null)
-            predicate = cb.and(predicate, cb.equal(root.get("gender"), request.getGender()));
+            predicate = cb.and(predicate, cb.equal(root.get("gender"), request.getGender().name()));
 
         if (request.getProfessorId() != null)
             predicate = cb.and(predicate, cb.equal(

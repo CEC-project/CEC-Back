@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/admin/rental-restriction")
 @RequiredArgsConstructor
-@Tag(name = "제재 관리 API", description = "제재 관리 어드민 API")
+@Tag(name = "2-1. 사용자 관리 / 제재 목록", description = "수정 필요")
 public class AdminRentalRestrictionController {
 
     private final AdminRentalRestrictionService rentalRestrictionService;
