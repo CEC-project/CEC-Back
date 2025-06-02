@@ -56,12 +56,6 @@ public class AdminEquipmentCategoryController {
 
     //====================================================유저에서 가져옴====================================================
 
-//    @Operation(summary = "전체 카테고리 조회", description = "모든 장비 카테고리를 조회합니다.")
-//    @GetMapping
-//    public ApiResponse<List<EquipmentCategoryResponse>> getAllCategories() {
-//        return ApiResponse.success("전체 카테고리 조회 성공", equipmentCategoryService.getAllCategories());
-//    }
-
     @Operation(summary = "카테고리 상세 조회", description = "특정 ID의 장비 카테고리를 조회합니다.")
     @GetMapping("/{id}")
     public ApiResponse<EquipmentCategoryResponse> getCategoryById(

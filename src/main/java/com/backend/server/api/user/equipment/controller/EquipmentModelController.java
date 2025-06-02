@@ -38,17 +38,7 @@ public class EquipmentModelController {
 
     @GetMapping("/{id}")
     @Operation(
-            summary = "장비 모델 단일 조회",
-            description = """
-            지정한 ID에 해당하는 장비 모델의 상세 정보를 조회합니다.
-            
-            반환 항목:
-            - 아이디
-            - 모델명
-            - 영문 코드
-            - 사용 가능 여부
-            - 카테고리 아이디
-            """
+            summary = "장비 모델 단일 조회"
             )
     public ApiResponse<EquipmentModelResponse> getModel(
             @Parameter(description = "조회할 장비 모델의 고유 ID", example = "1")
