@@ -40,11 +40,15 @@ public class AdminUserListRequest extends AbstractPaginationParam<AdminUserSortT
     @Schema(description = "교수 ID (professor 테이블의 PK)", implementation = Integer.class)
     private Long professorId;
 
-    @Schema(description = "정렬 기준", implementation = AdminUserSortType.class)
+    @Schema(description = "정렬 기준 (기본값 ID)", implementation = AdminUserSortType.class)
     private AdminUserSortType sortBy;
 
     public AdminUserSearchType getSearchType() {
         return searchType == null ? AdminUserSearchType.ALL : searchType;
+    }
+
+    public AdminUserSortType getSortBy() {
+        return sortBy == null ? AdminUserSortType.ID : sortBy;
     }
 
     @Override
