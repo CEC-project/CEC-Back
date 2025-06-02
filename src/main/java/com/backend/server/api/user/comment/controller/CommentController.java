@@ -12,7 +12,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "댓글", description = "댓글 API")
+@Tag(name = "2. 게시판 / 댓글", description = "수정 필요")
 @RestController
 @RequestMapping("/api/comments")
 @RequiredArgsConstructor
