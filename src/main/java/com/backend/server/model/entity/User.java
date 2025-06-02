@@ -1,6 +1,7 @@
 package com.backend.server.model.entity;
 
 import com.backend.server.api.admin.user.dto.AdminUserRequest;
+import com.backend.server.model.entity.enums.Gender;
 import jakarta.persistence.*;
 import java.util.*;
 import lombok.*;
@@ -43,7 +44,8 @@ public class User extends BaseTimeEntity {
     private String group;
 
     @Column(nullable = false)
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Column(nullable = false)
     private String phoneNumber;
@@ -64,7 +66,7 @@ public class User extends BaseTimeEntity {
     private int rentalCount;
 
     @Column
-    private int damageCount;
+    private int brokenCount;
 
     @Column
     private int restrictionCount;
@@ -97,7 +99,7 @@ public class User extends BaseTimeEntity {
         this.nickname = request.getNickname();
         this.studentNumber = request.getStudentNumber();
         this.grade = request.getGrade();
-        this.gender = request.getGender().name();
+        this.gender = request.getGender();
         this.phoneNumber = request.getPhoneNumber();
         this.professor = professor;
         this.birthDate = request.parseBirthday();

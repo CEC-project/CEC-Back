@@ -109,7 +109,7 @@ public class AdminEquipmentRentalService {
         EquipmentBrokenHistory history = EquipmentBrokenHistory.builder()
                 .equipment(equipment)
                 .brokenBy(equipment.getRenter())
-                .brokenType(BrokenType.RETURN_DAMAGED)
+                .brokenType(BrokenType.RETURN_BROKEN)
                 .brokenDetail(detail)
                 .build();
 

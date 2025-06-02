@@ -33,14 +33,14 @@ public class AdminRentalRestrictionController {
     대여 제한 등록 요청
     
     - type: 제한 종류 (필수) (EQUIPMENT, CLASSROOM)
-    - reason: 제한 사유 (필수) (OVERDUE, DAMAGED, LOST)
+    - reason: 제한 사유 (필수) (OVERDUE, BROKEN, LOST)
     - duration: 제한 기간 (양수, 단위: 일)
     
     모든 필드는 필수이며, duration은 1 이상의 정수여야 합니다.
     """)
-    @PostMapping("/{userId}")
+    @PostMapping("/user/{id}")
     public ApiResponse<Long> createRentalRestriction(
-            @PathVariable Long userId,
+            @PathVariable("id") Long userId,
             @Valid @RequestBody AdminRentalRestrictionRequest request) {
         Long id = rentalRestrictionService.addRentalRestriction(userId, request);
         return ApiResponse.success("제재 등록 성공", id);
@@ -62,7 +62,7 @@ public class AdminRentalRestrictionController {
     - grade: 학년 (1~4 또는 미지정)
     - gender: 성별 ('남' 또는 '여')
     - type: 제한 종류 (EQUIPMENT, CLASSROOM)
-    - reason: 제한 사유 (OVERDUE, DAMAGED, LOST)
+    - reason: 제한 사유 (OVERDUE, BROKEN, LOST)
     - professorId: 담당 교수 ID
     
     페이징 및 정렬:
@@ -87,7 +87,7 @@ public class AdminRentalRestrictionController {
     - grade: 학년 (1~4 또는 미지정)
     - gender: 성별 ('남' 또는 '여')
     - type: 제한 종류 (EQUIPMENT, CLASSROOM)
-    - reason: 제한 사유 (OVERDUE, DAMAGED, LOST)
+    - reason: 제한 사유 (OVERDUE, BROKEN, LOST)
     - professorId: 담당 교수 ID
     
     페이징 및 정렬:
@@ -96,7 +96,7 @@ public class AdminRentalRestrictionController {
     - sortBy: 정렬 기준 (NAME, STUDENT_NUMBER, RESTRICTION_COUNT, RESTRICTION_START_TIME, RESTRICTION_END_TIME)
     - direction: 정렬 방향 (ASC 또는 DESC)
     """)
-    @GetMapping("/allowed-user")
+    @GetMapping("/not-restricted-user")
     public ApiResponse<AdminUserListResponse> getAllowedUsers(
             @ParameterObject AdminRentalRestrictionListRequest request) {
         AdminUserListResponse result = rentalRestrictionService.getAllowedUsers(request);

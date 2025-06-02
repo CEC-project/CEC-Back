@@ -1,6 +1,6 @@
 -- 아래 계정들의 비밀번호는 asdf1234! 임
 
-insert into public.users (birth_date, damage_count, grade, rental_count, report_count, restriction_count, created_at,
+insert into public.users (birth_date, broken_count, grade, rental_count, report_count, restriction_count, created_at,
                           professor_id, updated_at, department, email, gender, "group", major, name, nickname,
                           password, phone_number, profile_picture, role, student_number)
 values  ('2001-03-15', 0, 3, 5, 2, 1,

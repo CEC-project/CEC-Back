@@ -1,5 +1,6 @@
 package com.backend.server.api.admin.user.service;
 
+import com.backend.server.model.entity.enums.Gender;
 import com.backend.server.model.entity.enums.Role;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.UserRepository;
@@ -117,7 +118,7 @@ public class AdminImportExcelService {
                     userBuilder.nickname(name); // 닉네임은 이름으로 설정
                     
                     if (gradeIndex != null) userBuilder.grade(Integer.parseInt(getCellValue(row.getCell(gradeIndex))));
-                    if (genderIndex != null) userBuilder.gender(getCellValue(row.getCell(genderIndex)));
+                    if (genderIndex != null) userBuilder.gender(Gender.fromKorean(getCellValue(row.getCell(genderIndex))));
                     // if (professorIndex != null) userBuilder.professor(getCellValue(row.getCell(professorIndex)));
                     if (phoneIndex != null) userBuilder.phoneNumber(getCellValue(row.getCell(phoneIndex)));
                     if (emailIndex != null) userBuilder.email(getCellValue(row.getCell(emailIndex)));

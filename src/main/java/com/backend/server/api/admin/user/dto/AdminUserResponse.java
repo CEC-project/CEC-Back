@@ -2,6 +2,7 @@ package com.backend.server.api.admin.user.dto;
 
 import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.User;
+import com.backend.server.model.entity.enums.Gender;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ public class AdminUserResponse {
     private String studentNumber;
     private String nickname;
     private Integer year;
-    private String gender;
+    private Gender gender;
     private String professor;
     private String phoneNumber;
     private String email;
@@ -43,7 +44,7 @@ public class AdminUserResponse {
         profilePicture = user.getProfilePicture();
         birthDate = user.getBirthDate();
         rentalCount = user.getRentalCount();
-        brokenCount = user.getDamageCount();
+        brokenCount = user.getBrokenCount();
         restrictionCount = user.getRestrictionCount();
         reportCount = user.getReportCount();
         createdAt = user.getCreatedAt();
