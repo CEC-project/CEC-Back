@@ -28,26 +28,23 @@ public class AdminUserListRequest extends AbstractPaginationParam<AdminUserSortT
     @Schema(description = "검색 키워드", example = "홍길동", nullable = true)
     private String searchKeyword;
 
-    @Schema(description = "검색 유형 NAME, PHONE_NUMBER, STUDENT_NUMBER, NICKNAME, ALL", example = "ALL", nullable = true)
+    @Schema(description = "검색 유형 : 생략시 ALL", implementation = AdminUserSearchType.class)
     private AdminUserSearchType searchType;
 
     @Schema(description = "학년 (1, 2, 3, 4 중 하나)", example = "2", nullable = true, implementation = Integer.class)
     private Integer grade;
 
-    @Schema(description = "성별 M/F", nullable = true)
+    @Schema(description = "성별 M/F", implementation = Gender.class)
     private Gender gender;
 
-    @Schema(description = "교수 ID (professor 테이블의 PK)", example = "102", nullable = true)
+    @Schema(description = "교수 ID (professor 테이블의 PK)", implementation = Integer.class)
     private Long professorId;
+
+    @Schema(description = "정렬 기준", implementation = AdminUserSortType.class)
+    private AdminUserSortType sortBy;
 
     public AdminUserSearchType getSearchType() {
         return searchType == null ? AdminUserSearchType.ALL : searchType;
-    }
-
-    @Override
-    @Schema(implementation = AdminUserSortType.class)
-    public AdminUserSortType getSortBy() {
-        return sortBy == null ? AdminUserSortType.getDefault() : sortBy;
     }
 
     @Override

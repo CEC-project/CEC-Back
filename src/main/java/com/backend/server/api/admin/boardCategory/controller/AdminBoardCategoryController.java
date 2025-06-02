@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/admin/board-category")
 @RequiredArgsConstructor
-@Tag(name = "1-2. 카테고리 관리 / 게시글 유형 관리", description = "수정 필요")
+@Tag(name = "1-2. 카테고리 관리 / 게시글 유형 관리", description = "작업 완료")
 public class AdminBoardCategoryController {
 
     private final AdminBoardCategoryService adminBoardCategoryService;

@@ -30,31 +30,7 @@ public class AdminUserController {
 
     private final AdminUserService adminUserService;
 
-    @Operation(
-            summary = "사용자 목록 조회",
-            description = """
-    관리자 페이지에서 사용자 목록을 검색, 필터링, 정렬, 페이징 조건에 따라 조회합니다.
-
-    <b>🔍검색/필터 조건:</b><br>
-    - <code>searchKeyword</code>: 검색 키워드 (아래 searchType 기준에 따라 검색) (생략시 전체 검색)<br>
-    - <code>searchType</code>: 검색 유형 (0: 이름, 1: 전화번호, 2: 학번, 3: 닉네임, 4: 전체) (생략시 전체)<br>
-    - <code>grade</code>: 학년 필터 (1, 2, 3, 4 중 하나 또는 생략)<br>
-    - <code>gender</code>: 성별 필터 ('남', '여' 중 하나 또는 생략)<br>
-    - <code>professorId</code>: 지도 교수 ID (자연수 하나 또는 생략)<br>
-
-    <b>🔃정렬 조건:</b><br>
-    - <code>sortBy</code>: 정렬 기준 (0: 이름(기본값), 1: 학번, 2: 제재 횟수)<br>
-    - <code>sortDirection</code>: 정렬 방향 (asc: 오름차순(기본값), desc: 내림차순)<br>
-
-    <b>📄페이징 조건:</b><br>
-    - <code>page</code>: 페이지 번호 (기본값: 0)<br>
-    - <code>size</code>: 페이지당 항목 수 (기본값: 10)<br>
-    
-    예시1 : /api/admin/user
-    예시2 : /api/admin/user?grade=1
-    예시3 : /api/admin/user?searchType=민
-    """
-    )
+    @Operation(summary = "사용자 목록 조회")
     @GetMapping
     public ApiResponse<AdminUserListResponse> getUsers(@ParameterObject AdminUserListRequest request) {
         return ApiResponse.success("사용자 목록 조회 성공", adminUserService.getUsers(request));
