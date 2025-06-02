@@ -25,6 +25,7 @@ public class AdminClassroomDetailResponse {
     @Schema(example = "16:00", description = "대여 종료 시간", implementation = String.class)
     private final LocalTime endRentTime;
 
+    private final Long managerId;
     private final String managerName;
     private final String status;
     private final String attachment;
@@ -42,6 +43,7 @@ public class AdminClassroomDetailResponse {
         this.attachment = classroom.getAttachment();
         this.requestedTime = classroom.getRequestedTime();
         this.managerName = manager != null ? manager.getName() : null;
+        this.managerId = manager != null ? manager.getId() : null;
         this.renter = renter != null ? new AdminUserResponse(renter, professor) : null;
     }
 }
