@@ -1,8 +1,8 @@
 package com.backend.server.api.admin.user.dto;
 
-import com.backend.server.api.admin.user.dto.AdminUserListRequest.Gender;
 import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.User;
+import com.backend.server.model.entity.enums.Gender;
 import com.backend.server.model.entity.enums.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
@@ -40,7 +40,7 @@ public class AdminUserRequest {
     public User toEntity(Professor professor, Role role, PasswordEncoder encoder) {
         return User.builder()
                 .grade(grade)
-                .gender(gender.name())
+                .gender(gender)
                 .studentNumber(studentNumber)
                 .name(name)
                 .nickname(nickname)

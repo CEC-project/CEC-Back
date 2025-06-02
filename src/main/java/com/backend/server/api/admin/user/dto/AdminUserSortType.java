@@ -11,7 +11,7 @@ public enum AdminUserSortType implements SortTypeConvertible {
     NAME("name"),
     STUDENT_NUMBER("studentNumber"),
     RENTAL_COUNT("rentalCount"),
-    BROKEN_COUNT("damageCount"),
+    BROKEN_COUNT("brokenCount"),
     RESTRICTION_COUNT("restrictionCount"),
     REPORT_COUNT("reportCount");
 

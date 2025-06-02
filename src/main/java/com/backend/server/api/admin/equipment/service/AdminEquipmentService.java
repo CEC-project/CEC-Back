@@ -212,7 +212,7 @@ public class AdminEquipmentService {
         EquipmentBrokenHistory history = EquipmentBrokenHistory.builder()
                 .equipment(equipment)
                 .brokenBy(user)
-                .brokenType(BrokenType.ADMIN_DAMAGED)
+                .brokenType(BrokenType.ADMIN_BROKEN)
                 .brokenDetail(detail)
                 .build();
 

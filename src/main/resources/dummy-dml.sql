@@ -1,6 +1,6 @@
 -- 아래 계정들의 비밀번호는 asdf1234! 임
 
-insert into users (birth_date, damage_count, grade, rental_count, report_count, restriction_count, created_at,
+insert into users (birth_date, broken_count, grade, rental_count, report_count, restriction_count, created_at,
                           professor_id, updated_at, department, email, gender, "group", major, name, nickname,
                           password, phone_number, profile_picture, role, student_number)
 values  ('2001-03-15', 0, 3, 5, 2, 1,
@@ -188,7 +188,7 @@ values
     (2, 3, now(), now(), null, 'ANSWERED', '문의2', 'RETURN', '문의내용2'),
     (3, 3, now(), now(), null, 'WAITING', '문의3', 'ETC', '문의내용3'),
     (4, 2, now(), now(), null, 'WAITING', '로그인이 안돼요', 'SYSTEM_ERROR', '로그인 시도 시 계속 실패합니다. 원인을 모르겠어요.'),
-    (5, 4, now(), now(), null, 'WAITING', '비밀번호 변경 문의', 'EQUIPMENT_DAMAGE', '비밀번호 변경 이메일이 오지 않습니다.'),
+    (5, 4, now(), now(), null, 'WAITING', '비밀번호 변경 문의', 'EQUIPMENT_BROKEN', '비밀번호 변경 이메일이 오지 않습니다.'),
     (6, 1, now(), now(), null, 'WAITING', '기능 제안', 'PENALTY', '장비 대여 시 반납 알림 기능이 있었으면 좋겠습니다.');
 
 -- 문의 답변
@@ -203,6 +203,6 @@ values
 insert into rental_restriction (created_at, end_at, updated_at, user_id, reason, type)
 values
     (now(), now() + (random() * interval '5 days'), now(), 5, 'OVERDUE', 'EQUIPMENT'),
-    (now(), now() + (random() * interval '5 days'), now(), 6, 'DAMAGED', 'EQUIPMENT'),
-    (now(), now() + (random() * interval '5 days'), now(), 7, 'DAMAGED', 'CLASSROOM'),
+    (now(), now() + (random() * interval '5 days'), now(), 6, 'BROKEN', 'EQUIPMENT'),
+    (now(), now() + (random() * interval '5 days'), now(), 7, 'BROKEN', 'CLASSROOM'),
     (now(), now() + (random() * interval '5 days'), now(), 8, 'LOST', 'CLASSROOM');
