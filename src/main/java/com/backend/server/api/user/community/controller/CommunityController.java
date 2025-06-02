@@ -40,12 +40,12 @@ public class CommunityController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{postId}")
+    @GetMapping("/{id}")
     public ResponseEntity<CommunityResponse> getCommunityPostById(
-        @PathVariable Long postId,
+        @PathVariable Long id,
         @AuthenticationPrincipal LoginUser loginuser
     ) {
-        CommunityResponse response = communityService.getPostById(postId, loginuser);
+        CommunityResponse response = communityService.getPostById(id, loginuser);
         return ResponseEntity.ok(response);
     }
 
@@ -59,9 +59,9 @@ public class CommunityController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/{postId}")
+    @PutMapping("/{id}")
     public ResponseEntity<CommunityResponse> updateCommunityPost(
-        @PathVariable Long postId,
+        @PathVariable Long id,
         @RequestBody UpdatePostRequest request,
         @AuthenticationPrincipal LoginUser loginuser
     ) {
@@ -72,26 +72,26 @@ public class CommunityController {
             .typeId(request.getCommunityTypeId())
             .build();
 
-        CommunityResponse response = communityService.updatePost(postId, communityDetailsToUpdate, loginuser);
+        CommunityResponse response = communityService.updatePost(id, communityDetailsToUpdate, loginuser);
 
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{postId}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCommunityPost(
-        @PathVariable Long postId,
+        @PathVariable Long id,
         @AuthenticationPrincipal LoginUser loginuser
     ) {
-        communityService.deletePost(postId, loginuser);
+        communityService.deletePost(id, loginuser);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{postId}/recommend")
+    @PostMapping("/{id}/recommend")
     public ResponseEntity<CommunityResponse> recommendCommunityPost(
-        @PathVariable Long postId,
+        @PathVariable Long id,
         @AuthenticationPrincipal LoginUser loginuser
     ) {
-        CommunityResponse response = communityService.recommendPost(postId, loginuser);
+        CommunityResponse response = communityService.recommendPost(id, loginuser);
         return ResponseEntity.ok(response);
     }
 }
