@@ -36,7 +36,7 @@ public class EquipmentController {
 
     @GetMapping
     @Operation(
-            summary = "장비 목록 조회 (내가 대여한 장비 목록 보기 이걸로 가능)"
+            summary = "장비 목록 조회"
     )
     public ApiResponse<EquipmentListResponse> getEquipments(
             @ParameterObject @ModelAttribute EquipmentListRequest request,
@@ -65,7 +65,8 @@ public class EquipmentController {
     }
 
     @PatchMapping("/action/{actionType}")
-    @Operation(summary = "장비 상태 변경 요청 (대여/반납 요청 및 취소)")
+    @Operation(summary = "장비 상태 변경 요청 (대여/반납 요청 및 취소)",description = "날짜는 대여 요청 시에만 필요")
+
     public ApiResponse<Void> handleEquipmentAction(
             @Parameter(description = "RENT_REQUEST, RENT_CANCEL, RETURN_REQUEST, RETURN_CANCEL")
             @PathVariable EquipmentAction actionType,
