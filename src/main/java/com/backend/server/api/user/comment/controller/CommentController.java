@@ -21,20 +21,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @Operation(
-            summary = "댓글 작성",
-            description = """
-                새로운 댓글을 작성합니다.
-                
-                **댓글 타입:**
-                - NOTICE: 공지사항 댓글
-                - BOARD: 게시판 댓글
-                - INQUIRY: 문의 댓글
-                
-                **대댓글 작성:**
-                - parentCommentId에 부모 댓글 ID를 넣으면 대댓글로 작성됩니다.
-                
-                **예시 URL:** http://localhost:8080/api/comments
-                """
+            summary = "댓글 작성"
     )
     @PostMapping
     public ApiResponse<Long> createComment(
@@ -44,25 +31,7 @@ public class CommentController {
     }
 
     @Operation(
-            summary = "댓글 목록 조회",
-            description = """
-                특정 대상(공지사항, 게시글 등)의 댓글 목록을 조회합니다.
-                
-                **필수 파라미터:**
-                - type: 댓글 대상 타입 (NOTICE, BOARD, INQUIRY)
-                - targetId: 댓글 대상 ID
-                
-                **페이징 파라미터:**
-                - page: 페이지 번호 (0부터 시작, 기본값: 0)
-                - size: 한 페이지에 보여줄 개수 (기본값: 10)
-                - sortBy: 정렬 기준 (ID, 기본값: ID)
-                - direction: 정렬 방향 (ASC, DESC, 기본값: ASC)
-                
-                **예시 URL:**
-                - 기본 조회: http://localhost:8080/api/comments?type=NOTICE&targetId=1
-                - 페이징 조회: http://localhost:8080/api/comments?type=NOTICE&targetId=1&page=0&size=10
-                - 정렬 조회: http://localhost:8080/api/comments?type=NOTICE&targetId=1&sortBy=ID&direction=DESC
-                """
+            summary = "댓글 목록 조회"
     )
     @GetMapping
     public ApiResponse<CommentListResponse> getComments(

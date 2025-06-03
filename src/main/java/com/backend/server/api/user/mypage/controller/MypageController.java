@@ -16,13 +16,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/mypage")
 @RequiredArgsConstructor
-@Tag(name = "3-1. 유저 프로필 / 내 정보 수정", description = "수정 필요")
+@Tag(name = "3-1. 유저 프로필 / 내 정보 수정", description = "수정 완")
 public class MypageController {
     private final MyInfoService myinfoService;
     //내정보조회
     @Operation(
-            summary = "내 정보 조회",
-            description = "현재 로그인된 사용자의 정보를 반환합니다."
+            summary = "내 정보 조회"
     )
     @GetMapping
     public ApiResponse<MyInfoResponse> getMyInfo(@AuthenticationPrincipal LoginUser loginUser) {
@@ -30,13 +29,7 @@ public class MypageController {
     }
 
     @Operation(
-            summary = "내 정보 수정",
-            description = "이름, 휴대폰 번호, 닉네임, 비밀번호, 프로필 이미지를 수정합니다.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "수정할 사용자 정보",
-                    required = true,
-                    content = @Content(schema = @Schema(implementation = MyInfoRequest.class))
-            )
+            summary = "내 정보 수정"
     )
     @PutMapping
     public ApiResponse<MyInfoResponse> updateMyInfo(@RequestBody MyInfoRequest request, @AuthenticationPrincipal LoginUser loginUser) {

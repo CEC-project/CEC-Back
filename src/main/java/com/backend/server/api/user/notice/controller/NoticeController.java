@@ -25,27 +25,7 @@ public class NoticeController {
   private final NoticeService noticeService;
 
   @Operation(
-      summary = "공지사항 목록 조회",
-      description = """
-          다양한 검색, 정렬, 필터 조건으로 공지사항 목록을 조회합니다.
-          
-          **검색 파라미터:**
-          - adminNoticeSearchType: 검색 기준 (TITLE, CONTENT, ALL)
-          - searchKeyword: 검색어
-          
-          **정렬 파라미터:**
-          - sortBy: 정렬 기준 (ID, CREATED_AT 등)
-          - direction: 정렬 방향 (ASC, DESC)
-          
-          **페이징 파라미터:**
-          - page: 페이지 번호 (0부터 시작)
-          - size: 한 페이지에 보여줄 개수
-          
-          **예시 URL:**
-          - 기본 조회: http://localhost:8080/api/admin/notices
-          - 검색 조회: http://localhost:8080/api/admin/notices?adminNoticeSearchType=TITLE&searchKeyword=기말고사
-          - 정렬 및 페이징: http://localhost:8080/api/admin/notices?page=0&size=10&sortBy=ID&direction=DESC
-          """
+      summary = "공지사항 목록 조회"
   )
   @GetMapping
   public ApiResponse<NoticeListResponse> getNotices(
@@ -56,12 +36,7 @@ public class NoticeController {
   }
 
   @Operation(
-      summary = "공지사항 상세조회",
-      description = """
-          공지사항 ID를 이용하여 공지사항의 상세 정보를 조회합니다.
-          
-          예시 URL: http://localhost:8080/api/admin/notices/1
-          """
+      summary = "공지사항 단일조회"
   )
   @GetMapping("{id}")
   public ApiResponse<NoticeResponse> getNotice(
