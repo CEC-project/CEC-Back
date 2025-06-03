@@ -8,25 +8,24 @@ import java.time.LocalDateTime;
 
 @Getter
 public class CommunityResponse {
-    private Long id;
-    private String title;
-    private Long community_type_id;
-    private int recommand;
-    private int view;
-    private String type;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private final Long id;
+    private final String title;
+    private final Long community_type_id;
+    private final int recommend;
+    private final int view;
+    private final String type;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
-    private Long authorId;
-    private String authorName;
-    private String authorNickname;
-    private String authorProfilePicture;
+    private final Long authorId;
+    private final String authorName;
+    private final String authorNickname;
+    private final String authorProfilePicture;
 
     public CommunityResponse(Community community, LoginUser loginuser) {
         this.id = community.getId();
         this.title = community.getTitle();
-        this.authorId = community.getAuthor().getId();
-        this.recommand = community.getRecommand();
+        this.recommend = community.getRecommend();
         this.view = community.getView();
         this.type = community.getType();
         this.community_type_id = community.getTypeId();

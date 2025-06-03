@@ -65,7 +65,7 @@ public class CommunityService {
             .typeId(request.getCommunityTypeId())
             .author(author)
             .nickname(author.getNickname())
-            .recommand(0)
+            .recommend(0)
             .view(0)
             .build();
 
@@ -155,31 +155,6 @@ public class CommunityService {
     }
 
     /**
-     * 관리자 권한으로 특정 커뮤니티 게시글을 수정합니다.
-     * 작성자 권한 확인 없이 수정합니다. (관리자 접근 권한은 상위 레이어에서 확인 필요)
-     *
-     * @param postId 수정할 게시글의 ID
-     * @param updatedCommunityDetails 업데이트할 내용을 담은 Community 엔티티
-     * @return 수정된 게시글 정보가 담긴 CommunityResponse DTO
-     */
-    @Transactional // 쓰기 작업이므로 트랜잭션 적용
-    public CommunityResponse adminUpdatePost(Long postId, Community updatedCommunityDetails) {
-         Community existingCommunity = communityRepository.findById(postId)
-             .orElseThrow(() -> new RuntimeException("Post not found with id: " + postId));
-
-        // 관리자는 작성자 권한 체크를 하지 않습니다.
-
-        existingCommunity.setTitle(updatedCommunityDetails.getTitle());
-        existingCommunity.setContent(updatedCommunityDetails.getContent());
-        existingCommunity.setType(updatedCommunityDetails.getType());
-        existingCommunity.setTypeId(updatedCommunityDetails.getTypeId());
-
-        Community updatedCommunity = communityRepository.save(existingCommunity);
-
-        return new CommunityResponse(updatedCommunity, null);
-    }
-
-    /**
      * 사용자 권한으로 특정 커뮤니티 게시글을 삭제합니다.
      * 게시글 작성자만 삭제할 수 있도록 권한을 확인합니다.
      *
@@ -195,18 +170,6 @@ public class CommunityService {
             throw new RuntimeException("You are not authorized to delete this post.");
         }
 
-        communityRepository.deleteById(postId);
-    }
-
-    /**
-     * 관리자 권한으로 특정 커뮤니티 게시글을 삭제합니다.
-     * 작성자 권한 확인 없이 삭제합니다. (관리자 접근 권한은 상위 레이어에서 확인 필요)
-     *
-     * @param postId 삭제할 게시글의 ID
-     */
-    @Transactional // 쓰기 작업이므로 트랜잭션 적용
-    public void adminDeletePost(Long postId) {
-        // 관리자는 작성자 권한 체크를 하지 않습니다.
         communityRepository.deleteById(postId);
     }
 
@@ -234,7 +197,7 @@ public class CommunityService {
 
         recommendationRepository.save(recommendation);
 
-        community.setRecommand(community.getRecommand() + 1);
+        community.setRecommend(community.getRecommend() + 1);
         Community updatedCommunity = communityRepository.save(community);
 
         return new CommunityResponse(updatedCommunity, loginuser);
