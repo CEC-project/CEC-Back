@@ -30,7 +30,7 @@ public class CommentListRequest extends AbstractPaginationParam {
         this.page = Math.max(page, 0);
         this.size = Math.max(size, 10);
         this.sortBy = sortBy == null ? CommentSortType.ID : sortBy;
-        this.direction = direction == null ? Sort.Direction.ASC : direction;
+        this.sortDirection = direction == null ? Sort.Direction.ASC : direction;
     }
 
     public Pageable toPageable() {

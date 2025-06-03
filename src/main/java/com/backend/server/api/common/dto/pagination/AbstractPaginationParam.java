@@ -22,7 +22,7 @@ public abstract class AbstractPaginationParam {
     protected Integer size;
 
     @Schema(description = "정렬 방법", implementation = Sort.Direction.class)
-    protected Sort.Direction direction = Sort.Direction.ASC;
+    protected Sort.Direction sortDirection = Sort.Direction.ASC;
 
     public AbstractPaginationParam() {
         page = 0;
@@ -30,6 +30,6 @@ public abstract class AbstractPaginationParam {
     }
 
     public <T extends Enum<T> & SortTypeConvertible> Pageable toPageable(T sortBy) {
-        return PageRequest.of(page, size, direction, sortBy.getField());
+        return PageRequest.of(page, size, sortDirection, sortBy.getField());
     }
 }
