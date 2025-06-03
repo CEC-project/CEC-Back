@@ -36,10 +36,7 @@ public class AdminYearScheduleController {
     }
 
     @Operation(
-            summary = "연간 일정 등록 API",
-            description = """
-        ⚠️ 공휴일이면 classroomId, startAt, endAt 은 요청에 아예 보내지 않는걸 권장합니다. 에러가 날수 있습니다.
-        """)
+            summary = "연간 일정 등록 API")
     @PostMapping
     public ApiResponse<Long> createYearSchedule(@Valid @RequestBody AdminYearScheduleRequest request) {
         Long id = adminYearScheduleService.createYearSchedule(request);

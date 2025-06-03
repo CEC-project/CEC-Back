@@ -51,7 +51,7 @@ public class AdminEquipmentController {
     @Operation(
             summary = "시리얼 넘버 미리보기 생성"
     )
-    public ApiResponse<String> getSerialNumber(@ModelAttribute AdminEquipmentSerialNumberGenerateRequest request) {
+    public ApiResponse<String> getSerialNumber(@ParameterObject AdminEquipmentSerialNumberGenerateRequest request) {
         return ApiResponse.success("시리얼넘버 보여주기 성공", adminEquipmentService.generateSerialNumber(request));
     }
 

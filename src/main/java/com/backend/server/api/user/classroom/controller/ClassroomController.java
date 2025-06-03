@@ -50,9 +50,9 @@ public class ClassroomController {
     }
 
     @Operation(summary = "강의실 대여 신청")
-    @PatchMapping("/{classroomId}/rental")
+    @PatchMapping("/{id}/rental")
     public ApiResponse<Long> rental(
-            @PathVariable Long classroomId,
+            @PathVariable("id") Long classroomId,
             @RequestBody ClassroomRentalRequest request,
             @AuthenticationPrincipal LoginUser loginUser
     ) {
@@ -61,9 +61,9 @@ public class ClassroomController {
     }
 
     @Operation(summary = "강의실 대여 취소")
-    @PatchMapping("/{classroomId}/cancel")
+    @PatchMapping("/{id}/cancel")
     public ApiResponse<Long> cancel(
-            @PathVariable Long classroomId,
+            @PathVariable("id") Long classroomId,
             @AuthenticationPrincipal LoginUser loginUser
     ) {
         Long result = classroomService.cancelRental(loginUser.getId(), classroomId);
