@@ -60,6 +60,7 @@ public class EquipmentCategoryService{
             return new EquipmentCountByCategoryResponse(
                     category.getId(),
                     category.getName(), // 혹시 name 필드 없으면 category.getType() 같은 걸로 바꿔야 함
+                    category.getEnglishCode(),
                     total,
                     available,
                     category.getMaxRentalCount(),
