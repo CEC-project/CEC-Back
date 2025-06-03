@@ -33,5 +33,5 @@ public class BoardCategory extends BaseTimeEntity{
 
     @Builder.Default
     @OneToMany(mappedBy = "boardCategory")
-    private List<Board> posts = new ArrayList<>();
+    private List<Community> posts = new ArrayList<>();
 }

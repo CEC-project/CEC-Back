@@ -1,11 +1,7 @@
 package com.backend.server.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table
@@ -15,32 +11,36 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class Community extends BaseTimeEntity{
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(nullable = false)
-  private String title;
+    @Column(nullable = false)
+    private String title;
 
-  @Column(nullable = false)
-  private String nickname;
+    @Column(nullable = false)
+    private String nickname;
 
-  @ManyToOne
-  @JoinColumn(name = "author_id")
-  private User author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private User author;
 
-  @Column
-  private int recommand;
+    @Column
+    private int recommend;
 
-  @Column
-  private int view;
+    @Column
+    private int view;
 
-  @Column
-  private String type;
+    @Column
+    private String type;
 
-  @Column
-  private Long typeId;
+    @Column
+    private Long typeId;
 
-  @Column(nullable = false, columnDefinition = "TEXT")
-  private String content;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String content;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_category_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private BoardCategory boardCategory;
 }
