@@ -2,6 +2,7 @@ package com.backend.server.api.admin.rentalRestriction.dto;
 
 import com.backend.server.model.entity.RentalRestriction;
 import com.backend.server.model.entity.User;
+import com.backend.server.model.entity.enums.Gender;
 import com.backend.server.model.entity.enums.RestrictionReason;
 import com.backend.server.model.entity.enums.RestrictionType;
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ public class AdminRentalRestrictionResponse {
 
     private final Long id;
     private final Integer grade;
-    private final String gender;
+    private final Gender gender;
     private final String studentNumber;
     private final String name;
 

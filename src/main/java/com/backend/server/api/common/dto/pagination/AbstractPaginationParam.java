@@ -13,7 +13,7 @@ import org.springframework.data.domain.Sort;
  */
 @Getter
 @Setter
-public abstract class AbstractPaginationParam<T extends Enum<T> & SortTypeConvertible> {
+public abstract class AbstractPaginationParam {
 
     @Schema(description = "페이지 번호 (기본값 0)", type = "Integer", example = "0")
     protected Integer page;
@@ -21,18 +21,15 @@ public abstract class AbstractPaginationParam<T extends Enum<T> & SortTypeConver
     @Schema(description = "페이지당 크기 (기본값 = 10)", type = "Integer", example = "10")
     protected Integer size;
 
-    @Schema(description = "정렬 기준")
-    protected T sortBy;
-
     @Schema(description = "정렬 방법", implementation = Sort.Direction.class)
-    protected Sort.Direction direction = Sort.Direction.ASC;
+    protected Sort.Direction sortDirection = Sort.Direction.ASC;
 
     public AbstractPaginationParam() {
         page = 0;
         size = 10;
     }
 
-    public Pageable toPageable() {
-        return PageRequest.of(page, size, direction, sortBy.getField());
+    public <T extends Enum<T> & SortTypeConvertible> Pageable toPageable(T sortBy) {
+        return PageRequest.of(page, size, sortDirection, sortBy.getField());
     }
 }

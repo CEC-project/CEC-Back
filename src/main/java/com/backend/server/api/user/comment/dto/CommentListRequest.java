@@ -4,10 +4,11 @@ import com.backend.server.api.common.dto.pagination.AbstractPaginationParam;
 import com.backend.server.model.entity.enums.TargetType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 @Getter
-public class CommentListRequest extends AbstractPaginationParam<CommentSortType> {
+public class CommentListRequest extends AbstractPaginationParam {
     private TargetType type;
     private Long targetId;
 
@@ -29,6 +30,10 @@ public class CommentListRequest extends AbstractPaginationParam<CommentSortType>
         this.page = Math.max(page, 0);
         this.size = Math.max(size, 10);
         this.sortBy = sortBy == null ? CommentSortType.ID : sortBy;
-        this.direction = direction == null ? Sort.Direction.ASC : direction;
+        this.sortDirection = direction == null ? Sort.Direction.ASC : direction;
+    }
+
+    public Pageable toPageable() {
+        return toPageable(sortBy);
     }
 }

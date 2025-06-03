@@ -1,6 +1,7 @@
 package com.backend.server.api.admin.user.dto;
 
 import com.backend.server.api.common.dto.pagination.AbstractPaginationParam;
+import com.backend.server.model.entity.enums.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,14 +16,10 @@ import org.springframework.data.domain.Pageable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AdminUserListRequest extends AbstractPaginationParam<AdminUserSortType> {
+public class AdminUserListRequest extends AbstractPaginationParam {
 
     public enum AdminUserSearchType {
         NAME, PHONE_NUMBER, STUDENT_NUMBER, NICKNAME, ALL
-    }
-
-    public enum Gender {
-        M, F
     }
 
     @Schema(description = "검색 키워드", example = "홍길동", nullable = true)
@@ -40,15 +37,18 @@ public class AdminUserListRequest extends AbstractPaginationParam<AdminUserSortT
     @Schema(description = "교수 ID (professor 테이블의 PK)", implementation = Integer.class)
     private Long professorId;
 
-    @Schema(description = "정렬 기준", implementation = AdminUserSortType.class)
+    @Schema(description = "정렬 기준 (기본값 ID)", implementation = AdminUserSortType.class)
     private AdminUserSortType sortBy;
 
     public AdminUserSearchType getSearchType() {
         return searchType == null ? AdminUserSearchType.ALL : searchType;
     }
 
-    @Override
+    public AdminUserSortType getSortBy() {
+        return sortBy == null ? AdminUserSortType.ID : sortBy;
+    }
+
     public Pageable toPageable() {
-        return PageRequest.of(page, size, direction, getSortBy().getField());
+        return PageRequest.of(page, size, sortDirection, getSortBy().getField());
     }
 }

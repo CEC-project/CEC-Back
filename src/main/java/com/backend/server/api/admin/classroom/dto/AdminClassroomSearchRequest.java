@@ -38,16 +38,16 @@ public class AdminClassroomSearchRequest {
     @Schema(description = "검색어")
     private String keyword = "";
 
-    @Schema(description = "검색 타입", implementation = SearchType.class)
+    @Schema(description = "검색 타입 (기본값 ALL)", implementation = SearchType.class)
     private SearchType type = SearchType.ALL;
 
-    @Schema(description = "상태 필터", implementation = Status.class)
+    @Schema(description = "상태 필터 (기본값 ALL)", implementation = Status.class)
     private Status status = Status.ALL;
 
-    @Schema(description = "정렬 기준", implementation = SortBy.class)
+    @Schema(description = "정렬 기준 (기본값 REQUESTED_TIME)", implementation = SortBy.class)
     private SortBy sortBy = SortBy.REQUESTED_TIME;
 
-    @Schema(description = "정렬 방향", implementation = SortDirection.class)
+    @Schema(description = "정렬 방향 (기본값 ASC)", implementation = SortDirection.class)
     private SortDirection sortDirection = SortDirection.ASC;
 
     public Sort toSort() {
