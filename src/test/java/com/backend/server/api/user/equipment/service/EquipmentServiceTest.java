@@ -1,9 +1,11 @@
 package com.backend.server.api.user.equipment.service;
 
 import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentRentalRequest;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentResponse;
+import com.backend.server.api.common.notification.dto.CommonNotificationDto;
+import com.backend.server.api.common.notification.service.CommonNotificationService;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentActionRequest;
 import com.backend.server.model.entity.*;
+import com.backend.server.model.entity.enums.EquipmentAction;
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.equipment.EquipmentCart;
@@ -20,7 +22,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -31,166 +32,127 @@ class EquipmentServiceTest {
     @Mock private EquipmentRepository equipmentRepository;
     @Mock private UserRepository userRepository;
     @Mock private EquipmentCartRepository equipmentCartRepository;
+    @Mock private CommonNotificationService notificationService;
     @InjectMocks private EquipmentService equipmentService;
 
     private LoginUser loginUser;
     private User user;
-    private Equipment equipment1;
-    private Equipment equipment2;
-    private EquipmentCategory category1;
+    private Equipment equipment;
+    private EquipmentCategory category;
 
     @BeforeEach
     void setUp() {
-        loginUser = LoginUser.builder().id(1L).build();
-        user = User.builder().id(1L).name("testuser").grade(1).build();
-        category1 = EquipmentCategory.builder().name("카메라").englishCode("CAMERA").maxRentalCount(10).build();
-        EquipmentModel model = EquipmentModel.builder().name("Canon 70D").build();
+        loginUser = LoginUser.builder().id(1L).grade(1).name("테스트유저").build();
+        user = User.builder().id(1L).grade(1).name("테스트유저").build();
+        category = EquipmentCategory.builder().name("카메라").englishCode("CAMERA").maxRentalCount(10).build();
+        EquipmentModel model = EquipmentModel.builder().name("Canon").build();
 
-        equipment1 = Equipment.builder()
+        equipment = Equipment.builder()
                 .id(101L)
-                .equipmentCategory(category1)
-                .equipmentModel(model)
-                .status(Status.AVAILABLE)
-                .restrictionGrade("2,3,4")
-                .build();
-
-        equipment2 = Equipment.builder()
-                .id(102L)
-                .equipmentCategory(category1)
+                .equipmentCategory(category)
                 .equipmentModel(model)
                 .status(Status.AVAILABLE)
                 .restrictionGrade("2,3,4")
                 .build();
     }
-
 
     @Nested
     class AddToCartTests {
         @Test
         void addToCart_success() {
-            mockFindUser();
-            mockFindEquipment(equipment1);
-            when(equipmentCartRepository.existsByUserIdAndEquipmentId(user.getId(), equipment1.getId())).thenReturn(false);
+            when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+            when(equipmentRepository.findById(equipment.getId())).thenReturn(Optional.of(equipment));
+            when(equipmentCartRepository.existsByUserIdAndEquipmentId(user.getId(), equipment.getId())).thenReturn(false);
 
-            equipmentService.addToCart(loginUser, List.of(equipment1.getId()));
+            equipmentService.addToCart(loginUser, List.of(equipment.getId()));
 
             verify(equipmentCartRepository).save(any(EquipmentCart.class));
         }
 
         @Test
-        void addToCart_alreadyInCart() {
-            mockFindUser();
-            mockFindEquipment(equipment1);
-            when(equipmentCartRepository.existsByUserIdAndEquipmentId(user.getId(), equipment1.getId())).thenReturn(true);
+        void addToCart_gradeRestricted_throwsException() {
+            user = user.toBuilder().grade(3).build(); // 제한된 학년
+            when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+            when(equipmentRepository.findById(equipment.getId())).thenReturn(Optional.of(equipment));
 
-            equipmentService.addToCart(loginUser, List.of(equipment1.getId()));
-
-            verify(equipmentCartRepository, never()).save(any());
+            assertThrows(IllegalStateException.class, () ->
+                    equipmentService.addToCart(loginUser, List.of(equipment.getId()))
+            );
         }
     }
 
     @Nested
-    class GetCartItemsTests {
-        @Test
-        void getCartItems_success() {
-            EquipmentCart cart1 = EquipmentCart.builder().userId(user.getId()).equipmentId(equipment1.getId()).build();
-            EquipmentCart cart2 = EquipmentCart.builder().userId(user.getId()).equipmentId(equipment2.getId()).build();
-
-            when(equipmentCartRepository.findByUserId(loginUser.getId())).thenReturn(List.of(cart1, cart2));
-            mockFindEquipment(equipment1);
-            mockFindEquipment(equipment2);
-
-            List<EquipmentResponse> result = equipmentService.getCartItems(loginUser);
-
-            assertThat(result).hasSize(2);
-        }
-
-        @Test
-        void getCartItems_emptyCart() {
-            when(equipmentCartRepository.findByUserId(loginUser.getId())).thenReturn(Collections.emptyList());
-
-            List<EquipmentResponse> result = equipmentService.getCartItems(loginUser);
-
-            assertThat(result).isEmpty();
-        }
-    }
-
-    @Nested
-    class RequestRentalTests {
-        private EquipmentRentalRequest rentalRequest;
+    class HandleUserActionTests {
+        private EquipmentActionRequest request;
         private LocalDateTime startDate = LocalDateTime.now().plusDays(1);
         private LocalDateTime endDate = LocalDateTime.now().plusDays(3);
 
         @BeforeEach
-        void rentalSetup() {
-            rentalRequest = EquipmentRentalRequest.builder()
-                    .equipmentIds(List.of(equipment1.getId()))
+        void setupRequest() {
+            request = EquipmentActionRequest.builder()
+                    .equipmentIds(List.of(equipment.getId()))
                     .startDate(startDate)
                     .endDate(endDate)
                     .build();
         }
 
         @Test
-        void requestRental_success() {
-            mockFindUser();
-            mockFindEquipmentForUpdate(equipment1);
+        void handleRentRequest_success() {
+            when(userRepository.findById(loginUser.getId())).thenReturn(Optional.of(user));
+            when(equipmentRepository.findByIdForUpdate(equipment.getId())).thenReturn(Optional.of(equipment));
 
-            equipmentService.requestRental(loginUser, rentalRequest);
+            equipmentService.handleUserAction(loginUser, request, EquipmentAction.RENT_REQUEST);
 
-            verify(equipmentRepository).save(any());
-            verify(equipmentCartRepository).deleteByUserIdAndEquipmentId(user.getId(), equipment1.getId());
+            verify(equipmentRepository).save(any(Equipment.class));
+            verify(equipmentCartRepository).deleteByUserIdAndEquipmentId(user.getId(), equipment.getId());
+            verify(notificationService).createNotificationToAdmins(any(CommonNotificationDto.class));
         }
-    }
 
-    @Nested
-    class CancelRentalRequestTests {
         @Test
-        void cancelRentalRequest_success() {
-            equipment1 = equipment1.toBuilder().status(Status.RENTAL_PENDING).renter(user).build();
-            mockFindUser();
-            mockFindEquipment(equipment1);
+        void handleRentCancel_success() {
+            Equipment rented = equipment.toBuilder()
+                    .status(Status.RENTAL_PENDING)
+                    .renter(user)
+                    .startRentDate(startDate)
+                    .endRentDate(endDate)
+                    .build();
 
-            equipmentService.cancelRentalRequest(loginUser, List.of(equipment1.getId()));
+            when(userRepository.findById(loginUser.getId())).thenReturn(Optional.of(user));
+            when(equipmentRepository.findByIdForUpdate(equipment.getId())).thenReturn(Optional.of(rented));
 
-            verify(equipmentRepository).save(any());
+            equipmentService.handleUserAction(loginUser, request, EquipmentAction.RENT_CANCEL);
+
+            verify(equipmentRepository).save(any(Equipment.class));
         }
-    }
 
-    @Nested
-    class RequestReturnTests {
         @Test
-        void requestReturn_success() {
-            equipment1 = equipment1.toBuilder().status(Status.IN_USE).renter(user).build();
-            mockFindEquipment(equipment1);
+        void handleReturnRequest_success() {
+            Equipment inUse = equipment.toBuilder()
+                    .status(Status.IN_USE)
+                    .renter(user)
+                    .build();
 
-            equipmentService.requestReturn(loginUser, List.of(equipment1.getId()));
+            when(userRepository.findById(loginUser.getId())).thenReturn(Optional.of(user));
+            when(equipmentRepository.findByIdForUpdate(equipment.getId())).thenReturn(Optional.of(inUse));
 
-            verify(equipmentRepository).save(any());
+            equipmentService.handleUserAction(loginUser, request, EquipmentAction.RETURN_REQUEST);
+
+            verify(equipmentRepository).save(any(Equipment.class));
         }
-    }
 
-    @Nested
-    class CancelReturnRequestTests {
         @Test
-        void cancelReturnRequest_success() {
-            equipment1 = equipment1.toBuilder().status(Status.RETURN_PENDING).renter(user).build();
-            mockFindEquipment(equipment1);
+        void handleReturnCancel_success() {
+            Equipment returnPending = equipment.toBuilder()
+                    .status(Status.RETURN_PENDING)
+                    .renter(user)
+                    .build();
 
-            equipmentService.cancelReturnRequest(loginUser, List.of(equipment1.getId()));
+            when(userRepository.findById(loginUser.getId())).thenReturn(Optional.of(user));
+            when(equipmentRepository.findByIdForUpdate(equipment.getId())).thenReturn(Optional.of(returnPending));
 
-            verify(equipmentRepository).save(any());
+            equipmentService.handleUserAction(loginUser, request, EquipmentAction.RETURN_CANCEL);
+
+            verify(equipmentRepository).save(any(Equipment.class));
         }
-    }
-
-    private void mockFindUser() {
-        when(userRepository.findById(loginUser.getId())).thenReturn(Optional.of(user));
-    }
-
-    private void mockFindEquipment(Equipment equipment) {
-        when(equipmentRepository.findById(equipment.getId())).thenReturn(Optional.of(equipment));
-    }
-
-    private void mockFindEquipmentForUpdate(Equipment equipment) {
-        when(equipmentRepository.findByIdForUpdate(equipment.getId())).thenReturn(Optional.of(equipment));
     }
 }

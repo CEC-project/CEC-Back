@@ -33,7 +33,7 @@ public class EquipmentListRequest implements PageableRequest {
     @Schema(description = "정렬할 필드 (id, createdAt, name 등)", implementation = SortBy.class, example = "id")
     private SortBy sortBy = SortBy.ID;
 
-    @Schema(description = "정렬 방향 (ASC 또는 DESC)", example = "DESC")
+    @Schema(description = "정렬 방향 (ASC 또는 DESC)", example = "DESC", implementation = SortDirection.class)
     private SortDirection sortDirection;
 
     public enum SearchType {

@@ -2,13 +2,12 @@ package com.backend.server.api.user.equipment.service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.service.CommonNotificationService;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentListResponse;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentRentalRequest;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentResponse;
+import com.backend.server.api.user.equipment.dto.equipment.*;
+import com.backend.server.model.entity.enums.EquipmentAction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -26,6 +25,8 @@ import com.backend.server.model.repository.UserRepository;
 import com.backend.server.model.repository.equipment.EquipmentCartRepository;
 
 import lombok.RequiredArgsConstructor;
+
+import static com.backend.server.model.entity.enums.EquipmentAction.RENT_REQUEST;
 
 @Service
 @RequiredArgsConstructor
@@ -102,133 +103,119 @@ public class EquipmentService {
             .toList();
     }
 
-    //장비 대여 요청
+
     @Transactional
-    public void requestRental(LoginUser loginUser, EquipmentRentalRequest request) {
+    public void handleUserAction(LoginUser loginUser, EquipmentActionRequest request, EquipmentAction equipmentAction) {
         User user = userRepository.findById(loginUser.getId())
-            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        BiConsumer<Long, EquipmentActionRequest> operator = switch (equipmentAction) {
+            case RENT_REQUEST -> (id, req) -> handleRentRequest(user, loginUser, id, req);
+            case RENT_CANCEL -> (id, req) -> handleRentCancel(user, id);
+            case RETURN_REQUEST -> (id, req) -> handleReturnRequest(user, id);
+            case RETURN_CANCEL -> (id, req) -> handleReturnCancel(user, id);
+        };
 
         for (Long equipmentId : request.getEquipmentIds()) {
-            Equipment equipment = equipmentRepository.findByIdForUpdate(equipmentId)
+            operator.accept(equipmentId, request);
+        }
+    }
+
+    //대여요청
+    private void handleRentRequest(User user, LoginUser loginUser, Long equipmentId, EquipmentActionRequest request) {
+        Equipment equipment = equipmentRepository.findByIdForUpdate(equipmentId)
                 .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
 
-            // 장비가 대여 가능한 상태인지 확인
-            if (Status.AVAILABLE != equipment.getStatus()) {
-                throw new IllegalStateException("장비가 대여 불가능한 상태입니다: " + equipment.getId());
+        if (equipment.getStatus() != Status.AVAILABLE) {
+            throw new IllegalStateException("장비가 대여 불가능한 상태입니다.");
+        }
+
+        String restriction = equipment.getRestrictionGrade();
+        if (restriction != null) {
+            List<String> restrictedGrades = List.of(restriction.split(","));
+            if (restrictedGrades.contains(String.valueOf(loginUser.getGrade()))) {
+                throw new IllegalStateException("대여 제한 학년입니다.");
             }
-            //대여 제한 학년이면 예외 발생
-            String restriction = equipment.getRestrictionGrade();
-            if (restriction != null) {
-                List<String> restrictedGrades = Arrays.asList(restriction.split(","));
-                if (restrictedGrades.contains(String.valueOf(loginUser.getGrade()))) {
-                    throw new IllegalStateException("대여할 수 없는 유저입니다. (대여 제한 학년): " + equipment.getId());
-                }
-            }
-            
-            Equipment updatedEquipment = equipment.toBuilder()
+        }
+
+        if (request.getStartDate() == null || request.getEndDate() == null) {
+            throw new IllegalArgumentException("대여 요청은 시작일과 종료일이 필요합니다.");
+        }
+
+        Equipment updated = equipment.toBuilder()
                 .status(Status.RENTAL_PENDING)
                 .renter(user)
                 .startRentDate(request.getStartDate())
                 .endRentDate(request.getEndDate())
                 .build();
-            
-            equipmentRepository.save(updatedEquipment);
-            
-            // 장바구니에서 제거
-            equipmentCartRepository.deleteByUserIdAndEquipmentId(user.getId(), equipmentId);
 
-            CommonNotificationDto dto = CommonNotificationDto.builder()
-                    .category("장비")
-                    .title("장비 대여 요청이 있습니다.")
-                    .message(loginUser.getName() + "님의 장비 대여 요청이 있습니다.")
-                    .link("/approval/" + equipmentId)
-                    .build();
+        equipmentRepository.save(updated);
+        equipmentCartRepository.deleteByUserIdAndEquipmentId(user.getId(), equipmentId);
 
-            notificationService.createNotificationToAdmins(dto);
-        }
+        notificationService.createNotificationToAdmins(CommonNotificationDto.builder()
+                .category("장비")
+                .title("장비 대여 요청이 있습니다.")
+                .message(loginUser.getName() + "님의 장비 대여 요청이 있습니다.")
+                .link("/approval/" + equipmentId)
+                .build());
     }
-
-    @Transactional
-    public void cancelRentalRequest(LoginUser loginUser, List<Long> equipmentIds) {
-        User user = userRepository.findById(loginUser.getId())
-            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-        for (Long equipmentId : equipmentIds) {
-            Equipment equipment = equipmentRepository.findById(equipmentId)
+    private void handleRentCancel(User user, Long equipmentId) {
+        Equipment equipment = equipmentRepository.findByIdForUpdate(equipmentId)
                 .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
 
-            // 본인의 대여 요청인지 확인
-            if (!user.getId().equals(equipment.getRenter().getId())) {
-                throw new IllegalStateException("본인의 대여 요청만 취소할 수 있습니다.");
-            }
+        validateOwnership(user, equipment);
 
-            // 대여 요청 상태인지 확인
-            if (Status.RENTAL_PENDING != equipment.getStatus()) {
-                throw new IllegalStateException("대여 요청 상태인 경우에만 취소할 수 있습니다.");
-            }
+        if (equipment.getStatus() != Status.RENTAL_PENDING) {
+            throw new IllegalStateException("대여 요청 상태만 취소할 수 있습니다.");
+        }
 
-            Equipment updatedEquipment = equipment.toBuilder()
+        Equipment updated = equipment.toBuilder()
                 .status(Status.AVAILABLE)
                 .renter(null)
                 .startRentDate(null)
                 .endRentDate(null)
-                .build();   
-
-            equipmentRepository.save(updatedEquipment);
-
-        }
-    }
-
-    @Transactional
-    public void requestReturn(LoginUser loginUser, List<Long> equipmentIds) {
-        for (Long equipmentId : equipmentIds) {
-            Equipment equipment = equipmentRepository.findById(equipmentId)
-                .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
-
-            // 본인의 대여인지 확인
-            if (!loginUser.getId().equals(equipment.getRenter().getId())) {
-                throw new IllegalStateException("본인의 대여만 반납 요청할 수 있습니다.");
-            }
-
-            // 대여 중인 상태인지 확인
-            if (!Status.IN_USE.equals(equipment.getStatus())) {
-                throw new IllegalStateException("대여 중인 상태인 경우에만 반납 요청할 수 있습니다.");
-            }
-
-
-            Equipment updatedEquipment = equipment.toBuilder()
-                .status(Status.AVAILABLE)
                 .build();
-            
-            equipmentRepository.save(updatedEquipment);
-        }
+
+        equipmentRepository.save(updated);
     }
 
-    @Transactional
-    public void cancelReturnRequest(LoginUser loginUser, List<Long> equipmentIds) {
-        for (Long equipmentId : equipmentIds) {
-            Equipment equipment = equipmentRepository.findById(equipmentId)
+    private void handleReturnRequest(User user, Long equipmentId) {
+        Equipment equipment = equipmentRepository.findByIdForUpdate(equipmentId)
                 .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
 
-            // 본인의 대여인지 확인
-            if (!loginUser.getId().equals(equipment.getRenter().getId())) {
-                throw new IllegalStateException("본인의 대여만 반납 요청 취소할 수 있습니다.");
-            }
+        validateOwnership(user, equipment);
 
-            // 반납 요청 상태인지 확인
-            if (!Status.RETURN_PENDING.equals(equipment.getStatus())) {
-                throw new IllegalStateException("반납 요청 상태인 경우에만 취소할 수 있습니다.");
-            }
+        if (equipment.getStatus() != Status.IN_USE) {
+            throw new IllegalStateException("대여 중인 장비만 반납 요청할 수 있습니다.");
+        }
 
-            
-            Equipment updatedEquipment = equipment.toBuilder()
+        Equipment updated = equipment.toBuilder()
+                .status(Status.RETURN_PENDING)
+                .build();
+
+        equipmentRepository.save(updated);
+    }
+
+    private void handleReturnCancel(User user, Long equipmentId) {
+        Equipment equipment = equipmentRepository.findByIdForUpdate(equipmentId)
+                .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
+
+        validateOwnership(user, equipment);
+
+        if (equipment.getStatus() != Status.RETURN_PENDING) {
+            throw new IllegalStateException("반납 요청 상태만 취소할 수 있습니다.");
+        }
+
+        Equipment updated = equipment.toBuilder()
                 .status(Status.IN_USE)
                 .build();
 
-            equipmentRepository.save(updatedEquipment);
-        }
+        equipmentRepository.save(updated);
     }
 
-    // public List<Equipment> getMyRentals(Long userId) {
-    //     return equipmentRepository.findByRenterIdOrderByRequestedAtDesc(userId);
-    // }
+    private void validateOwnership(User user, Equipment equipment) {
+        if (!user.getId().equals(equipment.getRenter().getId())) {
+            throw new IllegalStateException("본인의 장비만 처리할 수 있습니다.");
+        }
+    }
 }
