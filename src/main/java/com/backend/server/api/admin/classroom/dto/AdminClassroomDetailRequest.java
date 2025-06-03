@@ -16,7 +16,7 @@ public class AdminClassroomDetailRequest {
 
     @NotNull
     @Schema(description = "필수")
-    private List<Long> classroomIds;
+    private List<Long> ids;
 
     @NotNull
     @Schema(description = "필수")

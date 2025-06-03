@@ -1,10 +1,8 @@
 package com.backend.server.api.user.equipment.controller;
 
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentListResponse;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentRentalRequest;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentResponse;
+import com.backend.server.api.user.equipment.dto.equipment.*;
 import com.backend.server.api.user.equipment.service.EquipmentService;
+import com.backend.server.model.entity.enums.EquipmentAction;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -38,7 +36,7 @@ public class EquipmentController {
 
     @GetMapping
     @Operation(
-            summary = "장비 목록 조회 (내가 대여한 장비 목록 보기 이걸로 가능)"
+            summary = "장비 목록 조회"
     )
     public ApiResponse<EquipmentListResponse> getEquipments(
             @ParameterObject @ModelAttribute EquipmentListRequest request,
@@ -66,49 +64,16 @@ public class EquipmentController {
         return ApiResponse.success("장바구니 조회 성공", equipmentService.getCartItems(loginUser));
     }
 
-    @PatchMapping("/rental")
-    @Operation(
-            summary = "장비 대여 요청 - 대여 성공시 장바구니에 있는 장비 자동 삭제"
-    )
-    public ApiResponse<Void> requestRental(
-            @RequestBody EquipmentRentalRequest request,
-            @AuthenticationPrincipal LoginUser loginUser) {
-        equipmentService.requestRental(loginUser, request);
-        return ApiResponse.success("대여 요청 성공", null);
+    @PatchMapping("/action/{actionType}")
+    @Operation(summary = "장비 상태 변경 요청 (대여/반납 요청 및 취소)",description = "날짜는 대여 요청 시에만 필요")
+
+    public ApiResponse<Void> handleEquipmentAction(
+            @Parameter(description = "RENT_REQUEST, RENT_CANCEL, RETURN_REQUEST, RETURN_CANCEL")
+            @PathVariable EquipmentAction actionType,
+            @RequestBody EquipmentActionRequest request,
+            @AuthenticationPrincipal LoginUser loginUser
+    ) {
+        equipmentService.handleUserAction(loginUser, request, actionType);
+        return ApiResponse.success("장비 처리 완료", null);
     }
-
-    @PatchMapping("/rental/cancel")
-    @Operation(
-            summary = "장비 대여 요청 취소"
-            )
-    public ApiResponse<Void> cancelRentalRequest(
-            @RequestBody List<Long> equipmentIds,
-            @AuthenticationPrincipal LoginUser loginUser) {
-        equipmentService.cancelRentalRequest(loginUser, equipmentIds);
-        return ApiResponse.success("대여 요청 취소 성공", null);
-    }
-
-    @PatchMapping("/return")
-    @Operation(
-            summary = "장비 반납 요청"
-    )
-    public ApiResponse<Void> requestReturn(
-            @AuthenticationPrincipal LoginUser loginUser,
-            @RequestBody List<Long> equipmentIds) {
-        equipmentService.requestReturn(loginUser, equipmentIds);
-        return ApiResponse.success("반납 요청 성공", null);
-    }
-
-    @PatchMapping("/return/cancel")
-    @Operation(
-            summary = "장비 반납 요청 취소"
-            )
-    public ApiResponse<Void> cancelReturnRequest(
-            @AuthenticationPrincipal LoginUser loginUser,
-            @RequestBody List<Long> equipmentIds) {
-        equipmentService.cancelReturnRequest(loginUser, equipmentIds);
-        return ApiResponse.success("반납 요청 취소 성공", null);
-    }
-
-
 }

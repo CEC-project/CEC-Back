@@ -25,19 +25,7 @@ public class AdminCommentController {
 
     @Operation(
         summary = "댓글 작성",
-        description = """
-            새로운 댓글을 작성합니다.
-            
-            **댓글 타입:**
-            - NOTICE: 공지사항 댓글
-            - BOARD: 게시판 댓글
-            - INQUIRY: 문의 댓글
-            
-            **대댓글 작성:**
-            - parentCommentId에 부모 댓글 ID를 넣으면 대댓글로 작성됩니다.
-            
-            **예시 URL:** http://localhost:8080/api/admin/comments
-            """
+        description = "새로운 댓글을 작성합니다."
     )
     @PostMapping
     public ApiResponse<Long> createComment(
@@ -46,44 +34,14 @@ public class AdminCommentController {
         return ApiResponse.success("댓글 작성 성공", adminCommentService.createComment(request, loginUser));
     }
 
-    @Operation(
-        summary = "댓글 목록 조회",
-        description = """
-            특정 대상(공지사항, 게시글 등)의 댓글 목록을 조회합니다.
-            
-            **필수 파라미터:**
-            - type: 댓글 대상 타입 (NOTICE, BOARD, INQUIRY)
-            - targetId: 댓글 대상 ID
-            
-            **페이징 파라미터:**
-            - page: 페이지 번호 (0부터 시작, 기본값: 0)
-            - size: 한 페이지에 보여줄 개수 (기본값: 10)
-            - sortBy: 정렬 기준 (ID, 기본값: ID)
-            - direction: 정렬 방향 (ASC, DESC, 기본값: ASC)
-            
-            **예시 URL:**
-            - 기본 조회: http://localhost:8080/api/admin/comments?type=NOTICE&targetId=1
-            - 페이징 조회: http://localhost:8080/api/admin/comments?type=NOTICE&targetId=1&page=0&size=10
-            - 정렬 조회: http://localhost:8080/api/admin/comments?type=NOTICE&targetId=1&sortBy=ID&direction=DESC
-            """
-    )
+    @Operation(summary = "댓글 목록 조회")
     @GetMapping
     public ApiResponse<CommentListResponse> getComments(
         @Parameter(description = "댓글 목록 조회 Parameter") @ParameterObject CommentListRequest request) {
         return ApiResponse.success("댓글 목록 조회 성공", adminCommentService.getComments(request));
     }
 
-    @Operation(
-        summary = "댓글 수정",
-        description = """
-            기존 댓글의 내용을 수정합니다.
-            
-            **권한:**
-            - 권한이 같거나 낮은 댓글만 수정 가능합니다.
-            
-            **예시 URL:** http://localhost:8080/api/admin/comments/1
-            """
-    )
+    @Operation(summary = "댓글 수정")
     @PatchMapping("{id}")
     public ApiResponse<Long> updateComment(
         @Parameter(description = "댓글 수정 요청 DTO") @RequestBody CommentUpdateRequest request,
@@ -108,11 +66,6 @@ public class AdminCommentController {
             **주의사항:**
             - 삭제된 댓글은 복구할 수 없습니다.
             - 대댓글이 있는 댓글을 삭제하면 대댓글도 고아 상태가 될 수 있습니다.
-            
-            **예시 URL:** http://localhost:8080/api/admin/comments/1
-            
-            **응답:**
-            - 삭제된 댓글의 ID를 반환합니다.
             """
     )
     @DeleteMapping("{id}")

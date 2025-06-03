@@ -1,20 +1,19 @@
-package com.backend.server.api.user.equipment.dto.category;
+package com.backend.server.api.admin.equipment.dto.category;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 @AllArgsConstructor
-public class EquipmentCountByCategoryResponse {
-
+public class AdminEquipmentCountByCategoryResponse {
     @Schema(description = "장비 카테고리 ID", example = "1")
     private Long id;
 
     @Schema(description = "장비 카테고리 이름", example = "카메라")
     private String name;
 
-    @Schema(description = "영문 약자", example = "SON")
+    @Schema(description = "카테고리 영문코드", example = "CAM")
     private String englishCode;
 
     @Schema(description = "해당 카테고리의 전체 장비 수", example = "20")

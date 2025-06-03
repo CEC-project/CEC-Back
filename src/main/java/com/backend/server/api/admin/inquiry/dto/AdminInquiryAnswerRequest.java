@@ -3,6 +3,7 @@ package com.backend.server.api.admin.inquiry.dto;
 import com.backend.server.model.entity.Inquiry;
 import com.backend.server.model.entity.InquiryAnswer;
 import com.backend.server.model.entity.User;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import lombok.Setter;
 public class AdminInquiryAnswerRequest {
     @NotEmpty(message = "답변 내용이 비어 있습니다.")
     @Size(min = 1, max = 1000, message = "답변 내용이 길이 제한을 벗어납니다.")
+    @Schema(description = "빈값 불가, 1~1000자 제한")
     String content;
 
     public InquiryAnswer toEntity(User responder, Inquiry inquiry) {

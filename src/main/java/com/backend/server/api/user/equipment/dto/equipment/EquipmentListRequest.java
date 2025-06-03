@@ -16,10 +16,10 @@ public class EquipmentListRequest implements PageableRequest {
     @Schema(description = "검색 키워드 (모델명, 대여자명, 일련번호, 카테고리명)", example = "SONY")
     private String keyword;
 
-    @Schema(description = "검색 타입 (ALL, MODEL_NAME, CATEGORY_NAME, SERIAL_NUMBER, RENTER_NAME)", example = "ALL")
+    @Schema(description = "검색 타입 (ALL, MODEL_NAME, CATEGORY_NAME, SERIAL_NUMBER, RENTER_NAME)", example = "ALL", implementation = SearchType.class)
     private SearchType searchType;
 
-    @Schema(description = "장비 상태 (AVAILABLE, IN_USE, BROKEN 등)", example = "AVAILABLE")
+    @Schema(description = "장비 상태 (AVAILABLE, IN_USE, BROKEN 등)", example = "AVAILABLE", implementation = Status.class)
     private Status status;
 
 
@@ -33,7 +33,7 @@ public class EquipmentListRequest implements PageableRequest {
     @Schema(description = "정렬할 필드 (id, createdAt, name 등)", implementation = SortBy.class, example = "id")
     private SortBy sortBy = SortBy.ID;
 
-    @Schema(description = "정렬 방향 (ASC 또는 DESC)", example = "DESC")
+    @Schema(description = "정렬 방향 (ASC 또는 DESC)", example = "DESC", implementation = SortDirection.class)
     private SortDirection sortDirection;
 
     public enum SearchType {

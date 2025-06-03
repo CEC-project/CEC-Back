@@ -16,7 +16,7 @@ public class AdminEquipmentBrokenOrRepairRequest {
         BROKEN, REPAIR
     }
 
-    private List<Long> equipmentIds;
+    private List<Long> ids;
     private EquipmentStatusActionType status;
     private String detail;
 }

@@ -1,5 +1,6 @@
 package com.backend.server.api.admin.equipment.controller;
 
+import com.backend.server.api.admin.equipment.dto.category.AdminEquipmentCountByCategoryResponse;
 import com.backend.server.api.user.equipment.dto.category.EquipmentCountByCategoryResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,8 +67,8 @@ public class AdminEquipmentCategoryController {
 
     @Operation(summary = "카테고리 전체랑 그에 따른 총 장비, 사용가능장비, 파손된 장비 등등 표시하는거")
     @GetMapping
-    public ApiResponse<List<EquipmentCountByCategoryResponse>> countEquipment() {
-        return ApiResponse.success("카테고리별 장비 개수 조회 성공",equipmentCategoryService.countAllCategoryWithEquipment());
+    public ApiResponse<List<AdminEquipmentCountByCategoryResponse>> countEquipment() {
+        return ApiResponse.success("카테고리별 장비 개수 조회 성공",adminEquipmentCategoryService.countAllCategoryWithEquipment());
     }
 
 
