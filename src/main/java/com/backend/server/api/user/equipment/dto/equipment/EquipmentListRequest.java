@@ -5,11 +5,6 @@ import com.backend.server.model.entity.enums.Status;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import com.backend.server.api.common.dto.PageableRequest;
-import com.backend.server.model.entity.enums.Status;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
-
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -35,7 +30,7 @@ public class EquipmentListRequest implements PageableRequest {
     @Schema(description = "페이지 당 항목 수", example = "20")
     private Integer size;
 
-    @Schema(description = "정렬할 필드 (id, createdAt, name 등)", example = "id")
+    @Schema(description = "정렬할 필드 (id, createdAt, name 등)", implementation = SortBy.class, example = "id")
     private SortBy sortBy = SortBy.ID;
 
     @Schema(description = "정렬 방향 (ASC 또는 DESC)", example = "DESC")

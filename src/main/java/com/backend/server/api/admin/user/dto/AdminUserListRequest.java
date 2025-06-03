@@ -49,6 +49,6 @@ public class AdminUserListRequest extends AbstractPaginationParam {
     }
 
     public Pageable toPageable() {
-        return PageRequest.of(page, size, direction, getSortBy().getField());
+        return PageRequest.of(page, size, sortDirection, getSortBy().getField());
     }
 }

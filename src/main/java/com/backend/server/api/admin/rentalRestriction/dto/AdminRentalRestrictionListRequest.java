@@ -26,10 +26,10 @@ public class AdminRentalRestrictionListRequest extends AbstractPaginationParam {
     public Pageable toPageable(boolean isUserTable) {
         if (isUserTable) {
             String field = sortBy.isUserTable() ? sortBy.getField() : "rentalRestriction." + sortBy.getField();
-            return PageRequest.of(page, size, direction, field);
+            return PageRequest.of(page, size, sortDirection, field);
         }
         String field = sortBy.isUserTable() ? "user." + sortBy.getField() : sortBy.getField();
-        return PageRequest.of(page, size, direction, field);
+        return PageRequest.of(page, size, sortDirection, field);
     }
 
     public AdminUserListRequest toAdminUserListRequest() {

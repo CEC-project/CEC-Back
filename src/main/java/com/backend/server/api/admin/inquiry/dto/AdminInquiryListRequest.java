@@ -31,6 +31,6 @@ public class AdminInquiryListRequest extends AbstractPaginationParam {
     }
 
     public Pageable toPageable() {
-        return PageRequest.of(size, page, direction, sortBy.getField());
+        return PageRequest.of(size, page, sortDirection, sortBy.getField());
     }
 }
