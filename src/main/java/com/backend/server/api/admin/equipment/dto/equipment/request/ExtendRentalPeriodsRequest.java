@@ -7,6 +7,6 @@ import java.util.List;
 
 @Data
 public class ExtendRentalPeriodsRequest {
-    private List<Long> equipmentIds;
+    private List<Long> ids;
     private LocalDateTime newEndDate;
 }

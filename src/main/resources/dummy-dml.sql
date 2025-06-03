@@ -184,12 +184,12 @@ values
 -- 문의
 insert into public.inquiry (id, author_id, created_at, updated_at, attachment_url, status, title, type, content)
 values
-    (1, 1, now(), now(), null, 'WAITING', '문의1', 'RENTAL', '문의내용1'),
+    (1, 1, now(), now(), null, 'NOT_ANSWERED', '문의1', 'RENTAL', '문의내용1'),
     (2, 3, now(), now(), null, 'ANSWERED', '문의2', 'RETURN', '문의내용2'),
-    (3, 3, now(), now(), null, 'WAITING', '문의3', 'ETC', '문의내용3'),
-    (4, 2, now(), now(), null, 'WAITING', '로그인이 안돼요', 'SYSTEM_ERROR', '로그인 시도 시 계속 실패합니다. 원인을 모르겠어요.'),
-    (5, 4, now(), now(), null, 'WAITING', '비밀번호 변경 문의', 'EQUIPMENT_BROKEN', '비밀번호 변경 이메일이 오지 않습니다.'),
-    (6, 1, now(), now(), null, 'WAITING', '기능 제안', 'PENALTY', '장비 대여 시 반납 알림 기능이 있었으면 좋겠습니다.');
+    (3, 3, now(), now(), null, 'NOT_ANSWERED', '문의3', 'ETC', '문의내용3'),
+    (4, 2, now(), now(), null, 'NOT_ANSWERED', '로그인이 안돼요', 'SYSTEM_ERROR', '로그인 시도 시 계속 실패합니다. 원인을 모르겠어요.'),
+    (5, 4, now(), now(), null, 'NOT_ANSWERED', '비밀번호 변경 문의', 'EQUIPMENT_BROKEN', '비밀번호 변경 이메일이 오지 않습니다.'),
+    (6, 1, now(), now(), null, 'NOT_ANSWERED', '기능 제안', 'PENALTY', '장비 대여 시 반납 알림 기능이 있었으면 좋겠습니다.');
 
 -- 문의 답변
 insert into public.inquiry_answer (created_at, inquiry_id, responder_id, updated_at, content)

@@ -48,9 +48,9 @@ public class AdminClassroomRentalService {
             case BROKEN -> this::rentalBroken;
             case REJECT -> this::rentalReject;
         };
-        for (Long classroomId : request.getClassroomIds())
+        for (Long classroomId : request.getIds())
             operator.apply(classroomId, request.getDetail());
-        return request.getClassroomIds();
+        return request.getIds();
     }
 
     @Transactional
