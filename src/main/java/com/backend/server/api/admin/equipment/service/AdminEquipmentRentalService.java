@@ -33,9 +33,9 @@ public class AdminEquipmentRentalService {
             case BROKEN -> this::rentalBroken;//대
             case REJECT -> this::rentalReject;
         };
-        for (Long classroomId : request.getEquipmentIds())
+        for (Long classroomId : request.getIds())
             operator.apply(classroomId, request.getDetail());
-        return request.getEquipmentIds();
+        return request.getIds();
     }
     //승인
     public Long rentalAccept(Long equipmentId){
