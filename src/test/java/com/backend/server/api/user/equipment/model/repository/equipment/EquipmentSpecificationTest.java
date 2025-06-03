@@ -2,6 +2,7 @@ package com.backend.server.api.user.equipment.model.repository.equipment;
 
 import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
 import com.backend.server.config.AbstractPostgresContainerTest;
+import com.backend.server.model.entity.enums.Gender;
 import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
 import com.backend.server.model.entity.equipment.EquipmentModel;
@@ -72,7 +73,7 @@ class EquipmentSpecificationTest extends AbstractPostgresContainerTest {
                 .department("테스트학부")
                 .nickname("테스트쟁이")
                 .grade(4)
-                .gender("M")
+                .gender(Gender.M)
                 .professor(null)
                 .phoneNumber("01023121234")
                 .role(Role.ROLE_SUPER_ADMIN)
