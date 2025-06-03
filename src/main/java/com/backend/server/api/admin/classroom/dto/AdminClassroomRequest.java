@@ -31,7 +31,7 @@ public class AdminClassroomRequest {
     @Pattern(regexp = "^([01]\\d|2[0-3]):[0-5]\\d$", message = "운영 종료 시간은 HH:mm 형식이어야 합니다.")
     private String endTime;
 
-    @Size(max = 255, message = "이미지 URL은 100자 이하여야 합니다.")
+    @Size(max = 255, message = "이미지 URL은 255자 이하여야 합니다.")
     @Pattern(regexp = "^https://.*$", message = "S3 도메인의 URL만 허용됩니다.")
     private String attachment;
 
