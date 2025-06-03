@@ -1,13 +1,21 @@
 package com.backend.server.api.admin.equipment.service;
 
+import com.backend.server.api.admin.equipment.dto.category.AdminEquipmentCountByCategoryResponse;
+import com.backend.server.api.user.equipment.dto.category.EquipmentCountByCategoryResponse;
+import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
 import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
 import com.backend.server.api.admin.equipment.dto.category.AdminEquipmentCategoryCreateRequest;
 
+import com.backend.server.model.repository.equipment.EquipmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+import static com.backend.server.model.entity.enums.Status.AVAILABLE;
+import static com.backend.server.model.entity.enums.Status.BROKEN;
 
 
 @Service
@@ -16,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminEquipmentCategoryService {
 
     private final EquipmentCategoryRepository categoryRepository;
+    private final EquipmentRepository equipmentRepository;
     //중복검사
     public void checkExist(AdminEquipmentCategoryCreateRequest request){
         if (categoryRepository.existsByName(request.getName())) {
@@ -64,5 +73,35 @@ public class AdminEquipmentCategoryService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다. id=" + id));
         categoryRepository.delete(category);
         return category.getId();
+    }
+
+    public List<AdminEquipmentCountByCategoryResponse> countAllCategoryWithEquipment() {
+        List<EquipmentCategory> categories = categoryRepository.findAll();
+        List<Equipment> allEquipment = equipmentRepository.findAll();
+
+        return categories.stream().map(category -> {
+            List<Equipment> filtered = allEquipment.stream()
+                    .filter(e -> e.getEquipmentCategory().getId().equals(category.getId()))
+                    .toList();
+
+            Integer total = filtered.size();
+            Integer available = (int) filtered.stream()
+                    .filter(e -> e.getStatus() == AVAILABLE)
+                    .count();
+            Integer broken = (int) filtered.stream()
+                    .filter(e -> e.getStatus() == BROKEN)
+                    .count();
+
+
+            return new AdminEquipmentCountByCategoryResponse(
+                    category.getId(),
+                    category.getName(), // 혹시 name 필드 없으면 category.getType() 같은 걸로 바꿔야 함
+                    category.getEnglishCode(),
+                    total,
+                    available,
+                    category.getMaxRentalCount(),
+                    broken
+            );
+        }).toList();
     }
 }
