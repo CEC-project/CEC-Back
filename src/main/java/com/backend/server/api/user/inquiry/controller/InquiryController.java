@@ -4,6 +4,7 @@ import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.user.inquiry.dto.InquiryRequest;
 import com.backend.server.api.user.inquiry.dto.InquiryResponse;
 import com.backend.server.api.user.inquiry.service.InquiryService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +19,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/boards/inquiry")
 @RequiredArgsConstructor
-@Tag(name = "3-2. 유저 프로필 / 1:1 문의하기", description = "수정 필요")
+@Tag(name = "3-2. 유저 프로필 / 1:1 문의하기", description = "수정 1차 완")
 public class InquiryController {
 
     private final InquiryService inquiryService;
 
     @PostMapping // POST, 글 쓰기
+    @Operation(summary = "1대1 문의 글 쓰기")
     public ResponseEntity<Long> createInquiry(
             @Valid @RequestBody InquiryRequest request, // 유효성 검사 적용
             @AuthenticationPrincipal LoginUser loginUser
@@ -34,6 +36,8 @@ public class InquiryController {
     }
 
     @GetMapping("/{id}") // GET, 상세 글 조회
+    @Operation(summary = "1대1 문의 글 단일 조회")
+
     public ResponseEntity<InquiryResponse> getInquiry(
             @PathVariable Long id,
             @AuthenticationPrincipal LoginUser loginUser
@@ -44,6 +48,8 @@ public class InquiryController {
     }
 
     @GetMapping // GET, 내 문의글 전체 조회
+    @Operation(summary = "내가 쓴 1대1 문의 전체 조회")
+
     public ResponseEntity<List<InquiryResponse>> getMyInquiries(
             @AuthenticationPrincipal LoginUser loginUser
     ) {
@@ -53,6 +59,7 @@ public class InquiryController {
     }
 
     @PutMapping("/{id}") // PUT, 문의글 수정
+    @Operation(summary = "1대1 문의 글 수정")
     public ResponseEntity<Void> updateInquiry(
             @PathVariable Long id,
             @Valid @RequestBody InquiryRequest request, // 유효성 검사 적용
@@ -64,6 +71,7 @@ public class InquiryController {
     }
 
     @DeleteMapping("/{id}") // DELETE, 문의글 삭제
+    @Operation(summary = "1대1 문의 글 삭제")
     public ResponseEntity<Void> deleteInquiry(
             @PathVariable Long id,
             @AuthenticationPrincipal LoginUser loginUser

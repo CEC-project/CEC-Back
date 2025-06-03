@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/mypage")
 @RequiredArgsConstructor
-@Tag(name = "3-1. 유저 프로필 / 내 정보 수정", description = "수정 완")
+@Tag(name = "3-1. 유저 프로필 / 내 정보 수정", description = "수정 1차 완")
 public class MypageController {
     private final MyInfoService myinfoService;
     //내정보조회

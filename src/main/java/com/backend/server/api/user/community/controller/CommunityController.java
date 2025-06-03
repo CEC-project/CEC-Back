@@ -7,6 +7,7 @@ import com.backend.server.api.user.community.dto.CreatePostRequest;
 import com.backend.server.api.user.community.dto.UpdatePostRequest;
 import com.backend.server.api.user.community.service.CommunityService;
 import com.backend.server.model.entity.Community;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -15,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "2. 게시판", description = "수정 필요")
+@Tag(name = "2. 게시판", description = "수정 1차 완")
 @RestController
 @RequestMapping("/api/user/community")
 public class CommunityController {
@@ -30,6 +31,7 @@ public class CommunityController {
     // GET /api/user/community?page=0&size=10&sort=createdAt,desc&typeId=1 (예: typeId=1은 '자유' 게시글)
     // GET /api/user/community?page=0&size=10&sort=createdAt,desc (typeId 없으면 전체 게시글)
     @GetMapping
+    @Operation(summary = "게시판 목록 조회")
     public ResponseEntity<CommunityListResponse> getCommunityPosts(
         @PageableDefault(size = 10, sort = "createdAt") Pageable pageable,
         @RequestParam(required = false) Long typeId, // <-- typeId 요청 파라미터 추가 (필수 아님)
@@ -41,6 +43,7 @@ public class CommunityController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "게시판 단일 조회")
     public ResponseEntity<CommunityResponse> getCommunityPostById(
         @PathVariable Long id,
         @AuthenticationPrincipal LoginUser loginuser
@@ -50,6 +53,7 @@ public class CommunityController {
     }
 
     @PostMapping
+    @Operation(summary = "게시판 글 쓰기")
     public ResponseEntity<CommunityResponse> createCommunityPost(
         @RequestBody CreatePostRequest request,
         @AuthenticationPrincipal LoginUser loginuser
@@ -60,6 +64,7 @@ public class CommunityController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "게시판 글 수정")
     public ResponseEntity<CommunityResponse> updateCommunityPost(
         @PathVariable Long id,
         @RequestBody UpdatePostRequest request,
@@ -78,6 +83,7 @@ public class CommunityController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "게시판 글 삭제")
     public ResponseEntity<Void> deleteCommunityPost(
         @PathVariable Long id,
         @AuthenticationPrincipal LoginUser loginuser
@@ -87,6 +93,7 @@ public class CommunityController {
     }
 
     @PostMapping("/{id}/recommend")
+    @Operation(summary = "게시판 글 따1봉")
     public ResponseEntity<CommunityResponse> recommendCommunityPost(
         @PathVariable Long id,
         @AuthenticationPrincipal LoginUser loginuser
