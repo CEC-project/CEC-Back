@@ -1,10 +1,13 @@
 package com.backend.server.model.repository;
 
 import com.backend.server.api.admin.inquiry.dto.AdminInquiryListRequest;
+import com.backend.server.api.admin.user.dto.AdminUserListRequest;
 import com.backend.server.model.entity.Inquiry;
 import com.backend.server.model.entity.User;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import java.util.Optional;
 import org.springframework.data.jpa.domain.Specification;
 
 public class InquirySpecification {
@@ -14,7 +17,19 @@ public class InquirySpecification {
 
             Join<Inquiry, User> author = root.join("author", JoinType.LEFT);
 
-            predicate = UserSpecification.searchAndFilterUsers(author, cb, predicate, request.toAdminUserListRequest());
+            Optional<AdminUserListRequest> userListRequest = request.toAdminUserListRequest();
+            if (userListRequest.isPresent())
+                predicate = UserSpecification.searchAndFilterUsers(author, cb, predicate, userListRequest.get());
+
+            String keyword = "%" + request.getSearchKeyword() + "%";
+            if (request.getSearchKeyword() == null || request.getSearchKeyword().isEmpty())
+                keyword = "%";
+
+            Predicate content = cb.like(root.get("content"), keyword);
+
+            switch (request.getSearchType()) {
+                case CONTENT, ALL -> predicate = cb.and(predicate, content);
+            }
 
             Join<?, ?> answers = root.join("answers", JoinType.LEFT);
             if (request.getAnswered() != null) {

@@ -14,6 +14,9 @@ public class EquipmentCountByCategoryResponse {
     @Schema(description = "장비 카테고리 이름", example = "카메라")
     private String name;
 
+    @Schema(description = "영문 약자", example = "SON")
+    private String englishCode;
+
     @Schema(description = "해당 카테고리의 전체 장비 수", example = "20")
     private Integer totalCount;
 
