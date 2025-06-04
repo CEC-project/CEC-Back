@@ -113,8 +113,8 @@ class EquipmentServiceTest {
             Equipment rented = equipment.toBuilder()
                     .status(Status.RENTAL_PENDING)
                     .renter(user)
-                    .startRentDate(startDate)
-                    .endRentDate(endDate)
+                    .startRentTime(startDate)
+                    .endRentTime(endDate)
                     .build();
 
             when(userRepository.findById(loginUser.getId())).thenReturn(Optional.of(user));

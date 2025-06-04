@@ -104,7 +104,7 @@ class ScheduledMaintenanceTasksTest extends AbstractPostgresContainerTest {
                 .repairCount(0L)
                 .build());
 
-        // RENTAL_PENDING 상태의 장비 (startRentDate가 과거)
+        // RENTAL_PENDING 상태의 장비 (startRentTime가 과거)
         rentalPendingEquipment = equipmentRepository.save(Equipment.builder()
                 .status(Status.RENTAL_PENDING)
                 .restrictionGrade("2")
@@ -113,7 +113,7 @@ class ScheduledMaintenanceTasksTest extends AbstractPostgresContainerTest {
                 .managerId(1L)
                 .rentalCount(0L)
                 .repairCount(0L)
-                .startRentDate(LocalDateTime.now().minusDays(1)) // 어제로 설정
+                .startRentTime(LocalDateTime.now().minusDays(1)) // 어제로 설정
                 .build());
 
         // 학기 스케줄 생성
@@ -234,7 +234,7 @@ class ScheduledMaintenanceTasksTest extends AbstractPostgresContainerTest {
     }
 
     @Test
-    @DisplayName("startRentDate가 미래인 RENTAL_PENDING 장비는 변경되지 않는다")
+    @DisplayName("startRentTime가 미래인 RENTAL_PENDING 장비는 변경되지 않는다")
     void testRentalPendingEquipmentWithFutureStartDate() {
         // given
         Equipment futureRentalEquipment = equipmentRepository.save(Equipment.builder()
@@ -245,7 +245,7 @@ class ScheduledMaintenanceTasksTest extends AbstractPostgresContainerTest {
                 .managerId(1L)
                 .rentalCount(0L)
                 .repairCount(0L)
-                .startRentDate(LocalDateTime.now().plusDays(1)) // 내일로 설정
+                .startRentTime(LocalDateTime.now().plusDays(1)) // 내일로 설정
                 .build());
 
 

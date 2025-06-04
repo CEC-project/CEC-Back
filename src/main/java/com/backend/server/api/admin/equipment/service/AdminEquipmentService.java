@@ -221,8 +221,8 @@ public class AdminEquipmentService {
         equipment = equipment.toBuilder()
                 .status(Status.BROKEN)
                 .renter(null)
-                .startRentDate(null)
-                .endRentDate(null)
+                .startRentTime(null)
+                .endRentTime(null)
                 .build();
 
         equipmentRepository.save(equipment);

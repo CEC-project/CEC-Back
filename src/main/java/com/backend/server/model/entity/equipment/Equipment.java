@@ -70,11 +70,14 @@ public class Equipment extends BaseTimeEntity {
     @JoinColumn(name = "renter_semester_schdule_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private SemesterSchedule semesterSchedule;
 
+    @Column
+    private LocalDateTime requestedTime;
+
     @Column(name = "start_rent_date")
-    private LocalDateTime startRentDate;
+    private LocalDateTime startRentTime;
 
     @Column(name = "end_rent_date")
-    private LocalDateTime endRentDate;
+    private LocalDateTime endRentTime;
 
     public void changeStatus(Status status) {
         this.status = status;

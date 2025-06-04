@@ -41,6 +41,8 @@ public class AdminEquipmentRentalService {
     public Long rentalAccept(Long equipmentId){
         Equipment equipment = equipmentRepository.findById(equipmentId)
                 .orElseThrow(()-> new IllegalArgumentException("장비를 찾을 수 없습니다"+equipmentId));
+        String equipmentName = equipment.getEquipmentModel().getName();
+        Long renterId = equipment.getRenter().getId();
 
         if(equipment.getStatus() != Status.RENTAL_PENDING){
             throw new IllegalArgumentException("대여 요청 중인 장비만 대여 가능합니다.");
@@ -49,7 +51,7 @@ public class AdminEquipmentRentalService {
                 .status(Status.IN_USE).build();
         equipmentRepository.save(equipment);
 
-        notificationProcess(equipment, "대여 승인", "");
+        notificationProcess(equipmentId, equipmentName, renterId, "대여 승인", "");
 
 
         return equipmentId;
@@ -58,6 +60,8 @@ public class AdminEquipmentRentalService {
     public Long rentalReturn(Long equipmentId){
         Equipment equipment = equipmentRepository.findById(equipmentId)
                 .orElseThrow(()-> new IllegalArgumentException("장비를 찾을 수 없습니다"+equipmentId));
+        String equipmentName = equipment.getEquipmentModel().getName();
+        Long renterId = equipment.getRenter().getId();
 
         if(equipment.getStatus() != Status.IN_USE){
             throw new IllegalArgumentException("사용 중인 장비만 반납 가능합니다.");
@@ -65,13 +69,13 @@ public class AdminEquipmentRentalService {
         equipment = equipment.toBuilder()
                 .status(Status.AVAILABLE)
                 .renter(null)
-                .startRentDate(null)
-                .endRentDate(null)
+                .startRentTime(null)
+                .endRentTime(null)
                 .build();
 
         equipmentRepository.save(equipment);
 
-        notificationProcess(equipment, "대여 반납", "");
+        notificationProcess(equipmentId, equipmentName, renterId, "대여 반납", "");
 
         return equipmentId;
     }
@@ -79,6 +83,8 @@ public class AdminEquipmentRentalService {
     public Long rentalReject(Long equipmentId, String detail){
         Equipment equipment = equipmentRepository.findById(equipmentId)
                 .orElseThrow(()-> new IllegalArgumentException("장비를 찾을 수 없습니다"+equipmentId));
+        String equipmentName = equipment.getEquipmentModel().getName();
+        Long renterId = equipment.getRenter().getId();
 
         if(equipment.getStatus() != Status.RENTAL_PENDING){
             throw new IllegalArgumentException("대여 요청 상태인 장비만 반려 가능합니다.");
@@ -86,13 +92,13 @@ public class AdminEquipmentRentalService {
         equipment = equipment.toBuilder()
                 .status(Status.AVAILABLE)
                 .renter(null)
-                .startRentDate(null)
-                .endRentDate(null)
+                .startRentTime(null)
+                .endRentTime(null)
                 .build();
 
         equipmentRepository.save(equipment);
 
-        notificationProcess(equipment, "대여 반려", "\n반려 사유 : " + detail);
+        notificationProcess(equipmentId, equipmentName, renterId, "대여 반려", "\n반려 사유 : " + detail);
 
         return equipmentId;
     }
@@ -101,6 +107,8 @@ public class AdminEquipmentRentalService {
     public Long rentalBroken(Long equipmentId, String detail){
         Equipment equipment = equipmentRepository.findById(equipmentId)
                 .orElseThrow(()-> new IllegalArgumentException("장비를 찾을 수 없습니다"+equipmentId));
+        String equipmentName = equipment.getEquipmentModel().getName();
+        Long renterId = equipment.getRenter().getId();
 
         if(equipment.getStatus() != Status.IN_USE){
             throw new IllegalArgumentException("대여 요청 상태인 장비만 반려 가능합니다.");
@@ -118,13 +126,13 @@ public class AdminEquipmentRentalService {
         equipment = equipment.toBuilder()
                 .status(Status.BROKEN)
                 .renter(null)
-                .startRentDate(null)
-                .endRentDate(null)
+                .startRentTime(null)
+                .endRentTime(null)
                 .build();
 
         equipmentRepository.save(equipment);
 
-        notificationProcess(equipment, "반납시 파손처리", "\n파손 내용 : " + detail);
+        notificationProcess(equipmentId, equipmentName, renterId, "반납시 파손처리", "\n파손 내용 : " + detail);
 
         return equipmentId;
     }
@@ -144,7 +152,7 @@ public class AdminEquipmentRentalService {
             }
 
             Equipment updated = equipment.toBuilder()
-                    .endRentDate(newEndDate)
+                    .endRentTime(newEndDate)
                     .build();
 
             equipmentRepository.save(updated);
@@ -152,17 +160,14 @@ public class AdminEquipmentRentalService {
     }
 
 
-    public void notificationProcess(Equipment equipment, String content, String extra) {
-        Long classroomId = equipment.getId();
-        Long renterId = equipment.getRenter().getId();
-
+    public void notificationProcess(Long resourceId, String resourceName, Long renterId, String content, String extra) {
         // 대여자에게 알림 전송
         CommonNotificationDto notification = CommonNotificationDto.builder()
                 .category("장비 %s".formatted(content))
                 .title("장비 %s되었습니다.".formatted(content))
                 .message("요청하신 장비 [%s] 가 %s되었습니다.%s"
-                        .formatted(equipment.getEquipmentModel().getName(), content, extra))
-                .link("/equipment/" + classroomId)
+                        .formatted(resourceName, content, extra))
+                .link("/equipment/" + resourceId)
                 .build();
         notificationService.createNotification(notification, renterId);
     }

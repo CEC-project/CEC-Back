@@ -26,7 +26,7 @@ public class ScheduledMaintenanceTasks {
     }
 
     public void runExpiredRentalCleanup() {
-        equipmentRepository.updateStatusByStartRentDateBefore(Status.RENTAL_PENDING, Status.AVAILABLE, LocalDateTime.now());
+        equipmentRepository.updateStatusByStartRentTimeBefore(Status.RENTAL_PENDING, Status.AVAILABLE, LocalDateTime.now());
         classroomRepository.updateClassroomStatusFromTo(Status.RENTAL_PENDING, Status.AVAILABLE);
 
         //끝난 학기중 가장 최신인 학기 가져오기

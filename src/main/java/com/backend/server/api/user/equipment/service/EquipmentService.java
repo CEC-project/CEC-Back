@@ -1,32 +1,29 @@
 package com.backend.server.api.user.equipment.service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.BiConsumer;
-
+import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.service.CommonNotificationService;
-import com.backend.server.api.user.equipment.dto.equipment.*;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentActionRequest;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentListResponse;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentResponse;
+import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.EquipmentAction;
+import com.backend.server.model.entity.enums.Status;
+import com.backend.server.model.entity.equipment.Equipment;
+import com.backend.server.model.entity.equipment.EquipmentCart;
+import com.backend.server.model.repository.UserRepository;
+import com.backend.server.model.repository.equipment.EquipmentCartRepository;
+import com.backend.server.model.repository.equipment.EquipmentRepository;
+import com.backend.server.model.repository.equipment.EquipmentSpecification;
+import java.util.List;
+import java.util.function.BiConsumer;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.model.entity.equipment.Equipment;
-import com.backend.server.model.entity.User;
-import com.backend.server.model.entity.enums.Status;
-import com.backend.server.model.entity.equipment.EquipmentCart;
-import com.backend.server.model.repository.equipment.EquipmentRepository;
-import com.backend.server.model.repository.equipment.EquipmentSpecification;
-import com.backend.server.model.repository.UserRepository;
-import com.backend.server.model.repository.equipment.EquipmentCartRepository;
-
-import lombok.RequiredArgsConstructor;
-
-import static com.backend.server.model.entity.enums.EquipmentAction.RENT_REQUEST;
 
 @Service
 @RequiredArgsConstructor
@@ -145,8 +142,8 @@ public class EquipmentService {
         Equipment updated = equipment.toBuilder()
                 .status(Status.RENTAL_PENDING)
                 .renter(user)
-                .startRentDate(request.getStartDate())
-                .endRentDate(request.getEndDate())
+                .startRentTime(request.getStartDate())
+                .endRentTime(request.getEndDate())
                 .build();
 
         equipmentRepository.save(updated);
@@ -172,8 +169,8 @@ public class EquipmentService {
         Equipment updated = equipment.toBuilder()
                 .status(Status.AVAILABLE)
                 .renter(null)
-                .startRentDate(null)
-                .endRentDate(null)
+                .startRentTime(null)
+                .endRentTime(null)
                 .build();
 
         equipmentRepository.save(updated);
