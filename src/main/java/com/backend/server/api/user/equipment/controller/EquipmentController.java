@@ -3,6 +3,7 @@ package com.backend.server.api.user.equipment.controller;
 import com.backend.server.api.user.equipment.dto.equipment.*;
 import com.backend.server.api.user.equipment.service.EquipmentService;
 import com.backend.server.model.entity.enums.EquipmentAction;
+import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -65,15 +66,14 @@ public class EquipmentController {
     }
 
 
-    @PatchMapping("/action/{actionType}")
+    @PatchMapping("/action")
     @Operation(summary = "장비 상태 변경 요청 (대여/반납 요청 및 취소)",description = "날짜는 대여 요청 시에만 필요")
     public ApiResponse<Void> handleEquipmentAction(
-            @Parameter(description = "RENT_REQUEST, RENT_CANCEL, RETURN_REQUEST, RETURN_CANCEL")
-            @PathVariable EquipmentAction actionType,
+            @Valid
             @RequestBody EquipmentActionRequest request,
             @AuthenticationPrincipal LoginUser loginUser
     ) {
-        equipmentService.handleUserAction(loginUser, request, actionType);
+        equipmentService.handleUserAction(loginUser, request);
         return ApiResponse.success("장비 처리 완료", null);
     }
 }

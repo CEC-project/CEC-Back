@@ -88,7 +88,7 @@ class EquipmentServiceTest {
         private LocalDateTime endDate = LocalDateTime.now().plusDays(3);
 
         @BeforeEach
-        void setupRequest() {
+        void setup() {
             request = EquipmentActionRequest.builder()
                     .equipmentIds(List.of(equipment.getId()))
                     .startDate(startDate)
@@ -98,10 +98,14 @@ class EquipmentServiceTest {
 
         @Test
         void handleRentRequest_success() {
+            EquipmentActionRequest rentRequest = request.toBuilder()
+                    .action(EquipmentActionRequest.Action.RENT_REQUEST)
+                    .build();
+
             when(userRepository.findById(loginUser.getId())).thenReturn(Optional.of(user));
             when(equipmentRepository.findByIdForUpdate(equipment.getId())).thenReturn(Optional.of(equipment));
 
-            equipmentService.handleUserAction(loginUser, request, EquipmentAction.RENT_REQUEST);
+            equipmentService.handleUserAction(loginUser, rentRequest);
 
             verify(equipmentRepository).save(any(Equipment.class));
             verify(equipmentCartRepository).deleteByUserIdAndEquipmentId(user.getId(), equipment.getId());
@@ -117,10 +121,14 @@ class EquipmentServiceTest {
                     .endRentDate(endDate)
                     .build();
 
+            EquipmentActionRequest rentCancelRequest = request.toBuilder()
+                    .action(EquipmentActionRequest.Action.RENT_CANCEL)
+                    .build();
+
             when(userRepository.findById(loginUser.getId())).thenReturn(Optional.of(user));
             when(equipmentRepository.findByIdForUpdate(equipment.getId())).thenReturn(Optional.of(rented));
 
-            equipmentService.handleUserAction(loginUser, request, EquipmentAction.RENT_CANCEL);
+            equipmentService.handleUserAction(loginUser, rentCancelRequest);
 
             verify(equipmentRepository).save(any(Equipment.class));
         }
@@ -132,10 +140,14 @@ class EquipmentServiceTest {
                     .renter(user)
                     .build();
 
+            EquipmentActionRequest returnRequest = request.toBuilder()
+                    .action(EquipmentActionRequest.Action.RETURN_REQUEST)
+                    .build();
+
             when(userRepository.findById(loginUser.getId())).thenReturn(Optional.of(user));
             when(equipmentRepository.findByIdForUpdate(equipment.getId())).thenReturn(Optional.of(inUse));
 
-            equipmentService.handleUserAction(loginUser, request, EquipmentAction.RETURN_REQUEST);
+            equipmentService.handleUserAction(loginUser, returnRequest);
 
             verify(equipmentRepository).save(any(Equipment.class));
         }
@@ -147,10 +159,14 @@ class EquipmentServiceTest {
                     .renter(user)
                     .build();
 
+            EquipmentActionRequest returnCancelRequest = request.toBuilder()
+                    .action(EquipmentActionRequest.Action.RETURN_CANCEL)
+                    .build();
+
             when(userRepository.findById(loginUser.getId())).thenReturn(Optional.of(user));
             when(equipmentRepository.findByIdForUpdate(equipment.getId())).thenReturn(Optional.of(returnPending));
 
-            equipmentService.handleUserAction(loginUser, request, EquipmentAction.RETURN_CANCEL);
+            equipmentService.handleUserAction(loginUser, returnCancelRequest);
 
             verify(equipmentRepository).save(any(Equipment.class));
         }
