@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import com.backend.server.model.entity.enums.Status;
 
@@ -79,7 +80,29 @@ public class Equipment extends BaseTimeEntity {
     @Column(name = "end_rent_date")
     private LocalDateTime endRentTime;
 
-    public void changeStatus(Status status) {
-        this.status = status;
+    public void makeAvailable() {
+        this.status = Status.AVAILABLE;
+        this.startRentTime = null;
+        this.endRentTime = null;
+        this.requestedTime = null;
+        this.renter = null;
+    }
+    public void makeRentalPending(LocalDateTime startRentTime, LocalDateTime endRentTime, User renter) {
+        this.status = Status.RENTAL_PENDING;
+        this.startRentTime = startRentTime;
+        this.endRentTime = endRentTime;
+        this.requestedTime = LocalDateTime.now();
+        this.renter = renter;
+    }
+
+    public void makeInUse() {
+        this.status = Status.IN_USE;
+    }
+
+    public void makeBroken() {
+        makeAvailable();
+        this.status = Status.BROKEN;
+
+        // 파손 테이블에 저장
     }
 }
