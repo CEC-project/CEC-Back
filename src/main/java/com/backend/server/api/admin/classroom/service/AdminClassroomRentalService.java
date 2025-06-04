@@ -58,6 +58,8 @@ public class AdminClassroomRentalService {
         // 강의실 조회
         Classroom classroom = classroomRepository.findById(classroomId)
                 .orElseThrow(() -> new IllegalArgumentException("강의실 id가 유효하지 않습니다."));
+        String classroomName = classroom.getName();
+        Long renterId = classroom.getRenter().getId();
 
         // 상태 확인
         if (classroom.getStatus() != Status.RENTAL_PENDING)
@@ -68,7 +70,7 @@ public class AdminClassroomRentalService {
         classroomRepository.save(classroom);
 
         // 알림 전송
-        notificationProcess(classroom, "대여 승인", "");
+        notificationProcess(classroomId, classroomName, renterId, "대여 승인", "");
 
         return classroomId;
     }
@@ -78,6 +80,8 @@ public class AdminClassroomRentalService {
         // 강의실 조회
         Classroom classroom = classroomRepository.findById(classroomId)
                 .orElseThrow(() -> new IllegalArgumentException("강의실 id가 유효하지 않습니다."));
+        String classroomName = classroom.getName();
+        Long renterId = classroom.getRenter().getId();
 
         // 상태 확인
         if (classroom.getStatus() != Status.RENTAL_PENDING)
@@ -88,7 +92,7 @@ public class AdminClassroomRentalService {
         classroomRepository.save(classroom);
 
         // 알림 전송
-        notificationProcess(classroom, "대여 반려", "\n반려 사유 : " + detail);
+        notificationProcess(classroomId, classroomName, renterId, "대여 반려", "\n반려 사유 : " + detail);
 
         return classroomId;
     }
@@ -98,6 +102,8 @@ public class AdminClassroomRentalService {
         // 강의실 조회
         Classroom classroom = classroomRepository.findById(classroomId)
                 .orElseThrow(() -> new IllegalArgumentException("강의실 id가 유효하지 않습니다."));
+        String classroomName = classroom.getName();
+        Long renterId = classroom.getRenter().getId();
 
         // 상태 확인
         if (classroom.getStatus() != Status.IN_USE)
@@ -108,7 +114,7 @@ public class AdminClassroomRentalService {
         classroomRepository.save(classroom);
 
         // 알림 전송
-        notificationProcess(classroom, "반납 승인", "");
+        notificationProcess(classroomId, classroomName, renterId, "반납 승인", "");
 
         return classroomId;
     }
@@ -118,6 +124,8 @@ public class AdminClassroomRentalService {
         // 강의실 조회
         Classroom classroom = classroomRepository.findById(classroomId)
                 .orElseThrow(() -> new IllegalArgumentException("강의실 id가 유효하지 않습니다."));
+        String classroomName = classroom.getName();
+        Long renterId = classroom.getRenter().getId();
 
         // 상태 확인
         if (classroom.getStatus() != Status.IN_USE)
@@ -128,7 +136,7 @@ public class AdminClassroomRentalService {
         classroomRepository.save(classroom);
 
         // 알림 전송
-        notificationProcess(classroom, "반납시 파손처리", "\n파손 내용 : " + detail);
+        notificationProcess(classroomId, classroomName, renterId, "반납시 파손처리", "\n파손 내용 : " + detail);
 
         return classroomId;
     }
@@ -138,6 +146,8 @@ public class AdminClassroomRentalService {
         // 강의실 조회
         Classroom classroom = classroomRepository.findById(classroomId)
                 .orElseThrow(() -> new IllegalArgumentException("강의실 id가 유효하지 않습니다."));
+        String classroomName = classroom.getName();
+        Long renterId = classroom.getRenter().getId();
 
         // 상태 확인
         if (classroom.getStatus() != Status.IN_USE)
@@ -148,22 +158,19 @@ public class AdminClassroomRentalService {
         classroomRepository.save(classroom);
 
         // 알림 전송
-        notificationProcess(classroom, "대여 취소", "\n대여 취소 사유 : " + detail);
+        notificationProcess(classroomId, classroomName, renterId, "대여 취소", "\n대여 취소 사유 : " + detail);
 
         return classroomId;
     }
 
-    public void notificationProcess(Classroom classroom, String content, String extra) {
-        Long classroomId = classroom.getId();
-        Long renterId = classroom.getRenter().getId();
-
+    public void notificationProcess(Long resourceId, String resourceName, Long renterId, String content, String extra) {
         // 대여자에게 알림 전송
         CommonNotificationDto notification = CommonNotificationDto.builder()
                 .category("강의실 %s".formatted(content))
                 .title("강의실 %s되었습니다.".formatted(content))
                 .message("요청하신 강의실 [%s] 가 %s되었습니다.%s"
-                        .formatted(classroom.getName(), content, extra))
-                .link("/classroom/" + classroomId)
+                        .formatted(resourceName, content, extra))
+                .link("/classroom/" + resourceId)
                 .build();
         notificationService.createNotification(notification, renterId);
     }
