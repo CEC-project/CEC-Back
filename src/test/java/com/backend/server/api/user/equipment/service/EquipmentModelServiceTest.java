@@ -53,8 +53,8 @@ public class EquipmentModelServiceTest {
 
         EquipmentModelListRequest request = EquipmentModelListRequest.builder()
                 .keyword("sony")
-                .page(0)
-                .size(10).build();
+
+                .build();
 
         Page<EquipmentModel> page = new PageImpl<>(List.of(model1,model2));
         when(equipmentModelRepository.findAll(any(Specification.class), any(Pageable.class)))

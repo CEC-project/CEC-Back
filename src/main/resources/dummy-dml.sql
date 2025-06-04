@@ -133,7 +133,12 @@ values  (0, 1, '2025-05-28 17:44:19.441547', null, 10, 1, 0, null, null, 0, null
         (0, 1, '2025-05-28 17:44:19.504248', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.504248', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250502', 'AVAILABLE'),
         (0, 1, '2025-05-28 17:44:19.513947', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.513947', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250503', 'AVAILABLE'),
         (0, 1, '2025-05-28 17:44:19.520992', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.520992', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250504', 'AVAILABLE'),
-        (0, 1, '2025-05-28 17:44:19.526169', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.526169', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250505', 'AVAILABLE');
+        (0, 1, '2025-05-28 17:44:19.526169', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.526169', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250505', 'AVAILABLE'),
+        (0, 1, '2025-06-04 10:00:00', '2025-06-10 10:00:00', 10, 1, 0, null, 3, 0, '2025-06-05 10:00:00', '2025-06-04 10:00:00', '대여 신청된 맥북 프로', 'images/macbook_pro.jpg', '3', 'CAMCAN250506', 'RENTAL_PENDING'),
+        (0, 1, '2025-06-04 10:01:00', '2025-06-10 10:01:00', 10, 1, 0, null, 3, 0, '2025-06-05 10:01:00', '2025-06-04 10:01:00', '대여 신청된 맥북 프로', 'images/macbook_pro.jpg', '3', 'CAMCAN250507', 'RENTAL_PENDING'),
+        (0, 1, '2025-06-04 10:02:00', '2025-06-10 10:02:00', 10, 1, 0, null, 3, 0, '2025-06-05 10:02:00', '2025-06-04 10:02:00', '대여 신청된 맥북 프로', 'images/macbook_pro.jpg', '3', 'CAMCAN250508', 'RENTAL_PENDING'),
+        (0, 1, '2025-06-04 10:03:00', '2025-06-10 10:03:00', 10, 1, 0, null, 3, 0, '2025-06-05 10:03:00', '2025-06-04 10:03:00', '대여 신청된 맥북 프로', 'images/macbook_pro.jpg', '3', 'CAMCAN250509', 'RENTAL_PENDING'),
+        (0, 1, '2025-06-04 10:04:00', '2025-06-10 10:04:00', 10, 1, 0, null, 3, 0, '2025-06-05 10:04:00', '2025-06-04 10:04:00', '대여 신청된 맥북 프로', 'images/macbook_pro.jpg', '3', 'CAMCAN250510', 'RENTAL_PENDING');
 
 -- 공지사항
 insert into public.notice (view, title, content, important, attachment_url, author_id, created_at, updated_at)
