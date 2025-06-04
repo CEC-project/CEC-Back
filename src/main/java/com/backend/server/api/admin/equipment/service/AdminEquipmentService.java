@@ -194,11 +194,11 @@ public class AdminEquipmentService {
             default -> throw new IllegalArgumentException("지원하지 않는 상태입니다: " + request.getStatus());
         }
 
-        for (Long equipmentId : request.getEquipmentIds()) {
+        for (Long equipmentId : request.getIds()) {
             operator.apply(equipmentId, request.getDetail());
         }
 
-        return request.getEquipmentIds();
+        return request.getIds();
     }
 
     //장비 상태 파손 처리

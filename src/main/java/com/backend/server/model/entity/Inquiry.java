@@ -44,7 +44,7 @@ public class Inquiry extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
-    private AnswerStatus status = AnswerStatus.WAITING; // 기본값 답변 대기 설정
+    private AnswerStatus status = AnswerStatus.NOT_ANSWERED; // 기본값 답변 대기 설정
 
     @OneToMany(mappedBy = "inquiry")
     @Builder.Default

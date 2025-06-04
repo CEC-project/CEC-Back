@@ -15,7 +15,7 @@ public class AdminEquipmentDetailRequest {
 
     @NotNull
     @Schema(description = "필수")
-    private List<Long> equipmentIds;
+    private List<Long> ids;
 
     @NotNull
     @Schema(description = "필수")

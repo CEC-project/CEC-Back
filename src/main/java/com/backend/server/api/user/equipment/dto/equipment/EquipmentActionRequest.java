@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+
 @Builder(toBuilder = true)
 public class EquipmentActionRequest {
 

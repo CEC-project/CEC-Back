@@ -36,10 +36,10 @@ public class AdminClassroomSearchRequest {
     }
 
     @Schema(description = "검색어")
-    private String keyword = "";
+    private String searchKeyword = "";
 
     @Schema(description = "검색 타입 (기본값 ALL)", implementation = SearchType.class)
-    private SearchType type = SearchType.ALL;
+    private SearchType searchType = SearchType.ALL;
 
     @Schema(description = "상태 필터 (기본값 ALL)", implementation = Status.class)
     private Status status = Status.ALL;

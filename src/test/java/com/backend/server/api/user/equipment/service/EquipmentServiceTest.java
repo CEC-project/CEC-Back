@@ -171,4 +171,5 @@ class EquipmentServiceTest {
             verify(equipmentRepository).save(any(Equipment.class));
         }
     }
+
 }
