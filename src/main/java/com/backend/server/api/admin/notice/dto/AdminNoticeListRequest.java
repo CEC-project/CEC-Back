@@ -10,7 +10,7 @@ import org.springframework.data.domain.Sort;
 public class AdminNoticeListRequest extends AbstractPaginationParam {
 
   @Schema(description = "관리자 공지사항 검색 기준", implementation = AdminNoticeSearchType.class)
-  AdminNoticeSearchType adminNoticeSearchType;
+  AdminNoticeSearchType searchType;
 
   @Schema(description = "검색어")
   String searchKeyword;
@@ -18,7 +18,7 @@ public class AdminNoticeListRequest extends AbstractPaginationParam {
   AdminNoticeSortType sortBy;
 
   public AdminNoticeListRequest(
-      AdminNoticeSearchType adminNoticeSearchType,
+      AdminNoticeSearchType searchType,
       String searchKeyword,
 
       Integer page,
@@ -26,7 +26,7 @@ public class AdminNoticeListRequest extends AbstractPaginationParam {
       AdminNoticeSortType sortBy,
       Sort.Direction direction
   ) {
-    this.adminNoticeSearchType = adminNoticeSearchType == null ? AdminNoticeSearchType.ALL : adminNoticeSearchType;
+    this.searchType = searchType == null ? AdminNoticeSearchType.ALL : searchType;
     this.searchKeyword = searchKeyword;
 
     this.page = Math.max(page, 0);
