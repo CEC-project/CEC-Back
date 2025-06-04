@@ -149,7 +149,7 @@ public class AdminEquipmentService {
 
     //장비 리스트 조회
     public AdminEquipmentListResponse getEquipments(AdminEquipmentListRequest request) {
-        Pageable pageable = EquipmentSpecification.getPageable(request);
+        Pageable pageable = request.toPageable();
 
         Specification<Equipment> spec = EquipmentSpecification.adminFilterEquipments(request);
         Page<Equipment> page = equipmentRepository.findAll(spec, pageable);

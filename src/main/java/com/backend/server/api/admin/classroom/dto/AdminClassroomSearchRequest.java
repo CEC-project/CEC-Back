@@ -20,7 +20,7 @@ public class AdminClassroomSearchRequest {
 
     @Getter
     public enum SortBy {
-        REQUESTED_TIME("requestedTime"),
+        REQUESTED_AT("requestedAt"),
         NAME("name"),
         ID("id"),
         DESCRIPTION("description"),
@@ -44,8 +44,8 @@ public class AdminClassroomSearchRequest {
     @Schema(description = "상태 필터 (기본값 ALL)", implementation = Status.class)
     private Status status = Status.ALL;
 
-    @Schema(description = "정렬 기준 (기본값 REQUESTED_TIME)", implementation = SortBy.class)
-    private SortBy sortBy = SortBy.REQUESTED_TIME;
+    @Schema(description = "정렬 기준 (기본값 REQUESTED_AT)", implementation = SortBy.class)
+    private SortBy sortBy = SortBy.REQUESTED_AT;
 
     @Schema(description = "정렬 방향 (기본값 ASC)", implementation = SortDirection.class)
     private SortDirection sortDirection = SortDirection.ASC;

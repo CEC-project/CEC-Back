@@ -45,7 +45,7 @@ public class EquipmentService {
         // 사용자 학년 정보 조회
         Integer userGrade = userRepository.findById(loginUser.getId()).map(User::getGrade).orElse(null);
 
-        Pageable pageable = EquipmentSpecification.getPageable(request);
+        Pageable pageable = request.toPageable();
         Specification<Equipment> spec = EquipmentSpecification.filterEquipments(request, userGrade);
         Page<Equipment> page = equipmentRepository.findAll(spec, pageable);
         

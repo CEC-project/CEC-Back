@@ -23,7 +23,7 @@ public class EquipmentModelService {
 
     //장비 모델 검색 / 페이지네이션 조회
     public EquipmentModelListResponse getAllModels(EquipmentModelListRequest request) {
-        Pageable pageable = EquipmentModelSpecification.getPageable(request);
+        Pageable pageable = request.toPageable();
         Specification<EquipmentModel> spec = EquipmentModelSpecification.filterEquipmentModels(request);
         Page<EquipmentModel> page = equipmentModelRepository.findAll(spec, pageable);
         
