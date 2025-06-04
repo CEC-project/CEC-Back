@@ -12,27 +12,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Schema(description = "문의 조회 응답 DTO")
 public class InquiryResponse {
 
     @Schema(description = "문의 ID", example = "1")
-    private Long id;
+    private Long id;               // 문의 ID
 
     @Schema(description = "문의 제목", example = "장비 대여 관련 문의")
-    private String title;
+    private String title;           // 제목
 
-    @Schema(description = "문의 내용", example = "장비 대여 가능 시간에 대해 알고 싶습니다.")
-    private String content;
+    @Schema(description = "문의 내용", example = "장비 대여 예약이 되지 않습니다.")
+    private String content;         // 내용
 
-    @Schema(description = "첨부 파일 URL", example = "https://example.com/file.png")
-    private String attachmentUrl;
+    @Schema(description = "첨부파일 URL", example = "https://example.com/image.png")
+    private String attachmentUrl;   // 첨부파일 URL
 
     @Schema(description = "문의 유형", example = "RENTAL", implementation = InquiryType.class)
-    private InquiryType type;
+    private InquiryType type;      // 문의 유형 (enum)
 
     @Schema(description = "답변 상태", example = "WAITING", implementation = AnswerStatus.class)
-    private AnswerStatus status;
+    private AnswerStatus status;   // 답변 상태
 
-    @Schema(description = "문의 작성 시각 (yyyy-MM-dd HH:mm:ss)", example = "2025-06-03 15:12:00")
-    private String createdAt;
+    @Schema(description = "문의 작성 시간 (ISO-8601)", example = "2025-06-02T15:34:21")
+    private String createdAt;       // 생성 일시
 }
