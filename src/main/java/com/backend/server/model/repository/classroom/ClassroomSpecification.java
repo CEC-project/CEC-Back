@@ -12,10 +12,10 @@ public class ClassroomSpecification {
         return (root, query, cb) -> {
             Predicate predicate = cb.conjunction();
 
-            String keyword = request.getKeyword();
+            String keyword = request.getSearchKeyword();
             if (keyword != null && !keyword.trim().isEmpty()) {
                 String trimmedKeyword = "%" + keyword.trim() + "%";
-                switch (request.getType()) {
+                switch (request.getSearchType()) {
                     case ID:
                         if (keyword.matches("\\d+")) {
                             predicate = cb.and(predicate, cb.equal(root.get("id"), Long.parseLong(keyword)));
