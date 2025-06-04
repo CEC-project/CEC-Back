@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "공지사항", description = "공지사항 API")
+@Tag(name = "3-3. 게시판/공지사항", description = "1차 수정 완료")
 @RestController
 @RequestMapping("/api/notices")
 @RequiredArgsConstructor

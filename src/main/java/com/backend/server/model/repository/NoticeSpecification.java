@@ -17,7 +17,7 @@ public class NoticeSpecification {
       if (StringUtils.hasText(request.getSearchKeyword())) {
         String[] keywords = request.getSearchKeyword().trim().split("\\s+");
 
-        switch (request.getAdminNoticeSearchType()) {
+        switch (request.getSearchType()) {
           case TITLE -> {
             for (String keyword : keywords) {
               predicates.add(cb.like(cb.lower(root.get("title")), "%" + keyword.toLowerCase() + "%"));
