@@ -42,7 +42,7 @@ public class AdminClassroomDetailResponse {
         this.endRentTime = classroom.getEndRentTime();
         this.status = classroom.getStatus();
         this.attachment = classroom.getAttachment();
-        this.requestedTime = classroom.getRequestedTime();
+        this.requestedTime = classroom.getRequestedAt();
         this.managerName = manager != null ? manager.getName() : null;
         this.managerId = manager != null ? manager.getId() : null;
         this.renter = renter != null ? new AdminUserResponse(renter, professor) : null;

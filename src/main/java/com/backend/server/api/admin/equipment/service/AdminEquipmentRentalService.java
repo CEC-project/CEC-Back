@@ -3,7 +3,6 @@ package com.backend.server.api.admin.equipment.service;
 import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentDetailRequest;
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.service.CommonNotificationService;
-import com.backend.server.model.entity.enums.BrokenType;
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.equipment.EquipmentBrokenHistory;
@@ -12,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -47,8 +45,7 @@ public class AdminEquipmentRentalService {
         if(equipment.getStatus() != Status.RENTAL_PENDING){
             throw new IllegalArgumentException("대여 요청 중인 장비만 대여 가능합니다.");
         }
-        equipment = equipment.toBuilder()
-                .status(Status.IN_USE).build();
+        equipment.makeInUse();
         equipmentRepository.save(equipment);
 
         notificationProcess(equipmentId, equipmentName, renterId, "대여 승인", "");
@@ -68,13 +65,8 @@ public class AdminEquipmentRentalService {
         if(equipment.getStatus() != Status.IN_USE){
             throw new IllegalArgumentException("사용 중인 장비만 반납 가능합니다.");
         }
-        equipment = equipment.toBuilder()
-                .status(Status.AVAILABLE)
-                .renter(null)
-                .startRentTime(null)
-                .endRentTime(null)
-                .build();
 
+        equipment.makeAvailable();
         equipmentRepository.save(equipment);
 
         notificationProcess(equipmentId, equipmentName, renterId, "대여 반납", "");
@@ -92,12 +84,8 @@ public class AdminEquipmentRentalService {
         if(equipment.getStatus() != Status.IN_USE){
             throw new IllegalArgumentException("대여 요청 중인 장비만 대여 가능합니다.");
         }
-        equipment = equipment.toBuilder()
-                .status(Status.AVAILABLE)
-                .renter(null)
-                .startRentTime(null)
-                .endRentTime(null)
-                .build();
+
+        equipment.makeAvailable();
         equipmentRepository.save(equipment);
 
         notificationProcess(equipmentId, equipmentName, renterId, "대여 취소", "\n대여 취소 사유 : " + detail);
@@ -115,13 +103,8 @@ public class AdminEquipmentRentalService {
         if(equipment.getStatus() != Status.RENTAL_PENDING){
             throw new IllegalArgumentException("대여 요청 상태인 장비만 반려 가능합니다.");
         }
-        equipment = equipment.toBuilder()
-                .status(Status.AVAILABLE)
-                .renter(null)
-                .startRentTime(null)
-                .endRentTime(null)
-                .build();
 
+        equipment.makeAvailable();
         equipmentRepository.save(equipment);
 
         notificationProcess(equipmentId, equipmentName, renterId, "대여 반려", "\n반려 사유 : " + detail);
@@ -140,51 +123,16 @@ public class AdminEquipmentRentalService {
             throw new IllegalArgumentException("대여 요청 상태인 장비만 반려 가능합니다.");
         }
 
-        EquipmentBrokenHistory history = EquipmentBrokenHistory.builder()
-                .equipment(equipment)
-                .brokenBy(equipment.getRenter())
-                .brokenType(BrokenType.RETURN_BROKEN)
-                .brokenDetail(detail)
-                .build();
-
+        EquipmentBrokenHistory history = EquipmentBrokenHistory.ofReturnBroken(equipment, detail);
         equipmentBrokenHistoryRepository.save(history);
 
-        equipment = equipment.toBuilder()
-                .status(Status.BROKEN)
-                .renter(null)
-                .startRentTime(null)
-                .endRentTime(null)
-                .build();
-
+        equipment.makeBroken();
         equipmentRepository.save(equipment);
 
         notificationProcess(equipmentId, equipmentName, renterId, "반납시 파손처리", "\n파손 내용 : " + detail);
 
         return equipmentId;
     }
-
-    @Transactional
-    public void extendRentalPeriods(List<Long> equipmentIds, LocalDateTime newEndDate) {
-        if (newEndDate.isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("연장 날짜는 현재 시간보다 이후여야 합니다.");
-        }
-
-        for (Long equipmentId : equipmentIds) {
-            Equipment equipment = equipmentRepository.findById(equipmentId)
-                    .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다. ID: " + equipmentId));
-
-            if (Status.IN_USE != equipment.getStatus()) {
-                throw new IllegalStateException("대여 중인 장비만 기간을 연장할 수 있습니다. ID: " + equipmentId);
-            }
-
-            Equipment updated = equipment.toBuilder()
-                    .endRentTime(newEndDate)
-                    .build();
-
-            equipmentRepository.save(updated);
-        }
-    }
-
 
     public void notificationProcess(Long resourceId, String resourceName, Long renterId, String content, String extra) {
         // 대여자에게 알림 전송

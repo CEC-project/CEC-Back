@@ -95,7 +95,7 @@ values  ('2001-03-15', 0, 3, 5, 2, 1,
             '01001234567', 'profile17.png', 'ROLE_USER', '202300019');
 
 -- 강의실 INSERT
-insert into public.classroom (end_time, start_time, created_at, manager_id, renter_id, updated_at, attachment, location, name, status, requested_time, start_rent_time, end_rent_time)
+insert into public.classroom (end_time, start_time, created_at, manager_id, renter_id, updated_at, attachment, location, name, status, requested_at, start_rent_time, end_rent_time)
 values
     ('18:00:00', '09:00:00', now(), 1, null, now(), null, '101', '101호', 'AVAILABLE', null, null, null),
     ('18:00:00', '09:00:00', now(), 1, null, now(), null, '102', '102호', 'AVAILABLE', null, null, null),

@@ -15,6 +15,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,9 +67,13 @@ public class InquiryService {
     }
 
     @Transactional(readOnly = true)
-    public List<InquiryResponse> getMyInquiries(Long currentUserId) { // 내 글 전체 조회
-        return inquiryRepository.findAllByAuthorId(currentUserId).stream()
-                .map(inquiry -> InquiryResponse.builder()
+    public Page<InquiryResponse> getMyInquiries(Long currentUserId, int page, int size, String sortBy, String sortDirection) { // 내 글 전체 조회
+        Sort.Direction direction = Sort.Direction.fromOptionalString(sortDirection).orElse(Sort.Direction.DESC);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+
+        Page<Inquiry> inquiries = inquiryRepository.findAllByAuthorId(currentUserId, pageable);
+
+        return inquiries.map(inquiry -> InquiryResponse.builder()
                         .id(inquiry.getId())
                         .title(inquiry.getTitle())
                         .content(inquiry.getContent())
@@ -73,8 +81,7 @@ public class InquiryService {
                         .type(inquiry.getType())
                         .status(inquiry.getStatus())
                         .createdAt(inquiry.getCreatedAt().toString())
-                        .build())
-        .collect(Collectors.toList());
+                        .build());
     }
 
     @Transactional

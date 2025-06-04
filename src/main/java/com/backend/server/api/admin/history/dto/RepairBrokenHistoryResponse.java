@@ -10,10 +10,11 @@ public class RepairBrokenHistoryResponse {
     private Long id;
     private String targetType; // EQUIPMENT or CLASSROOM
     private String historyType; // BROKEN or REPAIR
-    private String category; // 장비 카테고리(장비분류), 장비일 ㄱㅇㅇ우만
+    private String category; // 장비 카테고리(장비분류), 장비일 경우만
     private String name; // 장비명(모델이름) or 강의실명
     private String serialNumber; // 장비일 경우만
     private BrokenType brokenType; // 파손일 경우만
+    private String brokenByName; //파손일 경우만
     private String detail;
     private LocalDateTime createdAt;
 
@@ -26,6 +27,7 @@ public class RepairBrokenHistoryResponse {
         this.name = history.getEquipment().getEquipmentModel().getName();
         this.serialNumber = history.getEquipment().getSerialNumber();
         this.brokenType = history.getBrokenType();
+        this.brokenByName = history.getBrokenByName();
         this.detail = history.getBrokenDetail();
         this.createdAt = history.getCreatedAt();
     }
