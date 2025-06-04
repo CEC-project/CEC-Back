@@ -22,7 +22,10 @@ public class EquipmentBrokenHistory extends BaseTimeEntity {
     @JoinColumn(name = "broken_by_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User brokenBy;
 
-        @Enumerated(EnumType.STRING)
+    @Column(name = "broken_by_name", nullable = false)
+    private String brokenByName;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "broken_type", nullable = false)
     private BrokenType brokenType;
 
@@ -43,4 +46,12 @@ public class EquipmentBrokenHistory extends BaseTimeEntity {
                 .brokenDetail(detail)
                 .build();
     }
+
+    @PrePersist
+    private void prePersist() {
+        if (this.brokenBy != null && this.brokenByName == null) {
+            this.brokenByName = this.brokenBy.getNickname();
+        }
+    }
+
 }
