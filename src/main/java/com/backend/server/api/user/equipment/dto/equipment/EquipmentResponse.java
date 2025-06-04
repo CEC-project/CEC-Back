@@ -15,10 +15,10 @@ public class EquipmentResponse {
     private final String modelName;
 
     @Schema(description = "대여 시작 시간", example = "2025-06-01T09:00:00")
-    private final LocalDateTime startRentDate;
+    private final LocalDateTime startRentTime;
 
     @Schema(description = "대여 종료 시간", example = "2025-06-03T18:00:00")
-    private final LocalDateTime endRentDate;
+    private final LocalDateTime endRentTime;
 
     @Schema(description = "대여자 이름 (대여하지 않은 경우 null)", example = "홍길동", nullable = true)
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -35,8 +35,8 @@ public class EquipmentResponse {
 
     public EquipmentResponse(Equipment equipment) {
         this.modelName = equipment.getEquipmentModel().getName();
-        this.startRentDate = equipment.getStartRentDate();
-        this.endRentDate = equipment.getEndRentDate();
+        this.startRentTime = equipment.getStartRentTime();
+        this.endRentTime = equipment.getEndRentTime();
         this.renterName = equipment.getRenter() != null
                 ? equipment.getRenter().getName()
                 : null;

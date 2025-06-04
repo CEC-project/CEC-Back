@@ -70,8 +70,8 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     @Modifying
     @Query("UPDATE Equipment e SET "
             + "e.status = :status, "
-            + "e.startRentDate = :start, "
-            + "e.endRentDate = :end, "
+            + "e.startRentTime = :start, "
+            + "e.endRentTime = :end, "
             + "e.semesterSchedule = :schedule "
             + "WHERE e.id IN :ids")
     void rentByIds(
@@ -86,8 +86,8 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     @Modifying
     @Query("UPDATE Equipment e SET "
             + "e.status = :status, "
-            + "e.startRentDate = null, "
-            + "e.endRentDate = null, "
+            + "e.startRentTime = null, "
+            + "e.endRentTime = null, "
             + "e.semesterSchedule = null "
             + "WHERE e IN :equipments")
     void cancelRent(List<Equipment> equipments, Status status);
@@ -100,8 +100,8 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
 
     @Modifying
     @Transactional
-    @Query("UPDATE Equipment e SET e.status = :newStatus WHERE e.status = :targetStatus AND e.startRentDate < :now")
-    void updateStatusByStartRentDateBefore(@Param("targetStatus") Status targetStatus,
+    @Query("UPDATE Equipment e SET e.status = :newStatus WHERE e.status = :targetStatus AND e.startRentTime < :now")
+    void updateStatusByStartRentTimeBefore(@Param("targetStatus") Status targetStatus,
                                            @Param("newStatus") Status newStatus,
                                            @Param("now") LocalDateTime now);
 

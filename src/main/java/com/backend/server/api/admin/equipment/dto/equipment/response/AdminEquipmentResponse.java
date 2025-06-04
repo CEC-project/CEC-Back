@@ -58,11 +58,14 @@ public class AdminEquipmentResponse {
     @Schema(description = "이용 제한 학년 (문자열)", example = "1234")
     private String restrictionGrade;
 
+    @Schema(description = "대여 신청시각", example = "2024-05-20T10:00:00")
+    private LocalDateTime requestedTime;
+
     @Schema(description = "대여 시작일", example = "2024-05-20T10:00:00")
-    private LocalDateTime startRentDate;
+    private LocalDateTime startRentTime;
 
     @Schema(description = "대여 종료일", example = "2024-05-27T10:00:00")
-    private LocalDateTime endRentDate;
+    private LocalDateTime endRentTime;
 
     public AdminEquipmentResponse(Equipment equipment) {
         if (equipment.getRenter() != null)
@@ -83,7 +86,8 @@ public class AdminEquipmentResponse {
         this.categoryName = equipment.getEquipmentCategory().getName();
         this.description = equipment.getDescription();
         this.restrictionGrade = equipment.getRestrictionGrade();
-        this.startRentDate = equipment.getStartRentDate();
-        this.endRentDate = equipment.getEndRentDate();
+        this.requestedTime = equipment.getRequestedTime();
+        this.startRentTime = equipment.getStartRentTime();
+        this.endRentTime = equipment.getEndRentTime();
     }
 }

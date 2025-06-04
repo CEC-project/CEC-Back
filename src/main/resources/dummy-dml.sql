@@ -95,13 +95,13 @@ values  ('2001-03-15', 0, 3, 5, 2, 1,
             '01001234567', 'profile17.png', 'ROLE_USER', '202300019');
 
 -- 강의실 INSERT
-insert into public.classroom (end_time, start_time, created_at, manager_id, renter_id, updated_at, attachment, location, name, status)
+insert into public.classroom (end_time, start_time, created_at, manager_id, renter_id, updated_at, attachment, location, name, status, requested_time, start_rent_time, end_rent_time)
 values
-    ('18:00:00', '09:00:00', now(), 1, null, now(), null, '101', '101호', 'AVAILABLE'),
-    ('18:00:00', '09:00:00', now(), 1, null, now(), null, '102', '102호', 'AVAILABLE'),
-    ('18:00:00', '09:00:00', now(), 1, 1, now(), null, '103', '103호', 'RENTAL_PENDING'),
-    ('18:00:00', '09:00:00', now(), 1, 1, now(), null, '105', '105호', 'RENTAL_PENDING'),
-    ('18:00:00', '09:00:00', now(), 1, null, now(), null, '201', '201호', 'AVAILABLE');
+    ('18:00:00', '09:00:00', now(), 1, null, now(), null, '101', '101호', 'AVAILABLE', null, null, null),
+    ('18:00:00', '09:00:00', now(), 1, null, now(), null, '102', '102호', 'AVAILABLE', null, null, null),
+    ('18:00:00', '09:00:00', now(), 1, 1, now(), null, '103', '103호', 'RENTAL_PENDING', date_trunc('day', now()) + interval '11 hours', '13:00:00', '15:00:00'),
+    ('18:00:00', '09:00:00', now(), 1, 1, now(), null, '105', '105호', 'RENTAL_PENDING', date_trunc('day', now()) + interval '10 hours', '14:00:00', '16:00:00'),
+    ('18:00:00', '09:00:00', now(), 1, null, now(), null, '201', '201호', 'AVAILABLE', null, null, null);
 
 -- 교수 INSERT
 insert into public.professor (created_at, updated_at, description, name)
@@ -136,20 +136,19 @@ values  (0, 1, '2025-05-28 17:44:19.441547', null, 10, 1, 0, null, null, 0, null
         (0, 1, '2025-05-28 17:44:19.526169', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.526169', '최신 맥북 프로 16인치', 'images/macbook_pro.jpg', '3', 'CAMCAN250505', 'AVAILABLE');
 
 -- 공지사항
- insert into public.notice (view, title, content, important, attachment_url, author_id, created_at, updated_at)
-       values
-          (0,'시스템 점검 안내',
-           '안녕하세요. 서버 시스템 점검으로 인해 2025년 5월 25일 오전 2시~4시까지 서비스 이용이 일시 중단됩니다. 이용에 불편을 드려 죄송합니다.',
-           true, null, 3, '2025-05-20 09:00:00', '2025-05-20 09:00:00'),
-          (0,'신규 기능 업데이트 소식',
-           '안녕하세요! 많은 분들이 요청해주신 댓글 기능이 추가되었습니다. 이제 게시글에 댓글을 작성하고 다른 사용자들과 소통할 수 있습니다. 많은 이용 부탁드립니다.',
-           false, 'https://example.com/update-guide.pdf', 2, '2025-05-18 14:30:00', '2025-05-18 14:30:00'),
-          (0,'개인정보 처리방침 변경 안내',
-           '개인정보보호법 개정에 따라 개인정보 처리방침이 일부 변경되었습니다. 주요 변경사항을 확인하시고 동의 절차를 진행해주시기 바랍니다. 미동의 시 서비스 이용에 제한이 있을 수 있습니다.',
-           true, 'https://example.com/privacy-policy.pdf', 1, '2025-05-15 11:00:00', '2025-05-15 11:00:00'),
-          (0,'5월 정기 점검 및 이벤트 안내',
-           '5월 정기 점검이 예정되어 있습니다. 점검 기간: 2025년 5월 30일 오전 1시~3시. 또한 점검 완료 후 감사 이벤트로 포인트 지급 이벤트를 진행할 예정이니 많은 참여 바랍니다.',
-           false, null, 3, '2025-05-22 16:45:00', '2025-05-22 16:45:00');
+insert into public.notice (view, title, content, important, attachment_url, author_id, created_at, updated_at)
+values  (0,'시스템 점검 안내',
+        '안녕하세요. 서버 시스템 점검으로 인해 2025년 5월 25일 오전 2시~4시까지 서비스 이용이 일시 중단됩니다. 이용에 불편을 드려 죄송합니다.',
+        true, null, 3, '2025-05-20 09:00:00', '2025-05-20 09:00:00'),
+        (0,'신규 기능 업데이트 소식',
+        '안녕하세요! 많은 분들이 요청해주신 댓글 기능이 추가되었습니다. 이제 게시글에 댓글을 작성하고 다른 사용자들과 소통할 수 있습니다. 많은 이용 부탁드립니다.',
+        false, 'https://example.com/update-guide.pdf', 2, '2025-05-18 14:30:00', '2025-05-18 14:30:00'),
+        (0,'개인정보 처리방침 변경 안내',
+        '개인정보보호법 개정에 따라 개인정보 처리방침이 일부 변경되었습니다. 주요 변경사항을 확인하시고 동의 절차를 진행해주시기 바랍니다. 미동의 시 서비스 이용에 제한이 있을 수 있습니다.',
+        true, 'https://example.com/privacy-policy.pdf', 1, '2025-05-15 11:00:00', '2025-05-15 11:00:00'),
+        (0,'5월 정기 점검 및 이벤트 안내',
+        '5월 정기 점검이 예정되어 있습니다. 점검 기간: 2025년 5월 30일 오전 1시~3시. 또한 점검 완료 후 감사 이벤트로 포인트 지급 이벤트를 진행할 예정이니 많은 참여 바랍니다.',
+        false, null, 3, '2025-05-22 16:45:00', '2025-05-22 16:45:00');
 
 -- 연간 일정
 insert into public.year_schedule (date, end_at, is_holiday, start_at, classroom_id, created_at, updated_at, description)

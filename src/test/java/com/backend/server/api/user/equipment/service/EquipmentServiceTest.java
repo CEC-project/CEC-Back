@@ -117,8 +117,8 @@ class EquipmentServiceTest {
             Equipment rented = equipment.toBuilder()
                     .status(Status.RENTAL_PENDING)
                     .renter(user)
-                    .startRentDate(startDate)
-                    .endRentDate(endDate)
+                    .startRentTime(startDate)
+                    .endRentTime(endDate)
                     .build();
 
             EquipmentActionRequest rentCancelRequest = request.toBuilder()
