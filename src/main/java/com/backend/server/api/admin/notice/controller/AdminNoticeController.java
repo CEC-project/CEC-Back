@@ -16,7 +16,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "5-1. 게시판 관리 / 공지사항", description = "수정 필요")
+@Tag(name = "5-1. 게시판 관리 / 공지사항", description = "1차 수정 완료")
 @RestController
 @RequestMapping("/api/admin/notices")
 @RequiredArgsConstructor
@@ -25,8 +25,7 @@ public class AdminNoticeController {
   private final AdminNoticeService adminNoticeService;
 
   @Operation(
-      summary = "공지사항 등록",
-      description = "새로운 공지사항을 등록합니다."
+      summary = "공지사항 등록"
   )
   @PostMapping
   public ApiResponse<Long> createNotice(
@@ -37,7 +36,9 @@ public class AdminNoticeController {
     return ApiResponse.success("공지사항 등록 성공", adminNoticeService.createNotice(request, loginUser));
   }
 
-  @Operation(summary = "공지사항 목록 조회")
+  @Operation(
+      summary = "공지사항 목록 조회"
+          )
   @GetMapping
   public ApiResponse<NoticeListResponse> getNotices(
       @Parameter(description = "공지사항 목록 조회 요청 DTO")
@@ -47,8 +48,7 @@ public class AdminNoticeController {
   }
 
   @Operation(
-      summary = "공지사항 상세조회",
-      description = "공지사항 ID를 이용하여 공지사항의 상세 정보를 조회합니다."
+      summary = "공지사항 상세조회"
   )
   @GetMapping("{id}")
   public ApiResponse<NoticeResponse> getNotice(
