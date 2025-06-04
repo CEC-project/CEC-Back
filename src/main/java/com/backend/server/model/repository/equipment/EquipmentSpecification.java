@@ -15,8 +15,11 @@ import org.springframework.util.StringUtils;
 
 import jakarta.persistence.criteria.Predicate;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest.Status.CANCELABLE;
 
 public class EquipmentSpecification {
 
@@ -51,7 +54,19 @@ public class EquipmentSpecification {
 
             // 상태 필터
             if (request.getStatus() != null) {
-                predicates.add(cb.equal(root.get("status"), request.getStatus()));
+                switch (request.getStatus()) {
+                    case BROKEN, RENTAL_PENDING, IN_USE, AVAILABLE -> {
+                        Status s = Status.valueOf(request.getStatus().name());
+                        predicates.add(cb.equal(root.get("status"), s));
+                    }
+                    case CANCELABLE -> {
+                        predicates.add(cb.equal(root.get("status"), Status.IN_USE));
+                        predicates.add(cb.greaterThan(root.get("startTime"), LocalDateTime.now()));
+                    }
+                    case ALL -> {
+                        // 조건 없음
+                    }
+                }
             }
 
             // 검색 키워드 필터
@@ -85,6 +100,8 @@ public class EquipmentSpecification {
                     }
                 }
             }
+
+
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };
@@ -132,8 +149,17 @@ public class EquipmentSpecification {
                 }
             }
 
+            // 상태 필터
             if (request.getStatus() != null) {
-                predicates.add(cb.equal(root.get("status"), request.getStatus()));
+                switch (request.getStatus()) {
+                    case BROKEN, RENTAL_PENDING, IN_USE, AVAILABLE -> {
+                        Status s = Status.valueOf(request.getStatus().name());
+                        predicates.add(cb.equal(root.get("status"), s));
+                    }
+                    case ALL -> {
+                        // 조건 없음
+                    }
+                }
             }
 
             // 대여 제한 학년이 걸리는 장비는 조회 제외
