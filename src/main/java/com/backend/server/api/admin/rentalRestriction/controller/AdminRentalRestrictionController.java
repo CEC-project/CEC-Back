@@ -56,6 +56,6 @@ public class AdminRentalRestrictionController {
     public ApiResponse<AdminUserListResponse> getAllowedUsers(
             @ParameterObject AdminRentalRestrictionListRequest request) {
         AdminUserListResponse result = rentalRestrictionService.getAllowedUsers(request);
-        return ApiResponse.success("현재 제재된 유저 목록 조회 성공", result);
+        return ApiResponse.success("현재 제재되지 \"않은\" 유저 목록 조회 API", result);
     }
 }
