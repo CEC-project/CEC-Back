@@ -22,7 +22,7 @@ public class EquipmentBrokenHistory extends BaseTimeEntity {
     @JoinColumn(name = "broken_by_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User brokenBy;
 
-    @Enumerated(EnumType.STRING)
+        @Enumerated(EnumType.STRING)
     @Column(name = "broken_type", nullable = false)
     private BrokenType brokenType;
 
@@ -34,4 +34,13 @@ public class EquipmentBrokenHistory extends BaseTimeEntity {
 
     @Column(name = "broken_detail", length = 500)
     private String brokenDetail;
+
+    public static EquipmentBrokenHistory ofReturnBroken(Equipment equipment, String detail) {
+        return EquipmentBrokenHistory.builder()
+                .equipment(equipment)
+                .brokenBy(equipment.getRenter())
+                .brokenType(BrokenType.RETURN_BROKEN)
+                .brokenDetail(detail)
+                .build();
+    }
 }

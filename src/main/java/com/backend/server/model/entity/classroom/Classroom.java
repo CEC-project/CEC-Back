@@ -50,7 +50,7 @@ public class Classroom extends BaseTimeEntity {
     private LocalTime startTime;
     private LocalTime endTime;
 
-    private LocalDateTime requestedTime;
+    private LocalDateTime requestedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "renter_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -60,7 +60,7 @@ public class Classroom extends BaseTimeEntity {
         this.status = Status.AVAILABLE;
         this.startRentTime = null;
         this.endRentTime = null;
-        this.requestedTime = null;
+        this.requestedAt = null;
         this.renter = null;
     }
 
@@ -68,7 +68,7 @@ public class Classroom extends BaseTimeEntity {
         this.status = Status.RENTAL_PENDING;
         this.startRentTime = startRentTime;
         this.endRentTime = endRentTime;
-        this.requestedTime = LocalDateTime.now();
+        this.requestedAt = LocalDateTime.now();
         this.renter = renter;
     }
 
