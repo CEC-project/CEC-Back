@@ -1,5 +1,6 @@
 package com.backend.server.api.user.equipment.dto.equipment;
 
+import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentListRequest;
 import com.backend.server.api.common.dto.PageableRequest;
 import com.backend.server.model.entity.enums.Status;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,8 +20,12 @@ public class EquipmentListRequest implements PageableRequest {
     @Schema(description = "검색 타입 (ALL, MODEL_NAME, CATEGORY_NAME, SERIAL_NUMBER, RENTER_NAME)", example = "ALL", implementation = SearchType.class)
     private SearchType searchType;
 
-    @Schema(description = "장비 상태 (AVAILABLE, IN_USE, BROKEN 등)", example = "AVAILABLE", implementation = Status.class)
-    private Status status;
+
+    @Schema(description = "장비 상태 (ALL, AVAILABLE, IN_USE, BROKEN, RENTAL_PENDING, RETURN_PENDING 중 선택)",
+            example = "AVAILABLE"
+            ,implementation = EquipmentStatus.class)
+    private EquipmentStatus status = EquipmentStatus.ALL;
+
 
 
     // 페이징 및 정렬
@@ -34,7 +39,10 @@ public class EquipmentListRequest implements PageableRequest {
     private SortBy sortBy = SortBy.ID;
 
     @Schema(description = "정렬 방향 (ASC 또는 DESC)", example = "DESC", implementation = SortDirection.class)
-    private SortDirection sortDirection;
+    private SortDirection sortDirection = SortDirection.ASC;
+    public enum EquipmentStatus {
+        ALL, AVAILABLE, IN_USE, BROKEN, RENTAL_PENDING, RETURN_PENDING
+    }
 
     public enum SearchType {
         ALL, MODEL_NAME, CATEGORY_NAME, RENTER_NAME

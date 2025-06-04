@@ -24,7 +24,7 @@ public class AdminEquipmentListRequest implements PageableRequest {
             ,implementation = SearchType.class)
     private SearchType searchType = SearchType.ALL;
 
-    @Schema(description = "장비 상태 (ALL, AVAILABLE, IN_USE, BROKEN, RENTAL_PENDING, RETURN_PENDING 중 선택)",
+    @Schema(description = "장비 상태 (ALL, AVAILABLE, IN_USE, BROKEN, RENTAL_PENDING, RETURN_PENDING, CANCELABLE 중 선택)",
             example = "AVAILABLE"
             ,implementation = EquipmentStatus.class)
     private EquipmentStatus status = EquipmentStatus.ALL;
@@ -62,7 +62,7 @@ public class AdminEquipmentListRequest implements PageableRequest {
     }
 
     public enum EquipmentStatus {
-        ALL, AVAILABLE, IN_USE, BROKEN, RENTAL_PENDING, RETURN_PENDING
+        ALL, AVAILABLE, IN_USE, BROKEN, RENTAL_PENDING, RETURN_PENDING, CANCELABLE
     }
 
     public enum SortDirection {

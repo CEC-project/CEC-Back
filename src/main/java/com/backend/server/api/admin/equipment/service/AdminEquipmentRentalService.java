@@ -29,7 +29,7 @@ public class AdminEquipmentRentalService {
         BiFunction<Long, String, Long> operator = switch (request.getStatus()) {
             case ACCEPT -> (l, s) -> rentalAccept(l); //장비대여승인
             case RETURN -> (l, s) -> rentalReturn(l);//반납
-            //case CANCEL -> this::rentalCancel;
+            case CANCEL -> this::rentalCancel;
             case BROKEN -> this::rentalBroken;//대
             case REJECT -> this::rentalReject;
         };
@@ -54,6 +54,8 @@ public class AdminEquipmentRentalService {
 
         return equipmentId;
     }
+
+
     //반납
     public Long rentalReturn(Long equipmentId){
         Equipment equipment = equipmentRepository.findById(equipmentId)
@@ -72,6 +74,28 @@ public class AdminEquipmentRentalService {
         equipmentRepository.save(equipment);
 
         notificationProcess(equipment, "대여 반납", "");
+
+        return equipmentId;
+    }
+
+    //승인
+    public Long rentalCancel(Long equipmentId, String detail){
+        Equipment equipment = equipmentRepository.findById(equipmentId)
+                .orElseThrow(()-> new IllegalArgumentException("장비를 찾을 수 없습니다"+equipmentId));
+
+        if(equipment.getStatus() != Status.IN_USE){
+            throw new IllegalArgumentException("대여 요청 중인 장비만 대여 가능합니다.");
+        }
+        equipment = equipment.toBuilder()
+                .status(Status.AVAILABLE)
+                .renter(null)
+                .startRentDate(null)
+                .endRentDate(null)
+                .build();
+        equipmentRepository.save(equipment);
+
+        notificationProcess(equipment, "대여 취소", "\n대여 취소 사유 : " + detail);
+
 
         return equipmentId;
     }

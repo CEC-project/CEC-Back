@@ -105,11 +105,13 @@ public class EquipmentService {
 
 
     @Transactional
-    public void handleUserAction(LoginUser loginUser, EquipmentActionRequest request, EquipmentAction equipmentAction) {
+
+    public void handleUserAction(LoginUser loginUser, EquipmentActionRequest request) {
         User user = userRepository.findById(loginUser.getId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        BiConsumer<Long, EquipmentActionRequest> operator = switch (equipmentAction) {
+        BiConsumer<Long, EquipmentActionRequest> operator = switch (request.getAction()) {
+
             case RENT_REQUEST -> (id, req) -> handleRentRequest(user, loginUser, id, req);
             case RENT_CANCEL -> (id, req) -> handleRentCancel(user, id);
             case RETURN_REQUEST -> (id, req) -> handleReturnRequest(user, id);
