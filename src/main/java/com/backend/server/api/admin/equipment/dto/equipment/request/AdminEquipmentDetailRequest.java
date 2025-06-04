@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 public class AdminEquipmentDetailRequest {
     public enum Status {
-        RETURN, REJECT, BROKEN, ACCEPT
+        RETURN, REJECT, BROKEN, ACCEPT, CANCEL
     }
 
     @NotNull
