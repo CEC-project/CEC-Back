@@ -15,10 +15,10 @@ import org.springframework.data.domain.Sort;
 @Setter
 public abstract class AbstractPaginationParam {
 
-    @Schema(description = "페이지 번호 (기본값 0)", type = "Integer", example = "0")
+    @Schema(description = "페이지 번호 (기본값 0)", implementation = Integer.class, example = "0")
     protected Integer page;
 
-    @Schema(description = "페이지당 크기 (기본값 = 10)", type = "Integer", example = "10")
+    @Schema(description = "페이지당 크기 (기본값 = 10)", implementation = Integer.class, example = "10")
     protected Integer size;
 
     @Schema(description = "정렬 방법", implementation = Sort.Direction.class)

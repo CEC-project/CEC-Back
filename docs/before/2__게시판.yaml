@@ -1,0 +1,229 @@
+openapi: 3.0.3
+info:
+  title: CEC USER API Documentation
+  version: 1.0.12
+tags:
+- name: 2. 게시판
+paths:
+  /api/user/community/{id}:
+    get:
+      tags:
+      - 2. 게시판
+      summary: 게시판 단일 조회
+      operationId: getCommunityPostById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CommunityResponse'
+    put:
+      tags:
+      - 2. 게시판
+      summary: 게시판 글 수정
+      operationId: updateCommunityPost
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePostRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CommunityResponse'
+    delete:
+      tags:
+      - 2. 게시판
+      summary: 게시판 글 삭제
+      operationId: deleteCommunityPost
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+  /api/user/community:
+    get:
+      tags:
+      - 2. 게시판
+      summary: 게시판 목록 조회
+      operationId: getCommunityPosts
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/Pageable'
+      - name: typeId
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CommunityListResponse'
+    post:
+      tags:
+      - 2. 게시판
+      summary: 게시판 글 쓰기
+      operationId: createCommunityPost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePostRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CommunityResponse'
+  /api/user/community/{id}/recommend:
+    post:
+      tags:
+      - 2. 게시판
+      summary: 게시판 글 따1봉
+      operationId: recommendCommunityPost
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CommunityResponse'
+components:
+  schemas:
+    UpdatePostRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        type:
+          type: string
+        communityTypeId:
+          type: integer
+          format: int64
+    CommunityResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        community_type_id:
+          type: integer
+          format: int64
+        recommend:
+          type: integer
+          format: int32
+        view:
+          type: integer
+          format: int32
+        type:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        authorId:
+          type: integer
+          format: int64
+        authorName:
+          type: string
+        authorNickname:
+          type: string
+        authorProfilePicture:
+          type: string
+    CreatePostRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        type:
+          type: string
+        communityTypeId:
+          type: integer
+          format: int64
+    PageableInfo:
+      type: object
+      properties:
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+    Pageable:
+      type: object
+      properties:
+        page:
+          minimum: 0
+          type: integer
+          format: int32
+        size:
+          minimum: 1
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            type: string
+    CommunityListResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommunityResponse'
+        pageable:
+          $ref: '#/components/schemas/PageableInfo'

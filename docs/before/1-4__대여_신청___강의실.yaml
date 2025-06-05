@@ -1,0 +1,206 @@
+openapi: 3.0.3
+info:
+  title: CEC USER API Documentation
+  version: 1.0.12
+tags:
+- name: 1-4. 대여 신청 / 강의실
+paths:
+  /api/classroom/{id}/rental:
+    patch:
+      tags:
+      - 1-4. 대여 신청 / 강의실
+      summary: 강의실 대여 신청
+      operationId: rental
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassroomRentalRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseLong'
+  /api/classroom/{id}/cancel:
+    patch:
+      tags:
+      - 1-4. 대여 신청 / 강의실
+      summary: 강의실 대여 취소
+      operationId: cancel
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseLong'
+  /api/classroom:
+    get:
+      tags:
+      - 1-4. 대여 신청 / 강의실
+      summary: 강의실 목록 조회
+      operationId: getAllClassroom
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseListClassroomResponse'
+  /api/classroom/schedule:
+    get:
+      tags:
+      - 1-4. 대여 신청 / 강의실
+      summary: 휴일 + 특강 + 수업 + 대여 시간표 조회
+      description: "**일정이 시작되는 시간순으로 정렬해서 조회됩니다.**\n\n- **요청 파라미터**\n  - **date**\
+        \ : yyyy-HH-dd 형식. 조회할 주차의 아무 날짜.\n  - **classroomId** : 강의실 id"
+      operationId: getSchedule
+      parameters:
+      - name: date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: classroomId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseListScheduleResponse'
+components:
+  schemas:
+    ApiResponseLong:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: integer
+          format: int64
+    ClassroomRentalRequest:
+      required:
+      - endRentTime
+      - startRentTime
+      type: object
+      properties:
+        startRentTime:
+          type: string
+          description: 대여 시작 시간
+          example: '13:00'
+        endRentTime:
+          type: string
+          description: 대여 종료 시간
+          example: '14:00'
+    ApiResponseListClassroomResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassroomResponse'
+    ClassroomResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        attachment:
+          type: string
+        status:
+          type: string
+          example: AVAILABLE, IN_USE, BROKEN, RENTAL_PENDING 중 하나
+          enum:
+          - AVAILABLE(대여 가능)
+          - IN_USE(대여중)
+          - BROKEN(파손)
+          - RENTAL_PENDING(대여 신청 중)
+          - RETURN_PENDING(반납 처리중)
+        startTime:
+          type: string
+          description: 운영 시작 시간
+          example: 09:00
+        endTime:
+          type: string
+          description: 운영 종료 시간
+          example: '18:00'
+    ApiResponseListScheduleResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduleResponse'
+    ScheduleResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          example: HOLIDAY, SPECIAL_LECTURE, LECTURE, RENTAL 중 하나.
+          enum:
+          - HOLIDAY
+          - SPECIAL_LECTURE
+          - LECTURE
+          - RENTAL
+        day:
+          type: integer
+          description: 요일을 나타냄. 1, 2, 3, 4, 5 중 하나.
+          format: int32
+        date:
+          type: string
+          format: date
+        startAt:
+          type: string
+          description: 일정 시작 시간
+          example: '13:00'
+        endAt:
+          type: string
+          description: 일정 종료 시간
+          example: '13:00'
+        color:
+          type: string
+        content:
+          type: string
+          description: 강의실의 경우, 이 값은 항상 대여 됨 입니다.
+        id:
+          type: integer
+          description: 대여 취소할때는 이 값을 보내면 됩니다.
+          format: int64

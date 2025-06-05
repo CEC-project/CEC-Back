@@ -1,0 +1,96 @@
+openapi: 3.0.3
+info:
+  title: CEC USER API Documentation
+  version: 1.0.12
+tags:
+- name: 3-1. 유저 프로필 / 내 정보 수정
+paths:
+  /api/mypage:
+    get:
+      tags:
+      - 3-1. 유저 프로필 / 내 정보 수정
+      summary: 내 정보 조회
+      operationId: getMyInfo
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseMyInfoResponse'
+    put:
+      tags:
+      - 3-1. 유저 프로필 / 내 정보 수정
+      summary: 내 정보 수정
+      operationId: updateMyInfo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MyInfoRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseMyInfoResponse'
+components:
+  schemas:
+    MyInfoRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 이름
+          example: 홍길동
+        phoneNumber:
+          type: string
+          description: 휴대폰 번호
+          example: 01012345678
+        nickname:
+          type: string
+          description: 닉네임
+          example: 길동이
+        newPassword:
+          pattern: ^((?=.*[A-Za-z])(?=.*\d)|(?=.*[A-Za-z])(?=.*[^A-Za-z\d])|(?=.*\d)(?=.*[^A-Za-z\d])).{8,16}$
+          type: string
+          description: 새 비밀번호 (영문, 숫자, 특수기호 중 2가지 이상 조합, 8~16자)
+        confirmPassword:
+          type: string
+          description: 새 비밀번호 확인
+        imageUrl:
+          type: string
+          description: 프로필 이미지 S3 URL
+          example: https://s3.bucket/path/profile.jpg
+      description: 내 정보 수정 요청 DTO
+    ApiResponseMyInfoResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/MyInfoResponse'
+    MyInfoResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 사용자 이름
+          example: 홍길동
+        phoneNumber:
+          type: string
+          description: 전화번호
+          example: 010-1234-5678
+        nickname:
+          type: string
+          description: 닉네임
+          example: 길동이
+        imageUrl:
+          type: string
+          description: 프로필 사진 URL
+          nullable: true
+          example: https://example.com/profile.jpg

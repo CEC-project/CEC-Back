@@ -1,0 +1,349 @@
+openapi: 3.0.3
+info:
+  title: CEC USER API Documentation
+  version: 1.0.12
+tags:
+- name: 2. 게시판
+paths:
+  /api/board:
+    get:
+      tags:
+      - 2. 게시판
+      summary: 게시판 목록 조회
+      operationId: getBoardList
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseListBoardResponse'
+  /api/board/post/{id}:
+    get:
+      tags:
+      - 2. 게시판
+      summary: 게시글 단일 조회
+      operationId: getBoardPostById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponsePostResponse'
+    put:
+      tags:
+      - 2. 게시판
+      summary: 게시판 글 수정
+      operationId: updateBoardPost
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePostRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseLong'
+    delete:
+      tags:
+      - 2. 게시판
+      summary: 게시판 글 삭제
+      operationId: deleteBoardPost
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseVoid'
+  /api/board/post:
+    get:
+      tags:
+      - 2. 게시판
+      summary: 게시글 목록 조회
+      operationId: getBoardPosts
+      parameters:
+      - name: boardId
+        in: query
+        description: 게시판 ID(생략시 전체 조회)
+        required: false
+        schema:
+          type: integer
+          example: 1
+        example: 1
+      - name: searchKeyword
+        in: query
+        description: 검색어 (searchType 값에 따른 검색, 빈값이면 전체검색)
+        required: false
+        schema:
+          type: string
+          example: 카메라
+        example: 카메라
+      - name: searchType
+        in: query
+        description: "    검색 기준 (대문자로 전달해야 함)\n    - TITLE (제목)\n    - CONTENT (내용)\n\
+          \    - ALL (전체) (기본값)\n"
+        required: false
+        schema:
+          type: string
+          enum:
+          - TITLE
+          - CONTENT
+          - ALL
+        example: ID
+      - name: sortBy
+        in: query
+        description: "    정렬 기준 (대문자로 전달해야 함)\n    - ID (게시글 ID, 작성일 순서와 동일함)\n  \
+          \  - RECOMMEND (추천수)\n"
+        required: false
+        schema:
+          type: string
+          enum:
+          - ID
+          - RECOMMEND
+        example: ID
+      - name: page
+        in: query
+        description: 페이지 번호 (기본값 0)
+        required: false
+        schema:
+          type: integer
+          description: 페이지 번호 (기본값 0)
+          example: 0
+        example: 0
+      - name: size
+        in: query
+        description: 페이지당 크기 (기본값 = 10)
+        required: false
+        schema:
+          type: integer
+          description: 페이지당 크기 (기본값 = 10)
+          example: 10
+        example: 10
+      - name: sortDirection
+        in: query
+        description: 정렬 방법
+        required: false
+        schema:
+          type: string
+          enum:
+          - ASC
+          - DESC
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseBoardListResponse'
+    post:
+      tags:
+      - 2. 게시판
+      summary: 게시판 글 쓰기
+      operationId: createBoardPost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePostRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseLong'
+  /api/board/post/{id}/recommend:
+    post:
+      tags:
+      - 2. 게시판
+      summary: 게시판 글 따1봉
+      operationId: recommendBoardPost
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseLong'
+components:
+  schemas:
+    UpdatePostRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+    ApiResponsePostResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/PostResponse'
+    PostResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        recommend:
+          type: integer
+          format: int32
+        view:
+          type: integer
+          format: int32
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        attachments:
+          type: array
+          items:
+            type: string
+        author:
+          $ref: '#/components/schemas/AuthorResponse'
+        board:
+          $ref: '#/components/schemas/BoardResponse'
+    AuthorResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nickname:
+          type: string
+        role:
+          type: string
+          enum:
+          - ROLE_USER
+          - ROLE_ADMIN
+          - ROLE_SUPER_ADMIN
+        imageUrl:
+          type: string
+    ApiResponseListBoardResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BoardResponse'
+    BoardResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+    ApiResponseVoid:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+    CreatePostRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        type:
+          type: string
+        BoardTypeId:
+          type: integer
+          format: int64
+    ApiResponseLong:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: integer
+          format: int64
+    PageableInfo:
+      type: object
+      properties:
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+    BoardListResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/BoardResponse'
+        pageable:
+          $ref: '#/components/schemas/PageableInfo'
+    ApiResponseBoardListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/BoardListResponse'
