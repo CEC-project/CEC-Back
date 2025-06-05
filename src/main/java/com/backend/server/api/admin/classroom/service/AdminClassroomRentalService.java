@@ -5,9 +5,11 @@ import com.backend.server.api.admin.classroom.dto.AdminClassroomDetailResponse;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.service.CommonNotificationService;
+import com.backend.server.model.entity.BrokenRepairHistory;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.enums.Status;
+import com.backend.server.model.repository.BrokenRepairHistoryRepository;
 import com.backend.server.model.repository.UserRepository;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
 import com.backend.server.model.repository.classroom.ClassroomSpecification;
@@ -26,6 +28,7 @@ public class AdminClassroomRentalService {
     public final ClassroomRepository classroomRepository;
     public final UserRepository userRepository;
     private final CommonNotificationService notificationService;
+    private final BrokenRepairHistoryRepository brokenRepairHistoryRepository;
 
     @Transactional(readOnly = true)
     public List<AdminClassroomDetailResponse> getClassrooms(AdminClassroomSearchRequest request) {
@@ -119,13 +122,15 @@ public class AdminClassroomRentalService {
         return classroomId;
     }
 
+    //강의실 파손
     @Transactional
     public Long rentalBroken(Long classroomId, String detail) {
         // 강의실 조회
         Classroom classroom = classroomRepository.findById(classroomId)
                 .orElseThrow(() -> new IllegalArgumentException("강의실 id가 유효하지 않습니다."));
         String classroomName = classroom.getName();
-        Long renterId = classroom.getRenter().getId();
+        User renter = classroom.getRenter();
+        Long renterId = renter.getId();
 
         // 상태 확인
         if (classroom.getStatus() != Status.IN_USE)
@@ -134,6 +139,9 @@ public class AdminClassroomRentalService {
         // 상태 변경
         classroom.makeBroken(detail);
         classroomRepository.save(classroom);
+
+        BrokenRepairHistory history = BrokenRepairHistory.markAsBrokenWhenClassroomReturn(classroom, renter, detail);
+        brokenRepairHistoryRepository.save(history);
 
         // 알림 전송
         notificationProcess(classroomId, classroomName, renterId, "반납시 파손처리", "\n파손 내용 : " + detail);

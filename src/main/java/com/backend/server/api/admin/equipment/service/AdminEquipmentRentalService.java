@@ -3,9 +3,11 @@ package com.backend.server.api.admin.equipment.service;
 import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentDetailRequest;
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.service.CommonNotificationService;
+import com.backend.server.model.entity.BrokenRepairHistory;
+import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.equipment.Equipment;
-import com.backend.server.model.entity.equipment.EquipmentBrokenHistory;
+import com.backend.server.model.repository.BrokenRepairHistoryRepository;
 import com.backend.server.model.repository.equipment.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,7 @@ public class AdminEquipmentRentalService {
     private final EquipmentRepository equipmentRepository;
 
     private final CommonNotificationService notificationService;
-    private final EquipmentBrokenHistoryRepository equipmentBrokenHistoryRepository;
+    private final BrokenRepairHistoryRepository brokenRepairHistoryRepository;
 
     @Transactional
     public List<Long> changeStatus(AdminEquipmentDetailRequest request) {
@@ -117,14 +119,15 @@ public class AdminEquipmentRentalService {
         Equipment equipment = equipmentRepository.findById(equipmentId)
                 .orElseThrow(()-> new IllegalArgumentException("장비를 찾을 수 없습니다"+equipmentId));
         String equipmentName = equipment.getEquipmentModel().getName();
+        User renter = equipment.getRenter();
         Long renterId = equipment.getRenter().getId();
 
         if(equipment.getStatus() != Status.IN_USE){
             throw new IllegalArgumentException("대여 요청 상태인 장비만 반려 가능합니다.");
         }
 
-        EquipmentBrokenHistory history = EquipmentBrokenHistory.ofReturnBroken(equipment, detail);
-        equipmentBrokenHistoryRepository.save(history);
+        BrokenRepairHistory history = BrokenRepairHistory.markAsBrokenWhenEquipmentReturn(equipment, renter, detail);
+        brokenRepairHistoryRepository.save(history);
 
         equipment.makeBroken();
         equipmentRepository.save(equipment);
