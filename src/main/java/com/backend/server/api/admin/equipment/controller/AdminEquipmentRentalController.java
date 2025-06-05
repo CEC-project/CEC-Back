@@ -35,7 +35,7 @@ public class AdminEquipmentRentalController {
     }
 
     @Operation(
-            summary = "장비 대여 일괄 상태 변경 API")
+            summary = "장비 대여 일괄 상태 변경 API" , description = "상태는 [RETURN, CANCEL, BROKEN, REJECT, ACCEPT] 중 선택, ACCEPT,RETURN일 경우 detail생략")
     @PatchMapping("/status")
     public ApiResponse<List<Long>> changeStatus(@Valid @RequestBody AdminEquipmentDetailRequest request) {
         List<Long> ids = adminEquipmentRentalService.changeStatus(request);

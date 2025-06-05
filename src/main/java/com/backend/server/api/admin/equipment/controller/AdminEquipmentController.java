@@ -91,20 +91,20 @@ public class AdminEquipmentController {
         return ApiResponse.success("장비 상세조회 성공", adminEquipmentService.getEquipment(id));
     }
 
-    @PutMapping("/{id}/status")
-    @Operation(
-            summary = "장비 상태 변경"
-    )
-    public ApiResponse<Long> updateEquipmentStatus(
-            @PathVariable Long id,
-            @RequestBody AdminEquipmentStatusUpdateRequest request) {
-        adminEquipmentService.updateEquipmentStatus(id, request);
-        return ApiResponse.success("장비 상태 변경 성공", id);
-    }
+//    @PutMapping("/{id}/status")
+//    @Operation(
+//            summary = "장비 상태 변경"
+//    )
+//    public ApiResponse<Long> updateEquipmentStatus(
+//            @PathVariable Long id,
+//            @RequestBody AdminEquipmentStatusUpdateRequest request) {
+//        adminEquipmentService.updateEquipmentStatus(id, request);
+//        return ApiResponse.success("장비 상태 변경 성공", id);
+//    }
 
     @PatchMapping("/status")
     @Operation(
-            summary = "장비 상태 변경 (고장 또는 수리)"
+            summary = "장비 상태 변경 (고장 또는 수리) BROKEN, REPAIR중 선택"
     )
     public ApiResponse<List<Long>> changeEquipmentStatus(
             @RequestBody AdminEquipmentBrokenOrRepairRequest request,
