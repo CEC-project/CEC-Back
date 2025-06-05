@@ -29,6 +29,16 @@
 
 ---
 
+### 명세서
+
+[사용자 웹 api 명세서 수정전](user-api-docs-before.yaml)
+
+[사용자 웹 api 명세서 수정후](user-api-docs-after.yaml)
+
+https://wepplication.github.io/tools/compareDoc/ 에서 수정전/후를 쉽게 비교할수 있습니다.
+
+---
+
 ### 1. API 엔드포인트 규칙
 1. URI 맨 마지막에 / 제거
 2. URI 에 명사는 단수만 허용
