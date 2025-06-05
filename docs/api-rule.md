@@ -1,16 +1,31 @@
-## 앞으로 pr 승인은 코드리뷰를 거쳐야함
-1. 목적 : 사전에 명세서가 제대로 만들어지지 않은 상황이므로, 스웨거로 명세서를 대신하기 위해 엄격한 규칙 적용필요.
-2. 아래 규칙 준수 여부를 위주로 확인할 예정.
+### 사용자 웹 명세서
+
+지금 관리자 웹에서 프론트랑 연동하는 중에, 파라미터나 응답값 통일성 문제가 있어서,
+사용자 웹 쪽은 매끄럽게 작업하기 위해 사용자 웹 명세서를 다시 만들었습니다.
+
+[사용자 웹 api 명세서](user-api-docs-after.yaml)
+[사용자 웹 api 명세서(6월 5일 현재 상태)](user-api-docs-before.yaml)
+
+위 파일은 1800줄 정도 되므로, 컨트롤러 단위로 짧게 분리한 명세서는 [after](./after) 와 [before](./before) 폴더에서 볼수 있습니다. 
+
+파일 내용을 https://editor.swagger.io/ 사이트에 붙여넣거나, 인텔리제이로 보면 편하게 볼수 있습니다.
+[비교 사이트](https://wepplication.github.io/tools/compareDoc/) 에서 두 파일을 비교하면 뭘 고쳐야하는지 쉽게 보입니다.
+
+### 명세서 주요 변경사항
+1. 강의실/장비/프로필 사진은 imageUrl 로 통일하고, 게시글/문의 첨부파일 응답은 attachments 로 통일했습니다.
+   - 구분한 기준은 사진이냐 아니냐, 파일이 하나냐 아니냐 입니다.
+   - attachments 는 배열로 응답하는 것이 맞는것 같습니다.
+2. 게시글/댓글 작성자는 authorResponse dto를 반환하도록 통일했습니다.
+3. 문의 상세조회 응답에서 문의 답변도 응답하게 수정했습니다.
+4. community 를 전부 board 로 수정하고, url 를 수정했습니다.
+5. 다른 자잘한 수정사항도 있으니, 각자 맡은 부분 명세서를 [after](./after) 와 [before](./before) 폴더에서 찾아서 [비교 사이트](https://wepplication.github.io/tools/compareDoc/)에서 비교해 주세요.
+
 
 ---
 
-### 명세서
-
-[사용자 웹 api 명세서 수정전](user-api-docs-before.yaml)
-
-[사용자 웹 api 명세서 수정후](user-api-docs-after.yaml)
-
-https://wepplication.github.io/tools/compareDoc/ 에서 수정전/후를 쉽게 비교할수 있습니다.
+## 앞으로 pr 승인은 코드리뷰를 거쳐야함
+1. 목적 : 사전에 명세서가 제대로 만들어지지 않은 상황이므로, 스웨거로 명세서를 대신하기 위해 엄격한 규칙 적용필요.
+2. 아래 규칙 준수 여부를 위주로 확인할 예정.
 
 ---
 
