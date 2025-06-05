@@ -20,7 +20,7 @@ public class CommentRequest {
     @NotBlank(message = "댓글 내용은 필수 입력 항목입니다.")
     private String content;
 
-    @Schema(description = "댓글 대상 종류", example = "NOTICE")
+    @Schema(description = "댓글 대상 종류", implementation = TargetType.class)
     @NotNull(message = "댓글 대상 종류는 필수 입력 항목입니다.")
     private TargetType type;
 

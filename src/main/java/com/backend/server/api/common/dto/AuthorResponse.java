@@ -2,15 +2,15 @@ package com.backend.server.api.common.dto;
 
 import com.backend.server.model.entity.User;
 
-public record ProfileResponse(
+public record AuthorResponse(
         Long id,
         String name,
         String nickname,
-        String profilePicture,
+        String imageUrl,
         String role
 ) {
-    public static ProfileResponse from(User user) {
-        return new ProfileResponse(
+    public static AuthorResponse from(User user) {
+        return new AuthorResponse(
                 user.getId(),
                 user.getName(),
                 user.getNickname(),
