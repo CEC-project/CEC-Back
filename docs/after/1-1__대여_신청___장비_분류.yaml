@@ -1,0 +1,121 @@
+openapi: 3.0.3
+info:
+  title: CEC USER API Documentation
+  version: 1.0.12
+tags:
+- name: 1-1. 대여 신청 / 장비 분류
+paths:
+  /api/equipment-categories/{id}:
+    get:
+      tags:
+      - 1-1. 대여 신청 / 장비 분류
+      summary: 카테고리 단일 조회
+      operationId: getCategoryById
+      parameters:
+      - name: id
+        in: path
+        description: 조회할 장비 카테고리의 ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseEquipmentCategoryResponse'
+  /api/equipment-categories:
+    get:
+      tags:
+      - 1-1. 대여 신청 / 장비 분류
+      summary: 카테고리 전체 조회와 각 카테고리 별 장비 개수 통계
+      operationId: countEquipment
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseListEquipmentCategoryListResponse'
+components:
+  schemas:
+    ApiResponseEquipmentCategoryResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/EquipmentCategoryResponse'
+    EquipmentCategoryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 장비 카테고리 ID
+          format: int64
+          example: 1
+        name:
+          type: string
+          description: 장비 카테고리 이름
+          example: 카메라
+        englishCode:
+          type: string
+          description: 장비 카테고리 영어 코드
+          example: CAMERA
+        maxRentalCount:
+          type: integer
+          description: 최대 대여 가능 개수
+          format: int32
+          example: 2
+    ApiResponseListEquipmentCategoryListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EquipmentCategoryListResponse'
+    EquipmentCategoryListResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 장비 카테고리 ID
+          format: int64
+          example: 1
+        name:
+          type: string
+          description: 장비 카테고리 이름
+          example: 카메라
+        englishCode:
+          type: string
+          description: 영문 약자
+          example: SON
+        totalCount:
+          type: integer
+          description: 해당 카테고리의 전체 장비 수
+          format: int32
+          example: 20
+        available:
+          type: integer
+          description: 대여 가능한 장비 수
+          format: int32
+          example: 15
+        maxRentalCount:
+          type: integer
+          description: 사용자당 최대 대여 가능 수량
+          format: int32
+          example: 2
+        brokenCount:
+          type: integer
+          description: 파손된 장비 수
+          format: int32
+          example: 3
