@@ -2,6 +2,7 @@ package com.backend.server.api.user.notice.dto;
 
 import com.backend.server.api.common.dto.PageableInfo;
 import com.backend.server.model.entity.Notice;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.domain.Page;

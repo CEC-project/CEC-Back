@@ -1,0 +1,192 @@
+openapi: 3.0.3
+info:
+  title: CEC USER API Documentation
+  version: 1.0.12
+tags:
+- name: 공지사항
+paths:
+  /api/notices:
+    get:
+      tags:
+      - 공지사항
+      summary: 공지사항 목록 조회
+      operationId: getNotices
+      parameters:
+      - name: adminNoticeSearchType
+        in: query
+        description: 관리자 공지사항 검색 기준
+        required: false
+        schema:
+          type: string
+          enum:
+          - ALL
+          - TITLE
+          - CONTENT
+      - name: searchKeyword
+        in: query
+        description: 검색어
+        required: false
+        schema:
+          type: string
+          description: 검색어
+      - name: sortBy
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - ID
+      - name: page
+        in: query
+        description: 페이지 번호 (기본값 0)
+        required: false
+        schema:
+          type: integer
+          description: 페이지 번호 (기본값 0)
+          example: 0
+        example: 0
+      - name: size
+        in: query
+        description: 페이지당 크기 (기본값 = 10)
+        required: false
+        schema:
+          type: integer
+          description: 페이지당 크기 (기본값 = 10)
+          example: 10
+        example: 10
+      - name: sortDirection
+        in: query
+        description: 정렬 방법
+        required: false
+        schema:
+          type: string
+          enum:
+          - ASC
+          - DESC
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseNoticeListResponse'
+  /api/notices/{id}:
+    get:
+      tags:
+      - 공지사항
+      summary: 공지사항 단일조회
+      operationId: getNotice
+      parameters:
+      - name: id
+        in: path
+        description: 공지사항 ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseNoticeResponse'
+components:
+  schemas:
+    PageableInfo:
+      type: object
+      properties:
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+    ApiResponseNoticeListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/NoticeListResponse'
+    NoticeListResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/NoticeResponse'
+        pageable:
+          $ref: '#/components/schemas/PageableInfo'
+    NoticeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 공지사항 ID
+          format: int64
+          example: 1
+        title:
+          type: string
+          description: 공지사항 제목
+          example: 시스템 점검 안내
+        content:
+          type: string
+          description: 공지사항 본문 내용
+          example: 시스템 점검이 6월 3일 00시에 진행됩니다.
+        isImportant:
+          type: boolean
+          description: 중요 공지 여부 (true이면 상단 고정)
+          example: true
+        attachmentUrl:
+          type: string
+          description: 첨부 파일 URL
+          nullable: true
+          example: https://example.com/files/manual.pdf
+        view:
+          type: integer
+          description: 공지사항 조회수
+          format: int32
+          example: 132
+        createdAt:
+          type: string
+          description: 공지 등록 시간
+          format: date-time
+        updatedAt:
+          type: string
+          description: 공지 수정 시간
+          format: date-time
+        author:
+          $ref: '#/components/schemas/ProfileResponse'
+    ProfileResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        nickname:
+          type: string
+        profilePicture:
+          type: string
+        role:
+          type: string
+      description: 공지 작성자 정보
+    ApiResponseNoticeResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/NoticeResponse'

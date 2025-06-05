@@ -1,0 +1,168 @@
+openapi: 3.0.3
+info:
+  title: CEC USER API Documentation
+  version: 1.0.12
+tags:
+- name: 1-2. 대여 신청 / 장비 모델
+paths:
+  /api/equipment-models:
+    get:
+      tags:
+      - 1-2. 대여 신청 / 장비 모델
+      summary: 장비 모델 목록 조회
+      operationId: getAllModels
+      parameters:
+      - name: categoryId
+        in: query
+        description: 장비 카테고리 ID
+        required: false
+        schema:
+          type: string
+          description: 장비 카테고리 ID
+          example: 1
+        example: 1
+      - name: searchKeyword
+        in: query
+        description: 검색어 (모델명 또는 영문코드에 대해 부분 일치 검색)
+        required: false
+        schema:
+          type: string
+          description: 검색어 (모델명 또는 영문코드에 대해 부분 일치 검색)
+          example: 카메라
+        example: 카메라
+      - name: sortBy
+        in: query
+        description: "    정렬할 필드 이름 (대문자로 전달해야 함)\n    - NAME: 모델명 기준 정렬\n    - ID:\
+          \ 모델 ID 기준 정렬 (기본값)\n"
+        required: false
+        schema:
+          type: string
+          enum:
+          - NAME
+          - ID
+        example: ID
+      - name: page
+        in: query
+        description: 페이지 번호 (기본값 0)
+        required: false
+        schema:
+          type: integer
+          description: 페이지 번호 (기본값 0)
+          example: 0
+        example: 0
+      - name: size
+        in: query
+        description: 페이지당 크기 (기본값 = 10)
+        required: false
+        schema:
+          type: integer
+          description: 페이지당 크기 (기본값 = 10)
+          example: 10
+        example: 10
+      - name: sortDirection
+        in: query
+        description: 정렬 방법
+        required: false
+        schema:
+          type: string
+          enum:
+          - ASC
+          - DESC
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseEquipmentModelListResponse'
+  /api/equipment-models/{id}:
+    get:
+      tags:
+      - 1-2. 대여 신청 / 장비 모델
+      summary: 장비 모델 단일 조회
+      operationId: getModel
+      parameters:
+      - name: id
+        in: path
+        description: 조회할 장비 모델의 고유 ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseEquipmentModelResponse'
+components:
+  schemas:
+    PageableInfo:
+      type: object
+      properties:
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+    ApiResponseEquipmentModelListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/EquipmentModelListResponse'
+    EquipmentModelListResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/EquipmentModelResponse'
+        pageable:
+          $ref: '#/components/schemas/PageableInfo'
+    EquipmentModelResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 장비 모델 ID
+          format: int64
+          example: 1
+        name:
+          type: string
+          description: 장비 모델 이름
+          example: SONY
+        englishCode:
+          type: string
+          description: 장비 모델의 영어 코드
+          example: CAMERA
+        available:
+          type: boolean
+          description: 현재 사용 가능한지 여부
+          example: true
+        categoryId:
+          type: integer
+          description: 장비 모델이 속한 카테고리 ID
+          format: int64
+          example: 3
+    ApiResponseEquipmentModelResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/EquipmentModelResponse'

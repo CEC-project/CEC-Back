@@ -10,10 +10,10 @@ import org.springframework.data.domain.Sort;
 @Getter
 public class CommentListRequest extends AbstractPaginationParam {
     //BOARD, NOTICE, INQUIRY
-    @Schema(description = "BOARD, NOTICE, INQUIRY 중 1", implementation = CommentSortType.class)
+    @Schema(description = "BOARD, NOTICE, INQUIRY 중 1", implementation = TargetType.class)
     private TargetType type;
     //대상 댓글 아이디
-    @Schema(description = "대댓글 대상", implementation = CommentSortType.class)
+    @Schema(description = "대댓글 대상", implementation = Long.class)
     private Long targetId;
 
     @Schema(description = "정렬 기준", implementation = CommentSortType.class)
