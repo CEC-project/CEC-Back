@@ -6,12 +6,14 @@ import com.backend.server.api.admin.classroom.dto.AdminClassroomResponse;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
 import com.backend.server.api.admin.classroom.service.AdminClassroomService;
 import com.backend.server.api.common.dto.ApiResponse;
+import com.backend.server.api.common.dto.LoginUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,8 +72,8 @@ public class AdminClassroomController {
 
     @Operation(summary = "강의실 수리 완료 API", description = "파손된 강의실을 정상 상태로 되돌립니다.")
     @PostMapping("/{id}/repair")
-    public ApiResponse<Long> repairClassroom(@PathVariable Long id, @Valid @RequestBody AdminClassroomDetailRequest request) {
-        Long repairId = adminClassroomService.repairClassroom(id, request);
+    public ApiResponse<Long> repairClassroom(@PathVariable Long id, @Valid @RequestBody AdminClassroomDetailRequest request, @AuthenticationPrincipal LoginUser loginUser) {
+        Long repairId = adminClassroomService.repairClassroom(id, request, loginUser);
         return ApiResponse.success("강의실 수리 완료", repairId);
     }
 }
