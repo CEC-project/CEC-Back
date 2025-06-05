@@ -21,12 +21,7 @@ public class EquipmentModelListRequest extends AbstractPaginationParam {
     private String keyword;
 
     @Schema(
-            description = """
-            정렬할 필드 이름 (대문자로 전달해야 함)
-            - NAME: 모델명 기준 정렬
-            - ID: 모델 ID 기준 정렬
-        """,
-            example = "ID",
+
             implementation = SortBy.class
     )
 

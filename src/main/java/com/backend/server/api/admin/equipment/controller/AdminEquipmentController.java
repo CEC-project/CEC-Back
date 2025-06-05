@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin/equipments")
-@Tag(name = "3-1. 강의실/장비 관리 / 장비 관리 / 장비", description = "수정 필요")
+@Tag(name = "3-1. 강의실/장비 관리 / 장비 관리 / 장비", description = "수정 완료")
 public class AdminEquipmentController {
 
     private final AdminEquipmentService adminEquipmentService;
@@ -34,12 +34,7 @@ public class AdminEquipmentController {
 
     @PostMapping
     @Operation(
-            summary = "장비 등록",
-            description = """
-            새 장비를 시스템에 등록합니다.
-    
-            입력 항목에는 이미지 경로, 카테고리 ID, 모델 ID, 수량, 관리자 ID, 설명, 제한 학년 등이 포함됩니다.
-            """
+            summary = "장비 등록"
 
     )
     public ApiResponse<List<Long>> createEquipment(

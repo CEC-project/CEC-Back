@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/admin/equipment-models")
 @RequiredArgsConstructor
-@Tag(name = "3-1. 강의실/장비 관리 / 장비 관리 / 모델", description = "수정 필요")
+@Tag(name = "3-1. 강의실/장비 관리 / 장비 관리 / 모델", description = "수정 완료")
 public class AdminEquipmentModelController {
 
     private final AdminEquipmentModelService adminEquipmentModelService;

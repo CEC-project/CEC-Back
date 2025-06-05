@@ -31,11 +31,11 @@ public class BrokenRepairHistory extends BaseTimeEntity{
 
     // 대상 정보
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "equipment_id")
+    @JoinColumn(name = "equipment_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Equipment equipment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "classroom_id")
+    @JoinColumn(name = "classroom_id",foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Classroom classroom;
 
     // 공통 정보
@@ -45,13 +45,13 @@ public class BrokenRepairHistory extends BaseTimeEntity{
     private BrokenType brokenType; // 파손일 때만
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "broken_by_id")
+    @JoinColumn(name = "broken_by_id" ,foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT) )
     private User brokenBy; // 파손일 때만
 
     private String brokenByName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "related_broken_id")
+    @JoinColumn(name = "related_broken_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private BrokenRepairHistory relatedBrokenHistory;
 
     @PrePersist
