@@ -101,7 +101,9 @@ values
     ('18:00:00', '09:00:00', now(), 1, null, now(), null, '102', '102호', 'AVAILABLE', null, null, null),
     ('18:00:00', '09:00:00', now(), 1, 1, now(), null, '103', '103호', 'RENTAL_PENDING', date_trunc('day', now()) + interval '11 hours', '13:00:00', '15:00:00'),
     ('18:00:00', '09:00:00', now(), 1, 1, now(), null, '105', '105호', 'RENTAL_PENDING', date_trunc('day', now()) + interval '10 hours', '14:00:00', '16:00:00'),
-    ('18:00:00', '09:00:00', now(), 1, null, now(), null, '201', '201호', 'AVAILABLE', null, null, null);
+    ('18:00:00', '09:00:00', now(), 1, null, now(), null, '201', '201호', 'AVAILABLE', null, null, null),
+    ('18:00:00', '09:00:00', now(), 1, null, now(), null, '202', '202호', 'IN_USE', null, null, null),
+    ('18:00:00', '09:00:00', now(), 1, null, now(), null, '203', '203호', 'BROKEN', null, null, null);
 
 -- 교수 INSERT
 insert into public.professor (created_at, updated_at, description, name)
@@ -138,8 +140,13 @@ values  (0, 1, '2025-05-28 17:44:19.441547', null, 10, 1, 0, null, null, 0, null
         (0, 1, '2025-06-04 10:01:00', '2025-06-10 10:01:00', 10, 1, 0, null, 3, 0, '2025-06-05 10:01:00', '2025-06-04 10:01:00', '대여 신청된 맥북 프로', 'images/macbook_pro.jpg', '3', 'CAMCAN250507', 'RENTAL_PENDING'),
         (0, 1, '2025-06-04 10:02:00', '2025-06-10 10:02:00', 10, 1, 0, null, 3, 0, '2025-06-05 10:02:00', '2025-06-04 10:02:00', '대여 신청된 맥북 프로', 'images/macbook_pro.jpg', '3', 'CAMCAN250508', 'RENTAL_PENDING'),
         (0, 1, '2025-06-04 10:03:00', '2025-06-10 10:03:00', 10, 1, 0, null, 3, 0, '2025-06-05 10:03:00', '2025-06-04 10:03:00', '대여 신청된 맥북 프로', 'images/macbook_pro.jpg', '3', 'CAMCAN250509', 'RENTAL_PENDING'),
-        (0, 1, '2025-06-04 10:04:00', '2025-06-10 10:04:00', 10, 1, 0, null, 3, 0, '2025-06-05 10:04:00', '2025-06-04 10:04:00', '대여 신청된 맥북 프로', 'images/macbook_pro.jpg', '3', 'CAMCAN250510', 'RENTAL_PENDING');
-
+        (0, 1, '2025-06-04 10:04:00', '2025-06-10 10:04:00', 10, 1, 0, null, 3, 0, '2025-06-05 10:04:00', '2025-06-04 10:04:00', '대여 신청된 맥북 프로', 'images/macbook_pro.jpg', '3', 'CAMCAN250510', 'RENTAL_PENDING'),
+        (0, 1, '2025-06-05 10:10:00', '2025-06-11 10:10:00', 10, 1, 1, null, 3, 0, '2025-06-05 10:10:00', '2025-06-05 10:10:00', '사용 중인 맥북 프로', 'images/macbook_pro.jpg', '3', 'CAMCAN250511', 'IN_USE'),
+        (0, 1, '2025-06-05 10:11:00', '2025-06-11 10:11:00', 10, 1, 2, null, 3, 0, '2025-06-05 10:11:00', '2025-06-05 10:11:00', '사용 중인 맥북 프로', 'images/macbook_pro.jpg', '3', 'CAMCAN250512', 'IN_USE'),
+        (0, 1, '2025-06-05 10:12:00', '2025-06-11 10:12:00', 10, 1, 3, null, 3, 0, '2025-06-05 10:12:00', '2025-06-05 10:12:00', '사용 중인 맥북 프로', 'images/macbook_pro.jpg', '3', 'CAMCAN250513', 'IN_USE'),
+        (1, 1, '2025-06-05 10:20:00', null, 10, 1, 5, null, null, 0, null, '2025-06-05 10:20:00', '파손된 맥북 프로', 'images/macbook_pro.jpg', '3', 'CAMCAN250514', 'BROKEN'),
+        (2, 1, '2025-06-05 10:21:00', null, 10, 1, 6, null, null, 1, null, '2025-06-05 10:21:00', '파손된 맥북 프로', 'images/macbook_pro.jpg', '3', 'CAMCAN250515', 'BROKEN'),
+        (1, 1, '2025-06-05 10:22:00', null, 10, 1, 7, null, null, 0, null, '2025-06-05 10:22:00', '파손된 맥북 프로', 'images/macbook_pro.jpg', '3', 'CAMCAN250516', 'BROKEN');
 -- 공지사항
 insert into public.notice (view, title, content, important, attachment_url, author_id, created_at, updated_at)
 values  (0,'시스템 점검 안내',
