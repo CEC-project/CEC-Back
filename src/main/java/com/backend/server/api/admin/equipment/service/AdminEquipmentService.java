@@ -4,14 +4,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 
 import com.backend.server.api.admin.equipment.dto.equipment.request.*;
 import com.backend.server.api.common.dto.LoginUser;
+import com.backend.server.model.entity.BrokenRepairHistory;
 import com.backend.server.model.entity.enums.BrokenType;
 import com.backend.server.model.entity.equipment.*;
+import com.backend.server.model.repository.BrokenRepairHistoryRepository;
 import com.backend.server.model.repository.equipment.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,8 +39,8 @@ public class AdminEquipmentService {
     private final EquipmentRepository equipmentRepository;
     private final EquipmentCategoryRepository equipmentCategoryRepository;
     private final EquipmentModelRepository equipmentModelRepository;
-    private final EquipmentBrokenHistoryRepository equipmentBrokenHistoryRepository;
-    private final EquipmentRepairHistoryRepository equipmentRepairHistoryRepository;
+    private final BrokenRepairHistoryRepository brokenRepairHistoryRepository;
+
     
     //어드민 유저 조회
     public List<AdminManagerCandidatesResponse> getAdminUsers() {
@@ -209,14 +212,7 @@ public class AdminEquipmentService {
         User user = userRepository.findById(loginUser.getId())
                 .orElseThrow(()->new IllegalArgumentException("관리자를 찾을 수 없습니다"));
 
-        EquipmentBrokenHistory history = EquipmentBrokenHistory.builder()
-                .equipment(equipment)
-                .brokenBy(user)
-                .brokenType(BrokenType.ADMIN_BROKEN)
-                .brokenDetail(detail)
-                .build();
 
-        equipmentBrokenHistoryRepository.save(history);
 
         equipment = equipment.toBuilder()
                 .status(Status.BROKEN)
@@ -226,6 +222,9 @@ public class AdminEquipmentService {
                 .build();
 
         equipmentRepository.save(equipment);
+
+        BrokenRepairHistory history = BrokenRepairHistory.markAsBrokenEquipmentByAdmin(equipment, user, detail);
+        brokenRepairHistoryRepository.save(history);
         return  equipmentId;
     }
     //장비 상태 수리 처리
@@ -238,31 +237,31 @@ public class AdminEquipmentService {
             throw new IllegalArgumentException("고장(BROKEN) 상태의 장비만 수리할 수 있습니다.");
         }
 
-        // 최근 고장 이력 찾기
-        EquipmentBrokenHistory brokenHistory = equipmentBrokenHistoryRepository
-                .findTopByEquipmentOrderByCreatedAtDesc(equipment)
-                .orElseThrow(() -> new IllegalStateException("고장 이력이 존재하지 않습니다."));
+        User user = userRepository.findById(loginUser.getId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        // 수리 이력 기록
-        EquipmentRepairHistory repairHistory = EquipmentRepairHistory.builder()
-                .equipment(equipment)
-                .equipmentBrokenHistory(brokenHistory)
-                .repairDetail(detail)
-                .build();
+        // 최근 고장 이력 선택 (없을 수도 있음)
+        Optional<BrokenRepairHistory> latestBroken =
+                brokenRepairHistoryRepository.findTopByEquipmentAndHistoryTypeOrderByCreatedAtDesc(
+                        equipment, BrokenRepairHistory.HistoryType.BROKEN
+                );
 
-        equipmentRepairHistoryRepository.save(repairHistory);
+        // 수리 이력 등록
+        BrokenRepairHistory repairHistory = BrokenRepairHistory.markAsRepairEquipment(
+                equipment, user, detail, latestBroken.orElse(null)
+        );
+        brokenRepairHistoryRepository.save(repairHistory);
 
         // 장비 상태 변경
-        Equipment updated = equipment.toBuilder()
-                .status(Status.AVAILABLE)
-                .build();
-
-        equipmentRepository.save(updated);
+        equipment = equipment.toBuilder().status(Status.AVAILABLE).build();
+        equipmentRepository.save(equipment);
 
         return equipmentId;
     }
 
 
-    
-    
+
+
+
+
 }
