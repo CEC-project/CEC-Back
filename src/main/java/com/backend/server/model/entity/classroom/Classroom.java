@@ -76,10 +76,10 @@ public class Classroom extends BaseTimeEntity {
         this.status = Status.IN_USE;
     }
 
-    public void makeBroken(String detail) {
+    public void makeBroken() {
         makeAvailable();
         this.status = Status.BROKEN;
 
-        // 파손 테이블에 저장
+
     }
 }

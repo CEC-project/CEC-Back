@@ -211,16 +211,7 @@ public class AdminEquipmentService {
                 .orElseThrow(()-> new IllegalArgumentException("장비를 찾을 수 없습니다"+equipmentId));
         User user = userRepository.findById(loginUser.getId())
                 .orElseThrow(()->new IllegalArgumentException("관리자를 찾을 수 없습니다"));
-
-
-
-        equipment = equipment.toBuilder()
-                .status(Status.BROKEN)
-                .renter(null)
-                .startRentTime(null)
-                .endRentTime(null)
-                .build();
-
+        equipment.makeBroken();
         equipmentRepository.save(equipment);
 
         BrokenRepairHistory history = BrokenRepairHistory.markAsBrokenEquipmentByAdmin(equipment, user, detail);
@@ -253,7 +244,7 @@ public class AdminEquipmentService {
         brokenRepairHistoryRepository.save(repairHistory);
 
         // 장비 상태 변경
-        equipment = equipment.toBuilder().status(Status.AVAILABLE).build();
+        equipment.makeAvailable();
         equipmentRepository.save(equipment);
 
         return equipmentId;

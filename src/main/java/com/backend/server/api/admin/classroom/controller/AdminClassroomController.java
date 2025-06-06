@@ -5,6 +5,7 @@ import com.backend.server.api.admin.classroom.dto.AdminClassroomRequest;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomResponse;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
 import com.backend.server.api.admin.classroom.service.AdminClassroomService;
+import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentBrokenOrRepairRequest;
 import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.common.dto.LoginUser;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,14 +15,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin/classroom")
@@ -63,17 +57,29 @@ public class AdminClassroomController {
         return ApiResponse.success("강의실 삭제 성공", null);
     }
 
-    @Operation(summary = "강의실 파손 등록 API", description = "강의실을 파손 상태로 표시합니다.")
-    @PostMapping("/{id}/broken")
-    public ApiResponse<Long> markAsBroken(@PathVariable Long id, @Valid @RequestBody AdminClassroomDetailRequest request) {
-        Long brokenId = adminClassroomService.markAsBroken(id, request);
-        return ApiResponse.success("강의실 파손 등록 성공", brokenId);
-    }
+//    @Operation(summary = "강의실 파손 등록 API", description = "강의실을 파손 상태로 표시합니다.")
+//    @PostMapping("/{id}/broken")
+//    public ApiResponse<Long> markAsBroken(@PathVariable Long id, @Valid @RequestBody AdminClassroomDetailRequest request) {
+//        Long brokenId = adminClassroomService.markAsBroken(id, request);
+//        return ApiResponse.success("강의실 파손 등록 성공", brokenId);
+//    }
+//
+//    @Operation(summary = "강의실 수리 완료 API", description = "파손된 강의실을 정상 상태로 되돌립니다.")
+//    @PostMapping("/{id}/repair")
+//    public ApiResponse<Long> repairClassroom(@PathVariable Long id, @Valid @RequestBody AdminClassroomDetailRequest request, @AuthenticationPrincipal LoginUser loginUser) {
+//        Long repairId = adminClassroomService.repairClassroom(id, request, loginUser);
+//        return ApiResponse.success("강의실 수리 완료", repairId);
+//    }
 
-    @Operation(summary = "강의실 수리 완료 API", description = "파손된 강의실을 정상 상태로 되돌립니다.")
-    @PostMapping("/{id}/repair")
-    public ApiResponse<Long> repairClassroom(@PathVariable Long id, @Valid @RequestBody AdminClassroomDetailRequest request, @AuthenticationPrincipal LoginUser loginUser) {
-        Long repairId = adminClassroomService.repairClassroom(id, request, loginUser);
-        return ApiResponse.success("강의실 수리 완료", repairId);
+    @PatchMapping("/status")
+    @Operation(
+            summary = "강의실 상태 변경 (고장 또는 수리) BROKEN, REPAIR중 선택"
+    )
+    public ApiResponse<List<Long>> changeClassroomStatus(
+            @RequestBody AdminClassroomDetailRequest request,
+            @AuthenticationPrincipal LoginUser loginUser) {
+
+        List<Long> updatedIds = adminClassroomService.changeStatus(request, loginUser);
+        return ApiResponse.success("강의실 상태 변경 성공", updatedIds);
     }
 }
