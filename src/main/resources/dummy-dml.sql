@@ -102,7 +102,7 @@ values
     ('18:00:00', '09:00:00', now(), 1, 1, now(), null, '103', '103호', 'RENTAL_PENDING', date_trunc('day', now()) + interval '11 hours', '13:00:00', '15:00:00'),
     ('18:00:00', '09:00:00', now(), 1, 1, now(), null, '105', '105호', 'RENTAL_PENDING', date_trunc('day', now()) + interval '10 hours', '14:00:00', '16:00:00'),
     ('18:00:00', '09:00:00', now(), 1, null, now(), null, '201', '201호', 'AVAILABLE', null, null, null),
-    ('18:00:00', '09:00:00', now(), 1, null, now(), null, '202', '202호', 'IN_USE', null, null, null),
+    ('18:00:00', '09:00:00', now(), 1, 1, now(), null, '202', '202호', 'IN_USE', date_trunc('day', now()) + interval '9 hours', '15:00:00', '18:00:00'),
     ('18:00:00', '09:00:00', now(), 1, null, now(), null, '203', '203호', 'BROKEN', null, null, null);
 
 -- 교수 INSERT
@@ -164,8 +164,10 @@ values  (0,'시스템 점검 안내',
 
 -- 연간 일정
 insert into public.year_schedule (date, end_at, is_holiday, start_at, classroom_id, created_at, updated_at, description)
-values  ('2025-05-26', null, true, null, null, '2025-05-26 10:52:46.130416', '2025-05-26 10:52:46.130416', 'string'),
-        ('2025-05-26', '14:00:00', false, '13:00:00', 1, '2025-05-26 10:53:50.759813', '2025-05-26 10:53:50.759813', 'string');
+values  ('2025-05-26', null, true, null, null, '2025-05-26 10:52:46.130416', '2025-05-26 10:52:46.130416', '첫번째 연간 일정(휴일)'),
+        ('2025-05-27', '14:00:00', false, '13:00:00', 1, '2025-05-26 10:53:50.759813', '2025-05-26 10:53:50.759813', '두번째 연간 일정(특강)'),
+        ('2025-06-10', null, true, null, null, '2025-05-26 10:52:46.130416', '2025-05-26 10:52:46.130416', '세번째 연간 일정(휴일)'),
+        ('2025-06-11', '14:00:00', false, '13:00:00', 1, '2025-05-26 10:53:50.759813', '2025-05-26 10:53:50.759813', '네번째 연간 일정(특강)');
 
 -- 학기
 insert into public.semester (end_date, start_date, year, created_at, updated_at, name)
