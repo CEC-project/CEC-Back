@@ -50,12 +50,6 @@ public class NoticeResponse {
     this.createdAt = notice.getCreatedAt();
     this.updatedAt = notice.getUpdatedAt();
 
-    this.author = new AuthorResponse(
-            user.getId(),
-            user.getName(),
-            user.getNickname(),
-            user.getProfilePicture(),
-            user.getRole().name()
-    );
+    this.author = user == null ? null : AuthorResponse.from(user);
   }
 }
