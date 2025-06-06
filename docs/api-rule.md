@@ -3,8 +3,8 @@
 지금 관리자 웹에서 프론트랑 연동하는 중에, 파라미터나 응답값 통일성 문제가 있어서,
 사용자 웹 쪽은 매끄럽게 작업하기 위해 사용자 웹 명세서를 다시 만들었습니다.
 
-[사용자 웹 api 명세서](user-api-docs-after.yaml)
-[사용자 웹 api 명세서(6월 5일 현재 상태)](user-api-docs-before.yaml)
+- [사용자 웹 api 명세서](user-api-docs-after.yaml)
+- [사용자 웹 api 명세서(6월 5일 현재 상태)](user-api-docs-before.yaml)
 
 위 파일은 1800줄 정도 되므로, 컨트롤러 단위로 짧게 분리한 명세서는 [after](./after) 와 [before](./before) 폴더에서 볼수 있습니다. 
 
@@ -20,6 +20,17 @@
 4. community 를 전부 board 로 수정하고, url 를 수정했습니다.
 5. 다른 자잘한 수정사항도 있으니, 각자 맡은 부분 명세서를 [after](./after) 와 [before](./before) 폴더에서 찾아서 [비교 사이트](https://wepplication.github.io/tools/compareDoc/)에서 비교해 주세요.
 
+### 6월 6일 명세서 변경사항
+1. 댓글 관련 필드중 type -> targetType 으로 수정하는게 좋겠습니다.
+   - type 이라는 이름만 보고 무엇인지 유추하기 힘들다고 생각합니다.
+   - 같은 dto 의 targetId 필드와 관련이 깊으므로, 두 필드가 공통으로 target 접두사를 쓰는게 좋겠습니다.
+   - GET /api/admin/broken-repair-history api 에서도 targetType 이라는 필드가 있어서, 통일하면 좋겠습니다.
+2. GET /api/board/post/{id}/recommend 를 추가했습니다.
+   - 추천을 여부를 조회하는 API 가 필요해서 추가했습니다. 
+3. 기존 POST /api/board/post/{id}/recommend 를 PATCH /api/board/post/{id}/recommend 로 수정했습니다.
+   - 이미 추천을 했다면 에러를 던지는 것보다, 추천을 취소하는거 어떨까요?
+   - 다른 의견 있다면 말씀해 주세요.
+4. 위 내용들은 yaml 파일들에도 반영되었습니다.
 
 ---
 
