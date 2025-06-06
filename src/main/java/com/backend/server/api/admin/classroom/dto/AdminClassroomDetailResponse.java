@@ -29,7 +29,7 @@ public class AdminClassroomDetailResponse {
     private final Long managerId;
     private final String managerName;
     private final Status status;
-    private final String attachment;
+    private final String imageUrl;
 
     private final LocalDateTime requestedTime;
     private final AdminUserResponse renter;
@@ -41,7 +41,7 @@ public class AdminClassroomDetailResponse {
         this.startRentTime = classroom.getStartRentTime();
         this.endRentTime = classroom.getEndRentTime();
         this.status = classroom.getStatus();
-        this.attachment = classroom.getAttachment();
+        this.imageUrl = classroom.getAttachment();
         this.requestedTime = classroom.getRequestedAt();
         this.managerName = manager != null ? manager.getName() : null;
         this.managerId = manager != null ? manager.getId() : null;
