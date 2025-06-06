@@ -1,5 +1,27 @@
 package com.backend.server.api.admin.equipment.service;
 
+import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentBrokenOrRepairRequest;
+import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentCreateRequest;
+import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentListRequest;
+import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentSerialNumberGenerateRequest;
+import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentStatusUpdateRequest;
+import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentListResponse;
+import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentResponse;
+import com.backend.server.api.admin.equipment.dto.equipment.response.AdminManagerCandidatesResponse;
+import com.backend.server.api.common.dto.LoginUser;
+import com.backend.server.model.entity.BrokenRepairHistory;
+import com.backend.server.model.entity.User;
+import com.backend.server.model.entity.enums.Role;
+import com.backend.server.model.entity.enums.Status;
+import com.backend.server.model.entity.equipment.Equipment;
+import com.backend.server.model.entity.equipment.EquipmentCategory;
+import com.backend.server.model.entity.equipment.EquipmentModel;
+import com.backend.server.model.repository.BrokenRepairHistoryRepository;
+import com.backend.server.model.repository.UserRepository;
+import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
+import com.backend.server.model.repository.equipment.EquipmentModelRepository;
+import com.backend.server.model.repository.equipment.EquipmentRepository;
+import com.backend.server.model.repository.equipment.EquipmentSpecification;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -7,30 +29,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
-
-
-import com.backend.server.api.admin.equipment.dto.equipment.request.*;
-import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.model.entity.BrokenRepairHistory;
-import com.backend.server.model.entity.enums.BrokenType;
-import com.backend.server.model.entity.equipment.*;
-import com.backend.server.model.repository.BrokenRepairHistoryRepository;
-import com.backend.server.model.repository.equipment.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.backend.server.api.admin.equipment.dto.equipment.response.AdminManagerCandidatesResponse;
-import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentListResponse;
-import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentResponse;
-import com.backend.server.model.entity.User;
-import com.backend.server.model.entity.enums.Role;
-import com.backend.server.model.entity.enums.Status;
-import com.backend.server.model.repository.UserRepository;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -211,16 +215,10 @@ public class AdminEquipmentService {
                 .orElseThrow(()-> new IllegalArgumentException("장비를 찾을 수 없습니다"+equipmentId));
         User user = userRepository.findById(loginUser.getId())
                 .orElseThrow(()->new IllegalArgumentException("관리자를 찾을 수 없습니다"));
+        if (equipment.getStatus() == Status.BROKEN)
+            throw new IllegalArgumentException("이미 파손된 강의실입니다.");
 
-
-
-        equipment = equipment.toBuilder()
-                .status(Status.BROKEN)
-                .renter(null)
-                .startRentTime(null)
-                .endRentTime(null)
-                .build();
-
+        equipment.makeBroken();
         equipmentRepository.save(equipment);
 
         BrokenRepairHistory history = BrokenRepairHistory.markAsBrokenEquipmentByAdmin(equipment, user, detail);
@@ -253,7 +251,7 @@ public class AdminEquipmentService {
         brokenRepairHistoryRepository.save(repairHistory);
 
         // 장비 상태 변경
-        equipment = equipment.toBuilder().status(Status.AVAILABLE).build();
+        equipment.makeAvailable();
         equipmentRepository.save(equipment);
 
         return equipmentId;

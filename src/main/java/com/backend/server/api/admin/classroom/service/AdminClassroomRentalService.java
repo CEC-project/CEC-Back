@@ -50,6 +50,7 @@ public class AdminClassroomRentalService {
             case CANCEL -> this::rentalCancel;
             case BROKEN -> this::rentalBroken;
             case REJECT -> this::rentalReject;
+            default -> throw new IllegalArgumentException("지원하지 않는 상태입니다: " + request.getStatus());
         };
         for (Long classroomId : request.getIds())
             operator.apply(classroomId, request.getDetail());
@@ -137,7 +138,7 @@ public class AdminClassroomRentalService {
             throw new IllegalStateException("대여된 강의실만 반납시 파손처리 할 수 있습니다. ID: " + classroomId);
 
         // 상태 변경
-        classroom.makeBroken(detail);
+        classroom.makeBroken();
         classroomRepository.save(classroom);
 
         BrokenRepairHistory history = BrokenRepairHistory.markAsBrokenWhenClassroomReturn(classroom, renter, detail);
