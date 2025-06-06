@@ -1,9 +1,9 @@
 package com.backend.server.api.admin.classroom.service;
 
-import com.backend.server.api.admin.classroom.dto.AdminClassroomDetailRequest;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomRequest;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomResponse;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
+import com.backend.server.api.admin.classroom.dto.AdminClassroomStatusRequest;
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.model.entity.BrokenRepairHistory;
 import com.backend.server.model.entity.User;
@@ -93,14 +93,11 @@ public class AdminClassroomService {
     }
 
     @Transactional
-    public List<Long> changeStatus(AdminClassroomDetailRequest request, LoginUser loginUser) {
-        BiFunction<Long, String, Long> operator;
-
-        switch (request.getStatus()) {
-            case BROKEN -> operator = (id, detail) -> markAsBroken(id, detail, loginUser);
-            case REPAIR -> operator = (id, detail) -> repairClassroom(id, detail, loginUser);
-            default -> throw new IllegalArgumentException("지원하지 않는 상태입니다: " + request.getStatus());
-        }
+    public List<Long> changeStatus(AdminClassroomStatusRequest request, LoginUser loginUser) {
+        BiFunction<Long, String, Long> operator = switch (request.getStatus()) {
+            case BROKEN -> (id, detail) -> markAsBroken(id, detail, loginUser);
+            case REPAIR -> (id, detail) -> repairClassroom(id, detail, loginUser);
+        };
 
         for (Long classroomId : request.getIds()) {
             operator.apply(classroomId, request.getDetail());
