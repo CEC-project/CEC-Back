@@ -34,7 +34,21 @@ public class CommentController {
     }
 
     @Operation(
-        summary = "댓글 목록 조회"
+        summary = "댓글 목록 조회",
+        description = """
+            **주의 사항**
+            
+            - 댓글 작성자 탈퇴 시
+            ```json
+            {
+              ...
+              author : null
+              ...
+            }
+            ```
+            
+            반환
+            """
     )
     @GetMapping
     public ApiResponse<CommentListResponse> getComments(

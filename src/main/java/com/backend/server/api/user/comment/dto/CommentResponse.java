@@ -2,7 +2,6 @@ package com.backend.server.api.user.comment.dto;
 
 import com.backend.server.api.common.dto.AuthorResponse;
 import com.backend.server.model.entity.Comment;
-import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.TargetType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -27,15 +26,13 @@ public class CommentResponse {
     @Schema(description = "대댓글")
     private List<CommentChildResponse> childComments;
     @Schema(description = "댓글 작성자 정보", implementation = AuthorResponse.class)
-    private AuthorResponse authorResponse;
+    private AuthorResponse author;
     @Schema(description = "댓글 작성시간", implementation = LocalDateTime.class)
     private LocalDateTime createdAt;
     @Schema(description = "댓글 수정시간", implementation = LocalDateTime.class)
     private LocalDateTime updatedAt;
 
     private CommentResponse(Comment comment, List<Comment> childComments) {
-        User user = comment.getAuthor();
-
         this.id = comment.getId();
         this.type = comment.getType();
         this.targetId = comment.getTargetId();
@@ -46,13 +43,7 @@ public class CommentResponse {
             .map(CommentChildResponse::from)
             .toList();
 
-        this.authorResponse = new AuthorResponse(
-            user.getId(),
-            user.getName(),
-            user.getNickname(),
-            user.getProfilePicture(),
-            user.getRole().name()
-        );
+        this.author = comment.getAuthor() == null ? null : AuthorResponse.from(comment.getAuthor());
         this.createdAt = comment.getCreatedAt();
         this.updatedAt = comment.getUpdatedAt();
     }
