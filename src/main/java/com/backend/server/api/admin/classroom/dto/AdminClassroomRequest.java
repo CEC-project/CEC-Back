@@ -33,7 +33,7 @@ public class AdminClassroomRequest {
 
     @Size(max = 255, message = "이미지 URL은 255자 이하여야 합니다.")
     @Pattern(regexp = "^https://.*$", message = "S3 도메인의 URL만 허용됩니다.")
-    private String attachment;
+    private String imageUrl;
 
     @NotNull
     private Long managerId;
@@ -54,7 +54,7 @@ public class AdminClassroomRequest {
                 .endTime(parseEndTime())
                 .manager(manager)
                 .status(Status.AVAILABLE)
-                .attachment(attachment)
+                .attachment(imageUrl)
                 .build();
     }
 }
