@@ -19,7 +19,7 @@ public class CommentChildResponse {
     @Schema(description = "부모 댓글 ID", example = "1")
     private Long parentCommentId;
     @Schema(description = "댓글 작성자 정보", implementation = AuthorResponse.class)
-    private AuthorResponse authorResponse;
+    private AuthorResponse author;
     @Schema(description = "댓글 작성시간", implementation = LocalDateTime.class)
     private LocalDateTime createdAt;
     @Schema(description = "댓글 수정시간", implementation = LocalDateTime.class)
@@ -27,13 +27,7 @@ public class CommentChildResponse {
 
     public static CommentChildResponse from(Comment comment) {
         User user = comment.getAuthor();
-        AuthorResponse authorResponse = new AuthorResponse(
-            user.getId(),
-            user.getName(),
-            user.getNickname(),
-            user.getProfilePicture(),
-            user.getRole().name()
-        );
+        AuthorResponse authorResponse = user == null ? null : AuthorResponse.from(user);
 
         return new CommentChildResponse(
             comment.getId(),
