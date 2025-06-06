@@ -2,11 +2,11 @@ package com.backend.server.api.admin.notice.controller;
 
 import com.backend.server.api.admin.notice.dto.AdminNoticeCreateRequest;
 import com.backend.server.api.admin.notice.dto.AdminNoticeListRequest;
+import com.backend.server.api.admin.notice.dto.AdminNoticeListResponse;
+import com.backend.server.api.admin.notice.dto.AdminNoticeResponse;
 import com.backend.server.api.admin.notice.service.AdminNoticeService;
 import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.api.user.notice.dto.NoticeListResponse;
-import com.backend.server.api.user.notice.dto.NoticeResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,7 +14,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "5-1. 게시판 관리 / 공지사항", description = "1차 수정 완료")
 @RestController
@@ -40,7 +47,7 @@ public class AdminNoticeController {
       summary = "공지사항 목록 조회"
           )
   @GetMapping
-  public ApiResponse<NoticeListResponse> getNotices(
+  public ApiResponse<AdminNoticeListResponse> getNotices(
       @Parameter(description = "공지사항 목록 조회 요청 DTO")
       @ParameterObject AdminNoticeListRequest request
   ) {
@@ -51,7 +58,7 @@ public class AdminNoticeController {
       summary = "공지사항 상세조회"
   )
   @GetMapping("{id}")
-  public ApiResponse<NoticeResponse> getNotice(
+  public ApiResponse<AdminNoticeResponse> getNotice(
       @Parameter(description = "공지사항 ID")
       @PathVariable("id") Long noticeId
   ) {

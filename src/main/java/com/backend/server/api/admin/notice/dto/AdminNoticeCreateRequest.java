@@ -5,10 +5,12 @@ import com.backend.server.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 @Getter
 @Builder
@@ -29,14 +31,14 @@ public class AdminNoticeCreateRequest {
   private Boolean important;
 
   @Schema(description = "첨부파일 URL (첨부파일 경로)", example = "images/exam_day.jpg")
-  private String attachmentUrl;
+  private List<String> attachments;
 
   public Notice toEntity(User author) {
     return Notice.builder()
         .title(title)
         .content(content)
         .important(important)
-        .attachmentUrl(attachmentUrl)
+        .attachmentUrl(StringUtils.join(attachments, ";"))
         .view(0)
         .author(author)
         .build();

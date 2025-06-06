@@ -2,15 +2,16 @@ package com.backend.server.api.admin.notice.service;
 
 import com.backend.server.api.admin.notice.dto.AdminNoticeCreateRequest;
 import com.backend.server.api.admin.notice.dto.AdminNoticeListRequest;
+import com.backend.server.api.admin.notice.dto.AdminNoticeListResponse;
+import com.backend.server.api.admin.notice.dto.AdminNoticeResponse;
 import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.api.user.notice.dto.NoticeListResponse;
-import com.backend.server.api.user.notice.dto.NoticeResponse;
 import com.backend.server.model.entity.Notice;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.NoticeRepository;
 import com.backend.server.model.repository.NoticeSpecification;
 import com.backend.server.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -62,10 +63,10 @@ public class AdminNoticeService {
      * @param request 공지사항 목록 조회 요청 정보 (필터 조건, 페이징 정보 포함)
      * @return 조회된 공지사항 목록과 페이징 정보를 담은 응답 객체
      */
-    public NoticeListResponse getNotices(AdminNoticeListRequest request) {
+    public AdminNoticeListResponse getNotices(AdminNoticeListRequest request) {
         Specification<Notice> spec = NoticeSpecification.filterNotices(request);
         Page<Notice> page = noticeRepository.findAll(spec, request.toPageable());
-        return new NoticeListResponse(page);
+        return new AdminNoticeListResponse(page);
     }
 
     /**
@@ -78,12 +79,12 @@ public class AdminNoticeService {
      * @return 조회된 공지사항 정보를 담은 응답 객체
      * @throws IllegalArgumentException 조회하려는 공지사항이 존재하지 않는 경우
      */
-    public NoticeResponse getNotice(Long noticeId) {
+    public AdminNoticeResponse getNotice(Long noticeId) {
         Notice notice = noticeRepository.findById(noticeId)
             .orElseThrow(() -> new IllegalArgumentException("공지사항을 찾을 수 없습니다."));
         notice.increaseViewCount();
 
-        return new NoticeResponse(notice);
+        return new AdminNoticeResponse(notice);
     }
 
     /**
@@ -104,7 +105,7 @@ public class AdminNoticeService {
         Notice updated = notice.toBuilder()
             .title(request.getTitle())
             .content(request.getContent())
-            .attachmentUrl(request.getAttachmentUrl())
+            .attachmentUrl(StringUtils.join(request.getAttachments(), ";"))
             .important(request.getImportant())
             .build();
 
