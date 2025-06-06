@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AdminClassroomDetailRequest {
+public class AdminClassroomRentalStatusRequest {
     public enum Status {
         RETURN, REJECT, CANCEL, BROKEN, ACCEPT, REPAIR
     }

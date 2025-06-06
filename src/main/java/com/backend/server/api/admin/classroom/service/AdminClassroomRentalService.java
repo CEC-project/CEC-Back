@@ -1,6 +1,6 @@
 package com.backend.server.api.admin.classroom.service;
 
-import com.backend.server.api.admin.classroom.dto.AdminClassroomDetailRequest;
+import com.backend.server.api.admin.classroom.dto.AdminClassroomRentalStatusRequest;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomDetailResponse;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
@@ -43,7 +43,7 @@ public class AdminClassroomRentalService {
     }
 
     @Transactional
-    public List<Long> changeStatus(AdminClassroomDetailRequest request) {
+    public List<Long> changeStatus(AdminClassroomRentalStatusRequest request) {
         BiFunction<Long, String, Long> operator = switch (request.getStatus()) {
             case ACCEPT -> (l, s) -> rentalAccept(l);
             case RETURN -> (l, s) -> rentalReturn(l);
@@ -52,6 +52,7 @@ public class AdminClassroomRentalService {
             case REJECT -> this::rentalReject;
             default -> throw new IllegalArgumentException("지원하지 않는 상태입니다: " + request.getStatus());
         };
+
         for (Long classroomId : request.getIds())
             operator.apply(classroomId, request.getDetail());
         return request.getIds();

@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Table(name = "comment")
@@ -36,6 +39,9 @@ public class Comment extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_comment_id")
     private Comment parentComment;
+
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Comment> childComments = new ArrayList<>();
 
     public void validateAuthor(Long userId) {
         if (!this.author.getId().equals(userId)) {

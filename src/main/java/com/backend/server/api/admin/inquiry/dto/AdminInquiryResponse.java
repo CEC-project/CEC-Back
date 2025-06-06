@@ -8,6 +8,7 @@ import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.AnswerStatus;
 import com.backend.server.model.entity.enums.InquiryType;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class AdminInquiryResponse {
     private final Long id;
     private final String title;
     private final String content;
-    private final String attachmentUrl;
+    private final List<String> attachments;
     private final InquiryType inquiryType;
     private final AnswerStatus answerStatus;
     private final LocalDateTime createdAt;
@@ -36,7 +37,7 @@ public class AdminInquiryResponse {
         this.title = inquiry.getTitle();
         this.content = inquiry.getContent();
         this.createdAt = inquiry.getCreatedAt();
-        this.attachmentUrl = inquiry.getAttachmentUrl();
+        this.attachments = Arrays.stream(inquiry.getAttachmentUrl().split(";")).toList();
         this.inquiryType = inquiry.getType();
         this.answerStatus = inquiry.getStatus();
         this.author = new AdminUserResponse(author, professor);

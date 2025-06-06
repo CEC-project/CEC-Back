@@ -1,15 +1,16 @@
-package com.backend.server.api.user.notice.dto;
+package com.backend.server.api.admin.notice.dto;
 
 import com.backend.server.api.common.dto.AuthorResponse;
 import com.backend.server.model.entity.Notice;
 import com.backend.server.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
-public class NoticeResponse {
+public class AdminNoticeResponse {
 
   @Schema(description = "공지사항 ID", example = "1")
   private Long id;
@@ -23,8 +24,8 @@ public class NoticeResponse {
   @Schema(description = "중요 공지 여부 (true이면 상단 고정)", example = "true")
   private Boolean isImportant;
 
-  @Schema(description = "첨부 파일 URL", example = "https://example.com/files/manual.pdf", nullable = true)
-  private String attachmentUrl;
+  @Schema(description = "첨부 파일 URL", nullable = true)
+  private List<String> attachments;
 
   @Schema(description = "공지사항 조회수", example = "132")
   private Integer view;
@@ -38,14 +39,14 @@ public class NoticeResponse {
   @Schema(description = "공지 작성자 정보")
   private AuthorResponse author;
 
-  public NoticeResponse(Notice notice) {
+  public AdminNoticeResponse(Notice notice) {
     User user = notice.getAuthor();
 
     this.id = notice.getId();
     this.title = notice.getTitle();
     this.content = notice.getContent();
     this.isImportant = notice.getImportant();
-    this.attachmentUrl = notice.getAttachmentUrl();
+    this.attachments = Arrays.stream(notice.getAttachmentUrl().split(";")).toList();
     this.view = notice.getView();
     this.createdAt = notice.getCreatedAt();
     this.updatedAt = notice.getUpdatedAt();
