@@ -17,7 +17,7 @@ public class AdminClassroomResponse {
     private final String endTime;
     private final String managerName;
     private final String status;
-    private final String attachment;
+    private final String imageUrl;
 
     public AdminClassroomResponse(Classroom classroom, User manager) {
         this.id = classroom.getId();
@@ -27,6 +27,6 @@ public class AdminClassroomResponse {
         this.endTime = classroom.getEndTime().toString();
         this.managerName = manager.getName(); // User의 name 필드 기준
         this.status = classroom.getStatus().name();
-        this.attachment = classroom.getAttachment();
+        this.imageUrl = classroom.getAttachment();
     }
 }
