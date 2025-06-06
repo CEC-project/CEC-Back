@@ -1,12 +1,8 @@
 package com.backend.server.model.entity.equipment;
 
 import com.backend.server.model.entity.BaseTimeEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
+import com.backend.server.model.entity.User;
+import jakarta.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,14 +20,16 @@ import java.time.LocalDateTime;
 @Builder(toBuilder = true)
 @Table(name = "equipment_carts")
 public class EquipmentCart extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
-    
-    @Column(name = "equipment_id", nullable = false)
-    private Long equipmentId;
-    
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "equipment_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Equipment equipment;
 }

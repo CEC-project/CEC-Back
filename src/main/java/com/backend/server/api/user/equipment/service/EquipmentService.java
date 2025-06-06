@@ -79,8 +79,8 @@ public class EquipmentService {
             }
 
             EquipmentCart cart = EquipmentCart.builder()
-                .userId(user.getId())
-                .equipmentId(equipment.getId())
+                .user(user)
+                .equipment(equipment)
                 .build();
             
             equipmentCartRepository.save(cart);
@@ -90,11 +90,10 @@ public class EquipmentService {
     //장비 장바구니 조회
     public List<EquipmentResponse> getCartItems(LoginUser loginUser) {
         List<EquipmentCart> cartItems = equipmentCartRepository.findByUserId(loginUser.getId());
-        
+
         return cartItems.stream()
             .map(cart -> {
-                Equipment equipment = equipmentRepository.findById(cart.getEquipmentId())
-                    .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
+                Equipment equipment = cart.getEquipment();
                 return new EquipmentResponse(equipment);
             })
             .toList();

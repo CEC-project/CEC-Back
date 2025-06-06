@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "equipment_model")
 @Getter
@@ -26,4 +28,7 @@ public class EquipmentModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private EquipmentCategory category;
+
+    @OneToMany(mappedBy = "equipmentModel", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Equipment> equipments;
 }

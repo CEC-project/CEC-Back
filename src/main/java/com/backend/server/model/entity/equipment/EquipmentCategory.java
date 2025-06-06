@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "equipment_category")
 @Getter
@@ -22,5 +24,8 @@ public class EquipmentCategory {
     @Column(name = "max_rental_count", nullable = false)
     private Integer maxRentalCount;
     @Column(name = "english_code", nullable = false)
-    private String englishCode; 
+    private String englishCode;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EquipmentModel> models;
 }

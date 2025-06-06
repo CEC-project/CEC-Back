@@ -2,6 +2,7 @@ package com.backend.server.model.entity;
 
 import com.backend.server.api.admin.user.dto.AdminUserRequest;
 import com.backend.server.model.entity.enums.Gender;
+import com.backend.server.model.entity.equipment.EquipmentCart;
 import jakarta.persistence.*;
 import java.util.*;
 import lombok.*;
@@ -85,6 +86,10 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Builder.Default
     private List<RentalRestriction> rentalRestrictions = new ArrayList<>();
+
+    //장비 장바구니 Cascading 설정 위함
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EquipmentCart> carts = new ArrayList<>();
 
     @PrePersist //닉네임을 이름으로 설정하기 위해 30줄가량 생성자를 일일이 써야하는 문제를 해결
     public void prePersist() {
