@@ -335,11 +335,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiResponseLong'
   /api/board/post/{id}/recommend:
-    post:
+    patch:
       tags:
         - 2. 게시판
-      summary: 게시판 글 따1봉
-      operationId: recommendBoardPost
+      summary: 추천 토글(두번 추천하면 취소됨)
+      operationId: recommendBoardPut
       parameters:
         - name: id
           in: path
@@ -354,6 +354,25 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/ApiResponseLong'
+    get:
+      tags:
+        - 2. 게시판
+      summary: 현재 로그인한 사용자가 추천했는지 여부 확인
+      operationId: recommendBoardGet
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiResponseBoolean'
   /api/comments:
     get:
       tags:
@@ -1209,14 +1228,14 @@ components:
       required:
         - content
         - targetId
-        - type
+        - targetType
       type: object
       properties:
         content:
           type: string
           description: 댓글 내용
           example: 좋은 글 감사합니다.
-        type:
+        targetType:
           type: string
           description: 댓글 대상 종류
           example: NOTICE
@@ -1245,6 +1264,15 @@ components:
         data:
           type: integer
           format: int64
+    ApiResponseBoolean:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: boolean
     EquipmentActionRequest:
       type: object
       properties:
@@ -1632,7 +1660,7 @@ components:
         id:
           type: integer
           format: int64
-        type:
+        targetType:
           type: string
           enum:
             - BOARD
@@ -1736,7 +1764,7 @@ components:
           type: string
         content:
           type: string
-          description: 
+          description:
             type = HOLIDAY / SPECIAL_LECTURE / LECTURE 이면 일정 이름을 나타냅니다.<br>
             type = RENTAL 이면, 이 값은 항상 "대여 됨" 입니다.
         id:
