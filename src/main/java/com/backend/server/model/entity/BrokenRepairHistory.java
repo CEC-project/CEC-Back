@@ -50,6 +50,8 @@ public class BrokenRepairHistory extends BaseTimeEntity{
 
     private String brokenByName;
 
+    private String brokenByStudentNumber;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "related_broken_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private BrokenRepairHistory relatedBrokenHistory;
@@ -58,8 +60,13 @@ public class BrokenRepairHistory extends BaseTimeEntity{
     public void prePersist() {
         if (this.brokenBy != null && (this.brokenByName == null || this.brokenByName.isBlank())) {
             this.brokenByName = this.brokenBy.getName();
+            this.brokenByStudentNumber = this.brokenBy.getStudentNumber();
         }
+
+
     }
+
+
 
     public enum TargetType { EQUIPMENT, CLASSROOM }
     public enum HistoryType { BROKEN, REPAIR }
@@ -69,6 +76,7 @@ public class BrokenRepairHistory extends BaseTimeEntity{
                 .equipment(equipment)
                 .brokenBy(user)
                 .brokenByName(user.getName())
+                .brokenByStudentNumber(user.getStudentNumber())
                 .detail(detail)
                 .brokenType(BrokenType.RETURN_BROKEN)
                 .targetType(TargetType.EQUIPMENT)
@@ -81,6 +89,8 @@ public class BrokenRepairHistory extends BaseTimeEntity{
                 .equipment(equipment)
                 .brokenBy(user)
                 .brokenByName(user.getName())
+                .brokenByStudentNumber(user.getStudentNumber())
+
                 .detail(detail)
                 .brokenType(BrokenType.ADMIN_BROKEN)
                 .targetType(TargetType.EQUIPMENT)
@@ -96,6 +106,8 @@ public class BrokenRepairHistory extends BaseTimeEntity{
                 .historyType(HistoryType.REPAIR)
                 .brokenBy(user)  // 수리자 정보 넣을 수도 있음
                 .brokenByName(user.getName())
+                .brokenByStudentNumber(user.getStudentNumber())
+
                 .relatedBrokenHistory(brokenRef) // 연관된 고장 이력
                 .build();
     }
@@ -105,6 +117,8 @@ public class BrokenRepairHistory extends BaseTimeEntity{
                 .classroom(classroom)
                 .brokenBy(user)
                 .brokenByName(user.getName())
+                .brokenByStudentNumber(user.getStudentNumber())
+
                 .detail(detail)
                 .brokenType(BrokenType.RETURN_BROKEN)
                 .targetType(TargetType.CLASSROOM)
@@ -112,11 +126,13 @@ public class BrokenRepairHistory extends BaseTimeEntity{
                 .build();
     }
 
-    public static BrokenRepairHistory markAsBrokenClassroomByAdmin(Classroom classroom, User admin, String detail) {
+    public static BrokenRepairHistory markAsBrokenClassroomByAdmin(Classroom classroom, User user, String detail) {
         return BrokenRepairHistory.builder()
                 .classroom(classroom)
-                .brokenBy(admin)
-                .brokenByName(admin.getName())
+                .brokenBy(user)
+                .brokenByName(user.getName())
+                .brokenByStudentNumber(user.getStudentNumber())
+
                 .detail(detail)
                 .brokenType(BrokenType.ADMIN_BROKEN)
                 .targetType(TargetType.CLASSROOM)
@@ -129,6 +145,7 @@ public class BrokenRepairHistory extends BaseTimeEntity{
                 .classroom(classroom)
                 .brokenBy(user)  // 수리 기록한 사람 정보
                 .brokenByName(user.getName())
+                .brokenByStudentNumber(user.getStudentNumber())
                 .detail(detail)
                 .targetType(TargetType.CLASSROOM)
                 .historyType(HistoryType.REPAIR)
