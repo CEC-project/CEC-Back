@@ -5,9 +5,13 @@ import java.time.LocalDateTime;
 import com.backend.server.model.entity.equipment.Equipment;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EquipmentResponse {
 
@@ -44,4 +48,6 @@ public class EquipmentResponse {
         this.createdAt = equipment.getCreatedAt();
         this.imageUrl = equipment.getImageUrl();
     }
+
+
 }

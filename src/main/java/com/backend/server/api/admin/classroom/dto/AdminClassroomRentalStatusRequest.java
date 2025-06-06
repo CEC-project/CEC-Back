@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class AdminClassroomRentalStatusRequest {
     public enum Status {
-        RETURN, REJECT, CANCEL, BROKEN, ACCEPT
+        RETURN, REJECT, CANCEL, BROKEN, ACCEPT, REPAIR
     }
 
     @NotNull
