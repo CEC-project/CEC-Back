@@ -1,6 +1,6 @@
 package com.backend.server.api.user.notice.dto;
 
-import com.backend.server.api.common.dto.ProfileResponse;
+import com.backend.server.api.common.dto.AuthorResponse;
 import com.backend.server.model.entity.Notice;
 import com.backend.server.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,7 +36,7 @@ public class NoticeResponse {
   private LocalDateTime updatedAt;
 
   @Schema(description = "공지 작성자 정보")
-  private ProfileResponse author;
+  private AuthorResponse author;
 
   public NoticeResponse(Notice notice) {
     User user = notice.getAuthor();
@@ -50,12 +50,6 @@ public class NoticeResponse {
     this.createdAt = notice.getCreatedAt();
     this.updatedAt = notice.getUpdatedAt();
 
-    this.author = new ProfileResponse(
-            user.getId(),
-            user.getName(),
-            user.getNickname(),
-            user.getProfilePicture(),
-            user.getRole().name()
-    );
+    this.author = user == null ? null : AuthorResponse.from(user);
   }
 }
