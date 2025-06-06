@@ -1,6 +1,6 @@
 package com.backend.server.api.admin.classroom.controller;
 
-import com.backend.server.api.admin.classroom.dto.AdminClassroomDetailRequest;
+import com.backend.server.api.admin.classroom.dto.AdminClassroomRentalStatusRequest;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomDetailResponse;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
 import com.backend.server.api.admin.classroom.service.AdminClassroomRentalService;
@@ -35,7 +35,7 @@ public class AdminClassroomRentalController {
 
     @Operation(summary = "강의실 일괄 상태 변경 API")
     @PatchMapping("/status")
-    public ApiResponse<List<Long>> changeStatus(@Valid @RequestBody AdminClassroomDetailRequest request) {
+    public ApiResponse<List<Long>> changeStatus(@Valid @RequestBody AdminClassroomRentalStatusRequest request) {
         List<Long> ids = rentalService.changeStatus(request);
         return ApiResponse.success("강의실 일괄 상태 변경되었습니다.", ids);
     }

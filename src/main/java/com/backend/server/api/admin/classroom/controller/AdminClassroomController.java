@@ -1,9 +1,9 @@
 package com.backend.server.api.admin.classroom.controller;
 
-import com.backend.server.api.admin.classroom.dto.AdminClassroomDetailRequest;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomRequest;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomResponse;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
+import com.backend.server.api.admin.classroom.dto.AdminClassroomStatusRequest;
 import com.backend.server.api.admin.classroom.service.AdminClassroomService;
 import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.common.dto.LoginUser;
@@ -69,7 +69,7 @@ public class AdminClassroomController {
             summary = "강의실 상태 변경 (고장 또는 수리) BROKEN, REPAIR중 선택"
     )
     public ApiResponse<List<Long>> changeClassroomStatus(
-            @RequestBody AdminClassroomDetailRequest request,
+            @RequestBody AdminClassroomStatusRequest request,
             @AuthenticationPrincipal LoginUser loginUser) {
 
         List<Long> updatedIds = adminClassroomService.changeStatus(request, loginUser);
