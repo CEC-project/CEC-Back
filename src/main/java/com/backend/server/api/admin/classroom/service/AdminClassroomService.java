@@ -74,7 +74,7 @@ public class AdminClassroomService {
                 .startTime(start)
                 .endTime(end)
                 .manager(manager)
-                .attachment(request.getAttachment())
+                .attachment(request.getImageUrl())
                 .build();
 
         classroomRepository.save(classroom);

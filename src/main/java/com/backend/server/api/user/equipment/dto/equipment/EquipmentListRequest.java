@@ -16,18 +16,18 @@ public class EquipmentListRequest extends AbstractPaginationParam {
     @Schema(description = "카테고리 ID로 정렬", example = "1")
     private Long categoryId;
 
-    @Schema(description = "검색 키워드 (모델명, 대여자명, 일련번호, 카테고리명)", example = "SONY")
+    @Schema(description = "검색 키워드", example = "SONY")
     private String keyword;
 
-    @Schema(description = "검색 타입 (ALL, MODEL_NAME, CATEGORY_NAME, SERIAL_NUMBER, RENTER_NAME)",
+    @Schema(description = "검색 타입",
             example = "ALL", implementation = SearchType.class)
     private SearchType searchType = SearchType.ALL;
 
-    @Schema(description = "장비 상태 (ALL, AVAILABLE, IN_USE, BROKEN, RENTAL_PENDING, RETURN_PENDING 중 선택)",
+    @Schema(description = "장비 상태",
             example = "AVAILABLE", implementation = EquipmentStatus.class)
     private EquipmentStatus status = EquipmentStatus.ALL;
 
-    @Schema(description = "정렬할 필드 (id, createdAt, name 등)",
+    @Schema(description = "정렬할 필드",
             implementation = SortBy.class, example = "id")
     private SortBy sortBy = SortBy.ID;
 

@@ -6,6 +6,7 @@ import com.backend.server.api.admin.history.service.AdminBrokenRepairHistoryServ
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,7 +19,7 @@ public class AdminBrokenRepairHistoryController {
 
     @GetMapping
     @Operation(summary = "수리/파손 이력 목록 조회")
-    public AdminBrokenRepairHistoryListResponse getBrokenRepairHistory(AdminBrokenRepairHistoryRequest request) {
+    public AdminBrokenRepairHistoryListResponse getBrokenRepairHistory(@ParameterObject AdminBrokenRepairHistoryRequest request) {
         return adminBrokenRepairHistoryService.getBrokenRepairHistory(request);
     }
 }

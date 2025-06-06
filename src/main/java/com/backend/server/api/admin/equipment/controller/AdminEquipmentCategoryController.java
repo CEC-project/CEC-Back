@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-@Tag(name = "3-1. 강의실/장비 관리 / 장비 관리 / 카테고리", description = "수정 필요")
+@Tag(name = "3-1. 강의실/장비 관리 / 장비 관리 / 카테고리", description = "수정 완료")
 @RestController
 @RequestMapping("/api/admin/equipment-categories")
 @RequiredArgsConstructor
@@ -28,7 +28,7 @@ public class AdminEquipmentCategoryController {
     private final EquipmentCategoryService equipmentCategoryService;
 
 
-    @Operation(summary = "카테고리 생성", description = "새로운 장비 카테고리를 생성합니다.")
+    @Operation(summary = "카테고리 생성")
     @PostMapping
     public ApiResponse<Long> createCategory(
         @Parameter(description = "생성할 카테고리 정보")
@@ -37,30 +37,26 @@ public class AdminEquipmentCategoryController {
     }
 
 
-    @Operation(summary = "카테고리 수정", description = "기존 장비 카테고리를 수정합니다.")
+    @Operation(summary = "카테고리 수정")
     @PutMapping("/{id}")
     public ApiResponse<Long> updateCategory(
-        @Parameter(description = "카테고리 ID", example = "1")
         @PathVariable Long id,
-        @Parameter(description = "수정할 카테고리 정보")
         @Valid @RequestBody AdminEquipmentCategoryCreateRequest request) {
         return ApiResponse.success("카테고리 수정 성공", adminEquipmentCategoryService.updateCategory(id, request));
     }
 
-    @Operation(summary = "카테고리 삭제", description = "장비 카테고리를 삭제합니다.")
+    @Operation(summary = "카테고리 삭제")
     @DeleteMapping("/{id}")
     public ApiResponse<Long> deleteCategory(
-        @Parameter(description = "카테고리 ID", example = "1")
         @PathVariable Long id) {
         return ApiResponse.success("카테고리 삭제 성공",adminEquipmentCategoryService.deleteCategory(id) );
     }
 
     //====================================================유저에서 가져옴====================================================
 
-    @Operation(summary = "카테고리 상세 조회", description = "특정 ID의 장비 카테고리를 조회합니다.")
+    @Operation(summary = "카테고리 상세 조회")
     @GetMapping("/{id}")
     public ApiResponse<EquipmentCategoryResponse> getCategoryById(
-        @Parameter(description = "카테고리 ID", example = "1")
         @PathVariable Long id) {
         return ApiResponse.success("카테고리 상세 조회 성공", equipmentCategoryService.getCategoryById(id));
     }

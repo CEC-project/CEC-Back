@@ -15,10 +15,10 @@ public class AdminBrokenRepairHistoryResponse {
     private Long id;
 
     @Schema(description = "대상 타입 (EQUIPMENT, CLASSROOM)", example = "EQUIPMENT")
-    private String targetType;
+    private TargetType targetType;
 
     @Schema(description = "이력 타입 (BROKEN, REPAIR)", example = "BROKEN")
-    private String historyType;
+    private HistoryType historyType;
 
     @Schema(description = "장비명 또는 강의실명", example = "SONY 카메라" /* 또는 "402호 강의실" */)
     private String name;
@@ -38,22 +38,30 @@ public class AdminBrokenRepairHistoryResponse {
     @Schema(description = "파손자 이름 (수리일 경우 null)", example = "홍길동", nullable = true)
     private String brokenByName;
 
+    @Schema(description = "파손자 학번 (수리일 경우 null)", example = "202300003", nullable = true)
+    private String brokenByStudentNumber;
+
     @Schema(description = "참조된 파손 이력 ID (수리 이력일 경우만)", example = "17", nullable = true)
     private Long brokenReferenceId;
 
     @Schema(description = "이력 생성 시각", example = "2024-06-01T15:30:00")
     private LocalDateTime createdAt;
 
+    public enum TargetType{
+        ALL, EQUIPMENT, CLASSROOM
+    }
 
+    public enum HistoryType { ALL, BROKEN, REPAIR }
 
     public AdminBrokenRepairHistoryResponse(BrokenRepairHistory history) {
         this.id = history.getId();
-        this.targetType = history.getTargetType().name();
-        this.historyType = history.getHistoryType().name();
+        this.targetType = TargetType.valueOf(history.getTargetType().name());
+        this.historyType = HistoryType.valueOf(history.getHistoryType().name());
         this.detail = history.getDetail();
         this.createdAt = history.getCreatedAt();
         this.brokenType = history.getBrokenType();
         this.brokenByName = history.getBrokenByName();
+        this.brokenByStudentNumber = history.getBrokenByStudentNumber();  //학번
         if (history.getHistoryType() == BrokenRepairHistory.HistoryType.REPAIR &&
                 history.getRelatedBrokenHistory() != null) {
             this.brokenReferenceId = history.getRelatedBrokenHistory().getId();
