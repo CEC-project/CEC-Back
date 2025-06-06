@@ -1,6 +1,6 @@
 package com.backend.server.api.admin.classroom.service;
 
-import com.backend.server.api.admin.classroom.dto.AdminClassroomDetailRequest;
+import com.backend.server.api.admin.classroom.dto.AdminClassroomRentalStatusRequest;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomDetailResponse;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
@@ -43,7 +43,7 @@ public class AdminClassroomRentalService {
     }
 
     @Transactional
-    public List<Long> changeStatus(AdminClassroomDetailRequest request) {
+    public List<Long> changeStatus(AdminClassroomRentalStatusRequest request) {
         BiFunction<Long, String, Long> operator = switch (request.getStatus()) {
             case ACCEPT -> (l, s) -> rentalAccept(l);
             case RETURN -> (l, s) -> rentalReturn(l);
@@ -51,6 +51,7 @@ public class AdminClassroomRentalService {
             case BROKEN -> this::rentalBroken;
             case REJECT -> this::rentalReject;
         };
+
         for (Long classroomId : request.getIds())
             operator.apply(classroomId, request.getDetail());
         return request.getIds();
@@ -137,7 +138,7 @@ public class AdminClassroomRentalService {
             throw new IllegalStateException("대여된 강의실만 반납시 파손처리 할 수 있습니다. ID: " + classroomId);
 
         // 상태 변경
-        classroom.makeBroken(detail);
+        classroom.makeBroken();
         classroomRepository.save(classroom);
 
         BrokenRepairHistory history = BrokenRepairHistory.markAsBrokenWhenClassroomReturn(classroom, renter, detail);
