@@ -14,7 +14,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "1-1. 대여 신청 / 장비 분류", description = "수정 필요")
+@Tag(name = "1-1. 대여 신청 / 장비 분류", description = "수정 완료")
 @RestController
 @RequestMapping("/api/equipment-categories")
 @RequiredArgsConstructor

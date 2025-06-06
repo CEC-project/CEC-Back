@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin/equipments-rental")
-@Tag(name = "4-1. 대여 신청/반납 관리 / 장비 관리", description = "수정 필요")
+@Tag(name = "4-1. 대여 신청/반납 관리 / 장비 관리", description = "수정 완료")
 public class AdminEquipmentRentalController {
     private final AdminEquipmentService adminEquipmentService;
     private final AdminEquipmentRentalService adminEquipmentRentalService;
@@ -35,7 +35,7 @@ public class AdminEquipmentRentalController {
     }
 
     @Operation(
-            summary = "장비 대여 일괄 상태 변경 API")
+            summary = "장비 대여 일괄 상태 변경 API" , description = "상태는 [RETURN, CANCEL, BROKEN, REJECT, ACCEPT] 중 선택, ACCEPT,RETURN일 경우 detail생략")
     @PatchMapping("/status")
     public ApiResponse<List<Long>> changeStatus(@Valid @RequestBody AdminEquipmentDetailRequest request) {
         List<Long> ids = adminEquipmentRentalService.changeStatus(request);

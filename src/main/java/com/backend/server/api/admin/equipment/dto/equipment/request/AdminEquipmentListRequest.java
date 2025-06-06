@@ -16,21 +16,21 @@ import org.springframework.data.domain.Pageable;
 @Schema(description = "장비 목록 조회 요청 DTO")
 public class AdminEquipmentListRequest extends AbstractPaginationParam {
 
-    @Schema(description = "카테고리 ID로 정렬", example = "1")
+    @Schema(description = "카테고리 ID로 정렬")
     private Long categoryId;
 
-    @Schema(description = "검색 키워드 (모델명, 일련번호, 대여자 이름 포함)", example = "SONY")
+    @Schema(description = "검색 키워드")
     private String searchKeyword;
 
-    @Schema(description = "검색 타입 (ALL, CATEGORY_NAME, MODEL_NAME, SERIAL_NUMBER, RENTER_NAME 중 선택)",
+    @Schema(description = "검색 타입",
             example = "ALL", implementation = SearchType.class)
     private SearchType searchType = SearchType.ALL;
 
-    @Schema(description = "장비 상태 (ALL, AVAILABLE, IN_USE, BROKEN, RENTAL_PENDING, RETURN_PENDING, CANCELABLE 중 선택)",
+    @Schema(description = "장비 상태",
             example = "AVAILABLE", implementation = EquipmentStatus.class)
     private EquipmentStatus status = EquipmentStatus.ALL;
 
-    @Schema(description = "정렬 기준 (ID, NAME, CREATED_AT, RENTAL_COUNT, REPAIR_COUNT, BROKEN_COUNT,REQUESTED_AT 중 선택)",
+    @Schema(description = "정렬 기준",
             example = "createdAt", implementation = SortBy.class)
     private SortBy sortBy = SortBy.ID;
 

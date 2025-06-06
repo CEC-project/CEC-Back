@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/equipment-models")
 @RequiredArgsConstructor
-@Tag(name = "1-2. 대여 신청 / 장비 모델", description = "수정 필요")
+@Tag(name = "1-2. 대여 신청 / 장비 모델", description = "수정 완료")
 public class EquipmentModelController {
 
     private final EquipmentModelService equipmentModelService;
@@ -41,7 +41,6 @@ public class EquipmentModelController {
             summary = "장비 모델 단일 조회"
             )
     public ApiResponse<EquipmentModelResponse> getModel(
-            @Parameter(description = "조회할 장비 모델의 고유 ID", example = "1")
             @PathVariable Long id
     ) {
         return ApiResponse.success("장비 모델 상세 조회 성공", equipmentModelService.getModel(id));
