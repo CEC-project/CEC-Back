@@ -46,6 +46,8 @@ public class AdminInquiryListRequest extends AbstractPaginationParam {
     }
 
     public Pageable toPageable() {
+        if (sortBy == null)
+            sortBy = AdminInquirySortType.getDefault();
         return PageRequest.of(page, size, sortDirection, sortBy.getField());
     }
 }

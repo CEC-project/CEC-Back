@@ -9,11 +9,11 @@ import lombok.Getter;
 public enum AdminInquirySortType implements SortTypeConvertible {
     NAME("author.name"),
     STUDENT_NUMBER("author.studentNumber"),
-    CREATION_TIME("createdAt");
+    CREATED_AT("createdAt");
 
     private final String field;
 
     public static AdminInquirySortType getDefault() {
-        return AdminInquirySortType.NAME;
+        return AdminInquirySortType.CREATED_AT;
     }
 }
