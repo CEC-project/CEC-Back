@@ -181,7 +181,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiResponseLong'
   /api/board/post/{id}/recommend:
-    put:
+    patch:
       tags:
       - 2. 게시판
       summary: 추천 토글(두번 추천하면 취소됨)

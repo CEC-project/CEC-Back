@@ -11,9 +11,9 @@ public class ClassroomResponse {
     private final Long id;
     private final String name;
     private final String description;
-    private final String attachment;
+    private final String imageUrl;
 
-    @Schema(example = "AVAILABLE, IN_USE, BROKEN, RENTAL_PENDING 중 하나")
+    @Schema(description = "AVAILABLE, IN_USE, BROKEN, RENTAL_PENDING 중 하나")
     private final Status status;
 
     @Schema(example = "09:00", implementation = String.class, description = "운영 시작 시간")
@@ -26,7 +26,7 @@ public class ClassroomResponse {
         this.id = classroom.getId();
         this.name = classroom.getName();
         this.description = classroom.getLocation();
-        this.attachment = classroom.getAttachment();
+        this.imageUrl = classroom.getAttachment();
         this.status = classroom.getStatus();
         this.startTime = classroom.getStartTime();
         this.endTime = classroom.getEndTime();

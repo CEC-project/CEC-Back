@@ -7,6 +7,7 @@ import com.backend.server.api.user.classroom.dto.ClassroomResponse;
 import com.backend.server.api.user.classroom.dto.ScheduleResponse;
 import com.backend.server.api.user.classroom.service.ClassroomService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import java.util.List;
@@ -29,16 +30,12 @@ public class ClassroomController {
 
     @Operation(
             summary = "휴일 + 특강 + 수업 + 대여 시간표 조회",
-            description = """
-                    **일정이 시작되는 시간순으로 정렬해서 조회됩니다.**
-                    
-                    - **요청 파라미터**
-                      - **date** : yyyy-HH-dd 형식. 조회할 주차의 아무 날짜.
-                      - **classroomId** : 강의실 id""")
-    @GetMapping("/schedule")
+            description = "**일정이 시작되는 시간순으로 정렬해서 조회됩니다.**")
+    @GetMapping("/{id}/schedule")
     public ApiResponse<List<ScheduleResponse>> getSchedule(
-            @RequestParam LocalDate date,
-            @RequestParam Long classroomId
+            @PathVariable("id") Long classroomId,
+            @Schema(implementation = LocalDate.class, description = "yyyy-MM-dd 형식. 조회할 주차의 아무 날짜.")
+            @RequestParam LocalDate date
     ) {
         return ApiResponse.success("시간표 조회 성공", classroomService.getSchedules(date, classroomId));
     }

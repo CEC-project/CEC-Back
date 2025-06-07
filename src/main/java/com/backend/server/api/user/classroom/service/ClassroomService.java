@@ -140,7 +140,7 @@ public class ClassroomService {
         // 요일, 시작 시간 순으로 정렬
         result.sort((a, b) -> {
             if (a.getDay().compareTo(b.getDay()) != 0) return a.getDay() - b.getDay();
-            return a.getStartAt().compareTo(b.getStartAt());
+            return a.getStartTime().compareTo(b.getStartTime());
         });
 
         return result;
