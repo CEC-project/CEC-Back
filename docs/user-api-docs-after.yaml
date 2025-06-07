@@ -1007,9 +1007,6 @@ paths:
       summary: 휴일 + 특강 + 수업 + 대여 시간표 조회
       description: |-
         **일정이 시작되는 시간순으로 정렬해서 조회됩니다.**
-
-        - **요청 파라미터**
-          - **date** : yyyy-HH-dd 형식. 조회할 주차의 아무 날짜.
       operationId: getSchedule
       parameters:
         - name: id

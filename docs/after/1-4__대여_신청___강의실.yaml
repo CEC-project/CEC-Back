@@ -69,8 +69,7 @@ paths:
       tags:
       - 1-4. 대여 신청 / 강의실
       summary: 휴일 + 특강 + 수업 + 대여 시간표 조회
-      description: "**일정이 시작되는 시간순으로 정렬해서 조회됩니다.**\n\n- **요청 파라미터**\n  - **date**\
-        \ : yyyy-HH-dd 형식. 조회할 주차의 아무 날짜."
+      description: '**일정이 시작되는 시간순으로 정렬해서 조회됩니다.**'
       operationId: getSchedule
       parameters:
       - name: id
