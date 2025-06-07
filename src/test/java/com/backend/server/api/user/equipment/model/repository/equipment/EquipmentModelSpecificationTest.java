@@ -1,7 +1,7 @@
 package com.backend.server.api.user.equipment.model.repository.equipment;
 
 import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
-import com.backend.server.config.AbstractPostgresContainerTest;
+import com.backend.server.config.AbstractPostgresConfigure;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
 import com.backend.server.model.entity.equipment.EquipmentModel;
 import com.backend.server.model.repository.equipment.*;
@@ -12,16 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.domain.Specification;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-@Testcontainers
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class EquipmentModelSpecificationTest extends AbstractPostgresContainerTest {
+public class EquipmentModelSpecificationTest extends AbstractPostgresConfigure {
 
     @Autowired
     private EquipmentCategoryRepository equipmentCategoryRepository;

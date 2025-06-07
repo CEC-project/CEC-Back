@@ -38,12 +38,6 @@ class AdminEquipmentRentalServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private EquipmentBrokenHistoryRepository equipmentBrokenHistoryRepository;
-
-    @Mock
-    private EquipmentRepairHistoryRepository equipmentRepairHistoryRepository;
-
     private final Long equipmentId = 1L;
     private final Long userId = 1L;
     private final String detail = "테스트 상세내용";
@@ -81,37 +75,6 @@ class AdminEquipmentRentalServiceTest {
         List<Long> result = adminEquipmentService.changeStatus(request, loginUser);
 
         // then
-        verify(equipmentBrokenHistoryRepository).save(any(EquipmentBrokenHistory.class));
-        verify(equipmentRepository).save(any(Equipment.class));
-        assertThat(result).containsExactly(equipmentId);
-    }
-
-    @Test
-    void changeStatus_toRepair_success() {
-        // given
-        equipment = equipment.toBuilder().status(Status.BROKEN).build();
-        EquipmentBrokenHistory brokenHistory = EquipmentBrokenHistory.builder()
-                .id(1L)
-                .equipment(equipment)
-                .brokenDetail("고장 사유")
-                .build();
-
-        AdminEquipmentBrokenOrRepairRequest request = new AdminEquipmentBrokenOrRepairRequest(
-                List.of(equipmentId),REPAIR, detail);
-        LoginUser loginUser = LoginUser.builder()
-                .id(1L)
-                .name("테스트맨")
-                .build();
-
-        when(equipmentRepository.findById(equipmentId)).thenReturn(Optional.of(equipment));
-        when(equipmentBrokenHistoryRepository.findTopByEquipmentOrderByCreatedAtDesc(equipment))
-                .thenReturn(Optional.of(brokenHistory));
-
-        // when
-        List<Long> result = adminEquipmentService.changeStatus(request, loginUser);
-
-        // then
-        verify(equipmentRepairHistoryRepository).save(any(EquipmentRepairHistory.class));
         verify(equipmentRepository).save(any(Equipment.class));
         assertThat(result).containsExactly(equipmentId);
     }

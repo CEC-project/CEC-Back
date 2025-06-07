@@ -1,35 +1,30 @@
 package com.backend.server.batch;
 
-import com.backend.server.config.AbstractPostgresContainerTest;
-import com.backend.server.model.entity.equipment.Equipment;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+import com.backend.server.config.AbstractPostgresConfigure;
 import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.classroom.Semester;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
 import com.backend.server.model.entity.enums.Status;
+import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
 import com.backend.server.model.repository.classroom.SemesterRepository;
 import com.backend.server.model.repository.classroom.SemesterScheduleRepository;
 import com.backend.server.model.repository.equipment.EquipmentRepository;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.testcontainers.junit.jupiter.Testcontainers;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-@Testcontainers
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class ScheduledMaintenanceTasksTest extends AbstractPostgresContainerTest {
+class ScheduledMaintenanceTasksTest extends AbstractPostgresConfigure {
 
     @Autowired
     EquipmentRepository equipmentRepository;
