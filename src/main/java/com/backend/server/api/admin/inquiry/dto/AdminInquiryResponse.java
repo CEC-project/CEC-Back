@@ -9,6 +9,7 @@ import com.backend.server.model.entity.enums.AnswerStatus;
 import com.backend.server.model.entity.enums.InquiryType;
 import io.micrometer.common.util.StringUtils;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -34,7 +35,7 @@ public class AdminInquiryResponse {
             List<User> responders,
             User author,
             Professor professor) {
-        List<String> attachments = null;
+        List<String> attachments = new ArrayList<>();
         if (!StringUtils.isEmpty(inquiry.getAttachmentUrl()))
             attachments = Arrays.stream(inquiry.getAttachmentUrl().split(";")).toList();
         this.attachments = attachments;

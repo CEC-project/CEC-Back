@@ -6,6 +6,7 @@ import com.backend.server.model.entity.User;
 import io.micrometer.common.util.StringUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
@@ -22,8 +23,9 @@ public class AdminNoticeResponse {
     @Schema(description = "공지사항 본문 내용", example = "시스템 점검이 6월 3일 00시에 진행됩니다.")
     private String content;
 
+    // important 로 통일하려고 합니다. -qkr10
     @Schema(description = "중요 공지 여부 (true이면 상단 고정)", example = "true")
-    private Boolean isImportant;
+    private Boolean important;
 
     @Schema(description = "첨부 파일 URL", nullable = true)
     private List<String> attachments;
@@ -43,7 +45,7 @@ public class AdminNoticeResponse {
     public AdminNoticeResponse(Notice notice) {
         User user = notice.getAuthor();
 
-        List<String> attachments = null;
+        List<String> attachments = new ArrayList<>();
         if (!StringUtils.isEmpty(notice.getAttachmentUrl()))
             attachments = Arrays.stream(notice.getAttachmentUrl().split(";")).toList();
         this.attachments = attachments;
@@ -51,7 +53,7 @@ public class AdminNoticeResponse {
         this.id = notice.getId();
         this.title = notice.getTitle();
         this.content = notice.getContent();
-        this.isImportant = notice.getImportant();
+        this.important = notice.getImportant();
         this.view = notice.getView();
         this.createdAt = notice.getCreatedAt();
         this.updatedAt = notice.getUpdatedAt();
