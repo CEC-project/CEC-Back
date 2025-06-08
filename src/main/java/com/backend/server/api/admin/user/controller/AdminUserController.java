@@ -1,13 +1,12 @@
 package com.backend.server.api.admin.user.controller;
 
+import com.backend.server.api.admin.user.dto.AdminUserDetailListResponse;
+import com.backend.server.api.admin.user.dto.AdminUserDetailResponse;
 import com.backend.server.api.admin.user.dto.AdminUserListRequest;
-import com.backend.server.api.admin.user.dto.AdminUserListResponse;
 import com.backend.server.api.admin.user.dto.AdminUserRequest;
-import com.backend.server.api.admin.user.dto.AdminUserResponse;
 import com.backend.server.api.admin.user.service.AdminImportExcelService;
 import com.backend.server.api.admin.user.service.AdminUserService;
 import com.backend.server.api.common.dto.ApiResponse;
-
 import com.backend.server.model.entity.enums.Role;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,7 +22,16 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -46,7 +54,7 @@ public class AdminUserController {
 
     @Operation(summary = "사용자 목록 조회")
     @GetMapping
-    public ApiResponse<AdminUserListResponse> getUsers(@ParameterObject AdminUserListRequest request) {
+    public ApiResponse<AdminUserDetailListResponse> getUsers(@ParameterObject AdminUserListRequest request) {
         return ApiResponse.success("사용자 목록 조회 성공", adminUserService.getUsers(request));
     }
 
@@ -95,7 +103,7 @@ public class AdminUserController {
             )
     })
     @GetMapping("/admin")
-    public ApiResponse<List<AdminUserResponse>> getAdmins(@RequestParam(required = false) List<Role> roles) {
+    public ApiResponse<List<AdminUserDetailResponse>> getAdmins(@RequestParam(required = false) List<Role> roles) {
         if (roles == null || roles.isEmpty())
             roles = Collections.singletonList(Role.ROLE_SUPER_ADMIN);
         if (roles.contains(Role.ROLE_USER))
