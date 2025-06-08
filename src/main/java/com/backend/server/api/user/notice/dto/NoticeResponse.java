@@ -20,8 +20,9 @@ public class NoticeResponse {
   @Schema(description = "공지사항 본문 내용", example = "시스템 점검이 6월 3일 00시에 진행됩니다.")
   private String content;
 
+  // important 로 통일하려고 합니다. -qkr10
   @Schema(description = "중요 공지 여부 (true이면 상단 고정)", example = "true")
-  private Boolean isImportant;
+  private Boolean important;
 
   @Schema(description = "첨부 파일 URL", example = "https://example.com/files/manual.pdf", nullable = true)
   private String attachmentUrl;
@@ -44,7 +45,7 @@ public class NoticeResponse {
     this.id = notice.getId();
     this.title = notice.getTitle();
     this.content = notice.getContent();
-    this.isImportant = notice.getImportant();
+    this.important = notice.getImportant();
     this.attachmentUrl = notice.getAttachmentUrl();
     this.view = notice.getView();
     this.createdAt = notice.getCreatedAt();

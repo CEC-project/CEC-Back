@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "5-2. 게시판 관리 / 게시글")
 @RestController
-@RequestMapping("/api/admin/community")
+@RequestMapping("/api/admin/board")
 @RequiredArgsConstructor
 public class AdminCommunityController {
 
