@@ -1,7 +1,5 @@
 package com.backend.server.api.admin.equipment.model.repository;
 
-
-import com.backend.server.config.AbstractPostgresConfigure;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Gender;
 import com.backend.server.model.entity.enums.Role;
@@ -17,12 +15,10 @@ import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class AdminEquipmentSpecificationTest extends AbstractPostgresConfigure {
+class AdminEquipmentSpecificationTest {
 
     @Autowired
     private EquipmentRepository equipmentRepository;

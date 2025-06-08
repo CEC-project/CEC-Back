@@ -2,7 +2,6 @@ package com.backend.server.batch;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.backend.server.config.AbstractPostgresConfigure;
 import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.classroom.Semester;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
@@ -13,6 +12,7 @@ import com.backend.server.model.repository.classroom.SemesterRepository;
 import com.backend.server.model.repository.classroom.SemesterScheduleRepository;
 import com.backend.server.model.repository.equipment.EquipmentRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -22,9 +22,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
-@DataJpaTest
-class ScheduledMaintenanceTasksTest extends AbstractPostgresConfigure {
+@SpringBootTest
+@Transactional
+class ScheduledMaintenanceTasksTest {
 
     @Autowired
     EquipmentRepository equipmentRepository;
@@ -36,6 +38,7 @@ class ScheduledMaintenanceTasksTest extends AbstractPostgresConfigure {
     SemesterScheduleRepository semesterScheduleRepository;
     @Autowired
     EntityManager em;
+
     private ScheduledMaintenanceTasks scheduledMaintenanceTasks;
     private Semester semester;
     private Classroom classroom;
@@ -136,10 +139,8 @@ class ScheduledMaintenanceTasksTest extends AbstractPostgresConfigure {
 
         em.flush();
         em.clear();
-
-
-
     }
+
     @Test
     @DisplayName("만료된 대여 정리 작업이 정상적으로 동작한다")
     void testRunExpiredRentalCleanup() {
@@ -180,6 +181,7 @@ class ScheduledMaintenanceTasksTest extends AbstractPostgresConfigure {
     void testRunExpiredRentalCleanupWithoutExpiredSemester() {
         // given
         // 기존 학기의 종료일을 미래로 업데이트 (새로운 엔티티 생성하지 않음)
+        semester = semesterRepository.findById(semester.getId()).orElse(null);
         semester = semester.toBuilder()
                 .endDate(LocalDate.now().plusDays(30))
                 .build();
@@ -187,10 +189,10 @@ class ScheduledMaintenanceTasksTest extends AbstractPostgresConfigure {
 
         // when
         scheduledMaintenanceTasks.runExpiredRentalCleanup();
-
-        // then
         em.flush();
         em.clear();
+
+        // then
 
         // RENTAL_PENDING 장비만 AVAILABLE로 변경되었는지 확인
         Equipment updatedRentalPendingEquipment = equipmentRepository.findById(rentalPendingEquipment.getId()).orElse(null);

@@ -2,6 +2,8 @@ package com.backend.server.api.user.equipment.service;
 
 import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
 import com.backend.server.api.user.equipment.dto.model.EquipmentModelListResponse;
+import com.backend.server.model.entity.Category;
+import com.backend.server.model.entity.equipment.EquipmentCategory;
 import com.backend.server.model.entity.equipment.EquipmentModel;
 import com.backend.server.model.repository.equipment.EquipmentModelRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,12 +50,12 @@ public class EquipmentModelServiceTest {
     @Test
     void getAllModels_shouldReturnFilteredResults() {
         //1.given
-        EquipmentModel model1 = EquipmentModel.builder().id(1L).name("SONY-A7000").build();
-        EquipmentModel model2 = EquipmentModel.builder().id(1L).name("SONY-A8000").build();
+        EquipmentCategory category = EquipmentCategory.builder().id(1L).name("SONY").build();
+        EquipmentModel model1 = EquipmentModel.builder().id(1L).name("SONY-A7000").category(category).build();
+        EquipmentModel model2 = EquipmentModel.builder().id(1L).name("SONY-A8000").category(category).build();
 
         EquipmentModelListRequest request = EquipmentModelListRequest.builder()
-                .keyword("sony")
-
+                .searchKeyword("sony")
                 .build();
 
         Page<EquipmentModel> page = new PageImpl<>(List.of(model1,model2));

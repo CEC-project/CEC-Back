@@ -1,26 +1,24 @@
 package com.backend.server.api.user.equipment.model.repository.equipment;
 
-import com.backend.server.config.AbstractPostgresConfigure;
+import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Gender;
+import com.backend.server.model.entity.enums.Role;
+import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
 import com.backend.server.model.entity.equipment.EquipmentModel;
-import com.backend.server.model.entity.User;
-import com.backend.server.model.entity.enums.Role;
-import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.repository.UserRepository;
-import com.backend.server.model.repository.equipment.*;
+import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
+import com.backend.server.model.repository.equipment.EquipmentModelRepository;
+import com.backend.server.model.repository.equipment.EquipmentRepository;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.time.LocalDate;
-
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class EquipmentSpecificationTest extends AbstractPostgresConfigure {
+class EquipmentSpecificationTest {
 
     @Autowired
     private EquipmentRepository equipmentRepository;

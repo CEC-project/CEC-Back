@@ -2,18 +2,13 @@ package com.backend.server.api.admin.classroom.service;
 
 import com.backend.server.api.admin.classroom.dto.AdminClassroomResponse;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
-import com.backend.server.config.AbstractPostgresConfigure;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class AdminClassroomServiceTest extends AbstractPostgresConfigure {
+public class AdminClassroomServiceTest {
 
     @Autowired
     private AdminClassroomService adminClassroomService;

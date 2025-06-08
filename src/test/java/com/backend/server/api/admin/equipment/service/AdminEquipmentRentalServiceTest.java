@@ -5,6 +5,7 @@ import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.equipment.Equipment;
+import com.backend.server.model.repository.BrokenRepairHistoryRepository;
 import com.backend.server.model.repository.UserRepository;
 import com.backend.server.model.repository.equipment.EquipmentRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,11 +33,9 @@ class AdminEquipmentRentalServiceTest {
     @InjectMocks
     private AdminEquipmentService adminEquipmentService;
 
-    @Mock
-    private EquipmentRepository equipmentRepository;
-
-    @Mock
-    private UserRepository userRepository;
+    @Mock private EquipmentRepository equipmentRepository;
+    @Mock private BrokenRepairHistoryRepository brokenRepairHistoryRepository;
+    @Mock private UserRepository userRepository;
 
     private final Long equipmentId = 1L;
     private final Long userId = 1L;
