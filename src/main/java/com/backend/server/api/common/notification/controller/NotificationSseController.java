@@ -56,7 +56,7 @@ public class NotificationSseController {
         return ApiResponse.success("안읽은 알림 다 봤어요", notificationService.getAllNotReadNotification(loginUser.getId()));
     }
 
-    @PatchMapping("/{id}/read")
+    @PatchMapping("/{id}")
     @Operation(summary = "단일 알림 읽음 처리")
     public ApiResponse<Long> markNotificationAsRead(@PathVariable Long id) {
         Long updatedId = notificationService.changeIsReadTrue(id);
