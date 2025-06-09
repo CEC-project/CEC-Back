@@ -47,8 +47,8 @@ public class AdminCommentService {
     }
 
     public CommentListResponse getComments(CommentListRequest request) {
-        Page<Comment> parentComments = commentRepository.findAllByTargetIdAndParentCommentIsNullWithAuthor(
-            request.getTargetId(), request.toPageable()
+        Page<Comment> parentComments = commentRepository.findAllByTypeAndTargetIdAndParentCommentIsNullWithAuthor(
+            request.getType(), request.getTargetId(), request.toPageable()
         );
 
         List<Long> parentIds = parentComments.getContent().stream()
