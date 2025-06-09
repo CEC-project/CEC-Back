@@ -1,14 +1,15 @@
 package com.backend.server.api.user.classroom.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
 @Builder(toBuilder = true)
 public class ClassroomActionRequest {
 
