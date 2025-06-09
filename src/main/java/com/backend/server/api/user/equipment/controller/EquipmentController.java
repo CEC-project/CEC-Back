@@ -51,9 +51,9 @@ public class EquipmentController {
             summary = "장비 장바구니 추가"
     )
     public ApiResponse<Void> addToCart(
-            @RequestBody List<Long> equipmentIds,
+            @RequestBody EquipmentCartListRequest request,
             @AuthenticationPrincipal LoginUser loginUser) {
-        equipmentService.addToCart(loginUser, equipmentIds);
+        equipmentService.addToCart(loginUser, request);
         return ApiResponse.success("장바구니 추가 성공", null);
     }
 

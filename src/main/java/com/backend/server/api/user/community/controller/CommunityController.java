@@ -1,5 +1,6 @@
 package com.backend.server.api.user.community.controller;
 
+import com.backend.server.api.admin.community.dto.CommunityListRequest;
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.user.community.dto.CommunityListResponse;
 import com.backend.server.api.user.community.dto.CommunityResponse;
@@ -9,6 +10,8 @@ import com.backend.server.api.user.community.service.CommunityService;
 import com.backend.server.model.entity.Community;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -18,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "2. 게시판", description = "수정 1차 완")
 @RestController
-@RequestMapping("/api/user/community")
+@RequestMapping("/api/board")
 public class CommunityController {
 
     private final CommunityService communityService;
@@ -32,13 +35,11 @@ public class CommunityController {
     // GET /api/user/community?page=0&size=10&sort=createdAt,desc (typeId 없으면 전체 게시글)
     @GetMapping
     @Operation(summary = "게시판 목록 조회")
-    public ResponseEntity<CommunityListResponse> getCommunityPosts(
-        @PageableDefault(size = 10, sort = "createdAt") Pageable pageable,
-        @RequestParam(required = false) Long typeId, // <-- typeId 요청 파라미터 추가 (필수 아님)
+    public ResponseEntity<CommunityListResponse> getCommunityPosts( @ParameterObject CommunityListRequest request,
         @AuthenticationPrincipal LoginUser loginuser // 실제 환경에서 로그인 사용자 정보 주입 필요
     ) {
         // Service 레이어 호출 시 typeId 인자를 함께 전달합니다.
-        CommunityListResponse response = communityService.getPosts(pageable, loginuser, typeId);
+        CommunityListResponse response = communityService.getPosts(loginuser, request);
         return ResponseEntity.ok(response);
     }
 
@@ -66,21 +67,14 @@ public class CommunityController {
     @PutMapping("/{id}")
     @Operation(summary = "게시판 글 수정")
     public ResponseEntity<CommunityResponse> updateCommunityPost(
-        @PathVariable Long id,
-        @RequestBody UpdatePostRequest request,
-        @AuthenticationPrincipal LoginUser loginuser
+            @PathVariable Long id,
+            @RequestBody @Valid UpdatePostRequest request,
+            @AuthenticationPrincipal LoginUser loginUser
     ) {
-        Community communityDetailsToUpdate = Community.builder()
-            .title(request.getTitle())
-            .content(request.getContent())
-            .type(request.getType())
-            .typeId(request.getCommunityTypeId())
-            .build();
-
-        CommunityResponse response = communityService.updatePost(id, communityDetailsToUpdate, loginuser);
-
+        CommunityResponse response = communityService.updatePost(id, request, loginUser);
         return ResponseEntity.ok(response);
     }
+
 
     @DeleteMapping("/{id}")
     @Operation(summary = "게시판 글 삭제")
@@ -101,4 +95,24 @@ public class CommunityController {
         CommunityResponse response = communityService.recommendPost(id, loginuser);
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/post/{id}") // URL 경로: /api/board + /post/{id}
+    @Operation(summary = "현재 로그인한 사용자가 추천했는지 여부 확인")
+    public ResponseEntity<Boolean> checkUserRecommendation(
+            @PathVariable Long id, // 확인할 게시글 ID
+            @AuthenticationPrincipal LoginUser loginuser // 현재 로그인한 사용자 정보
+    ) {
+        // 현재 로그인한 사용자의 ID를 가져옵니다.
+        Long userId = loginuser.getId();
+
+        // Service 레이어에 추천 여부 확인 로직 위임
+        boolean isRecommended = communityService.hasUserRecommended(id, userId);
+
+        // 추천 여부 결과 (boolean)를 200 OK 상태 코드와 함께 응답
+        // Swagger 명세서의 ApiResponseBoolean 형식에 맞춰 DTO로 감싸서 반환해야 할 수도 있습니다.
+        // 현재 Service는 boolean을 반환하므로 여기서는 boolean을 직접 반환합니다.
+        return ResponseEntity.ok(isRecommended);
+    }
+
+
+
 }
