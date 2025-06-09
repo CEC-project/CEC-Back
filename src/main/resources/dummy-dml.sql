@@ -193,8 +193,7 @@ VALUES
     (1, 1, now(), now(), 0, 0, 'general', null, '제목1', '닉네임1', '내용1'),
     (3, 2, now(), now(), 0, 0, 'general', null, '제목2', '닉네임2', '내용2'),
     (2, 1, now(), now(), 0, 0, 'general', null, '이번 주말에 뭐하세요?', '농구좋아', '같이 농구할 사람 모집합니다.'),
-    (4, 2, now(), now(), 0, 0, 'question', null, 'MySQL과 PostgreSQL 차이점?', '데이터베이스마스터', '두 DBMS의 차이를 정리해주실 수 있나요?'),
-    (1, 3, now(), now(), 0, 0, 'notice', null, '서비스 점검 안내', '관리자', '이번 주 토요일 오전 2시부터 4시까지 점검이 있을 예정입니다.');
+    (4, 2, now(), now(), 0, 0, 'question', null, 'MySQL과 PostgreSQL 차이점?', '데이터베이스마스터', '두 DBMS의 차이를 정리해주실 수 있나요?');
 
 -- 문의
 insert into public.inquiry (id, author_id, created_at, updated_at, attachment_url, status, title, type, content)
