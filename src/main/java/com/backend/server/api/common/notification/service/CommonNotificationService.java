@@ -99,11 +99,6 @@ public class CommonNotificationService {
     }
 
     //알림조회 전체
-    public List<CommonNotificationResponse> getAllNotification(Long userId, Pageable pagealbe) {
-        List<Notification> notifications = notificationRepository.findByUserIdOrderByCreatedAtDesc(userId, pagealbe);
-        return notifications.stream()
-            .map(CommonNotificationResponse::new)
-            .toList();
-    }
+
 
 }
