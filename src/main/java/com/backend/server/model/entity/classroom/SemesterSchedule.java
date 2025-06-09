@@ -47,7 +47,6 @@ public class SemesterSchedule extends BaseTimeEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "semesterSchedule")
     private List<Equipment> equipments;
 
-    private Integer year;
     private Integer day;
 
     @Column(length = 20)
