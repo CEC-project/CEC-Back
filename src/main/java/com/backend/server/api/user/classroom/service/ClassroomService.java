@@ -1,5 +1,7 @@
 package com.backend.server.api.user.classroom.service;
 
+import com.backend.server.api.common.dto.LoginUser;
+import com.backend.server.api.user.classroom.dto.ClassroomActionRequest;
 import com.backend.server.api.user.classroom.dto.ClassroomRentalRequest;
 import com.backend.server.api.user.classroom.dto.ClassroomResponse;
 import com.backend.server.api.user.classroom.dto.ScheduleResponse;
@@ -9,6 +11,7 @@ import com.backend.server.model.entity.classroom.Semester;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
 import com.backend.server.model.entity.classroom.YearSchedule;
 import com.backend.server.model.entity.enums.Status;
+import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.repository.UserRepository;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
 import com.backend.server.model.repository.classroom.SemesterRepository;
@@ -20,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -94,6 +98,110 @@ public class ClassroomService {
 
         classroomRepository.save(classroom);
         return classroom.getId();
+    }
+    @Transactional
+    public void handleUserAction(LoginUser loginUser, ClassroomActionRequest request) {
+        // 1) 사용자 로드
+        User user = userRepository.findById(loginUser.getId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        // 2) Action → handler 맵핑
+        BiConsumer<User, ClassroomActionRequest> handler = switch (request.getAction()) {
+            case RENT_REQUEST   -> this::handleRentRequest;
+            case RENT_CANCEL    -> this::handleRentCancel;
+            case RETURN_REQUEST -> this::handleReturnRequest;
+            case RETURN_CANCEL  -> this::handleReturnCancel;
+        };
+
+        // 3) 단일 요청이므로 바로 호출
+        handler.accept(user, request);
+    }
+
+    // --- 핸들러 메서드들 ---
+    private void handleRentRequest(User user, ClassroomActionRequest request) {
+        Classroom classroom = classroomRepository.findWithLockById(request.getId())
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 강의실 id 입니다."));
+
+        if (classroom.getStatus() != Status.AVAILABLE) {
+            throw new IllegalArgumentException("현재 대여 불가한 강의실 입니다.");
+        }
+
+        LocalDateTime now       = LocalDateTime.now();
+        int day                 = now.getDayOfWeek().getValue();
+        LocalTime start         = request.getStartAt().toLocalTime();
+        LocalTime end           = request.getEndAt().toLocalTime();
+
+        // (1) 연간 스케줄 체크
+        List<YearSchedule> yearSchedules = yearScheduleRepository.findWithRenterByDate(now.toLocalDate());
+        if (yearSchedules.stream().anyMatch(YearSchedule::getIsHoliday)) {
+            throw new IllegalArgumentException("휴일에는 강의실을 대여 할 수 없습니다.");
+        }
+        if (yearSchedules.stream().anyMatch(ys ->
+                CompareUtils.hasIntersectionInclusive(ys.getStartAt(), ys.getEndAt(), start, end))) {
+            throw new IllegalArgumentException("특강과 강의실 대여 시간이 겹칩니다.");
+        }
+
+        // (2) 수업 스케줄 체크
+        List<Semester> semesters = semesterRepository.findSemesterContainingDate(now.toLocalDate());
+        boolean clash = semesterScheduleRepository
+                .findByClassroomAndSemesterIn(classroom, semesters).stream()
+                .filter(ss -> ss.getDay() == day)
+                .anyMatch(ss -> CompareUtils.hasIntersectionExclusive(
+                        ss.getStartAt(), ss.getEndAt(), start, end));
+        if (clash) {
+            throw new IllegalArgumentException("수업과 강의실 대여 시간이 겹칩니다.");
+        }
+
+        classroom.makeRentalPending(start, end, user);
+        classroomRepository.save(classroom);
+    }
+
+    private void handleRentCancel(User user, ClassroomActionRequest request) {
+        Classroom classroom = classroomRepository.findWithLockAndRenterById(request.getId())
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 대여 id 입니다."));
+
+        if (!classroom.getRenter().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("대여한 사용자만 취소할 수 있습니다.");
+        }
+        if (classroom.getStatus() != Status.RENTAL_PENDING) {
+            throw new IllegalArgumentException("대여 신청 상태만 취소할 수 있습니다.");
+        }
+
+        classroom.makeAvailable();
+        classroomRepository.save(classroom);
+    }
+
+    private void handleReturnRequest(User user, ClassroomActionRequest request) {
+        Classroom classroom = classroomRepository.findWithLockAndRenterById(request.getId())
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 대여 id 입니다."));
+
+        if (!classroom.getRenter().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("대여한 사용자만 반납 요청할 수 있습니다.");
+        }
+        if (classroom.getStatus() != Status.IN_USE) {
+            throw new IllegalArgumentException("대여 중인 상태만 반납 요청할 수 있습니다.");
+        }
+
+
+        Classroom updated = classroom.toBuilder()
+                .status(Status.RETURN_PENDING)
+                .build();
+        classroomRepository.save(updated);
+    }
+
+    private void handleReturnCancel(User user, ClassroomActionRequest request) {
+        Classroom classroom = classroomRepository.findWithLockAndRenterById(request.getId())
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 반납 요청 id 입니다."));
+
+        if (!classroom.getRenter().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("요청 취소는 본인만 할 수 있습니다.");
+        }
+        if (classroom.getStatus() != Status.RETURN_PENDING) {
+            throw new IllegalArgumentException("반납 요청 상태만 취소할 수 있습니다.");
+        }
+
+        classroom.makeInUse();  // 혹은 이전 상태 복원 메서드
+        classroomRepository.save(classroom);
     }
 
     @Transactional(readOnly = true)
