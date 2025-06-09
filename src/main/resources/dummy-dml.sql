@@ -124,9 +124,9 @@ insert into public.semester (end_date, start_date, year, created_at, updated_at,
 values  ('2025-06-26', '2025-02-26', 2025, '2025-05-26 11:08:49.943975', '2025-05-26 11:08:49.943975', '1학기');
 
 -- 수업 시간표
-insert into public.semester_schedule (day, end_at, start_at, year, classroom_id, created_at, professor_id, semester_id, updated_at, name, color)
-values  (3, '14:00:00', '13:00:00', null, 2, '2025-05-28 18:28:36.555480', 1, 1, '2025-05-28 18:28:36.555480', 'string', '#112233'),
-        (5, '14:00:00', '13:00:00', null, 1, '2025-05-28 18:28:00.099899', 1, 1, '2025-05-28 18:28:00.099899', 'string', '#998877');
+insert into public.semester_schedule (day, end_at, start_at, classroom_id, created_at, professor_id, semester_id, updated_at, name, color)
+values  (3, '14:00:00', '13:00:00', 2, '2025-05-28 18:28:36.555480', 1, 1, '2025-05-28 18:28:36.555480', 'string', '#112233'),
+        (5, '14:00:00', '13:00:00', 1, '2025-05-28 18:28:00.099899', 1, 1, '2025-05-28 18:28:00.099899', 'string', '#998877');
 
 -- 게시판 카테고리
 insert into public.board_category (created_at, updated_at, description, name)
