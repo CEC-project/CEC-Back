@@ -34,7 +34,7 @@ public class CommunityController {
     // GET /api/user/community?page=0&size=10&sort=createdAt,desc&typeId=1 (예: typeId=1은 '자유' 게시글)
     // GET /api/user/community?page=0&size=10&sort=createdAt,desc (typeId 없으면 전체 게시글)
     @GetMapping
-    @Operation(summary = "게시판 목록 조회")
+    @Operation(summary = "게시글 유형 목록 조회")
     public ResponseEntity<CommunityListResponse> getCommunityPosts( @ParameterObject CommunityListRequest request,
         @AuthenticationPrincipal LoginUser loginuser // 실제 환경에서 로그인 사용자 정보 주입 필요
     ) {
@@ -44,7 +44,7 @@ public class CommunityController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "게시판 단일 조회")
+    @Operation(summary = "게시글 상세 보기")
     public ResponseEntity<CommunityResponse> getCommunityPostById(
         @PathVariable Long id,
         @AuthenticationPrincipal LoginUser loginuser
