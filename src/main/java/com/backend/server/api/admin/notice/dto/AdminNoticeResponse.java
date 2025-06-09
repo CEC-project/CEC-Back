@@ -1,6 +1,6 @@
 package com.backend.server.api.admin.notice.dto;
 
-import com.backend.server.api.common.dto.AuthorResponse;
+import com.backend.server.api.common.dto.AdminAuthorResponse;
 import com.backend.server.model.entity.Notice;
 import com.backend.server.model.entity.User;
 import io.micrometer.common.util.StringUtils;
@@ -40,7 +40,7 @@ public class AdminNoticeResponse {
     private LocalDateTime updatedAt;
 
     @Schema(description = "공지 작성자 정보")
-    private AuthorResponse author;
+    private AdminAuthorResponse author;
 
     public AdminNoticeResponse(Notice notice) {
         User user = notice.getAuthor();
@@ -58,6 +58,6 @@ public class AdminNoticeResponse {
         this.createdAt = notice.getCreatedAt();
         this.updatedAt = notice.getUpdatedAt();
 
-        this.author = user == null ? null : AuthorResponse.from(user);
+        this.author = user == null ? null : AdminAuthorResponse.from(user);
     }
 }
