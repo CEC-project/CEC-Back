@@ -114,7 +114,7 @@ public class EquipmentService {
             case RETURN_CANCEL -> (id, req) -> handleReturnCancel(user, id);
         };
 
-        for (Long equipmentId : request.getEquipmentIds()) {
+        for (Long equipmentId : request.getIds()) {
             operator.accept(equipmentId, request);
         }
     }
@@ -136,15 +136,15 @@ public class EquipmentService {
             }
         }
 
-        if (request.getStartDate() == null || request.getEndDate() == null) {
+        if (request.getStartAt() == null || request.getEndAt() == null) {
             throw new IllegalArgumentException("대여 요청은 시작일과 종료일이 필요합니다.");
         }
 
         Equipment updated = equipment.toBuilder()
                 .status(Status.RENTAL_PENDING)
                 .renter(user)
-                .startRentTime(request.getStartDate())
-                .endRentTime(request.getEndDate())
+                .startRentTime(request.getStartAt())
+                .endRentTime(request.getEndAt())
                 .build();
 
         equipmentRepository.save(updated);

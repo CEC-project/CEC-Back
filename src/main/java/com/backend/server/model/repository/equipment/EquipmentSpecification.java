@@ -117,7 +117,7 @@ public class EquipmentSpecification {
                 predicates.add(cb.equal(root.get("equipmentCategory").get("id"), request.getCategoryId()));
             }
 
-            String keyword = request.getKeyword();
+            String keyword = request.getSearchKeyword();
             EquipmentListRequest.SearchType searchType = request.getSearchType() != null
                     ? request.getSearchType()
                     : EquipmentListRequest.SearchType.ALL;

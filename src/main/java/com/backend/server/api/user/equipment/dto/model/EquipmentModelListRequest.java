@@ -18,7 +18,7 @@ public class EquipmentModelListRequest extends AbstractPaginationParam {
     private Long categoryId;
 
     @Schema(description = "검색어 (모델명 또는 영문코드에 대해 부분 일치 검색)", example = "카메라")
-    private String keyword;
+    private String searchKeyword;
 
     @Schema(
 
