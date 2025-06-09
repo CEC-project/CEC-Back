@@ -40,7 +40,7 @@ public class AdminCommentService {
 
         Comment parentComment = request.getParentCommentId() == null ? null
             : commentRepository.findById(request.getParentCommentId())
-            .orElseThrow(() -> new EntityNotFoundException("원본 댓글을를 찾을 수 없습니다."));
+            .orElseThrow(() -> new EntityNotFoundException("원본 댓글을 찾을 수 없습니다."));
         Comment comment = request.toEntity(parentComment, currentuser);
         commentRepository.save(comment);
         return comment.getId();
