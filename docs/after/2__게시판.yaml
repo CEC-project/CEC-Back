@@ -161,7 +161,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ApiResponseBoardListResponse'
+                $ref: '#/components/schemas/ApiResponsePostListResponse'
     post:
       tags:
       - 2. 게시판
@@ -244,6 +244,8 @@ components:
           type: integer
           format: int64
         title:
+          type: string
+        content:
           type: string
         recommend:
           type: integer
@@ -357,16 +359,16 @@ components:
         totalElements:
           type: integer
           format: int64
-    BoardListResponse:
+    PostListResponse:
       type: object
       properties:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/BoardResponse'
+            $ref: '#/components/schemas/PostResponse'
         pageable:
           $ref: '#/components/schemas/PageableInfo'
-    ApiResponseBoardListResponse:
+    ApiResponsePostListResponse:
       type: object
       properties:
         status:
@@ -374,4 +376,4 @@ components:
         message:
           type: string
         data:
-          $ref: '#/components/schemas/BoardListResponse'
+          $ref: '#/components/schemas/PostListResponse'
