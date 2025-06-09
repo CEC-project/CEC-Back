@@ -333,3 +333,48 @@ VALUES
 (15, 1, '2025-05-05 12:00:00', '2025-05-05 12:00:00'),
 (15, 2, '2025-05-05 12:05:00', '2025-05-05 12:05:00'),
 (15, 3, '2025-05-05 12:10:00', '2025-05-05 12:10:00');
+
+
+INSERT INTO notifications (user_id, category, title, message, link, read) VALUES
+-- User 1
+(1, '장비', '장비 대여 요청 승인 (User 1)', '장비 대여 요청이 승인되었습니다.',           '/equipment/1/approve',    true),
+(1, '회원', '회원 정보 업데이트 완료 (User 1)',  '회원 정보가 성공적으로 업데이트되었습니다.', '/user/1/profile',         true),
+(1, '강의', '강의실 예약 확인 (User 1)',        '강의실 예약이 확인되었습니다.',             '/classroom/1/booking',     false),
+(1, '시스템', '시스템 점검 안내',                '시스템 점검이 예정되어 있습니다.',         '/system/maintenance',      false),
+(1, '공지', '새 공지사항 등록',                 '새로운 공지사항이 등록되었습니다.',         '/notices/latest',          false),
+-- User 2
+(2, '장비', '장비 대여 요청 승인 (User 2)', '장비 대여 요청이 승인되었습니다.',           '/equipment/2/approve',    true),
+(2, '회원', '회원 정보 업데이트 완료 (User 2)',  '회원 정보가 성공적으로 업데이트되었습니다.', '/user/2/profile',         true),
+(2, '강의', '강의실 예약 확인 (User 2)',        '강의실 예약이 확인되었습니다.',             '/classroom/2/booking',     false),
+(2, '시스템', '시스템 점검 안내',                '시스템 점검이 예정되어 있습니다.',         '/system/maintenance',      false),
+(2, '공지', '새 공지사항 등록',                 '새로운 공지사항이 등록되었습니다.',         '/notices/latest',          false),
+-- User 3
+(3, '장비', '장비 대여 요청 승인 (User 3)', '장비 대여 요청이 승인되었습니다.',           '/equipment/3/approve',    true),
+(3, '회원', '회원 정보 업데이트 완료 (User 3)',  '회원 정보가 성공적으로 업데이트되었습니다.', '/user/3/profile',         true),
+(3, '강의', '강의실 예약 확인 (User 3)',        '강의실 예약이 확인되었습니다.',             '/classroom/3/booking',     false),
+(3, '시스템', '시스템 점검 안내',                '시스템 점검이 예정되어 있습니다.',         '/system/maintenance',      false),
+(3, '공지', '새 공지사항 등록',                 '새로운 공지사항이 등록되었습니다.',         '/notices/latest',          false),
+-- User 4
+(4, '장비', '장비 대여 요청 승인 (User 4)', '장비 대여 요청이 승인되었습니다.',           '/equipment/4/approve',    true),
+(4, '회원', '회원 정보 업데이트 완료 (User 4)',  '회원 정보가 성공적으로 업데이트되었습니다.', '/user/4/profile',         true),
+(4, '강의', '강의실 예약 확인 (User 4)',        '강의실 예약이 확인되었습니다.',             '/classroom/4/booking',     false),
+(4, '시스템', '시스템 점검 안내',                '시스템 점검이 예정되어 있습니다.',         '/system/maintenance',      false),
+(4, '공지', '새 공지사항 등록',                 '새로운 공지사항이 등록되었습니다.',         '/notices/latest',          false),
+-- User 5
+(5, '장비', '장비 대여 요청 승인 (User 5)', '장비 대여 요청이 승인되었습니다.',           '/equipment/5/approve',    true),
+(5, '회원', '회원 정보 업데이트 완료 (User 5)',  '회원 정보가 성공적으로 업데이트되었습니다.', '/user/5/profile',         true),
+(5, '강의', '강의실 예약 확인 (User 5)',        '강의실 예약이 확인되었습니다.',             '/classroom/5/booking',     false),
+(5, '시스템', '시스템 점검 안내',                '시스템 점검이 예정되어 있습니다.',         '/system/maintenance',      false),
+(5, '공지', '새 공지사항 등록',                 '새로운 공지사항이 등록되었습니다.',         '/notices/latest',          false),
+-- User 6
+(6, '장비', '장비 대여 요청 승인 (User 6)', '장비 대여 요청이 승인되었습니다.',           '/equipment/6/approve',    true),
+(6, '회원', '회원 정보 업데이트 완료 (User 6)',  '회원 정보가 성공적으로 업데이트되었습니다.', '/user/6/profile',         true),
+(6, '강의', '강의실 예약 확인 (User 6)',        '강의실 예약이 확인되었습니다.',             '/classroom/6/booking',     false),
+(6, '시스템', '시스템 점검 안내',                '시스템 점검이 예정되어 있습니다.',         '/system/maintenance',      false),
+(6, '공지', '새 공지사항 등록',                 '새로운 공지사항이 등록되었습니다.',         '/notices/latest',          false),
+-- User 7
+(7, '장비', '장비 대여 요청 승인 (User 7)', '장비 대여 요청이 승인되었습니다.',           '/equipment/7/approve',    true),
+(7, '회원', '회원 정보 업데이트 완료 (User 7)',  '회원 정보가 성공적으로 업데이트되었습니다.', '/user/7/profile',         true),
+(7, '강의', '강의실 예약 확인 (User 7)',        '강의실 예약이 확인되었습니다.',             '/classroom/7/booking',     false),
+(7, '시스템', '시스템 점검 안내',                '시스템 점검이 예정되어 있습니다.',         '/system/maintenance',      false),
+(7, '공지', '새 공지사항 등록',                 '새로운 공지사항이 등록되었습니다.',         '/notices/latest',          false);

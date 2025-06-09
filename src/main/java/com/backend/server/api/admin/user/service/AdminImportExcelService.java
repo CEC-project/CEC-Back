@@ -1,8 +1,11 @@
 package com.backend.server.api.admin.user.service;
 
+import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.enums.Gender;
+import java.util.Optional;
 import com.backend.server.model.entity.enums.Role;
 import com.backend.server.model.entity.User;
+import com.backend.server.model.repository.ProfessorRepository;
 import com.backend.server.model.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
@@ -33,6 +36,9 @@ public class AdminImportExcelService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ProfessorRepository professorRepository;
 
     /**
      * 엑셀 파일에서 사용자 정보를 읽어 데이터베이스에 일괄 등록합니다.
@@ -84,7 +90,8 @@ public class AdminImportExcelService {
             Integer studentNumberIndex = headerMap.get("학번");
             Integer gradeIndex = headerMap.get("학년");
             Integer genderIndex = headerMap.get("성별");
-            //Integer professorIndex = headerMap.get("지도교수");
+            //지도교수 여기
+            Integer professorIndex = headerMap.get("지도교수");
             Integer phoneIndex = headerMap.get("휴대폰번호");
             Integer emailIndex = headerMap.get("이메일");
             Integer birthDateIndex = headerMap.get("생년월일");
@@ -119,7 +126,26 @@ public class AdminImportExcelService {
                     
                     if (gradeIndex != null) userBuilder.grade(Integer.parseInt(getCellValue(row.getCell(gradeIndex))));
                     if (genderIndex != null) userBuilder.gender(Gender.fromKorean(getCellValue(row.getCell(genderIndex))));
-                    // if (professorIndex != null) userBuilder.professor(getCellValue(row.getCell(professorIndex)));
+
+                    //교수찾기
+                    if (professorIndex != null) {
+                        String profName = getCellValue(row.getCell(professorIndex)).trim();
+                        if (!profName.isEmpty()) {
+                            // 교수찾기
+                            Professor professor = professorRepository
+                                    .findByName(profName)
+                                    // 없으면 만들기
+                                    .orElseGet(() -> {
+                                        Professor newProf = Professor.builder()
+                                                .name(profName)
+                                                .description("자동 생성된 교수님입니다.")
+                                                .build();
+                                        return professorRepository.save(newProf);
+                                    });
+                            // 유저에 교수할당
+                            userBuilder.professor(professor);
+                        }
+                    }
                     if (phoneIndex != null) userBuilder.phoneNumber(getCellValue(row.getCell(phoneIndex)));
                     if (emailIndex != null) userBuilder.email(getCellValue(row.getCell(emailIndex)));
                     if (classIndex != null) userBuilder.group(getCellValue(row.getCell(classIndex)));
@@ -148,6 +174,7 @@ public class AdminImportExcelService {
                     
                     // 각 사용자를 개별적으로 저장
                     userRepository.save(user);
+                    processedCount++;
                     
                 } catch (Exception e) {
                     log.error("행 {}의 데이터 처리 중 오류 (학번: {}, 이름: {}): {}", i + 1, studentNumber, name, e.getMessage());
