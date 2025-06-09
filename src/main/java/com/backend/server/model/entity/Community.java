@@ -43,4 +43,8 @@ public class Community extends BaseTimeEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_category_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private BoardCategory boardCategory;
+
+    public void increaseViewCount() {
+        this.view++;
+    }
 }
