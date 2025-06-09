@@ -44,15 +44,6 @@ VALUES
     ('2006-10-18', 0, 1, 0, 0, 0, '2025-05-16 13:40:26.060319', 4, '2025-05-16 13:40:26.060319', '학과', '2023987319@example.com', 'F', 'A조', '세부전공', '임민서', '다은', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2', '01078901234', 'profile1.jpg', 'ROLE_USER', '2023987319'),
     ('2006-12-20', 0, 1, 0, 0, 0, '2025-05-16 13:40:26.060319', 5, '2025-05-16 13:40:26.060319', '학과', '2023987430@example.com', 'F', 'A조', '세부전공', '신예린', '예은', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2', '01089012345', 'profile1.jpg', 'ROLE_USER', '2023987430');
 
-insert into users (birth_date, broken_count, grade, rental_count, report_count, restriction_count, created_at,
-                          professor_id, updated_at, department, email, gender, "group", major, name, nickname,
-                          password, phone_number, profile_picture, role, student_number)
-values  ('2001-03-15', 0, 3, 5, 2, 1,
-         '2025-05-16 13:40:26.060319', 1, '2025-05-16 13:40:26.060319',
-         '학과', 'hong@example.com', 'M', 'A조', '세부전공',
-         '조경준', '조교', '$2a$10$2/ZUDynpz0BDpGUt/FLJ.OumPW6INKT.Hotj65QofSY5896MQmzW2',
-         '01012345678', 'profile1.jpg', 'ROLE_SUPER_ADMIN', '202300003');
-
 -- 강의실 INSERT
 insert into public.classroom (end_time, start_time, created_at, manager_id, renter_id, updated_at, attachment, location, name, status, requested_at, start_rent_time, end_rent_time)
 values
