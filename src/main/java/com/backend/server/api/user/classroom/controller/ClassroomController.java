@@ -2,15 +2,19 @@ package com.backend.server.api.user.classroom.controller;
 
 import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.common.dto.LoginUser;
+import com.backend.server.api.user.classroom.dto.ClassroomActionRequest;
 import com.backend.server.api.user.classroom.dto.ClassroomRentalRequest;
 import com.backend.server.api.user.classroom.dto.ClassroomResponse;
 import com.backend.server.api.user.classroom.dto.ScheduleResponse;
 import com.backend.server.api.user.classroom.service.ClassroomService;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentActionRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import java.util.List;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,24 +50,35 @@ public class ClassroomController {
         return ApiResponse.success("강의실 목록 조회 성공", classroomService.getAllClassrooms());
     }
 
-    @Operation(summary = "강의실 대여 신청")
-    @PatchMapping("/{id}/rental")
-    public ApiResponse<Long> rental(
-            @PathVariable("id") Long classroomId,
-            @RequestBody ClassroomRentalRequest request,
-            @AuthenticationPrincipal LoginUser loginUser
-    ) {
-        Long result = classroomService.rental(loginUser.getId(), classroomId, request);
-        return ApiResponse.success("강의실 대여 신청 성공", result);
-    }
+//    @Operation(summary = "강의실 대여 신청")
+//    @PatchMapping("/{id}/rental")
+//    public ApiResponse<Long> rental(
+//            @PathVariable("id") Long classroomId,
+//            @RequestBody ClassroomRentalRequest request,
+//            @AuthenticationPrincipal LoginUser loginUser
+//    ) {
+//        Long result = classroomService.rental(loginUser.getId(), classroomId, request);
+//        return ApiResponse.success("강의실 대여 신청 성공", result);
+//    }
+//
+//    @Operation(summary = "강의실 대여 취소")
+//    @PatchMapping("/{id}/cancel")
+//    public ApiResponse<Long> cancel(
+//            @PathVariable("id") Long classroomId,
+//            @AuthenticationPrincipal LoginUser loginUser
+//    ) {
+//        Long result = classroomService.cancelRental(loginUser.getId(), classroomId);
+//        return ApiResponse.success("강의실 대여 취소 성공", result);
+//    }
 
-    @Operation(summary = "강의실 대여 취소")
-    @PatchMapping("/{id}/cancel")
-    public ApiResponse<Long> cancel(
-            @PathVariable("id") Long classroomId,
+    @PatchMapping("/action")
+    @Operation(summary = "강의실 상태 변경 요청 (대여/반납 요청 및 취소)",description = "날짜는 대여 요청 시에만 필요")
+    public ApiResponse<Void> handleEquipmentAction(
+            @Valid
+            @RequestBody ClassroomActionRequest request,
             @AuthenticationPrincipal LoginUser loginUser
     ) {
-        Long result = classroomService.cancelRental(loginUser.getId(), classroomId);
-        return ApiResponse.success("강의실 대여 취소 성공", result);
+        classroomService.handleUserAction(loginUser, request);
+        return ApiResponse.success("강의실 대여/반납 요청 및 취소 처리 완료", null);
     }
 }
