@@ -14,5 +14,4 @@ public interface CommunityRepository extends JpaRepository<Community, Long>{
     @EntityGraph(attributePaths = {"author", "boardCategory"})
     Page<Community> findAll(Specification<Community> spec, Pageable pageable);
 
-    Page<Community> findAllByTypeId(Long community_type_id, Pageable pageable);
 }

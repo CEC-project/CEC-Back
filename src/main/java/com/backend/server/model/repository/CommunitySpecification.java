@@ -1,8 +1,10 @@
 package com.backend.server.model.repository;
 
 import com.backend.server.api.admin.community.dto.AdminCommunityListRequest;
+import com.backend.server.api.admin.community.dto.CommunityListRequest;
 import com.backend.server.api.admin.notice.dto.AdminNoticeListRequest;
 import com.backend.server.model.entity.Community;
+import com.backend.server.model.entity.Notice;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
@@ -78,4 +80,53 @@ public class CommunitySpecification {
 
         return predicate;
     }
+
+    //--------------------------
+    public static Specification<Community> filterCommunitiesForUser(CommunityListRequest request) {
+        return (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (StringUtils.hasText(request.getSearchKeyword())) {
+                String[] keywords = request.getSearchKeyword().trim().toLowerCase().split("\\s+");
+                for (String kw : keywords) {
+                    String pattern = "%" + kw + "%";
+
+                    switch (request.getSearchType()) {
+                        case TITLE:
+                            predicates.add(cb.like(cb.lower(root.get("title")), pattern));
+                            break;
+
+                        case CONTENT:
+                            predicates.add(cb.like(cb.lower(root.get("content")), pattern));
+                            break;
+
+                        case NAME:
+                            predicates.add(cb.like(cb.lower(root.get("author").get("name")), pattern));
+                            break;
+
+                        case NICKNAME:
+                            predicates.add(cb.like(cb.lower(root.get("author").get("nickname")), pattern));
+                            break;
+
+                        case ALL:
+                        default:
+                            Predicate titlePred    = cb.like(cb.lower(root.get("title")), pattern);
+                            Predicate contentPred  = cb.like(cb.lower(root.get("content")), pattern);
+                            Predicate namePred     = cb.like(cb.lower(root.get("author").get("name")), pattern);
+                            Predicate nicknamePred = cb.like(cb.lower(root.get("author").get("nickname")), pattern);
+                            predicates.add(cb.or(titlePred, contentPred, namePred, nicknamePred));
+                            break;
+                    }
+                }
+            }
+
+            // 2) 카테고리 필터
+            if (request.getCategoryId() != null) {
+                predicates.add(cb.equal(root.get("boardCategory").get("id"), request.getCategoryId()));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
 }

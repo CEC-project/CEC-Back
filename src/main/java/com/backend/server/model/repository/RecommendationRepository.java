@@ -1,6 +1,8 @@
 package com.backend.server.model.repository;
 
+import com.backend.server.model.entity.Community;
 import com.backend.server.model.entity.Recommendation;
+import com.backend.server.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +13,6 @@ public interface RecommendationRepository extends JpaRepository<Recommendation, 
     // 특정 user_id와 community_id를 가지는 Recommendation 엔티티가 존재하는지 확인하는 메소드
     // 이 메소드는 CommunityService에서 중복 추천을 확인하는 데 사용
     boolean existsByUserIdAndCommunityId(Long userId, Long communityId);
+
+    Recommendation findByUserAndCommunity(User user, Community community);
 }

@@ -132,17 +132,69 @@ values  (3, '14:00:00', '13:00:00', null, 2, '2025-05-28 18:28:36.555480', 1, 1,
 insert into public.board_category (created_at, updated_at, description, name)
 values
     (now(), now(), '자유로운 대화가 가능합니다.', '자유게시판'),
-    (now(), now(), '사용자끼리 자유로운 질문 답변이 가능합니다.', '질문게시판');
+    (now(), now(), '사용자끼리 자유로운 질문 답변이 가능합니다.', '질문게시판'),
+(now(), now(), '개선사항 ㄱㄱ링.', '개선사항 요구 게시판');
 
 -- 게시판
-INSERT INTO public.community (author_id, board_category_id, created_at, updated_at, recommend,
-    view, type, type_id, title, nickname, content
-)
+INSERT INTO community
+( title, nickname, author_id, recommend, view, content, board_category_id, created_at, updated_at )
 VALUES
-    (1, 1, now(), now(), 0, 0, 'general', null, '제목1', '닉네임1', '내용1'),
-    (3, 2, now(), now(), 0, 0, 'general', null, '제목2', '닉네임2', '내용2'),
-    (2, 1, now(), now(), 0, 0, 'general', null, '이번 주말에 뭐하세요?', '농구좋아', '같이 농구할 사람 모집합니다.'),
-    (4, 2, now(), now(), 0, 0, 'question', null, 'MySQL과 PostgreSQL 차이점?', '데이터베이스마스터', '두 DBMS의 차이를 정리해주실 수 있나요?');
+    (
+        '자유게시판 첫 글',
+        'member01',
+        1,
+        3,
+        10,
+        '자유로운 이야기를 공유합니다.',
+        1,
+        '2025-06-09 10:00:00',
+        '2025-06-09 10:00:00'
+    ),
+    (
+        '기능 개선 요청: 로그인 오류',
+        'user02',
+        2,
+        5,
+        20,
+        '로그인 시 간헐적 오류가 발생합니다. 확인 부탁드립니다.',
+        2,
+        '2025-06-09 11:30:00',
+        '2025-06-09 11:30:00'
+    ),
+    (
+        '건의사항: 페이지네이션 추가',
+        'tester',
+        3,
+        2,
+        15,
+        '페이지네이션 기능이 있으면 대량의 데이터도 편리하게 볼 수 있을 것 같습니다.',
+        1,
+        '2025-06-09 13:45:00',
+        '2025-06-09 13:45:00'
+    ),
+    (
+        '주말 일정 공유',
+        'happyUser',
+        4,
+        8,
+        30,
+        '이번 주말에 계획이 있으신가요? 함께 수다 떨어요!',
+        3,
+        '2025-06-09 15:20:00',
+        '2025-06-09 15:20:00'
+    ),
+    (
+        '요청: 다크 모드 지원',
+        'devFan',
+        5,
+        7,
+        25,
+        '다크 모드 기능이 있으면 눈의 피로를 줄일 수 있을 것 같습니다.',
+        2,
+        '2025-06-09 17:05:00',
+        '2025-06-09 17:05:00'
+    );
+
 
 -- 문의
 insert into public.inquiry (id, author_id, created_at, updated_at, attachment_url, status, title, type, content)

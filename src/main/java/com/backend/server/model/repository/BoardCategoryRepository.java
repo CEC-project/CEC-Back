@@ -5,7 +5,9 @@ import com.backend.server.model.entity.BoardCategory;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface BoardCategoryRepository extends JpaRepository<BoardCategory, Long> {
 
     @Query("SELECT new com.backend.server.api.admin.boardCategory.dto.AdminBoardCategoryResponse" +
