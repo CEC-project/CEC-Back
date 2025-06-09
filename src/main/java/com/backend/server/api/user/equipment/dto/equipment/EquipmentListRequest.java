@@ -17,7 +17,7 @@ public class EquipmentListRequest extends AbstractPaginationParam {
     private Long categoryId;
 
     @Schema(description = "검색 키워드", example = "SONY")
-    private String keyword;
+    private String searchKeyword;
 
     @Schema(description = "검색 타입",
             example = "ALL", implementation = SearchType.class)

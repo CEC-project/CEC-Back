@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class EquipmentCountByCategoryResponse {
+public class EquipmentCategoryListResponse {
 
     @Schema(description = "장비 카테고리 ID", example = "1")
     private Long id;

@@ -1,7 +1,6 @@
 package com.backend.server.api.admin.equipment.service;
 
 import com.backend.server.api.admin.equipment.dto.category.AdminEquipmentCountByCategoryResponse;
-import com.backend.server.api.user.equipment.dto.category.EquipmentCountByCategoryResponse;
 import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
 import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;

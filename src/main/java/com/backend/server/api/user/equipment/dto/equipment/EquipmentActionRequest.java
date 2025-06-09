@@ -26,11 +26,11 @@ public class EquipmentActionRequest {
     private Action action;
 
     @Schema(description = "장비 ID 목록", example = "[1, 2, 3]")
-    private List<Long> equipmentIds;
+    private List<Long> ids;
 
     @Schema(description = "요청 시작일 (대여 요청 시에만 필요)", example = "2025-06-03T10:00:00", nullable = true)
-    private LocalDateTime startDate;
+    private LocalDateTime startAt;
 
     @Schema(description = "요청 종료일 (대여 요청 시에만 필요)", example = "2025-06-05T18:00:00", nullable = true)
-    private LocalDateTime endDate;
+    private LocalDateTime endAt;
 }
