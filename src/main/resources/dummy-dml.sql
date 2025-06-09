@@ -182,8 +182,7 @@ values  (3, '14:00:00', '13:00:00', null, 2, '2025-05-28 18:28:36.555480', 1, 1,
 insert into public.board_category (created_at, updated_at, description, name)
 values
     (now(), now(), '자유로운 대화가 가능합니다.', '자유게시판'),
-    (now(), now(), '사용자끼리 자유로운 질문 답변이 가능합니다.', '질문게시판'),
-    (now(), now(), '관리자 공지사항을 안내합니다.', '공지사항');
+    (now(), now(), '사용자끼리 자유로운 질문 답변이 가능합니다.', '질문게시판');
 
 -- 게시판
 INSERT INTO public.community (author_id, board_category_id, created_at, updated_at, recommend,
