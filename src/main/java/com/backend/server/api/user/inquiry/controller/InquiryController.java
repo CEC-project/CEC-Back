@@ -2,6 +2,7 @@ package com.backend.server.api.user.inquiry.controller;
 
 import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.common.dto.LoginUser;
+import com.backend.server.api.user.inquiry.dto.InquiryListResponse; // 명세에 맞춘 DTO import
 import com.backend.server.api.user.inquiry.dto.InquiryRequest;
 import com.backend.server.api.user.inquiry.dto.InquiryResponse;
 import com.backend.server.api.user.inquiry.service.InquiryService;
@@ -9,7 +10,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -46,15 +46,15 @@ public class InquiryController {
 
     @Operation(summary = "내 문의글 목록 조회", description = "로그인한 사용자의 모든 문의글을 페이지네이션과 함께 조회합니다.")
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<InquiryResponse>>> getMyInquiries(
-            @AuthenticationPrincipal LoginUser loginUser,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "DESC") String sortDirection
+    public ResponseEntity<ApiResponse<InquiryListResponse>> getMyInquiries( // 수정: 반환 타입 Page → DTO
+                                                                            @AuthenticationPrincipal LoginUser loginUser,
+                                                                            @RequestParam(defaultValue = "1") int page,
+                                                                            @RequestParam(defaultValue = "10") int size,
+                                                                            @RequestParam(defaultValue = "createdAt") String sortBy,
+                                                                            @RequestParam(defaultValue = "DESC") String sortDirection
     ) {
         Long currentUserId = loginUser.getId();
-        Page<InquiryResponse> responses = inquiryService.getMyInquiries(currentUserId, page, size, sortBy, sortDirection);
+        InquiryListResponse responses = inquiryService.getMyInquiries(currentUserId, page, size, sortBy, sortDirection); // 반환값 DTO
         return ResponseEntity.ok(ApiResponse.success("문의글 목록 조회 성공", responses));
     }
 

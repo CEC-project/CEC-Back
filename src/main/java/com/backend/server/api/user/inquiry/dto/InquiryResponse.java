@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class InquiryResponse {
+
     @Schema(description = "문의 ID", example = "1")
     private Long id;
 
@@ -37,5 +38,5 @@ public class InquiryResponse {
     private String createdAt;
 
     @Schema(description = "답변 내용")
-    private InquiryAnswerResponse answer;
+    private InquiryAnswerResponse answer; // answer.author → 공통 AuthorResponse 사용
 }

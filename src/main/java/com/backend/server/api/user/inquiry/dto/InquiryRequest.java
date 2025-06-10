@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class InquiryRequest {
+
     @Schema(description = "문의 제목", example = "장비 대여 관련 문의")
     @NotBlank(message = "제목은 필수입니다.")
     private String title;

@@ -1,5 +1,7 @@
 package com.backend.server.api.user.inquiry.service;
 
+import com.backend.server.api.common.dto.AuthorResponse; // 공통 DTO 사용
+import com.backend.server.api.common.dto.PageableInfo;   // 공통 페이지 DTO 사용
 import com.backend.server.api.user.inquiry.dto.*;
 import com.backend.server.model.entity.Inquiry;
 import com.backend.server.model.entity.InquiryAnswer;
@@ -7,18 +9,12 @@ import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.InquiryRepository;
 import com.backend.server.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.AccessDeniedException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,15 +34,10 @@ public class InquiryService {
 
     private InquiryAnswerResponse mapAnswer(InquiryAnswer answer) {
         if (answer == null) return null;
-        User responder = answer.getResponder();
+
         return InquiryAnswerResponse.builder()
                 .content(answer.getContent())
-                .author(AuthorResponse.builder()
-                        .id(responder.getId())
-                        .nickname(responder.getNickname())
-                        .role(responder.getRole().name())
-                        .imageUrl(responder.getProfilePicture())
-                        .build())
+                .author(AuthorResponse.from(answer.getResponder())) //  공통 DTO 사용
                 .build();
     }
 
@@ -91,25 +82,31 @@ public class InquiryService {
     }
 
     @Transactional(readOnly = true)
-    public Page<InquiryResponse> getMyInquiries(Long currentUserId, int page, int size, String sortBy, String sortDirection) {
+    public InquiryListResponse getMyInquiries(Long currentUserId, int page, int size, String sortBy, String sortDirection) {
         Sort.Direction direction = Sort.Direction.fromOptionalString(sortDirection).orElse(Sort.Direction.DESC);
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(direction, sortBy));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(direction, sortBy)); //  0-based index
 
         Page<Inquiry> inquiries = inquiryRepository.findAllByAuthorId(currentUserId, pageable);
 
-        return inquiries.map(inquiry -> {
-            Optional<InquiryAnswer> answerOpt = inquiry.getAnswers().stream().findFirst();
-            return InquiryResponse.builder()
-                    .id(inquiry.getId())
-                    .title(inquiry.getTitle())
-                    .content(inquiry.getContent())
-                    .attachments(splitAttachments(inquiry.getAttachmentUrl()))
-                    .type(inquiry.getType())
-                    .status(inquiry.getStatus())
-                    .createdAt(inquiry.getCreatedAt().toString())
-                    .answer(answerOpt.map(this::mapAnswer).orElse(null))
-                    .build();
-        });
+        List<InquiryResponse> content = inquiries.getContent().stream()
+                .map(inquiry -> {
+                    Optional<InquiryAnswer> answerOpt = inquiry.getAnswers().stream().findFirst();
+                    return InquiryResponse.builder()
+                            .id(inquiry.getId())
+                            .title(inquiry.getTitle())
+                            .content(inquiry.getContent())
+                            .attachments(splitAttachments(inquiry.getAttachmentUrl()))
+                            .type(inquiry.getType())
+                            .status(inquiry.getStatus())
+                            .createdAt(inquiry.getCreatedAt().toString())
+                            .answer(answerOpt.map(this::mapAnswer).orElse(null))
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        PageableInfo pageableInfo = new PageableInfo(inquiries); // 명세에 맞춘 공통 생성자 사용
+
+        return new InquiryListResponse(content, pageableInfo); // 전체 응답 DTO로 반환
     }
 
     @Transactional
