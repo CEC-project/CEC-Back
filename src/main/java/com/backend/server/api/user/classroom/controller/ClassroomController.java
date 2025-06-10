@@ -3,18 +3,15 @@ package com.backend.server.api.user.classroom.controller;
 import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.user.classroom.dto.ClassroomActionRequest;
-import com.backend.server.api.user.classroom.dto.ClassroomRentalRequest;
 import com.backend.server.api.user.classroom.dto.ClassroomResponse;
 import com.backend.server.api.user.classroom.dto.ScheduleResponse;
 import com.backend.server.api.user.classroom.service.ClassroomService;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentActionRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
-
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -72,13 +69,13 @@ public class ClassroomController {
 //    }
 
     @PatchMapping("/action")
-    @Operation(summary = "강의실 상태 변경 요청 (대여/반납 요청 및 취소)",description = "날짜는 대여 요청 시에만 필요")
+    @Operation(summary = "강의실 상태 변경 요청 (대여/취소)", description = "시간은 대여 요청 시에만 필요")
     public ApiResponse<Void> handleEquipmentAction(
             @Valid
             @RequestBody ClassroomActionRequest request,
             @AuthenticationPrincipal LoginUser loginUser
     ) {
         classroomService.handleUserAction(loginUser, request);
-        return ApiResponse.success("강의실 대여/반납 요청 및 취소 처리 완료", null);
+        return ApiResponse.success("강의실 대여/취소 요청 완료", null);
     }
 }

@@ -24,6 +24,5 @@ public interface YearScheduleRepository extends JpaRepository<YearSchedule, Long
 
     List<YearSchedule> findByDateBetweenAndClassroom(LocalDate monday, LocalDate friday, Classroom classroom);
 
-    @EntityGraph(attributePaths = {"renter"})
-    List<YearSchedule> findWithRenterByDate(LocalDate localDate);
+    List<YearSchedule> findByDate(LocalDate localDate);
 }
