@@ -5,6 +5,7 @@ import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
 import com.backend.server.model.entity.classroom.YearSchedule;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -45,7 +46,11 @@ public class ScheduleResponse {
 
     @Schema(description = """
             type = RENTAL 이면서, 현재 로그인된 사람이 강의실 대여자일때만 true(현재 로그인한 사용자가 대여 취소가능하면 true)""")
+    @JsonProperty("isRenter")
     private final boolean isRenter;
+
+    @Schema(description = "대여자의 이름 / 수업하는 교수의 이름")
+    private final String renterName;
 
     public ScheduleResponse(YearSchedule schedule) {
         if (schedule.getIsHoliday()) {
@@ -56,6 +61,7 @@ public class ScheduleResponse {
             content = schedule.getDescription();
             id = schedule.getId();
             startTime = endTime = null;
+            renterName = null;
             isRenter = false;
             return;
         }
@@ -68,6 +74,7 @@ public class ScheduleResponse {
         content = schedule.getDescription();
         id = schedule.getId();
         isRenter = false;
+        renterName = null;
     }
 
     public ScheduleResponse(SemesterSchedule schedule, LocalDate date) {
@@ -80,6 +87,7 @@ public class ScheduleResponse {
         content = schedule.getName();
         id = schedule.getId();
         isRenter = false;
+        renterName = schedule.getProfessor().getName();
     }
 
     public ScheduleResponse(Classroom classroom, User renter) {
@@ -92,5 +100,6 @@ public class ScheduleResponse {
         content = classroom.getStatus().name();
         id = classroom.getId();
         isRenter = renter.getId().equals(classroom.getRenter().getId());
+        renterName = renter.getName();
     }
 }
