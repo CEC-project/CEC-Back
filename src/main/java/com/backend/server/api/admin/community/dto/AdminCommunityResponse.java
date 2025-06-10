@@ -1,6 +1,6 @@
 package com.backend.server.api.admin.community.dto;
 
-import com.backend.server.api.common.dto.AuthorResponse;
+import com.backend.server.api.common.dto.AdminAuthorResponse;
 import com.backend.server.api.common.dto.BoardResponse;
 import com.backend.server.model.entity.Community;
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ import lombok.Getter;
 public class AdminCommunityResponse {
     private Long id;
     private String title;
-    private AuthorResponse author;
+    private AdminAuthorResponse author;
     private BoardResponse board;
     private int recommend;
     private int view;
@@ -25,7 +25,7 @@ public class AdminCommunityResponse {
     public AdminCommunityResponse(Community community) {
         this.id = community.getId();
         this.title = community.getTitle();
-        this.author = community.getAuthor() == null ? null : AuthorResponse.from(community.getAuthor());
+        this.author = community.getAuthor() == null ? null : AdminAuthorResponse.from(community.getAuthor());
         this.recommend = community.getRecommend();
         this.view = community.getView();
         this.board = BoardResponse.from(community.getBoardCategory());
