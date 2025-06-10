@@ -16,6 +16,9 @@ import lombok.Getter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EquipmentResponse {
 
+    @Schema(description = "장비 id", example = "SONY")
+    private final Long id;
+
     @Schema(description = "장비 모델 이름", example = "SONY")
     private final String modelName;
 
@@ -39,6 +42,7 @@ public class EquipmentResponse {
     private final String imageUrl;
 
     public EquipmentResponse(Equipment equipment) {
+        this.id = equipment.getId();
         this.modelName = equipment.getEquipmentModel().getName();
         this.startRentAt = equipment.getStartRentTime();
         this.endRentAt = equipment.getEndRentTime();

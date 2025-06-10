@@ -198,14 +198,14 @@ components:
       required:
       - content
       - targetId
-      - targetType
+      - type
       type: object
       properties:
         content:
           type: string
           description: 댓글 내용
           example: 좋은 글 감사합니다.
-        targetType:
+        type:
           type: string
           description: 댓글 대상 종류
           example: NOTICE
@@ -279,7 +279,7 @@ components:
         id:
           type: integer
           format: int64
-        targetType:
+        type:
           type: string
           enum:
           - BOARD

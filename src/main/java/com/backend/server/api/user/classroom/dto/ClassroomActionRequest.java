@@ -1,4 +1,5 @@
-package com.backend.server.api.user.equipment.dto.equipment;
+package com.backend.server.api.user.classroom.dto;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Builder(toBuilder = true)
-public class EquipmentActionRequest {
+public class ClassroomActionRequest {
 
     public enum Action {
         RENT_REQUEST,    // 대여 요청
@@ -26,8 +27,8 @@ public class EquipmentActionRequest {
             "RETURN_CANCEL: 반납 요청 취소")
     private Action action;
 
-    @Schema(description = "장비 ID 목록", example = "[1, 2, 3]")
-    private List<Long> ids;
+    @Schema(description = "강의실 ID")
+    private Long id;
 
     @Schema(description = "요청 시작일 (대여 요청 시에만 필요)", example = "2025-06-03T10:00:00", nullable = true)
     private LocalDateTime startAt;

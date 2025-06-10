@@ -315,7 +315,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ApiResponseBoardListResponse'
+                $ref: '#/components/schemas/ApiResponsePostListResponse'
     post:
       tags:
         - 2. 게시판
@@ -1054,6 +1054,8 @@ components:
           format: int64
         title:
           type: string
+        content:
+          type: string
         recommend:
           type: integer
           format: int32
@@ -1216,23 +1218,21 @@ components:
           type: string
         content:
           type: string
-        type:
-          type: string
-        BoardTypeId:
+        boardId:
           type: integer
           format: int64
     CommentRequest:
       required:
         - content
         - targetId
-        - targetType
+        - type
       type: object
       properties:
         content:
           type: string
           description: 댓글 내용
           example: 좋은 글 감사합니다.
-        targetType:
+        type:
           type: string
           description: 댓글 대상 종류
           example: NOTICE
@@ -1418,16 +1418,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EquipmentResponse'
-    BoardListResponse:
+    PostListResponse:
       type: object
       properties:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/BoardResponse'
+            $ref: '#/components/schemas/PostResponse'
         pageable:
           $ref: '#/components/schemas/PageableInfo'
-    ApiResponseBoardListResponse:
+    ApiResponsePostListResponse:
       type: object
       properties:
         status:
@@ -1435,7 +1435,7 @@ components:
         message:
           type: string
         data:
-          $ref: '#/components/schemas/BoardListResponse'
+          $ref: '#/components/schemas/PostListResponse'
     ApiResponseNoticeListResponse:
       type: object
       properties:
@@ -1657,7 +1657,7 @@ components:
         id:
           type: integer
           format: int64
-        targetType:
+        type:
           type: string
           enum:
             - BOARD
