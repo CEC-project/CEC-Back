@@ -1,8 +1,8 @@
 package com.backend.server.api.user.community.service;
 
-
 import com.backend.server.api.admin.community.dto.CommunityListRequest;
 import com.backend.server.api.common.dto.LoginUser;
+import com.backend.server.api.user.community.dto.CommunityCategoryListResponse;
 import com.backend.server.api.user.community.dto.CommunityListResponse;
 import com.backend.server.api.user.community.dto.CommunityResponse;
 import com.backend.server.api.user.community.dto.CreatePostRequest;
@@ -11,15 +11,21 @@ import com.backend.server.model.entity.BoardCategory;
 import com.backend.server.model.entity.Community;
 import com.backend.server.model.entity.Recommendation;
 import com.backend.server.model.entity.User;
-import com.backend.server.model.repository.*;
+import com.backend.server.model.repository.BoardCategoryRepository;
+import com.backend.server.model.repository.CommunityRepository;
+import com.backend.server.model.repository.CommunitySpecification;
+import com.backend.server.model.repository.RecommendationRepository;
+import com.backend.server.model.repository.UserRepository;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * 커뮤니티 게시글과 관련된 비즈니스 로직을 처리하는 서비스 클래스입니다.
@@ -34,10 +40,6 @@ public class CommunityService {
     private final UserRepository userRepository; // User 엔티티 데이터 접근을 위한 Repository (작성자 정보 조회 시 필요)
     private final RecommendationRepository recommendationRepository; // Recommendation 엔티티 데이터 접근을 위한 Repository (추천 기능 시 필요)
     private final BoardCategoryRepository boardCategoryRepository;
-
-    // "개선사항 요구" 게시글의 community_type_id 값 (예시, 실제 값으로 변경 필요)
-    private static final Long DEFAULT_COMMUNITY_TYPE_ID = 1L; // TODO: 실제 "개선사항 요구"의 typeId 값으로 변경 필요
-    
 
     public boolean hasUserRecommended(Long postId, Long userId) {
         // RecommendationRepository의 existsByUserIdAndCommunityId 메소드를 호출하여 추천 기록 존재 여부를 확인
@@ -71,6 +73,20 @@ public class CommunityService {
         return new CommunityResponse(savedCommunity, loginuser);
     }
 
+    @Transactional(readOnly = true)
+    public List<CommunityCategoryListResponse> getBoardCategories() {
+        List<BoardCategory> categories = boardCategoryRepository.findAll();
+        return categories.stream()
+                .map(category -> {
+                    CommunityCategoryListResponse dto = new CommunityCategoryListResponse();
+                    dto.setId(category.getId());
+                    dto.setName(category.getName());
+                    dto.setDescription(category.getDescription());
+                    return dto;
+                })
+                .sorted(Comparator.comparing(CommunityCategoryListResponse::getId))
+                .collect(Collectors.toList());
+    }
     /**
      * 특정 ID를 가진 커뮤니티 게시글의 상세 정보를 조회합니다.
      * 게시글 조회 시 조회수를 1 증가시킵니다.
@@ -172,7 +188,7 @@ public class CommunityService {
 
             community.setRecommend(community.getRecommend() - 1);
             Community updatedCommunity = communityRepository.save(community);
-            return null;
+            return new CommunityResponse(updatedCommunity, loginuser);
         } //1번 더 클릭 시 감소로 변경
 
         Recommendation recommendation = new Recommendation(null, user, community);
