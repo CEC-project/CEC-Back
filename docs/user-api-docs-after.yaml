@@ -1218,9 +1218,7 @@ components:
           type: string
         content:
           type: string
-        type:
-          type: string
-        BoardTypeId:
+        boardId:
           type: integer
           format: int64
     CommentRequest:
