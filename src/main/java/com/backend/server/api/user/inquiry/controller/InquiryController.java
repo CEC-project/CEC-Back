@@ -47,11 +47,11 @@ public class InquiryController {
     @Operation(summary = "내 문의글 목록 조회", description = "로그인한 사용자의 모든 문의글을 페이지네이션과 함께 조회합니다.")
     @GetMapping
     public ResponseEntity<ApiResponse<InquiryListResponse>> getMyInquiries( // 수정: 반환 타입 Page → DTO
-                                                                            @AuthenticationPrincipal LoginUser loginUser,
-                                                                            @RequestParam(defaultValue = "1") int page,
-                                                                            @RequestParam(defaultValue = "10") int size,
-                                                                            @RequestParam(defaultValue = "createdAt") String sortBy,
-                                                                            @RequestParam(defaultValue = "DESC") String sortDirection
+                        @AuthenticationPrincipal LoginUser loginUser,
+                        @RequestParam(defaultValue = "1") int page,
+                        @RequestParam(defaultValue = "10") int size,
+                        @RequestParam(defaultValue = "createdAt") String sortBy,
+                        @RequestParam(defaultValue = "DESC") String sortDirection
     ) {
         Long currentUserId = loginUser.getId();
         InquiryListResponse responses = inquiryService.getMyInquiries(currentUserId, page, size, sortBy, sortDirection); // 반환값 DTO

@@ -1,11 +1,9 @@
 package com.backend.server.api.user.community.controller;
 
 import com.backend.server.api.admin.community.dto.CommunityListRequest;
+import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.api.user.community.dto.CommunityListResponse;
-import com.backend.server.api.user.community.dto.CommunityResponse;
-import com.backend.server.api.user.community.dto.CreatePostRequest;
-import com.backend.server.api.user.community.dto.UpdatePostRequest;
+import com.backend.server.api.user.community.dto.*;
 import com.backend.server.api.user.community.service.CommunityService;
 import com.backend.server.model.entity.Community;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "2. 게시판", description = "수정 1차 완")
 @RestController
@@ -33,8 +33,18 @@ public class CommunityController {
     // 게시글 목록 조회 엔드포인트 수정: typeId 요청 파라미터 추가
     // GET /api/user/community?page=0&size=10&sort=createdAt,desc&typeId=1 (예: typeId=1은 '자유' 게시글)
     // GET /api/user/community?page=0&size=10&sort=createdAt,desc (typeId 없으면 전체 게시글)
+
+
     @GetMapping
-    @Operation(summary = "게시글 유형 목록 조회")
+    @Operation(summary = "게시판 카테고리 조회")
+    public ApiResponse<List<CommunityCategoryListResponse>> getBoardCategories() {
+        List<CommunityCategoryListResponse> categories = communityService.getBoardCategories();
+        return ApiResponse.success("게시판 카테고리 내역입니다", categories);
+    }
+
+
+    @GetMapping("/post")
+    @Operation(summary = "게시글 목록 조회")
     public ResponseEntity<CommunityListResponse> getCommunityPosts( @ParameterObject CommunityListRequest request,
         @AuthenticationPrincipal LoginUser loginuser // 실제 환경에서 로그인 사용자 정보 주입 필요
     ) {
