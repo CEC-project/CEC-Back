@@ -30,7 +30,7 @@ public class AdminClassroomRentalController {
     public ApiResponse<List<AdminClassroomDetailResponse>> getReturnableClassrooms(
             @ParameterObject AdminClassroomSearchRequest request) {
         List<AdminClassroomDetailResponse> result = rentalService.getClassrooms(request);
-        return ApiResponse.success("강의실 반납시킬 목록 조회 성공", result);
+        return ApiResponse.success("강의실 목록 조회 성공", result);
     }
 
     @Operation(summary = "강의실 일괄 상태 변경 API")

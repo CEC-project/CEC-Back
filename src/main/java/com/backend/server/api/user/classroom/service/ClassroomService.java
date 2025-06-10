@@ -18,7 +18,6 @@ import com.backend.server.model.repository.classroom.SemesterScheduleRepository;
 import com.backend.server.model.repository.classroom.YearScheduleRepository;
 import com.backend.server.util.CompareUtils;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -47,8 +46,6 @@ public class ClassroomService {
         BiConsumer<User, ClassroomActionRequest> handler = switch (request.getAction()) {
             case RENT_REQUEST   -> this::handleRentRequest;
             case RENT_CANCEL    -> this::handleRentCancel;
-            case RETURN_REQUEST -> this::handleReturnRequest;
-            case RETURN_CANCEL  -> this::handleReturnCancel;
         };
 
         // 3) 단일 요청이므로 바로 호출
@@ -64,13 +61,13 @@ public class ClassroomService {
             throw new IllegalArgumentException("현재 대여 불가한 강의실 입니다.");
         }
 
-        LocalDateTime now       = LocalDateTime.now();
-        int day                 = now.getDayOfWeek().getValue();
-        LocalTime start         = request.getStartAt().toLocalTime();
-        LocalTime end           = request.getEndAt().toLocalTime();
+        LocalDate now   = LocalDate.now();
+        int day         = now.getDayOfWeek().getValue();
+        LocalTime start = request.getStartTime();
+        LocalTime end   = request.getEndTime();
 
         // (1) 연간 스케줄 체크
-        List<YearSchedule> yearSchedules = yearScheduleRepository.findWithRenterByDate(now.toLocalDate());
+        List<YearSchedule> yearSchedules = yearScheduleRepository.findByDate(now);
         if (yearSchedules.stream().anyMatch(YearSchedule::getIsHoliday)) {
             throw new IllegalArgumentException("휴일에는 강의실을 대여 할 수 없습니다.");
         }
@@ -80,7 +77,7 @@ public class ClassroomService {
         }
 
         // (2) 수업 스케줄 체크
-        List<Semester> semesters = semesterRepository.findSemesterContainingDate(now.toLocalDate());
+        List<Semester> semesters = semesterRepository.findSemesterContainingDate(now);
         boolean clash = semesterScheduleRepository
                 .findByClassroomAndSemesterIn(classroom, semesters).stream()
                 .filter(ss -> ss.getDay() == day)
@@ -106,39 +103,6 @@ public class ClassroomService {
         }
 
         classroom.makeAvailable();
-        classroomRepository.save(classroom);
-    }
-
-    private void handleReturnRequest(User user, ClassroomActionRequest request) {
-        Classroom classroom = classroomRepository.findWithLockAndRenterById(request.getId())
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 대여 id 입니다."));
-
-        if (!classroom.getRenter().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("대여한 사용자만 반납 요청할 수 있습니다.");
-        }
-        if (classroom.getStatus() != Status.IN_USE) {
-            throw new IllegalArgumentException("대여 중인 상태만 반납 요청할 수 있습니다.");
-        }
-
-
-        Classroom updated = classroom.toBuilder()
-                .status(Status.RETURN_PENDING)
-                .build();
-        classroomRepository.save(updated);
-    }
-
-    private void handleReturnCancel(User user, ClassroomActionRequest request) {
-        Classroom classroom = classroomRepository.findWithLockAndRenterById(request.getId())
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 반납 요청 id 입니다."));
-
-        if (!classroom.getRenter().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("요청 취소는 본인만 할 수 있습니다.");
-        }
-        if (classroom.getStatus() != Status.RETURN_PENDING) {
-            throw new IllegalArgumentException("반납 요청 상태만 취소할 수 있습니다.");
-        }
-
-        classroom.makeInUse();  // 혹은 이전 상태 복원 메서드
         classroomRepository.save(classroom);
     }
 
