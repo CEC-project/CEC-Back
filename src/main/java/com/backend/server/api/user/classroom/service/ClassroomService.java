@@ -19,6 +19,7 @@ import com.backend.server.model.repository.classroom.YearScheduleRepository;
 import com.backend.server.util.CompareUtils;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
@@ -111,6 +112,7 @@ public class ClassroomService {
         return classroomRepository.findAll()
                 .stream()
                 .map(ClassroomResponse::new)
+                .sorted(Comparator.comparing(ClassroomResponse::getId))
                 .toList();
     }
 

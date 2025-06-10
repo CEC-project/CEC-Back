@@ -47,27 +47,6 @@ public class ClassroomController {
         return ApiResponse.success("강의실 목록 조회 성공", classroomService.getAllClassrooms());
     }
 
-//    @Operation(summary = "강의실 대여 신청")
-//    @PatchMapping("/{id}/rental")
-//    public ApiResponse<Long> rental(
-//            @PathVariable("id") Long classroomId,
-//            @RequestBody ClassroomRentalRequest request,
-//            @AuthenticationPrincipal LoginUser loginUser
-//    ) {
-//        Long result = classroomService.rental(loginUser.getId(), classroomId, request);
-//        return ApiResponse.success("강의실 대여 신청 성공", result);
-//    }
-//
-//    @Operation(summary = "강의실 대여 취소")
-//    @PatchMapping("/{id}/cancel")
-//    public ApiResponse<Long> cancel(
-//            @PathVariable("id") Long classroomId,
-//            @AuthenticationPrincipal LoginUser loginUser
-//    ) {
-//        Long result = classroomService.cancelRental(loginUser.getId(), classroomId);
-//        return ApiResponse.success("강의실 대여 취소 성공", result);
-//    }
-
     @PatchMapping("/action")
     @Operation(summary = "강의실 상태 변경 요청 (대여/취소)", description = "시간은 대여 요청 시에만 필요")
     public ApiResponse<Void> handleEquipmentAction(
