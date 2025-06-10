@@ -119,7 +119,6 @@ class ScheduledMaintenanceTasksTest extends AbstractPostgresContainerTest {
         // 학기 스케줄 생성
         SemesterSchedule schedule = semesterScheduleRepository.save(SemesterSchedule.builder()
                 .name("스프링부트 수업")
-                .year(2025)
                 .day(1)
                 .color("#FFAA00")
                 .startAt(LocalTime.of(9, 0))

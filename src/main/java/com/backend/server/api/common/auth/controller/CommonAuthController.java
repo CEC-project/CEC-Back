@@ -50,33 +50,6 @@ public class CommonAuthController {
         - <code>408 Request Timeout</code>: JWT 토큰이 만료된 경우<br>
         """
     )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "로그인 성공",
-                    content = @Content(examples = @ExampleObject(
-                            """
-                                    {
-                                      "status": "success",
-                                      "message": "로그인 성공",
-                                      "data": {
-                                        "id": 3,
-                                        "studentNumber": "20230003",
-                                        "nickname": "철수짱",
-                                        "role": "ROLE_ADMIN",
-                                        "department": "학과",
-                                        "accessToken": "jwt헤더.jwt바디.jwt서명",
-                                        "tokenType": "Bearer"
-                                      }
-                                    }"""
-            ))),
-            @ApiResponse(responseCode = "500", description = "DB에 없는 학번 or PW 틀림",
-                    content = @Content(examples = @ExampleObject(
-                            """
-                                    {
-                                      "status": "fail",
-                                      "message": "2025-05-01T12:19:12.285+09:00 --- 로그인 실패",
-                                      "data": null
-                                    }"""
-            )))})
     @PostMapping("/sign-in")
     public CommonResponse<CommonSignInResponse> signIn(
             HttpServletResponse response,
