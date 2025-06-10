@@ -35,12 +35,12 @@ public class ScheduleResponse {
 
     private final String color;
 
-    @Schema(description = "강의실의 경우, 이 값은 항상 대여 됨 입니다.")
-    private final String content;
-
     @Schema(description = """
             type = HOLIDAY / SPECIAL_LECTURE / LECTURE 이면 일정 이름을 나타냅니다.<br>
-            type = RENTAL 이면, 이 값은 항상 "대여 됨" 입니다.""")
+            type = RENTAL 이면, 이 값은 항상 상태 Enum 값입니다.""")
+    private final String content;
+
+    @Schema(description = "강의실 id / 일정 id / 수업 id 중 하나.")
     private final Long id;
 
     @Schema(description = """
@@ -89,7 +89,7 @@ public class ScheduleResponse {
         startTime = classroom.getStartRentTime();
         endTime = classroom.getEndRentTime();
         color = null;
-        content = "대여됨";
+        content = classroom.getStatus().name();
         id = classroom.getId();
         isRenter = renter.getId().equals(classroom.getRenter().getId());
     }
