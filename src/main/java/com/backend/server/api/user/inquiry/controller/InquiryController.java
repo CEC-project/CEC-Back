@@ -60,14 +60,14 @@ public class InquiryController {
 
     @Operation(summary = "문의글 수정", description = "본인이 작성한 문의글을 수정합니다.")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> updateInquiry(
+    public ResponseEntity<ApiResponse<Long>> updateInquiry(
             @PathVariable Long id,
             @Valid @RequestBody InquiryRequest request,
             @AuthenticationPrincipal LoginUser loginUser
     ) throws Exception {
         Long currentUserId = loginUser.getId();
         inquiryService.updateInquiry(id, request, currentUserId);
-        return ResponseEntity.ok(ApiResponse.success("문의글 수정 성공", null));
+        return ResponseEntity.ok(ApiResponse.success("문의글 수정 성공", id));
     }
 
     @Operation(summary = "문의글 삭제", description = "본인이 작성한 문의글을 삭제합니다.")
