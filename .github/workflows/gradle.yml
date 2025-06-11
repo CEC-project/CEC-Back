@@ -1,4 +1,4 @@
-name: PR Build Check
+name: PR Build & Test Check
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
     types: [ published ]
 
 jobs:
-  build:
+  BuildAndTest:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -56,4 +56,4 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: ./gradlew build
