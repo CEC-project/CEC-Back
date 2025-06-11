@@ -51,9 +51,10 @@ class AdminEquipmentModelServiceTest {
         when(categoryRepository.existsById(100L)).thenReturn(true);
 
         EquipmentCategory savedCategory = EquipmentCategory.builder()
-                .id(1L)
+                .id(100L)
                 .name("카메라")
                 .englishCode("CAMERA").build();
+        when(categoryRepository.findById(100L)).thenReturn(Optional.of(savedCategory));
         // 저장 결과 목 설정
         EquipmentModel saved = EquipmentModel.builder()
                 .id(1L)
@@ -127,9 +128,11 @@ class AdminEquipmentModelServiceTest {
         when(modelRepository.existsByEnglishCodeAndIdNot("MX", id)).thenReturn(false);
         when(categoryRepository.existsById(100L)).thenReturn(true);
         EquipmentCategory savedCategory = EquipmentCategory.builder()
-                .id(1L)
+                .id(100L)
                 .name("카메라")
                 .englishCode("CAMERA").build();
+        when(categoryRepository.findById(100L)).thenReturn(Optional.of(savedCategory));
+
         // 기존 엔티티 조회 목 설정
         EquipmentModel existing = EquipmentModel.builder()
                 .id(id)

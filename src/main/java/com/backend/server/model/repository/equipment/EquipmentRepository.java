@@ -111,21 +111,18 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     //특정 학기(semesterId)에 등록된 강의 시간표(SemesterSchedule)에 포함된 장비들 중,
     //현재 상태가 IN_USE인 장비만 골라서
     //AVAILABLE 상태로 일괄 변경합니다.
-    @Query("""
-    UPDATE Equipment e
-    SET e.status = :availableStatus
-    WHERE e.status = :inUseStatus
-    AND e.id IN (
-        SELECT eq.id
-        FROM Equipment eq
-        JOIN eq.semesterSchedule ss
-        WHERE ss.semester.id = :semesterId
-    )
-""")
+    @Query(value = """
+            UPDATE equipment e
+            SET status = :availableStatus
+            FROM semester_schedule ss
+            WHERE e.renter_semester_schdule_id = ss.id
+            AND ss.semester_id = :semesterId
+            AND e.status = :inUseStatus""",
+            nativeQuery = true)
     void updateEquipmentStatusToAvailableBySemester(
             @Param("semesterId") Long semesterId,
-            @Param("inUseStatus") Status inUseStatus,
-            @Param("availableStatus") Status availableStatus
+            @Param("inUseStatus") String inUseStatus,
+            @Param("availableStatus") String availableStatus
     );
 
 

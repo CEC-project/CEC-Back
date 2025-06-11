@@ -1,27 +1,25 @@
 package com.backend.server.api.user.equipment.model.repository.equipment;
 
 import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
-import com.backend.server.config.AbstractPostgresContainerTest;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
 import com.backend.server.model.entity.equipment.EquipmentModel;
 import com.backend.server.model.repository.equipment.*;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.domain.Specification;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-@Testcontainers
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class EquipmentModelSpecificationTest extends AbstractPostgresContainerTest {
+@SpringBootTest
+@Transactional
+public class EquipmentModelSpecificationTest {
 
     @Autowired
     private EquipmentCategoryRepository equipmentCategoryRepository;
@@ -77,7 +75,7 @@ public class EquipmentModelSpecificationTest extends AbstractPostgresContainerTe
     void specification_shouldFilterAllCondition() {
         // given
         EquipmentModelListRequest request = EquipmentModelListRequest.builder()
-                .keyword("sony")
+                .searchKeyword("sony")
                 .categoryId(savedCategory1.getId())
                 .build();
 

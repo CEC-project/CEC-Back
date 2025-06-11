@@ -5,6 +5,7 @@ import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
 import com.backend.server.model.repository.classroom.SemesterRepository;
 import com.backend.server.model.repository.equipment.EquipmentRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,7 @@ public class ScheduledMaintenanceTasks {
         runExpiredRentalCleanup();
     }
 
+    @Transactional
     public void runExpiredRentalCleanup() {
         equipmentRepository.updateStatusByStartRentTimeBefore(Status.RENTAL_PENDING, Status.AVAILABLE, LocalDateTime.now());
         classroomRepository.updateClassroomStatusFromTo(Status.RENTAL_PENDING, Status.AVAILABLE);
@@ -33,9 +35,10 @@ public class ScheduledMaintenanceTasks {
         Semester semester = semesterRepository.findTopByEndDateBeforeOrderByEndDateDesc(LocalDate.now());
         //끝난 학기 없으면 NPE, 그래서 NPE체크 && 지난학기 맞는지 체크
         if (semester != null && LocalDate.now().isAfter(semester.getEndDate())) {
-
-            equipmentRepository.updateEquipmentStatusToAvailableBySemester(semester.getId(), Status.IN_USE, Status.AVAILABLE);
-            classroomRepository.updateClassroomStatusToAvailableBySemester(semester.getId(), Status.IN_USE, Status.AVAILABLE);
+            equipmentRepository.updateEquipmentStatusToAvailableBySemester(
+                    semester.getId(), Status.IN_USE.name(), Status.AVAILABLE.name());
+            classroomRepository.updateClassroomStatusToAvailableBySemester(
+                    semester.getId(), Status.IN_USE, Status.AVAILABLE);
         }
     }
 }

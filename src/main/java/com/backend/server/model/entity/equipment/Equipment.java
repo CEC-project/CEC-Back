@@ -93,6 +93,7 @@ public class Equipment extends BaseTimeEntity {
         this.requestedTime = null;
         this.renter = null;
     }
+
     public void makeRentalPending(LocalDateTime startRentTime, LocalDateTime endRentTime, User renter) {
         this.status = Status.RENTAL_PENDING;
         this.startRentTime = startRentTime;

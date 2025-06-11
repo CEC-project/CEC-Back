@@ -1,38 +1,24 @@
 package com.backend.server.api.admin.equipment.model.repository;
 
-
-import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipmentListRequest;
-import com.backend.server.config.AbstractPostgresContainerTest;
+import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Gender;
+import com.backend.server.model.entity.enums.Role;
+import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
 import com.backend.server.model.entity.equipment.EquipmentModel;
-import com.backend.server.model.entity.User;
-import com.backend.server.model.entity.enums.Role;
-import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.repository.UserRepository;
 import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
 import com.backend.server.model.repository.equipment.EquipmentModelRepository;
 import com.backend.server.model.repository.equipment.EquipmentRepository;
-import com.backend.server.model.repository.equipment.EquipmentSpecification;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.jpa.domain.Specification;
-import org.testcontainers.junit.jupiter.Testcontainers;
-
 import java.time.LocalDate;
-import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-@Testcontainers
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class AdminEquipmentSpecificationTest extends AbstractPostgresContainerTest {
+class AdminEquipmentSpecificationTest {
 
     @Autowired
     private EquipmentRepository equipmentRepository;
