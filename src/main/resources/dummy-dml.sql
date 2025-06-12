@@ -298,159 +298,6 @@ values
     (now(), now(), '', '이교수'),
     (now(), now(), '', '한교수');
 
--- 장비 카테고리
-insert into public.equipment_category (max_rental_count, english_code, name)
-values  (10, 'CAMERA', '카메라'),
-        (5, 'MIC', '마이크'),
-        (7, 'TRIPOD', '삼각대'),
-        (3, 'LIGHT', '조명');
-
--- 장비 모델명
-insert into public.equipment_model (available, category_id, english_code, name)
-values  (true, 1, 'CANNON-EOS-R6', '캐논 EOS R6'),
-        (true, 2, 'SHURE-SM7B', '슈어 SM7B'),
-        (true, 3, 'MANFROTTO-190X', '만프로토 190X'),
-        (false, 4, 'APUTURE-AL-M9', '아푸처 AL-M9');
-
--- 장비
-insert into public.equipment (broken_count, category_id, created_at, end_rent_date, manager_id, model_id, rental_count, renter_semester_schdule_id, renter_user_id, repair_count, start_rent_date, updated_at, description, image_url, restriction_grade, serial_number, status)
-values  (0, 1, '2025-05-28 17:44:19.441547', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.441547', '최신 맥북 프로 16인치', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', '1', 'CAMCAN250501', 'AVAILABLE'),
-        (0, 1, '2025-05-28 17:44:19.504248', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.504248', '최신 맥북 프로 16인치', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', '2', 'CAMCAN250502', 'AVAILABLE'),
-        (0, 1, '2025-05-28 17:44:19.513947', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.513947', '최신 맥북 프로 16인치', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', '3', 'CAMCAN250503', 'AVAILABLE'),
-        (0, 1, '2025-05-28 17:44:19.520992', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.520992', '최신 맥북 프로 16인치', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', '4', 'CAMCAN250504', 'AVAILABLE'),
-        (0, 1, '2025-05-28 17:44:19.526169', null, 10, 1, 0, null, null, 0, null, '2025-05-28 17:44:19.526169', '최신 맥북 프로 16인치', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', '1', 'CAMCAN250505', 'AVAILABLE'),
-        (0, 1, '2025-06-04 10:00:00', '2025-06-10 10:00:00', 10, 1, 0, null, 3, 0, '2025-06-05 10:00:00', '2025-06-04 10:00:00', '대여 신청된 맥북 프로', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', '1', 'CAMCAN250506', 'RENTAL_PENDING'),
-        (0, 1, '2025-06-04 10:01:00', '2025-06-10 10:01:00', 10, 1, 0, null, 3, 0, '2025-06-05 10:01:00', '2025-06-04 10:01:00', '대여 신청된 맥북 프로', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', '2', 'CAMCAN250507', 'RENTAL_PENDING'),
-        (0, 1, '2025-06-04 10:02:00', '2025-06-10 10:02:00', 10, 1, 0, null, 3, 0, '2025-06-05 10:02:00', '2025-06-04 10:02:00', '대여 신청된 맥북 프로', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', '3', 'CAMCAN250508', 'RENTAL_PENDING'),
-        (0, 1, '2025-06-04 10:03:00', '2025-06-10 10:03:00', 10, 1, 0, null, 3, 0, '2025-06-05 10:03:00', '2025-06-04 10:03:00', '대여 신청된 맥북 프로', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', '4', 'CAMCAN250509', 'RENTAL_PENDING'),
-        (0, 1, '2025-06-04 10:04:00', '2025-06-10 10:04:00', 10, 1, 0, null, 3, 0, '2025-06-05 10:04:00', '2025-06-04 10:04:00', '대여 신청된 맥북 프로', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', '1', 'CAMCAN250510', 'RENTAL_PENDING'),
-        (0, 1, '2025-06-05 10:10:00', '2025-06-11 10:10:00', 10, 1, 1, null, 3, 0, '2025-06-05 10:10:00', '2025-06-05 10:10:00', '사용 중인 맥북 프로', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', '1', 'CAMCAN250511', 'IN_USE'),
-        (0, 1, '2025-06-05 10:11:00', '2025-06-11 10:11:00', 10, 1, 2, null, 3, 0, '2025-06-05 10:11:00', '2025-06-05 10:11:00', '사용 중인 맥북 프로', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', '2', 'CAMCAN250512', 'IN_USE'),
-        (0, 1, '2025-06-05 10:12:00', '2025-06-11 10:12:00', 10, 1, 3, null, 3, 0, '2025-06-05 10:12:00', '2025-06-05 10:12:00', '사용 중인 맥북 프로', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', '3', 'CAMCAN250513', 'IN_USE'),
-        (1, 1, '2025-06-05 10:20:00', null, 10, 1, 5, null, null, 0, null, '2025-06-05 10:20:00', '파손된 맥북 프로', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', '1', 'CAMCAN250514', 'BROKEN'),
-        (2, 1, '2025-06-05 10:21:00', null, 10, 1, 6, null, null, 1, null, '2025-06-05 10:21:00', '파손된 맥북 프로', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', '2', 'CAMCAN250515', 'BROKEN'),
-        (1, 1, '2025-06-05 10:22:00', null, 10, 1, 7, null, null, 0, null, '2025-06-05 10:22:00', '파손된 맥북 프로', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', '3', 'CAMCAN250516', 'BROKEN');
--- -- 1) 카테고리 5종 삽입
--- INSERT INTO equipment_category (name, max_rental_count, english_code) VALUES
---       ('카메라',   5, 'CAMERA'),
---       ('렌즈',     5, 'LENS'),
---       ('기타장비', 3, 'OTHERS'),
---       ('조명',     3, 'LIGHT'),
---       ('음향',     3, 'SOUND');
---
--- -- 2) 모델 전체 삽입
--- INSERT INTO equipment_model (available, category_id, english_code, name)
--- SELECT
---     TRUE AS available,
---     ec.id   AS category_id,
---     vm.model_name AS english_code,
---     vm.model_name AS name
--- FROM equipment_category AS ec
---          JOIN (
---     VALUES
---         -- 카메라
---         ('카메라', 'NX-5'),
---         ('카메라', 'Canon 80D'),
---         ('카메라', 'Canon 5D Mk2'),
---         ('카메라', 'Canon 5D Mk4'),
---         ('카메라', 'Canon C-100'),
---         ('카메라', 'Sony A7C'),
---         ('카메라', 'Sony FX3'),
---         ('카메라', 'Sony FX6'),
---
---         -- 렌즈
---         ('렌즈', '28-60m 번들 렌즈'),
---         ('렌즈', '삼양(소니마운트/82mm) 24-70mm'),
---         ('렌즈', '삼양(소니마운트) 24-70mm'),
---         ('렌즈', '삼양(소니마운트/72mm) 50mm'),
---         ('렌즈', '삼양(소니마운트) 85mm'),
---         ('렌즈', '삼양(소니마운트/82mm) 35-150mm'),
---         ('렌즈', 'Sony(82mm) 16-35mm'),
---         ('렌즈', 'Sony 70-200mm'),
---         ('렌즈', 'Sony 70-350mm'),
---         ('렌즈', '매트박스'),
---         ('렌즈', '(77mm)_CU필터'),
---         ('렌즈', '(77mm)_CPL필터'),
---         ('렌즈', '(67mm)_CPL필터'),
---         ('렌즈', '(82mm)_CPL필터'),
---         ('렌즈', '(62mm)_BP필터'),
---         ('렌즈', '(72mm)_BP필터'),
---         ('렌즈', '(82mm)_BP필터'),
---         ('렌즈', '(77mm)_BP필터'),
---         ('렌즈', '(67mm)_BP필터'),
---         ('렌즈', '(67mm)_ND필터'),
---         ('렌즈', '(72mm)_ND필터'),
---         ('렌즈', '(77mm)_ND필터'),
---         ('렌즈', '(82mm)_ND필터'),
---         ('렌즈', '(40.5mm)_ND필터'),
---         ('렌즈', '(82mm)_UV필터'),
---         ('렌즈', '(67mm)_Screw-in'),
---         ('렌즈', '(82mm)_Screw-in'),
---         ('렌즈', 'Canon Lens 16-35m(82mm)'),
---         ('렌즈', 'Canon Lens 24-70m(77mm)'),
---         ('렌즈', 'Canon Lens 24-105m(77mm)'),
---         ('렌즈', 'Canon Lens 70-200m(67mm)'),
---
---         -- 기타장비
---         ('기타장비', '트라이포드 Libac'),
---         ('기타장비', '트라이포드 COMAN'),
---         ('기타장비', '트라이포드 Manfrotto'),
---         ('기타장비', '트라이포드 Ifootage'),
---         ('기타장비', '트라이포드 SmallRig'),
---         ('기타장비', '사대(모래 주머니)'),
---         ('기타장비', '소니 및 썬건 배터리'),
---         ('기타장비', 'a7c 배터리'),
---         ('기타장비', 'Sony FX-6 U30 배터리'),
---         ('기타장비', 'Sony FX-6 U60 배터리'),
---         ('기타장비', '캐논 배터리'),
---         ('기타장비', 'V마운트 배터리 소용량'),
---         ('기타장비', 'V마운트 배터리 대용량'),
---         ('기타장비', 'V마운트 플레이트 링그립타입(Tilta)'),
---         ('기타장비', '리그 세트(로드, 베이스, V마운트)'),
---         ('기타장비', '팔로우 포커스'),
---         ('기타장비', '미니 팔로우 포커스'),
---         ('기타장비', '무선 팔로우 포커스'),
---         ('기타장비', '틸트 헤드'),
---         ('기타장비', '고릴라 포드 3K'),
---         ('기타장비', '액션 팟 프로'),
---         ('기타장비', 'TILTA 링그립'),
---         ('기타장비', 'DJI 로닌 RS2 카메라 짐벌'),
---         ('기타장비', 'DJI 오즈모 핸드폰 짐벌'),
---         ('기타장비', '카메라 케이지 Mark 4'),
---         ('기타장비', '카메라 케이지 Sony A7C'),
---         ('기타장비', '미니 사이드 그립'),
---         ('기타장비', '탑 핸들'),
---         ('기타장비', '핉터 트레이'),
---         ('기타장비', '프리뷰 모니터'),
---         ('기타장비', '슬라이더set'),
---         ('기타장비', '미니 지미집'),
---         ('기타장비', '웨건'),
---         ('기타장비', '리더기'),
---         ('기타장비', 'C타입 리더기'),
---         ('기타장비', '256SD'),
---         ('기타장비', '64 SD'),
---         ('기타장비', '32 SD'),
---         ('기타장비', '64 CF'),
---
---         -- 조명
---         ('조명', '썬건(구형, 신형)'),
---         ('조명', '반사판'),
---         ('조명', 'LED 조명'),
---         ('조명', 'A스탠드'),
---         ('조명', 'C스탠드'),
---         ('조명', '익스텐션 암'),
---         ('조명', 'Aputure MC'),
---         ('조명', '고보 set (05/1/2/확산/차광)'),
---         ('조명', '블랙고보'),
---
---         -- 음향
---         ('음향', '붐마이크세트'),
---         ('음향', '타스캠'),
---         ('음향', '샷건'),
---         ('음향', '와이어리스 set'),
---         ('음향', '이어폰')
--- ) AS vm(category_name, model_name)
---               ON ec.name = vm.category_name;
 
 -- 공지사항
 insert into public.notice (view, title, content, important, attachment_url, author_id, created_at, updated_at)
@@ -546,7 +393,7 @@ insert into public.board_category (created_at, updated_at, description, name)
 values
     (now(), now(), '자유로운 대화가 가능합니다.', '자유게시판'),
     (now(), now(), '사용자끼리 자유로운 질문 답변이 가능합니다.', '질문게시판'),
-(now(), now(), '개선사항 ㄱㄱ링.', '개선사항 요구 게시판');
+    (now(), now(), '개선사항 ㄱㄱ링.', '개선사항 요구 게시판');
 
 -- 게시판
 INSERT INTO community
@@ -793,3 +640,839 @@ INSERT INTO notifications (user_id, category, title, message, link, read) VALUES
 (7, '강의', '강의실 예약 확인 (User 7)',        '강의실 예약이 확인되었습니다.',             '/classroom/7/booking',     false),
 (7, '시스템', '시스템 점검 안내',                '시스템 점검이 예정되어 있습니다.',         '/system/maintenance',      false),
 (7, '공지', '새 공지사항 등록',                 '새로운 공지사항이 등록되었습니다.',         '/notices/latest',          false);
+
+-- 1. Insert into equipment_category (No Change from previous versions)
+INSERT INTO equipment_category (name, max_rental_count, english_code) VALUES ('카메라', 99, 'CAMERA'); -- id = 1
+INSERT INTO equipment_category (name, max_rental_count, english_code) VALUES ('렌즈', 99, 'LENS');    -- id = 2
+INSERT INTO equipment_category (name, max_rental_count, english_code) VALUES ('트라이포드', 99, 'TRIPOD'); -- id = 3
+INSERT INTO equipment_category (name, max_rental_count, english_code) VALUES ('배터리', 99, 'BATTERY'); -- id = 4
+INSERT INTO equipment_category (name, max_rental_count, english_code) VALUES ('카메라 부착물', 99, 'ATTATCH'); -- id = 5
+INSERT INTO equipment_category (name, max_rental_count, english_code) VALUES ('모니터', 99, 'MONITOR'); -- id = 6
+INSERT INTO equipment_category (name, max_rental_count, english_code) VALUES ('기타장비', 99, 'OTHER'); -- id = 7
+INSERT INTO equipment_category (name, max_rental_count, english_code) VALUES ('조명', 99, 'LIGHT');   -- id = 8
+INSERT INTO equipment_category (name, max_rental_count, english_code) VALUES ('리더기/SD', 99, 'READER/SD'); -- id = 9
+INSERT INTO equipment_category (name, max_rental_count, english_code) VALUES ('음향', 99, 'AUDIO');   -- id = 10
+
+
+-- 2. Insert into equipment_model (Adding model_group_index for each model)
+--    Note: model_id values are illustrative. Actual IDs depend on auto-increment behavior.
+--    model_group_index is assigned based on grouping by first 3 chars of english_code.
+
+-- CAMERA (category_id = 1)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (1, '삼성 NX-5', 'Samsung NX-5', TRUE, 1); -- model_id: 1 (SAM group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (1, '캐논 80D', 'Canon 80D', TRUE, 1);     -- model_id: 2 (CAN group - first Canon)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (1, '캐논 5D Mk2', 'Canon 5D Mk2', TRUE, 2); -- model_id: 3 (CAN group - second Canon)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (1, '캐논 5D Mk4', 'Canon 5D Mk4', TRUE, 3); -- model_id: 4 (CAN group - third Canon)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (1, '캐논 C-100', 'Canon C-100', TRUE, 4); -- model_id: 5 (CAN group - fourth Canon)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (1, '소니 A7C', 'Sony A7C', TRUE, 1);       -- model_id: 6 (SON group - first Sony)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (1, '소니 FX3', 'Sony FX3', TRUE, 2);       -- model_id: 7 (SON group - second Sony)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (1, '소니 FX6', 'Sony FX6', TRUE, 3);       -- model_id: 8 (SON group - third Sony)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (1, '고프로', 'GoPro', TRUE, 1);           -- model_id: 9 (GOP group)
+
+-- LENS (category_id = 2)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '28-60m 번들 렌즈', '28-60m', TRUE, 1); -- model_id: 10 (_28 group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '삼양(소니마운트/82mm) 24-70mm', 'Samyang 24-70mm', TRUE, 1); -- model_id: 11 (SAM group - first Samyang)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '삼양(소니마운트) 24-70mm', 'Samyang 24-70mm', TRUE, 2); -- model_id: 12 (SAM group - second Samyang)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '삼양(소니마운트/72mm) 50mm', 'Samyang 50mm', TRUE, 3); -- model_id: 13 (SAM group - third Samyang)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '삼양(소니마운트) 85mm', 'Samyang 85mm', TRUE, 4); -- model_id: 14 (SAM group - fourth Samyang)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '삼양(소니마운트/82mm) 35-150mm', 'Samyang 35-150mm', TRUE, 5); -- model_id: 15 (SAM group - fifth Samyang)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, 'Sony(82mm) 16-35mm', 'Sony 16-35mm', TRUE, 1); -- model_id: 16 (SON group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, 'Sony 70-200mm', 'Sony 70-200mm', TRUE, 2); -- model_id: 17 (SON group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, 'Sony 70-350mm', 'Sony 70-350mm', TRUE, 3); -- model_id: 18 (SON group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '매트박스', 'Mattebox', TRUE, 1);       -- model_id: 19 (MAT group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(77mm)_CU필터', 'CU Filter 77mm', TRUE, 1); -- model_id: 20 (CU_ group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(77mm)_CPL필터', 'CPL Filter 77mm', TRUE, 1); -- model_id: 21 (CPL group - 77mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(67mm)_CPL필터', 'CPL Filter 67mm', TRUE, 2); -- model_id: 22 (CPL group - 67mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(82mm)_CPL필터', 'CPL Filter 82mm', TRUE, 3); -- model_id: 23 (CPL group - 82mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(62mm)_BP필터', 'BP Filter 62mm', TRUE, 1); -- model_id: 24 (BP_ group - 62mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(72mm)_BP필터', 'BP Filter 72mm', TRUE, 2); -- model_id: 25 (BP_ group - 72mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(82mm)_BP필터', 'BP Filter 82mm', TRUE, 3); -- model_id: 26 (BP_ group - 82mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(77mm)_BP필터', 'BP Filter 77mm', TRUE, 4); -- model_id: 27 (BP_ group - 77mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(67mm)_BP필터', 'BP Filter 67mm', TRUE, 5); -- model_id: 28 (BP_ group - 67mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(67mm)_ND필터', 'ND Filter 67mm', TRUE, 1); -- model_id: 29 (ND_ group - 67mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(72mm)_ND필터', 'ND Filter 72mm', TRUE, 2); -- model_id: 30 (ND_ group - 72mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(77mm)_ND필터', 'ND Filter 77mm', TRUE, 3); -- model_id: 31 (ND_ group - 77mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(82mm)_ND필터', 'ND Filter 82mm', TRUE, 4); -- model_id: 32 (ND_ group - 82mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(40.5mm)_ND필터', 'ND Filter 40.5mm', TRUE, 5); -- model_id: 33 (ND_ group - 40.5mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(82mm)_UV필터', 'UV Filter 82mm', TRUE, 1); -- model_id: 34 (UV_ group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(67mm)_Screw-in', 'Screw in 67mm', TRUE, 1); -- model_id: 35 (SCR group - 67mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, '(82mm)_Screw-in', 'Screw in 82mm', TRUE, 2); -- model_id: 36 (SCR group - 82mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, 'Canon Lens 16-35m(82mm)', 'Canon Lens 16-35m 82mm', TRUE, 1); -- model_id: 37 (CAN group - lens 16-35mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, 'Canon Lens 24-70m(77mm)', 'Canon Lens 24-70m 77mm', TRUE, 2); -- model_id: 38 (CAN group - lens 24-70mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, 'Canon Lens 24-105m(77mm)', 'Canon Lens 24-105m 77mm', TRUE, 3); -- model_id: 39 (CAN group - lens 24-105mm)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (2, 'Canon Lens 70-200m(67mm)', 'Canon Lens 70-200m 67mm', TRUE, 4); -- model_id: 40 (CAN group - lens 70-200mm)
+
+-- TRIPOD (category_id = 3)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (3, '트라이포드 Libec', 'Libec Tripod', TRUE, 1);     -- model_id: 41 (LIB group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (3, '트라이포드 COMAN', 'COMAN Tripod', TRUE, 1);   -- model_id: 42 (COM group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (3, '트라이포드 Manfrotto', 'Manfrotto Tripod', TRUE, 1); -- model_id: 43 (MAN group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (3, '트라이포드 Ifootage', 'Ifootage Tripod', TRUE, 1); -- model_id: 44 (IFO group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (3, '트라이포드 SmallRig', 'SmallRig Tripod', TRUE, 1); -- model_id: 45 (SMA group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (3, '사대(모래 주머니)', 'SandBag', TRUE, 1);     -- model_id: 46 (SAN group)
+
+-- BATTERY (category_id = 4)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (4, '소니 및 썬건 배터리', 'Sony Sungun Battery', TRUE, 1); -- model_id: 47 (SON group - Sungun)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (4, 'a7c 배터리', 'a7c Battery', TRUE, 1);          -- model_id: 48 (_A7 group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (4, 'Sony FX-6 U30 배터리', 'Sony FX-6 U30 Battery', TRUE, 2); -- model_id: 49 (SON group - FX6 U30)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (4, 'Sony FX-6 U60 배터리', 'Sony FX-6 U60 Battery', TRUE, 3); -- model_id: 50 (SON group - FX6 U60)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (4, '캐논 배터리', 'Canon Battery', TRUE, 1);        -- model_id: 51 (CAN group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (4, 'V마운트 배터리 소용량', 'V mount Battery Small', TRUE, 1); -- model_id: 52 (V_M group - small)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (4, 'V마운트 배터리 대용량', 'V mount Battery Large', TRUE, 2); -- model_id: 53 (V_M group - large)
+
+-- ATTATCH (category_id = 5)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, 'V마운트 플레이트 링그립타입(Tilta)', 'V mount Plate Ring Grip type', TRUE, 1); -- model_id: 54 (V_M group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, '리그 세트(로드, 베이스, V마운트)', 'Rig Set', TRUE, 1); -- model_id: 55 (RIG group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, '팔로우 포커스', 'Follow Focus', TRUE, 1);       -- model_id: 56 (FOL group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, '미니 팔로우 포커스', 'Mini Follow Focus', TRUE, 2); -- model_id: 57 (MIN group - follow focus)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, '무선 팔로우 포커스', 'Wireless Follow Focus', TRUE, 1); -- model_id: 58 (WIR group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, '틸트 헤드', 'Tilt Head', TRUE, 1);         -- model_id: 59 (TIL group - head)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, '고릴라 포드 3K', 'GorillaPod 3K', TRUE, 1);     -- model_id: 60 (GOR group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, '액션 팟 프로', 'ActionPod Pro', TRUE, 1);      -- model_id: 61 (ACT group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, 'TILTA 링그립', 'TILTA Ring Grip', TRUE, 1);    -- model_id: 62 (TIL group - ring grip)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, 'DJI 로닌 RS2 카메라 짐벌', 'DJI Ronin RS2', TRUE, 1); -- model_id: 63 (DJI group - RS2)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, 'DJI 오즈모 핸드폰 짐벌', 'DJI Osmo Mobile Gimbal', TRUE, 2); -- model_id: 64 (DJI group - Osmo)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, '카메라 케이지 Mark 4', 'Camera Cage Mark IV', TRUE, 1); -- model_id: 65 (CAM group - Mark IV)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, '카메라 케이지 Sony A7C', 'Camera Cage for Sony A7C', TRUE, 2); -- model_id: 66 (CAM group - A7C)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, '미니 사이드 그립', 'Mini Side Grip', TRUE, 1); -- model_id: 67 (MIN group - side grip)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, '탑 핸들', 'Top Handle', TRUE, 1);           -- model_id: 68 (TOP group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, '필터 트레이', 'Filter Tray', TRUE, 1);      -- model_id: 69 (FIL group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, '슬라이더set', 'Slider Set', TRUE, 1);      -- model_id: 70 (SLI group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (5, '미니 지미집', 'Mini Jib Arm', TRUE, 1);     -- model_id: 71 (MIN group - jib arm)
+
+-- MONITOR (category_id = 6)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (6, '프리뷰 모니터', 'Preview Monitor', TRUE, 1); -- model_id: 72 (PRE group)
+
+-- OTHER (category_id = 7)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (7, '웨건', 'Wagon', TRUE, 1); -- model_id: 73 (WAG group)
+
+-- LIGHT (category_id = 8)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (8, '썬건(구형, 신형)', 'SunGun', TRUE, 1); -- model_id: 74 (SUN group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (8, '반사판', 'Reflector', TRUE, 1);     -- model_id: 75 (REF group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (8, 'LED 조명', 'LED Light', TRUE, 1);   -- model_id: 76 (LED group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (8, 'A스탠드', 'A Stand', TRUE, 1);       -- model_id: 77 (_AS group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (8, 'C스탠드', 'C Stand', TRUE, 1);       -- model_id: 78 (C_S group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (8, '익스텐션 암', 'Extension Arm', TRUE, 1); -- model_id: 79 (EXT group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (8, 'Aputure MC', 'Aputure MC', TRUE, 1);   -- model_id: 80 (APU group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (8, '고보 set (05/1/2/확산/차광)', 'Gobo Set', TRUE, 1); -- model_id: 81 (GOB group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (8, '블랙고보', 'Black Godo', TRUE, 1);   -- model_id: 82 (BLA group)
+
+-- READER/SD (category_id = 9)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (9, '리더기', 'Reader', TRUE, 1);       -- model_id: 83 (REA group - generic)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (9, 'C타입 리더기', 'C Type Reader', TRUE, 1); -- model_id: 84 (C_T group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (9, '256SD', '256SD', TRUE, 1);         -- model_id: 85 (_25 group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (9, '64SD', '64SD', TRUE, 1);          -- model_id: 86 (_64 group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (9, '32SD', '32SD', TRUE, 1);          -- model_id: 87 (_32 group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (9, '64CF', '64CF', TRUE, 1);          -- model_id: 88 (_64 group - CF)
+
+-- AUDIO (category_id = 10)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (10, '붐마이크세트', 'Boom Microphone Set', TRUE, 1); -- model_id: 89 (BOO group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (10, '타스캠', 'TASCAM', TRUE, 1);          -- model_id: 90 (TAS group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (10, '샷건', 'Shotgun', TRUE, 1);          -- model_id: 91 (SHO group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (10, '와이어리스 set', 'Wireless', TRUE, 1); -- model_id: 92 (WIR group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (10, '이어폰', 'Earphone', TRUE, 1);          -- model_id: 93 (EAR group)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (10, '코미카마이크', 'Comica Microphone', TRUE, 1); -- model_id: 94 (COM group - mic)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (10, '코미카 무선마이크', 'Comica Wireless Microphone', TRUE, 2); -- model_id: 95 (COM group - wireless mic)
+INSERT INTO equipment_model (category_id, name, english_code, available, model_group_index) VALUES (10, '코미카 무선 샷건 마이크', 'Comica Wireless Shotgun Microphone', TRUE, 3); -- model_id: 96 (COM group - wireless shotgun)
+
+
+-- 3. Insert into equipment (Applying the new serial number pattern)
+-- Format: [CAT3_ENG] + [MOD3_ENG] + [MOD_GRP_IDX2] + [YYMM] + [SEQ]
+
+-- CAMERA (category_id = 1)
+-- Samsung NX-5 (model_id: 1, English: 'Samsung NX-5' -> SAM, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 1, 'CAMSAM01250601', 'NX-5 1번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/NX-5.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 1, 'CAMSAM01250602', 'NX-5 2번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/NX-5.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 1, 'CAMSAM01250603', 'NX-5 3번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/NX-5.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 1, 'CAMSAM01250604', 'NX-5 4번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/NX-5.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 1, 'CAMSAM01250605', 'NX-5 5번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/NX-5.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Canon 80D (model_id: 2, English: 'Canon 80D' -> CAN, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 2, 'CAMCAN01250601', 'Canon 80D 1번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_80D.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Canon 5D Mk2 (model_id: 3, English: 'Canon 5D Mk2' -> CAN, Group: 02)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 3, 'CAMCAN02250601', 'Canon 5D Mk2 1번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 3, 'CAMCAN02250602', 'Canon 5D Mk2 2번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK2.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Canon 5D Mk4 (model_id: 4, English: 'Canon 5D Mk4' -> CAN, Group: 03)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 4, 'CAMCAN03250601', 'Canon 5D Mk4 1번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK4.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 4, 'CAMCAN03250602', 'Canon 5D Mk4 2번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_5D_MK4.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Canon C-100 (model_id: 5, English: 'Canon C-100' -> CAN, Group: 04)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 5, 'CAMCAN04250601', 'Canon C-100 1번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_C-100.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 5, 'CAMCAN04250602', 'Canon C-100 2번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Canon_C-100.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Sony A7C (model_id: 6, English: 'Sony A7C' -> SON, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 6, 'CAMSON01250601', 'Sony A7C 1번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 6, 'CAMSON01250602', 'Sony A7C 2번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 6, 'CAMSON01250603', 'Sony A7C 3번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 6, 'CAMSON01250604', 'Sony A7C 4번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 6, 'CAMSON01250605', 'Sony A7C 5번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 6, 'CAMSON01250606', 'Sony A7C 6번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 6, 'CAMSON01250607', 'Sony A7C 7번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 6, 'CAMSON01250608', 'Sony A7C 8번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 6, 'CAMSON01250609', 'Sony A7C 9번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 6, 'CAMSON01250610', 'Sony A7C 10번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 6, 'CAMSON01250611', 'Sony A7C 11번장비입니다. (바디+28-60렌즈)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Sony FX3 (model_id: 7, English: 'Sony FX3' -> SON, Group: 02)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 7, 'CAMSON02250601', 'Sony FX3 1번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_FX3.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 7, 'CAMSON02250602', 'Sony FX3 2번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_FX3.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 7, 'CAMSON02250603', 'Sony FX3 3번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_FX3.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 7, 'CAMSON02250604', 'Sony FX3 4번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_FX3.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Sony FX6 (model_id: 8, English: 'Sony FX6' -> SON, Group: 03)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 8, 'CAMSON03250601', 'Sony FX6 1번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_FX6.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 8, 'CAMSON03250602', 'Sony FX6 2번장비입니다.', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/camera/Sony_FX6.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- GoPro (model_id: 9, English: 'GoPro' -> GOP, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 9, 'CAMGOP01250601', '고프로 #01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/GoPro.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 9, 'CAMGOP01250602', '고프로 #02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/GoPro.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (1, 9, 'CAMGOP01250603', '고프로 #03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/GoPro.jpg', 'AVAILABLE', 0, 0, 0);
+
+
+-- LENS (category_id = 2)
+-- 28-60m 번들 렌즈 (model_id: 10, English: '28-60m' -> _28, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 10, 'LEN_2801250601', '28-60m 번들 렌즈', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony_28-60mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 10, 'LEN_2801250602', '28-60m 번들 렌즈', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony_28-60mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 10, 'LEN_2801250603', '28-60m 번들 렌즈', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony_28-60mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 10, 'LEN_2801250604', '28-60m 번들 렌즈', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony_28-60mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 10, 'LEN_2801250605', '28-60m 번들 렌즈', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony_28-60mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 10, 'LEN_2801250606', '28-60m 번들 렌즈', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony_28-60mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 10, 'LEN_2801250607', '28-60m 번들 렌즈', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony_28-60mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 10, 'LEN_2801250608', '28-60m 번들 렌즈', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony_28-60mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 10, 'LEN_2801250609', '28-60m 번들 렌즈', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony_28-60mm.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Samyang 24-70mm (model_id: 11, English: 'Samyang 24-70mm' -> SAM, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 11, 'LENSAM01250601', '삼양(소니마운트/82mm) 24-70mm', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony(82mm)_24-70mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 11, 'LENSAM01250602', '삼양(소니마운트/82mm) 24-70mm', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony(82mm)_24-70mm.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Samyang 24-70mm (model_id: 12, English: 'Samyang 24-70mm' -> SAM, Group: 02)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 12, 'LENSAM02250601', '삼양(소니마운트) 24-70mm', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Canon_Lens(77mm)_24-70mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 12, 'LENSAM02250602', '삼양(소니마운트) 24-70mm', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Canon_Lens(77mm)_24-70mm.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Samyang 50mm (model_id: 13, English: 'Samyang 50mm' -> SAM, Group: 03)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 13, 'LENSAM03250601', '삼양(소니마운트/72mm) 50mm', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony(72mm)_50mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 13, 'LENSAM03250602', '삼양(소니마운트/72mm) 50mm', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony(72mm)_50mm.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Samyang 85mm (model_id: 14, English: 'Samyang 85mm' -> SAM, Group: 04)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 14, 'LENSAM04250601', '삼양(소니마운트) 85mm', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony_85mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 14, 'LENSAM04250602', '삼양(소니마운트) 85mm', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony_85mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 14, 'LENSAM04250603', '삼양(소니마운트) 85mm', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony_85mm.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Samyang 35-150mm (model_id: 15, English: 'Samyang 35-150mm' -> SAM, Group: 05)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 15, 'LENSAM05250601', '삼양(소니마운트/82mm) 35-150mm', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony(82mm)_35-150mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 15, 'LENSAM05250602', '삼양(소니마운트/82mm) 35-150mm', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony(82mm)_35-150mm.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Sony 16-35mm (model_id: 16, English: 'Sony 16-35mm' -> SON, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 16, 'LENSON01250601', 'Sony(82mm) 16-35mm', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Canon_Lens(82mm)_16-35mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 16, 'LENSON01250602', 'Sony(82mm) 16-35mm', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Canon_Lens(82mm)_16-35mm.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Sony 70-200mm (model_id: 17, English: 'Sony 70-200mm' -> SON, Group: 02)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 17, 'LENSON02250601', 'Sony 70-200mm', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony_70-200mm.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Sony 70-350mm (model_id: 18, English: 'Sony 70-350mm' -> SON, Group: 03)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 18, 'LENSON03250601', 'Sony 70-350mm', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony_70-200mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 18, 'LENSON03250602', 'Sony 70-350mm', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Sony_70-200mm.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Mattebox (model_id: 19, English: 'Mattebox' -> MAT, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 19, 'LENMAT01250601', '매트박스', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/MattBox.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 19, 'LENMAT01250602', '매트박스', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/MattBox.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 19, 'LENMAT01250603', '매트박스', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/MattBox.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- CU Filter 77mm (model_id: 20, English: 'CU Filter 77mm' -> CU_, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 20, 'LENCU_01250601', '(77mm)_CU필터_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/77mm_CU_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 20, 'LENCU_01250602', '(77mm)_CU필터_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/77mm_CU_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- CPL Filter 77mm (model_id: 21, English: 'CPL Filter 77mm' -> CPL, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 21, 'LENCPL01250601', '(77mm)_CPL필터_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/77mm_CPL_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- CPL Filter 67mm (model_id: 22, English: 'CPL Filter 67mm' -> CPL, Group: 02)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 22, 'LENCPL02250601', '(67mm)_CPL필터_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/67mm_CPL_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- CPL Filter 82mm (model_id: 23, English: 'CPL Filter 82mm' -> CPL, Group: 03)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 23, 'LENCPL03250601', '(82mm)_CPL필터_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/82mm_CPL_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 23, 'LENCPL03250602', '(82mm)_CPL필터_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/82mm_CPL_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 23, 'LENCPL03250603', '(82mm)_CPL필터_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/82mm_CPL_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 23, 'LENCPL03250604', '(82mm)_CPL필터_#04', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/82mm_CPL_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 23, 'LENCPL03250605', '(82mm)_CPL필터_#05', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/82mm_CPL_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- BP Filter 62mm (model_id: 24, English: 'BP Filter 62mm' -> BP_, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 24, 'LENBP_01250601', '(62mm)_BP필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/62mm_BP_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 24, 'LENBP_01250602', '(62mm)_BP필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/62mm_BP_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- BP Filter 72mm (model_id: 25, English: 'BP Filter 72mm' -> BP_, Group: 02)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 25, 'LENBP_02250601', '(72mm)_BP필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/72mm_BP_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 25, 'LENBP_02250602', '(72mm)_BP필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/72mm_BP_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 25, 'LENBP_02250603', '(72mm)_BP필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/72mm_BP_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 25, 'LENBP_02250604', '(72mm)_BP필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/72mm_BP_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- BP Filter 82mm (model_id: 26, English: 'BP Filter 82mm' -> BP_, Group: 03)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 26, 'LENBP_03250601', '(82mm)_BP필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/82mm_BP_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 26, 'LENBP_03250602', '(82mm)_BP필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/82mm_BP_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 26, 'LENBP_03250603', '(82mm)_BP필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/82mm_BP_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 26, 'LENBP_03250604', '(82mm)_BP필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/82mm_BP_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- BP Filter 77mm (model_id: 27, English: 'BP Filter 77mm' -> BP_, Group: 04)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 27, 'LENBP_04250601', '(77mm)_BP필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/77mm_BP_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 27, 'LENBP_04250602', '(77mm)_BP필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/77mm_BP_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- BP Filter 67mm (model_id: 28, English: 'BP Filter 67mm' -> BP_, Group: 05)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 28, 'LENBP_05250601', '(67mm)_BP필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/67mm_BP_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 28, 'LENBP_05250602', '(67mm)_BP필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/67mm_BP_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- ND Filter 67mm (model_id: 29, English: 'ND Filter 67mm' -> ND_, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 29, 'LENND_01250601', '(67mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/(67%2C+72%2C+77%2C+82mm)_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 29, 'LENND_01250602', '(67mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/(67%2C+72%2C+77%2C+82mm)_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 29, 'LENND_01250603', '(67mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/(67%2C+72%2C+77%2C+82mm)_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 29, 'LENND_01250604', '(67mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/(67%2C+72%2C+77%2C+82mm)_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 29, 'LENND_01250605', '(67mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/(67%2C+72%2C+77%2C+82mm)_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- ND Filter 72mm (model_id: 30, English: 'ND Filter 72mm' -> ND_, Group: 02)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 30, 'LENND_02250601', '(72mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/(67%2C+72%2C+77%2C+82mm)_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 30, 'LENND_02250602', '(72mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/(67%2C+72%2C+77%2C+82mm)_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 30, 'LENND_02250603', '(72mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/(67%2C+72%2C+77%2C+82mm)_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 30, 'LENND_02250604', '(72mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/(67%2C+72%2C+77%2C+82mm)_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- ND Filter 77mm (model_id: 31, English: 'ND Filter 77mm' -> ND_, Group: 03)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 31, 'LENND_03250601', '(77mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/(67%2C+72%2C+77%2C+82mm)_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 31, 'LENND_03250602', '(77mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/(67%2C+72%2C+77%2C+82mm)_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 31, 'LENND_03250603', '(77mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/(67%2C+72%2C+77%2C+82mm)_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 31, 'LENND_03250604', '(77mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/(67%2C+72%2C+77%2C+82mm)_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- ND Filter 82mm (model_id: 32, English: 'ND Filter 82mm' -> ND_, Group: 04)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 32, 'LENND_04250601', '(82mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/(67%2C+72%2C+77%2C+82mm)_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 32, 'LENND_04250602', '(82mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/(67%2C+72%2C+77%2C+82mm)_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 32, 'LENND_04250603', '(82mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/(67%2C+72%2C+77%2C+82mm)_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- ND Filter 40.5mm (model_id: 33, English: 'ND Filter 40.5mm' -> ND_, Group: 05)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 33, 'LENND_05250601', '(40.5mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/40.5mm_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 33, 'LENND_05250602', '(40.5mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/40.5mm_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 33, 'LENND_05250603', '(40.5mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/40.5mm_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 33, 'LENND_05250604', '(40.5mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/40.5mm_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 33, 'LENND_05250605', '(40.5mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/40.5mm_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 33, 'LENND_05250606', '(40.5mm)_ND필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/40.5mm_ND_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- UV Filter 82mm (model_id: 34, English: 'UV Filter 82mm' -> UV_, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 34, 'LENUV_01250601', '(82mm)_UV필터', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/82mm_UV_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Screw in 67mm (model_id: 35, English: 'Screw in 67mm' -> SCR, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 35, 'LENSCR01250601', '(67mm)_Screw-in', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/67mm_Screw-in_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 35, 'LENSCR01250602', '(67mm)_Screw-in', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/67mm_Screw-in_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Screw in 82mm (model_id: 36, English: 'Screw in 82mm' -> SCR, Group: 02)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 36, 'LENSCR02250601', '(82mm)_Screw-in', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/82mm_Screw-in_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 36, 'LENSCR02250602', '(82mm)_Screw-in', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/82mm_Screw-in_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Canon Lens 16-35m 82mm (model_id: 37, English: 'Canon Lens 16-35m 82mm' -> CAN, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 37, 'LENCAN01250601', 'Canon Lens 16-35m(82mm)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/82mm_Screw-in_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 37, 'LENCAN01250602', 'Canon Lens 16-35m(82mm)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/82mm_Screw-in_filter.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 37, 'LENCAN01250603', 'Canon Lens 16-35m(82mm)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/filter/82mm_Screw-in_filter.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Canon Lens 24-70m 77mm (model_id: 38, English: 'Canon Lens 24-70m 77mm' -> CAN, Group: 02)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 38, 'LENCAN02250601', 'Canon Lens 24-70m(77mm)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Canon_Lens(77mm)_24-70mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 38, 'LENCAN02250602', 'Canon Lens 24-70m(77mm)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Canon_Lens(77mm)_24-70mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 38, 'LENCAN02250603', 'Canon Lens 24-70m(77mm)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Canon_Lens(77mm)_24-70mm.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Canon Lens 24-105m 77mm (model_id: 39, English: 'Canon Lens 24-105m 77mm' -> CAN, Group: 03)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 39, 'LENCAN03250601', 'Canon Lens 24-105m(77mm)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Canon_Lens(77mm)_24-105mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 39, 'LENCAN03250602', 'Canon Lens 24-105m(77mm)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Canon_Lens(77mm)_24-105mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 39, 'LENCAN03250603', 'Canon Lens 24-105m(77mm)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Canon_Lens(77mm)_24-105mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 39, 'LENCAN03250604', 'Canon Lens 24-105m(77mm)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Canon_Lens(77mm)_24-105mm.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Canon Lens 70-200m 67mm (model_id: 40, English: 'Canon Lens 70-200m 67mm' -> CAN, Group: 04)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 40, 'LENCAN04250601', 'Canon Lens 70-200m(67mm)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Canon_Lens(67mm)_70-200mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 40, 'LENCAN04250602', 'Canon Lens 70-200m(67mm)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Canon_Lens(67mm)_70-200mm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (2, 40, 'LENCAN04250603', 'Canon Lens 70-200m(67mm)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/lens/lens/Canon_Lens(67mm)_70-200mm.jpg', 'AVAILABLE', 0, 0, 0);
+
+
+-- TRIPOD (category_id = 3)
+-- Libec Tripod (model_id: 41, English: 'Libec Tripod' -> LIB, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 41, 'TRILIB01250601', '트라이포드 Libec', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Libec_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 41, 'TRILIB01250602', '트라이포드 Libec', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Libec_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 41, 'TRILIB01250603', '트라이포드 Libec', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Libec_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- COMAN Tripod (model_id: 42, English: 'COMAN Tripod' -> COM, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 42, 'TRICOM01250601', '트라이포드 COMAN', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Coman_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 42, 'TRICOM01250602', '트라이포드 COMAN', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Coman_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 42, 'TRICOM01250603', '트라이포드 COMAN', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Coman_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 42, 'TRICOM01250604', '트라이포드 COMAN', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Coman_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 42, 'TRICOM01250605', '트라이포드 COMAN', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Coman_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Manfrotto Tripod (model_id: 43, English: 'Manfrotto Tripod' -> MAN, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 43, 'TRIMAN01250601', '트라이포드 Manfrotto', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Manfrotto_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 43, 'TRIMAN01250602', '트라이포드 Manfrotto', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Manfrotto_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 43, 'TRIMAN01250603', '트라이포드 Manfrotto', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Manfrotto_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 43, 'TRIMAN01250604', '트라이포드 Manfrotto', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Manfrotto_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Ifootage Tripod (model_id: 44, English: 'Ifootage Tripod' -> IFO, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 44, 'TRIIFO01250601', '트라이포드 Ifootage', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Ifootage_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 44, 'TRIIFO01250602', '트라이포드 Ifootage', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Ifootage_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 44, 'TRIIFO01250603', '트라이포드 Ifootage', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Ifootage_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 44, 'TRIIFO01250604', '트라이포드 Ifootage', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Ifootage_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- SmallRig Tripod (model_id: 45, English: 'SmallRig Tripod' -> SMA, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 45, 'TRISMA01250601', '트라이포드 SmallRig', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Smallrig_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 45, 'TRISMA01250602', '트라이포드 SmallRig', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Smallrig_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 45, 'TRISMA01250603', '트라이포드 SmallRig', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Smallrig_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 45, 'TRISMA01250604', '트라이포드 SmallRig', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Smallrig_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 45, 'TRISMA01250605', '트라이포드 SmallRig', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Smallrig_Triopod.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- SandBag (model_id: 46, English: 'SandBag' -> SAN, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 46, 'TRISAN01250601', '사대(모래 주머니)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/sand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 46, 'TRISAN01250602', '사대(모래 주머니)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/sand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 46, 'TRISAN01250603', '사대(모래 주머니)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/sand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 46, 'TRISAN01250604', '사대(모래 주머니)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/sand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 46, 'TRISAN01250605', '사대(모래 주머니)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/sand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 46, 'TRISAN01250606', '사대(모래 주머니)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/sand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 46, 'TRISAN01250607', '사대(모래 주머니)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/sand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 46, 'TRISAN01250608', '사대(모래 주머니)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/sand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 46, 'TRISAN01250609', '사대(모래 주머니)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/sand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 46, 'TRISAN01250610', '사대(모래 주머니)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/sand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 46, 'TRISAN01250611', '사대(모래 주머니)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/sand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (3, 46, 'TRISAN01250612', '사대(모래 주머니)', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/sand.jpg', 'AVAILABLE', 0, 0, 0);
+
+
+-- BATTERY (category_id = 4)
+-- Sony Sungun Battery (model_id: 47, English: 'Sony Sungun Battery' -> SON, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250601', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250602', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250603', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250604', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250605', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250606', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250607', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250608', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250609', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250610', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250611', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250612', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250613', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250614', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250615', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250616', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250617', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250618', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250619', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250620', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250621', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250622', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250623', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 47, 'BATSON01250624', '소니 및 썬건 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_SunGun_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- a7c Battery (model_id: 48, English: 'a7c Battery' -> _A7, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250601', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250602', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250603', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250604', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250605', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250606', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250607', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250608', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250609', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250610', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250611', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250612', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250613', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250614', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250615', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250616', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250617', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250618', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250619', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250620', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250621', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250622', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250623', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250624', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250625', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 48, 'BAT_A701250626', 'a7c 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_battery.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Sony FX-6 U30 Battery (model_id: 49, English: 'Sony FX-6 U30 Battery' -> SON, Group: 02)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 49, 'BATSON02250601', 'Sony FX-6 U30 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_FX6_U30_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 49, 'BATSON02250602', 'Sony FX-6 U30 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_FX6_U30_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 49, 'BATSON02250603', 'Sony FX-6 U30 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_FX6_U30_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 49, 'BATSON02250604', 'Sony FX-6 U30 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_FX6_U30_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Sony FX-6 U60 Battery (model_id: 50, English: 'Sony FX-6 U60 Battery' -> SON, Group: 03)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 50, 'BATSON03250601', 'Sony FX-6 U60 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_FX6_U60_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 50, 'BATSON03250602', 'Sony FX-6 U60 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Sony_FX6_U60_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Canon Battery (model_id: 51, English: 'Canon Battery' -> CAN, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250601', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250602', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250603', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250604', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250605', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250606', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250607', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250608', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250609', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250610', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250611', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250612', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250613', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250614', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250615', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250616', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250617', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 51, 'BATCAN01250618', '캐논 배터리', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Canon_Battery.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- V mount Battery Small (model_id: 52, English: 'V mount Battery Small' -> V_M, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 52, 'BATV_M01250601', 'V마운트 배터리 소용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Small.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 52, 'BATV_M01250602', 'V마운트 배터리 소용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Small.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 52, 'BATV_M01250603', 'V마운트 배터리 소용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Small.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 52, 'BATV_M01250604', 'V마운트 배터리 소용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Small.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 52, 'BATV_M01250605', 'V마운트 배터리 소용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Small.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 52, 'BATV_M01250606', 'V마운트 배터리 소용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Small.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 52, 'BATV_M01250607', 'V마운트 배터리 소용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Small.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 52, 'BATV_M01250608', 'V마운트 배터리 소용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Small.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 52, 'BATV_M01250609', 'V마운트 배터리 소용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Small.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 52, 'BATV_M01250610', 'V마운트 배터리 소용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Small.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 52, 'BATV_M01250611', 'V마운트 배터리 소용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Small.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 52, 'BATV_M01250612', 'V마운트 배터리 소용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Small.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 52, 'BATV_M01250613', 'V마운트 배터리 소용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Small.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 52, 'BATV_M01250614', 'V마운트 배터리 소용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Small.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 52, 'BATV_M01250615', 'V마운트 배터리 소용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Small.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 52, 'BATV_M01250616', 'V마운트 배터리 소용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Small.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- V mount Battery Large (model_id: 53, English: 'V mount Battery Large' -> V_M, Group: 02)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 53, 'BATV_M02250601', 'V마운트 배터리 대용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Large.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 53, 'BATV_M02250602', 'V마운트 배터리 대용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Large.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 53, 'BATV_M02250603', 'V마운트 배터리 대용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Large.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 53, 'BATV_M02250604', 'V마운트 배터리 대용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Large.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 53, 'BATV_M02250605', 'V마운트 배터리 대용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Large.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 53, 'BATV_M02250606', 'V마운트 배터리 대용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Large.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 53, 'BATV_M02250607', 'V마운트 배터리 대용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Large.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 53, 'BATV_M02250608', 'V마운트 배터리 대용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Large.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 53, 'BATV_M02250609', 'V마운트 배터리 대용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Large.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 53, 'BATV_M02250610', 'V마운트 배터리 대용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Large.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 53, 'BATV_M02250611', 'V마운트 배터리 대용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Large.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (4, 53, 'BATV_M02250612', 'V마운트 배터리 대용량', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/battery/Vmount_Battery_Large.jpg', 'AVAILABLE', 0, 0, 0);
+
+
+-- ATTATCH (category_id = 5)
+-- V mount Plate Ring Grip type (model_id: 54, English: 'V mount Plate Ring Grip type' -> V_M, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 54, 'ATTV_M01250601', 'V마운트 플레이트 링그립타입(Tilta)_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Vmount_Plate_Ring_GripType(Tilta).jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 54, 'ATTV_M01250602', 'V마운트 플레이트 링그립타입(Tilta)_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Vmount_Plate_Ring_GripType(Tilta).jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 54, 'ATTV_M01250603', 'V마운트 플레이트 링그립타입(Tilta)_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Vmount_Plate_Ring_GripType(Tilta).jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Rig Set (model_id: 55, English: 'Rig Set' -> RIG, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 55, 'ATTRIG01250601', '리그 세트(로드, 베이스, V마운트)_#1', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/League_Set.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 55, 'ATTRIG01250602', '리그 세트(로드, 베이스, V마운트)_#2', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/League_Set.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Follow Focus (model_id: 56, English: 'Follow Focus' -> FOL, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 56, 'ATTFOL01250601', '팔로우 포커스_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Follow_Focue.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 56, 'ATTFOL01250602', '팔로우 포커스_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Follow_Focue.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Mini Follow Focus (model_id: 57, English: 'Mini Follow Focus' -> MIN, Group: 02 - second MIN group in ATTATCH)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 57, 'ATTMIN02250601', '미니 팔로우 포커스_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Mini_Follow_Focus.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 57, 'ATTMIN02250602', '미니 팔로우 포커스_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Mini_Follow_Focus.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 57, 'ATTMIN02250603', '미니 팔로우 포커스_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Mini_Follow_Focus.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Wireless Follow Focus (model_id: 58, English: 'Wireless Follow Focus' -> WIR, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 58, 'ATTWIR01250601', '무선 팔로우 포커스_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Wireless_Follow_Focus.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 58, 'ATTWIR01250602', '무선 팔로우 포커스_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Wireless_Follow_Focus.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 58, 'ATTWIR01250603', '무선 팔로우 포커스_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Wireless_Follow_Focus.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Tilt Head (model_id: 59, English: 'Tilt Head' -> TIL, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 59, 'ATTTIL01250601', '틸트 헤드_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Tilt_Head.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 59, 'ATTTIL01250602', '틸트 헤드_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Tilt_Head.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- GorillaPod 3K (model_id: 60, English: 'GorillaPod 3K' -> GOR, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 60, 'ATTGOR01250601', '고릴라 포드 3K_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/gorilapod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 60, 'ATTGOR01250602', '고릴라 포드 3K_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/gorilapod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 60, 'ATTGOR01250603', '고릴라 포드 3K_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/gorilapod.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 60, 'ATTGOR01250604', '고릴라 포드 3K_#04', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/gorilapod.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- ActionPod Pro (model_id: 61, English: 'ActionPod Pro' -> ACT, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 61, 'ATTACT01250601', '액션 팟 프로_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/action+pod+pro.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 61, 'ATTACT01250602', '액션 팟 프로_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/action+pod+pro.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 61, 'ATTACT01250603', '액션 팟 프로_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/action+pod+pro.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- TILTA Ring Grip (model_id: 62, English: 'TILTA Ring Grip' -> TIL, Group: 02 - second TIL group in ATTATCH)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 62, 'ATTTIL02250601', 'TILTA 링그립_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/tilta+ring+grip.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 62, 'ATTTIL02250602', 'TILTA 링그립_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/tilta+ring+grip.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 62, 'ATTTIL02250603', 'TILTA 링그립_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/tilta+ring+grip.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- DJI Ronin RS2 (model_id: 63, English: 'DJI Ronin RS2' -> DJI, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 63, 'ATTDJI01250601', 'DJI 로닌 RS2 카메라 짐벌_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/DJI_Ronin_RS2_Camera_Jimbal.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 63, 'ATTDJI01250602', 'DJI 로닌 RS2 카메라 짐벌_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/DJI_Ronin_RS2_Camera_Jimbal.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 63, 'ATTDJI01250603', 'DJI 로닌 RS2 카메라 짐벌_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/DJI_Ronin_RS2_Camera_Jimbal.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- DJI Osmo Mobile Gimbal (model_id: 64, English: 'DJI Osmo Mobile Gimbal' -> DJI, Group: 02)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 64, 'ATTDJI02250601', 'DJI 오즈모 핸드폰 짐벌_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/DJI_Ozmo_Phone_Jimbal.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 64, 'ATTDJI02250602', 'DJI 오즈모 핸드폰 짐벌_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/DJI_Ozmo_Phone_Jimbal.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 64, 'ATTDJI02250603', 'DJI 오즈모 핸드폰 짐벌_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/DJI_Ozmo_Phone_Jimbal.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 64, 'ATTDJI02250604', 'DJI 오즈모 핸드폰 짐벌_#04', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/DJI_Ozmo_Phone_Jimbal.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Camera Cage Mark IV (model_id: 65, English: 'Camera Cage Mark IV' -> CAM, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 65, 'ATTCAM01250601', '카메라 케이지 Mark 4_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Camera_Cage_Canon_MK2.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 65, 'ATTCAM01250602', '카메라 케이지 Mark 4_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Camera_Cage_Canon_MK2.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Camera Cage for Sony A7C (model_id: 66, English: 'Camera Cage for Sony A7C' -> CAM, Group: 02)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 66, 'ATTCAM02250601', '카메라 케이지 Sony A7C_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Camera_Cage_Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 66, 'ATTCAM02250602', '카메라 케이지 Sony A7C_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Camera_Cage_Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 66, 'ATTCAM02250603', '카메라 케이지 Sony A7C_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Camera_Cage_Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 66, 'ATTCAM02250604', '카메라 케이지 Sony A7C_#04', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Camera_Cage_Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 66, 'ATTCAM02250605', '카메라 케이지 Sony A7C_#05', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Camera_Cage_Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 66, 'ATTCAM02250606', '카메라 케이지 Sony A7C_#06', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Camera_Cage_Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 66, 'ATTCAM02250607', '카메라 케이지 Sony A7C_#07', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Camera_Cage_Sony_A7C.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Mini Side Grip (model_id: 67, English: 'Mini Side Grip' -> MIN, Group: 01 - first MIN group in ATTATCH)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 67, 'ATTMIN01250601', '미니 사이드 그립_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Mini_Side_Grip.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 67, 'ATTMIN01250602', '미니 사이드 그립_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Mini_Side_Grip.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 67, 'ATTMIN01250603', '미니 사이드 그립_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Mini_Side_Grip.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 67, 'ATTMIN01250604', '미니 사이드 그립_#04', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Mini_Side_Grip.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 67, 'ATTMIN01250605', '미니 사이드 그립_#05', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Mini_Side_Grip.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 67, 'ATTMIN01250606', '미니 사이드 그립_#06', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Mini_Side_Grip.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 67, 'ATTMIN01250607', '미니 사이드 그립_#07', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Mini_Side_Grip.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 67, 'ATTMIN01250608', '미니 사이드 그립_#08', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Mini_Side_Grip.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 67, 'ATTMIN01250609', '미니 사이드 그립_#09', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Mini_Side_Grip.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Top Handle (model_id: 68, English: 'Top Handle' -> TOP, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 68, 'ATTTOP01250601', '탑 핸들_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Top_Handle.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 68, 'ATTTOP01250602', '탑 핸들_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Top_Handle.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 68, 'ATTTOP01250603', '탑 핸들_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Top_Handle.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 68, 'ATTTOP01250604', '탑 핸들_#04', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Top_Handle.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 68, 'ATTTOP01250605', '탑 핸들_#05', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Top_Handle.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Filter Tray (model_id: 69, English: 'Filter Tray' -> FIL, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 69, 'ATTFIL01250601', '핉터 트레이_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/%ED%95%84%ED%84%B0%ED%8A%B8%EB%A0%88%EC%9D%B4.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 69, 'ATTFIL01250602', '핉터 트레이_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/%ED%95%84%ED%84%B0%ED%8A%B8%EB%A0%88%EC%9D%B4.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Slider Set (model_id: 70, English: 'Slider Set' -> SLI, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 70, 'ATTSLI01250601', '슬라이더set #1', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Slider_Set.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 70, 'ATTSLI01250602', '슬라이더set #2', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Slider_Set.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 70, 'ATTSLI01250603', '슬라이더set #3', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Slider_Set.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 70, 'ATTSLI01250604', '슬라이더set #4', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Slider_Set.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Mini Jib Arm (model_id: 71, English: 'Mini Jib Arm' -> MIN, Group: 03 - third MIN group in ATTATCH)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 71, 'ATTMIN03250601', '미니 지미집 #1', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Mini_Zimizib.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (5, 71, 'ATTMIN03250602', '미니 지미집 #2', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/tripod/Mini_Zimizib.jpg', 'AVAILABLE', 0, 0, 0);
+
+
+-- MONITOR (category_id = 6)
+-- Preview Monitor (model_id: 72, English: 'Preview Monitor' -> PRE, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (6, 72, 'MONPRE01250601', '프리뷰 모니터 #1', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/monitor/Preview_Monitor.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (6, 72, 'MONPRE01250602', '프리뷰 모니터 #2', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/monitor/Preview_Monitor.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (6, 72, 'MONPRE01250603', '프리뷰 모니터 #3', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/monitor/Preview_Monitor.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (6, 72, 'MONPRE01250604', '프리뷰 모니터 #4', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/monitor/Preview_Monitor.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (6, 72, 'MONPRE01250605', '프리뷰 모니터 #5', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/monitor/Preview_Monitor.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (6, 72, 'MONPRE01250606', '프리뷰 모니터 #6', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/monitor/Preview_Monitor.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (6, 72, 'MONPRE01250607', '프리뷰 모니터 #7', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/monitor/Preview_Monitor.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (6, 72, 'MONPRE01250608', '프리뷰 모니터 #8', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/monitor/Preview_Monitor.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (6, 72, 'MONPRE01250609', '프리뷰 모니터 #9', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/monitor/Preview_Monitor.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (6, 72, 'MONPRE01250610', '프리뷰 모니터 #10', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/monitor/Preview_Monitor.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (6, 72, 'MONPRE01250611', '프리뷰 모니터 #11', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/monitor/Preview_Monitor.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (6, 72, 'MONPRE01250612', '프리뷰 모니터 #12', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/monitor/Preview_Monitor.jpg', 'AVAILABLE', 0, 0, 0);
+
+
+-- OTHER (category_id = 7)
+-- Wagon (model_id: 73, English: 'Wagon' -> WAG, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (7, 73, 'OTHWAG01250601', '웨건 #01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Waegun.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (7, 73, 'OTHWAG01250602', '웨건 #02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Waegun.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (7, 73, 'OTHWAG01250603', '웨건 #03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/camera_attach/Waegun.jpg', 'AVAILABLE', 0, 0, 0);
+
+
+-- LIGHT (category_id = 8)
+-- SunGun (model_id: 74, English: 'SunGun' -> SUN, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 74, 'LIGSUN01250601', '썬건(구형, 신형)_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/LED_Camera_Light.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 74, 'LIGSUN01250602', '썬건(구형, 신형)_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/LED_Camera_Light.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 74, 'LIGSUN01250603', '썬건(구형, 신형)_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/LED_Camera_Light.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 74, 'LIGSUN01250604', '썬건(구형, 신형)_#04', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/LED_Camera_Light.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 74, 'LIGSUN01250605', '썬건(구형, 신형)_#05', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/LED_Camera_Light.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Reflector (model_id: 75, English: 'Reflector' -> REF, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 75, 'LIGREF01250601', '반사판_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Reflector.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 75, 'LIGREF01250602', '반사판_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Reflector.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 75, 'LIGREF01250603', '반사판_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Reflector.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 75, 'LIGREF01250604', '반사판_#04', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Reflector.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 75, 'LIGREF01250605', '반사판_#05', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Reflector.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 75, 'LIGREF01250606', '반사판_#06', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Reflector.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 75, 'LIGREF01250607', '반사판_#07', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Reflector.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 75, 'LIGREF01250608', '반사판_#08', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Reflector.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- LED Light (model_id: 76, English: 'LED Light' -> LED, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 76, 'LIGLED01250601', 'LED 조명_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/LED_light.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 76, 'LIGLED01250602', 'LED 조명_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/LED_light.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 76, 'LIGLED01250603', 'LED 조명_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/LED_light.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 76, 'LIGLED01250604', 'LED 조명_#04', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/LED_light.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 76, 'LIGLED01250605', 'LED 조명_#05', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/LED_light.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 76, 'LIGLED01250606', 'LED 조명_#06', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/LED_light.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 76, 'LIGLED01250607', 'LED 조명_#07', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/LED_light.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 76, 'LIGLED01250608', 'LED 조명_#08', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/LED_light.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 76, 'LIGLED01250609', 'LED 조명_#09', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/LED_light.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 76, 'LIGLED01250610', 'LED 조명_#10', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/LED_light.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- A Stand (model_id: 77, English: 'A Stand' -> _AS, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250601', 'A스탠드_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250602', 'A스탠드_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250603', 'A스탠드_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250604', 'A스탠드_#04', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250605', 'A스탠드_#05', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250606', 'A스탠드_#06', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250607', 'A스탠드_#07', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250608', 'A스탠드_#08', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250609', 'A스탠드_#09', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250610', 'A스탠드_#10', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250611', 'A스탠드_#11', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250612', 'A스탠드_#12', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250613', 'A스탠드_#13', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250614', 'A스탠드_#14', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250615', 'A스탠드_#15', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250616', 'A스탠드_#16', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250617', 'A스탠드_#17', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250618', 'A스탠드_#18', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250619', 'A스탠드_#19', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 77, 'LIG_AS01250620', 'A스탠드_#20', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/A_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- C Stand (model_id: 78, English: 'C Stand' -> C_S, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 78, 'LIGC_S01250601', 'C스탠드_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/C_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 78, 'LIGC_S01250602', 'C스탠드_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/C_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 78, 'LIGC_S01250603', 'C스탠드_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/C_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 78, 'LIGC_S01250604', 'C스탠드_#04', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/C_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 78, 'LIGC_S01250605', 'C스탠드_#05', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/C_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 78, 'LIGC_S01250606', 'C스탠드_#06', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/C_Stand.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Extension Arm (model_id: 79, English: 'Extension Arm' -> EXT, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 79, 'LIGEXT01250601', '익스텐션 암_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Extention_Arm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 79, 'LIGEXT01250602', '익스텐션 암_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Extention_Arm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 79, 'LIGEXT01250603', '익스텐션 암_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Extention_Arm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 79, 'LIGEXT01250604', '익스텐션 암_#04', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Extention_Arm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 79, 'LIGEXT01250605', '익스텐션 암_#05', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Extention_Arm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 79, 'LIGEXT01250606', '익스텐션 암_#06', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Extention_Arm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 79, 'LIGEXT01250607', '익스텐션 암_#07', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Extention_Arm.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 79, 'LIGEXT01250608', '익스텐션 암_#08', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Extention_Arm.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Aputure MC (model_id: 80, English: 'Aputure MC' -> APU, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 80, 'LIGAPU01250601', 'Aputure MC_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Aputure_MC.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 80, 'LIGAPU01250602', 'Aputure MC_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Aputure_MC.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 80, 'LIGAPU01250603', 'Aputure MC_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Aputure_MC.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 80, 'LIGAPU01250604', 'Aputure MC_#04', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Aputure_MC.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 80, 'LIGAPU01250605', 'Aputure MC_#05', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Aputure_MC.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 80, 'LIGAPU01250606', 'Aputure MC_#06', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Aputure_MC.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Gobo Set (model_id: 81, English: 'Gobo Set' -> GOB, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 81, 'LIGGOB01250601', '고보 set (05/1/2/확산/차광)_#01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Gobo_set(05%2C+1%2C+2%2C+%ED%99%95%EC%82%B0%2C+%EC%B0%A8%EA%B4%91).jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 81, 'LIGGOB01250602', '고보 set (05/1/2/확산/차광)_#02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Gobo_set(05%2C+1%2C+2%2C+%ED%99%95%EC%82%B0%2C+%EC%B0%A8%EA%B4%91).jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 81, 'LIGGOB01250603', '고보 set (05/1/2/확산/차광)_#03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/Gobo_set(05%2C+1%2C+2%2C+%ED%99%95%EC%82%B0%2C+%EC%B0%A8%EA%B4%91).jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Black Godo (model_id: 82, English: 'Black Godo' -> BLA, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 82, 'LIGBLA01250601', '블랙고보 #01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/BlackGobo.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 82, 'LIGBLA01250602', '블랙고보 #02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/BlackGobo.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 82, 'LIGBLA01250603', '블랙고보 #03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/BlackGobo.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 82, 'LIGBLA01250604', '블랙고보 #04', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/BlackGobo.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (8, 82, 'LIGBLA01250605', '블랙고보 #05', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/light/BlackGobo.jpg', 'AVAILABLE', 0, 0, 0);
+
+
+-- READER/SD (category_id = 9)
+-- Reader (model_id: 83, English: 'Reader' -> REA, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 83, 'REARED01250601', '리더기#1', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/Reader.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 83, 'REARED01250602', '리더기#2', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/Reader.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 83, 'REARED01250603', '리더기#3', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/Reader.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 83, 'REARED01250604', '리더기#4', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/Reader.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 83, 'REARED01250605', '리더기#5', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/Reader.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- C Type Reader (model_id: 84, English: 'C Type Reader' -> C_T, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 84, 'REAC_T01250601', 'C타입 리더기 #01', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/C_Type_Reader.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 84, 'REAC_T01250602', 'C타입 리더기 #02', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/C_Type_Reader.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 84, 'REAC_T01250603', 'C타입 리더기 #03', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/C_Type_Reader.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 84, 'REAC_T01250604', 'C타입 리더기 #04', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/C_Type_Reader.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 84, 'REAC_T01250605', 'C타입 리더기 #05', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/C_Type_Reader.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 84, 'REAC_T01250606', 'C타입 리더기 #06', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/C_Type_Reader.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 84, 'REAC_T01250607', 'C타입 리더기 #07', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/C_Type_Reader.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 84, 'REAC_T01250608', 'C타입 리더기 #08', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/C_Type_Reader.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 84, 'REAC_T01250609', 'C타입 리더기 #09', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/C_Type_Reader.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 84, 'REAC_T01250610', 'C타입 리더기 #10', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/C_Type_Reader.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- 256SD (model_id: 85, English: '256SD' -> _25, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 85, 'REA_2501250601', '256SD#1', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_256G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 85, 'REA_2501250602', '256 SD#2', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_256G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 85, 'REA_2501250603', '256 SD#3', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_256G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 85, 'REA_2501250604', '256 SD#4', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_256G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 85, 'REA_2501250605', '256 SD#5', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_256G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 85, 'REA_2501250606', '256 SD#6', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_256G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 85, 'REA_2501250607', '256 SD#7', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_256G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 85, 'REA_2501250608', '256 SD#8', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_256G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 85, 'REA_2501250609', '256 SD#9', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_256G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 85, 'REA_2501250610', '256 SD#10', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_256G.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- 64SD (model_id: 86, English: '64SD' -> _64, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 86, 'REA_6401250601', '64 SD#1', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_64G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 86, 'REA_6401250602', '64 SD#2', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_64G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 86, 'REA_6401250603', '64 SD#3', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_64G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 86, 'REA_6401250604', '64 SD#4', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_64G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 86, 'REA_6401250605', '64 SD#5', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_64G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 86, 'REA_6401250606', '64 SD#6', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_64G.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- 32SD (model_id: 87, English: '32SD' -> _32, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 87, 'REA_3201250601', '32 SD#1', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_32G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 87, 'REA_3201250602', '32 SD#2', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_32G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 87, 'REA_3201250603', '32 SD#3', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_32G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 87, 'REA_3201250604', '32 SD#4', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_32G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 87, 'REA_3201250605', '32 SD#5', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_32G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 87, 'REA_3201250606', '32 SD#6', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_32G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 87, 'REA_3201250607', '32 SD#7', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/SD_32G.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- 64CF (model_id: 88, English: '64CF' -> _64, Group: 02)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 88, 'REA_6402250601', '64 CF#1', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/CF_64G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 88, 'REA_6402250602', '64 CF#2', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/CF_64G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 88, 'REA_6402250603', '64 CF#3', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/CF_64G.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (9, 88, 'REA_6402250604', '64 CF#4', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/other/Reader%2CSD/CF_64G.jpg', 'AVAILABLE', 0, 0, 0);
+
+
+-- AUDIO (category_id = 10)
+-- Boom Microphone Set (model_id: 89, English: 'Boom Microphone Set' -> BOO, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 89, 'AUDBOO01250601', '붐마이크세트 #1', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Boom_Microphone_kit.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 89, 'AUDBOO01250602', '붐마이크세트 #2', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Boom_Microphone_kit.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 89, 'AUDBOO01250603', '붐마이크세트 #3', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Boom_Microphone_kit.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 89, 'AUDBOO01250604', '붐마이크세트 #4', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Boom_Microphone_kit.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 89, 'AUDBOO01250605', '붐마이크세트 #5', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Boom_Microphone_kit.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 89, 'AUDBOO01250606', '붐마이크세트 #6', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Boom_Microphone_kit.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 89, 'AUDBOO01250607', '붐마이크세트 #7', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Boom_Microphone_kit.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 89, 'AUDBOO01250608', '붐마이크세트 #8', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Boom_Microphone_kit.jpg', 'AVAILABLE', 0, 0, 0);
+-- AUDIO (category_id = 10) (누락된 TASCAM 부분부터 재개)
+-- TASCAM (model_id: 90, English: 'TASCAM' -> TAS, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 90, 'AUDTAS01250601', '타스캠 #1', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Tascam.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 90, 'AUDTAS01250602', '타스캠 #2', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Tascam.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 90, 'AUDTAS01250603', '타스캠 #3', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Tascam.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 90, 'AUDTAS01250604', '타스캠 #4', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Tascam.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 90, 'AUDTAS01250605', '타스캠 #5', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Tascam.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 90, 'AUDTAS01250606', '타스캠 #6', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Tascam.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 90, 'AUDTAS01250607', '타스캠 #7', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Tascam.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Shotgun (model_id: 91, English: 'Shotgun' -> SHO, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 91, 'AUDSHO01250601', '샷건 #1', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Shotgun.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 91, 'AUDSHO01250602', '샷건 #2', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Shotgun.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 91, 'AUDSHO01250603', '샷건 #3', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Shotgun.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Wireless (model_id: 92, English: 'Wireless' -> WIR, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 92, 'AUDWIR01250601', '와이어리스 set #1', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Wireless_Set.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 92, 'AUDWIR01250602', '와이어리스 set #2', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Wireless_Set.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 92, 'AUDWIR01250603', '와이어리스 set #3', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Wireless_Set.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 92, 'AUDWIR01250604', '와이어리스 set #4', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Wireless_Set.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 92, 'AUDWIR01250605', '와이어리스 set #5', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Wireless_Set.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Earphone (model_id: 93, English: 'Earphone' -> EAR, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 93, 'AUDEAR01250601', '이어폰', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Earphone.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 93, 'AUDEAR01250602', '이어폰', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Earphone.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 93, 'AUDEAR01250603', '이어폰', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Earphone.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 93, 'AUDEAR01250604', '이어폰', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Earphone.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 93, 'AUDEAR01250605', '이어폰', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Earphone.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Comica Microphone (model_id: 94, English: 'Comica Microphone' -> COM, Group: 01)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 94, 'AUDCOM01250601', '코미카마이크 #1', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Comica_Mic.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 94, 'AUDCOM01250602', '코미카마이크 #2', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Comica_Mic.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Comica Wireless Microphone (model_id: 95, English: 'Comica Wireless Microphone' -> COM, Group: 02)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 95, 'AUDCOM02250601', '코미카 무선마이크 #1', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Comica_Wireless_Mic.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 95, 'AUDCOM02250602', '코미카 무선마이크 #2', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Comica_Wireless_Mic.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 95, 'AUDCOM02250603', '코미카 무선마이크 #3', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Comica_Wireless_Mic.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 95, 'AUDCOM02250604', '코미카 무선마이크 #4', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Comica_Wireless_Mic.jpg', 'AVAILABLE', 0, 0, 0);
+
+-- Comica Wireless Shotgun Microphone (model_id: 96, English: 'Comica Wireless Shotgun Microphone' -> COM, Group: 03)
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 96, 'AUDCOM03250601', '코미카 무선 샷건 마이크 #1', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Comica_Wireless_shotgun_Mic.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 96, 'AUDCOM03250602', '코미카 무선 샷건 마이크 #2', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Comica_Wireless_shotgun_Mic.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 96, 'AUDCOM03250603', '코미카 무선 샷건 마이크 #3', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Comica_Wireless_shotgun_Mic.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 96, 'AUDCOM03250604', '코미카 무선 샷건 마이크 #4', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Comica_Wireless_shotgun_Mic.jpg', 'AVAILABLE', 0, 0, 0);
+INSERT INTO equipment (category_id, model_id, serial_number, description, image_url, status, rental_count, broken_count, repair_count) VALUES (10, 96, 'AUDCOM03250605', '코미카 무선 샷건 마이크 #5', 'https://cec-front-assets.s3.ap-southeast-2.amazonaws.com/equipments/audio/Comica_Wireless_shotgun_Mic.jpg', 'AVAILABLE', 0, 0, 0);
