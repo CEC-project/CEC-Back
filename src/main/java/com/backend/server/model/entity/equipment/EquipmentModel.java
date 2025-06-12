@@ -23,6 +23,9 @@ public class EquipmentModel {
 
     private boolean available;
 
+    @Column(name = "model_group_index")
+    private Integer modelGroupIndex;  //시리얼넘버 중복 방지를 위해 모델별 인덱스
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private EquipmentCategory category;

@@ -39,14 +39,7 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     @Query("SELECT e FROM Equipment e WHERE e.id = :id")
     Optional<Equipment> findByIdForUpdate(@Param("id") Long id);
     
-    // 상태별 장비 조회
-    List<Equipment> findByStatus(Status status);
-    
-    // 대여자 ID로 장비 목록 조회 (내림차순)
-    // List<Equipment> findByRenterIdOrderByRequestedAtDesc(Long renterId);
-    
-    // 상태별 장비 개수 조회
-    long countByStatus(Status status);
+
 
     // 수업 생성시 장비 대여 가능 여부 확인
     @Query("SELECT COUNT(e.id) = :size "
@@ -128,6 +121,10 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
             @Param("availableStatus") Status availableStatus
     );
 
-
+    @Query(value = "SELECT e.serialNumber FROM Equipment e " + // JPQL 사용 (엔티티명 사용)
+            "WHERE e.serialNumber LIKE :serialPrefix || '%' " + // JPQL의 CONCATENATION은 DB에 따라 다를 수 있으나, 일반적으로 || 사용
+            "ORDER BY LENGTH(e.serialNumber) DESC, e.serialNumber DESC")
+    Optional<String> findTopBySerialNumberStartingWithOrderBySerialNumberDesc(@Param("serialPrefix") String serialPrefix);
+    Optional<Equipment> findBySerialNumber(String serialNumber);
 
 }
