@@ -3,10 +3,7 @@ package com.backend.server.api.user.equipment.service;
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.service.CommonNotificationService;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentActionRequest;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentListResponse;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentResponse;
+import com.backend.server.api.user.equipment.dto.equipment.*;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.EquipmentAction;
 import com.backend.server.model.entity.enums.Status;
@@ -57,10 +54,10 @@ public class EquipmentService {
 
     //장비 장바구니 추가
     @Transactional
-    public void addToCart(LoginUser loginUser, List<Long> equipmentIds) {
+    public void addToCart(LoginUser loginUser, EquipmentCartListRequest request) {
         User user = userRepository.findById(loginUser.getId())
                          .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
-        for (Long equipmentId : equipmentIds) {
+        for (Long equipmentId : request.getIds()) {
             Equipment equipment = equipmentRepository.findById(equipmentId)
                 .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
 
@@ -79,8 +76,8 @@ public class EquipmentService {
             }
 
             EquipmentCart cart = EquipmentCart.builder()
-                .userId(user.getId())
-                .equipmentId(equipment.getId())
+                .user(user)
+                .equipment(equipment)
                 .build();
             
             equipmentCartRepository.save(cart);
@@ -90,11 +87,10 @@ public class EquipmentService {
     //장비 장바구니 조회
     public List<EquipmentResponse> getCartItems(LoginUser loginUser) {
         List<EquipmentCart> cartItems = equipmentCartRepository.findByUserId(loginUser.getId());
-        
+
         return cartItems.stream()
             .map(cart -> {
-                Equipment equipment = equipmentRepository.findById(cart.getEquipmentId())
-                    .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
+                Equipment equipment = cart.getEquipment();
                 return new EquipmentResponse(equipment);
             })
             .toList();
@@ -115,7 +111,7 @@ public class EquipmentService {
             case RETURN_CANCEL -> (id, req) -> handleReturnCancel(user, id);
         };
 
-        for (Long equipmentId : request.getEquipmentIds()) {
+        for (Long equipmentId : request.getIds()) {
             operator.accept(equipmentId, request);
         }
     }
@@ -137,15 +133,15 @@ public class EquipmentService {
             }
         }
 
-        if (request.getStartDate() == null || request.getEndDate() == null) {
+        if (request.getStartAt() == null || request.getEndAt() == null) {
             throw new IllegalArgumentException("대여 요청은 시작일과 종료일이 필요합니다.");
         }
 
         Equipment updated = equipment.toBuilder()
                 .status(Status.RENTAL_PENDING)
                 .renter(user)
-                .startRentTime(request.getStartDate())
-                .endRentTime(request.getEndDate())
+                .startRentTime(request.getStartAt())
+                .endRentTime(request.getEndAt())
                 .build();
 
         equipmentRepository.save(updated);

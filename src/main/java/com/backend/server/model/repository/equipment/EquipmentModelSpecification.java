@@ -21,8 +21,8 @@ public class EquipmentModelSpecification {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             // 검색어 필터링 (모델명, 영문코드)
-            if (StringUtils.hasText(request.getKeyword())) {
-                String likePattern = "%" + request.getKeyword().toLowerCase() + "%";
+            if (StringUtils.hasText(request.getSearchKeyword())) {
+                String likePattern = "%" + request.getSearchKeyword().toLowerCase() + "%";
                 
                 Predicate namePredicate = cb.like(
                         cb.lower(root.get("name")), likePattern);

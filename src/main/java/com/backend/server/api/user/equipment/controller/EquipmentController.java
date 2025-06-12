@@ -21,7 +21,7 @@ import java.util.List;
 
 @Tag(name = "1-3. 대여 신청 / 장비", description = "수정 완료")
 @RestController
-@RequestMapping("/api/user/equipments")
+@RequestMapping("/api/equipments")
 @RequiredArgsConstructor
 public class EquipmentController {
 
@@ -51,9 +51,9 @@ public class EquipmentController {
             summary = "장비 장바구니 추가"
     )
     public ApiResponse<Void> addToCart(
-            @RequestBody List<Long> equipmentIds,
+            @RequestBody EquipmentCartListRequest request,
             @AuthenticationPrincipal LoginUser loginUser) {
-        equipmentService.addToCart(loginUser, equipmentIds);
+        equipmentService.addToCart(loginUser, request);
         return ApiResponse.success("장바구니 추가 성공", null);
     }
 

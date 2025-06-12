@@ -1,5 +1,6 @@
 package com.backend.server.model.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,6 +33,6 @@ public class BoardCategory extends BaseTimeEntity{
     private String description;
 
     @Builder.Default
-    @OneToMany(mappedBy = "boardCategory")
+    @OneToMany(mappedBy = "boardCategory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Community> posts = new ArrayList<>();
 }

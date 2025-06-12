@@ -1,7 +1,7 @@
 package com.backend.server.api.user.equipment.service;
 
+import com.backend.server.api.user.equipment.dto.category.EquipmentCategoryListResponse;
 import com.backend.server.api.user.equipment.dto.category.EquipmentCategoryResponse;
-import com.backend.server.api.user.equipment.dto.category.EquipmentCountByCategoryResponse;
 import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.repository.equipment.EquipmentRepository;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class EquipmentCategoryService{
         return new EquipmentCategoryResponse(category);
     }
 
-    public List<EquipmentCountByCategoryResponse> countAllCategoryWithEquipment() {
+    public List<EquipmentCategoryListResponse> countAllCategoryWithEquipment() {
         List<EquipmentCategory> categories = categoryRepository.findAll();
         List<Equipment> allEquipment = equipmentRepository.findAll();
 
@@ -57,7 +57,7 @@ public class EquipmentCategoryService{
                     .count();
 
 
-            return new EquipmentCountByCategoryResponse(
+            return new EquipmentCategoryListResponse(
                     category.getId(),
                     category.getName(), // 혹시 name 필드 없으면 category.getType() 같은 걸로 바꿔야 함
                     category.getEnglishCode(),

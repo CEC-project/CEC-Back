@@ -1,18 +1,19 @@
 package com.backend.server.api.admin.user.service;
 
+import com.backend.server.api.admin.user.dto.AdminUserDetailListResponse;
+import com.backend.server.api.admin.user.dto.AdminUserDetailResponse;
 import com.backend.server.api.admin.user.dto.AdminUserListRequest;
-import com.backend.server.api.admin.user.dto.AdminUserListResponse;
 import com.backend.server.api.admin.user.dto.AdminUserRequest;
-import com.backend.server.api.admin.user.dto.AdminUserResponse;
 import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Role;
+import com.backend.server.model.repository.ProfessorRepository;
 import com.backend.server.model.repository.UserRepository;
 import com.backend.server.model.repository.UserSpecification;
-import com.backend.server.model.repository.ProfessorRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class AdminUserService {
     private final ProfessorRepository professorRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AdminUserListResponse getUsers(AdminUserListRequest request) {
+    public AdminUserDetailListResponse getUsers(AdminUserListRequest request) {
         Pageable pageable = request.toPageable();
 
         Specification<User> spec = UserSpecification.filterUsers(request);
@@ -37,7 +38,7 @@ public class AdminUserService {
                 .map(User::getProfessor)
                 .toList();
 
-        return new AdminUserListResponse(page, professors);
+        return new AdminUserDetailListResponse(page, professors);
     }
 
     public void deleteUser(Long id) {
@@ -71,10 +72,10 @@ public class AdminUserService {
         return user.getId();
     }
 
-    public List<AdminUserResponse> getAdmins(List<Role> roles) {
+    public List<AdminUserDetailResponse> getAdmins(List<Role> roles) {
         List<User> users = userRepository.findByRoleInOrderByNameAsc(roles);
         return users.stream()
-                .map(user -> new AdminUserResponse(user, user.getProfessor()))
+                .map(user -> new AdminUserDetailResponse(user, user.getProfessor()))
                 .toList();
     }
 }

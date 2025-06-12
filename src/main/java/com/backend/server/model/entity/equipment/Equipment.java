@@ -8,6 +8,8 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.backend.server.model.entity.enums.Status;
 
@@ -28,9 +30,13 @@ public class Equipment extends BaseTimeEntity {
     @JoinColumn(name = "category_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private EquipmentCategory equipmentCategory;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "model_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private EquipmentModel equipmentModel;
+
+    //장바구니 Cascading을 위해 추가
+    @OneToMany(mappedBy = "equipment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EquipmentCart> carts = new ArrayList<>();
 
     // @Column(nullable = false)
     // private Long quantity;
@@ -87,6 +93,7 @@ public class Equipment extends BaseTimeEntity {
         this.requestedTime = null;
         this.renter = null;
     }
+
     public void makeRentalPending(LocalDateTime startRentTime, LocalDateTime endRentTime, User renter) {
         this.status = Status.RENTAL_PENDING;
         this.startRentTime = startRentTime;

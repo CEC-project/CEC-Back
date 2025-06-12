@@ -1,35 +1,32 @@
 package com.backend.server.batch;
 
-import com.backend.server.config.AbstractPostgresContainerTest;
-import com.backend.server.model.entity.equipment.Equipment;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.classroom.Semester;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
 import com.backend.server.model.entity.enums.Status;
+import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
 import com.backend.server.model.repository.classroom.SemesterRepository;
 import com.backend.server.model.repository.classroom.SemesterScheduleRepository;
 import com.backend.server.model.repository.equipment.EquipmentRepository;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.testcontainers.junit.jupiter.Testcontainers;
-
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-@Testcontainers
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class ScheduledMaintenanceTasksTest extends AbstractPostgresContainerTest {
+@SpringBootTest
+@Transactional
+class ScheduledMaintenanceTasksTest {
 
     @Autowired
     EquipmentRepository equipmentRepository;
@@ -41,6 +38,7 @@ class ScheduledMaintenanceTasksTest extends AbstractPostgresContainerTest {
     SemesterScheduleRepository semesterScheduleRepository;
     @Autowired
     EntityManager em;
+
     private ScheduledMaintenanceTasks scheduledMaintenanceTasks;
     private Semester semester;
     private Classroom classroom;
@@ -119,7 +117,6 @@ class ScheduledMaintenanceTasksTest extends AbstractPostgresContainerTest {
         // 학기 스케줄 생성
         SemesterSchedule schedule = semesterScheduleRepository.save(SemesterSchedule.builder()
                 .name("스프링부트 수업")
-                .year(2025)
                 .day(1)
                 .color("#FFAA00")
                 .startAt(LocalTime.of(9, 0))
@@ -142,10 +139,8 @@ class ScheduledMaintenanceTasksTest extends AbstractPostgresContainerTest {
 
         em.flush();
         em.clear();
-
-
-
     }
+
     @Test
     @DisplayName("만료된 대여 정리 작업이 정상적으로 동작한다")
     void testRunExpiredRentalCleanup() {
@@ -186,6 +181,7 @@ class ScheduledMaintenanceTasksTest extends AbstractPostgresContainerTest {
     void testRunExpiredRentalCleanupWithoutExpiredSemester() {
         // given
         // 기존 학기의 종료일을 미래로 업데이트 (새로운 엔티티 생성하지 않음)
+        semester = semesterRepository.findById(semester.getId()).orElse(null);
         semester = semester.toBuilder()
                 .endDate(LocalDate.now().plusDays(30))
                 .build();
@@ -193,10 +189,10 @@ class ScheduledMaintenanceTasksTest extends AbstractPostgresContainerTest {
 
         // when
         scheduledMaintenanceTasks.runExpiredRentalCleanup();
-
-        // then
         em.flush();
         em.clear();
+
+        // then
 
         // RENTAL_PENDING 장비만 AVAILABLE로 변경되었는지 확인
         Equipment updatedRentalPendingEquipment = equipmentRepository.findById(rentalPendingEquipment.getId()).orElse(null);

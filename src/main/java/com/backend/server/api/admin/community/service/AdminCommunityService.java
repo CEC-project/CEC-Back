@@ -34,6 +34,8 @@ public class AdminCommunityService {
         Community community = communityRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
 
+        community.increaseViewCount();
+
         return new AdminCommunityResponse(community);
     }
 

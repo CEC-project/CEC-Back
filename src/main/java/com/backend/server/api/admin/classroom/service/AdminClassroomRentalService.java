@@ -50,6 +50,7 @@ public class AdminClassroomRentalService {
             case CANCEL -> this::rentalCancel;
             case BROKEN -> this::rentalBroken;
             case REJECT -> this::rentalReject;
+            default -> throw new IllegalArgumentException("지원하지 않는 상태입니다: " + request.getStatus());
         };
 
         for (Long classroomId : request.getIds())

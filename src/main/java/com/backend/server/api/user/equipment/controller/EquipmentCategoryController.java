@@ -2,8 +2,8 @@ package com.backend.server.api.user.equipment.controller;
 
 import java.util.List;
 
+import com.backend.server.api.user.equipment.dto.category.EquipmentCategoryListResponse;
 import com.backend.server.api.user.equipment.dto.category.EquipmentCategoryResponse;
-import com.backend.server.api.user.equipment.dto.category.EquipmentCountByCategoryResponse;
 import com.backend.server.api.user.equipment.service.EquipmentCategoryService;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,11 +33,11 @@ public class EquipmentCategoryController {
         return ApiResponse.success("특정아이디 장비 카테고리 조회", categoryService.getCategoryById(id));
     }
 
-    @GetMapping("/countbycategory")
+    @GetMapping()
     @Operation(
             summary = "카테고리 전체 조회와 각 카테고리 별 장비 개수 통계"
     )
-    public ApiResponse<List<EquipmentCountByCategoryResponse>> countEquipment() {
+    public ApiResponse<List<EquipmentCategoryListResponse>> countEquipment() {
         return ApiResponse.success("카테고리별 장비 개수 조회 성공", categoryService.countAllCategoryWithEquipment());
     }
 }

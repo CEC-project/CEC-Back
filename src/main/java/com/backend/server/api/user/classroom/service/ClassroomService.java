@@ -1,8 +1,10 @@
 package com.backend.server.api.user.classroom.service;
 
-import com.backend.server.api.user.classroom.dto.ClassroomRentalRequest;
+import com.backend.server.api.common.dto.LoginUser;
+import com.backend.server.api.user.classroom.dto.ClassroomActionRequest;
 import com.backend.server.api.user.classroom.dto.ClassroomResponse;
 import com.backend.server.api.user.classroom.dto.ScheduleResponse;
+import com.backend.server.api.user.classroom.dto.ScheduleResponse.ScheduleType;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.classroom.Semester;
@@ -16,10 +18,10 @@ import com.backend.server.model.repository.classroom.SemesterScheduleRepository;
 import com.backend.server.model.repository.classroom.YearScheduleRepository;
 import com.backend.server.util.CompareUtils;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,64 +38,73 @@ public class ClassroomService {
     private final SemesterRepository semesterRepository;
 
     @Transactional
-    public Long rental(Long renterId, Long classroomId, ClassroomRentalRequest request) {
-        User renter = userRepository.findById(renterId)
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자 id 입니다."));
-        Classroom classroom = classroomRepository.findWithLockById(classroomId)
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 강의실 id 입니다."));
+    public void handleUserAction(LoginUser loginUser, ClassroomActionRequest request) {
+        // 1) 사용자 로드
+        User user = userRepository.findById(loginUser.getId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        if (classroom.getStatus() != Status.AVAILABLE)
-            throw new IllegalArgumentException("현재 대여 불가한 강의실 입니다.");
+        // 2) Action → handler 맵핑
+        BiConsumer<User, ClassroomActionRequest> handler = switch (request.getAction()) {
+            case RENT_REQUEST   -> this::handleRentRequest;
+            case RENT_CANCEL    -> this::handleRentCancel;
+        };
 
-        LocalDateTime now = LocalDateTime.now();
-        Integer day = now.getDayOfWeek().getValue();
-        LocalTime startRentTime = request.getStartRentTime();
-        LocalTime endRentTime = request.getEndRentTime();
-
-        // 연간 일정과 겹치는지 체크
-        List<YearSchedule> yearSchedules = yearScheduleRepository.findWithRenterByDate(now.toLocalDate());
-
-        boolean isHoliday = yearSchedules.stream().anyMatch(YearSchedule::getIsHoliday);
-        if (isHoliday)
-            throw new IllegalArgumentException("휴일에는 강의실을 대여 할 수 없습니다.");
-
-        boolean hasIntersectionWithSchedule = yearSchedules.stream().anyMatch(ys -> CompareUtils
-                .hasIntersectionInclusive(ys.getStartAt(), ys.getEndAt(), startRentTime, endRentTime));
-        if (hasIntersectionWithSchedule)
-            throw new IllegalArgumentException("특강과 강의실 대여 시간이 겹칩니다.");
-
-        // 수업과 겹치는지 체크
-        List<Semester> semesters = semesterRepository.findSemesterContainingDate(now.toLocalDate());
-        boolean hasIntersectionWithAnyLecture = semesterScheduleRepository
-                .findByClassroomAndSemesterIn(classroom, semesters)
-                .stream()
-                .filter((ss) -> Objects.equals(ss.getDay(), day))
-                .anyMatch((ss) -> CompareUtils.hasIntersectionExclusive(
-                        ss.getStartAt(), ss.getEndAt(), startRentTime, endRentTime));
-        if (hasIntersectionWithAnyLecture)
-            throw new IllegalArgumentException("수업과 강의실 대여 시간이 겹칩니다.");
-
-        classroom.makeRentalPending(startRentTime, endRentTime, renter);
-
-        classroomRepository.save(classroom);
-        return classroom.getId();
+        // 3) 단일 요청이므로 바로 호출
+        handler.accept(user, request);
     }
 
-    @Transactional
-    public Long cancelRental(Long renterId, Long rentalId) {
-        Classroom classroom = classroomRepository.findWithLockAndRenterById(rentalId)
+    // --- 핸들러 메서드들 ---
+    private void handleRentRequest(User user, ClassroomActionRequest request) {
+        Classroom classroom = classroomRepository.findWithLockById(request.getId())
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 강의실 id 입니다."));
+
+        if (classroom.getStatus() != Status.AVAILABLE) {
+            throw new IllegalArgumentException("현재 대여 불가한 강의실 입니다.");
+        }
+
+        LocalDate now   = LocalDate.now();
+        int day         = now.getDayOfWeek().getValue();
+        LocalTime start = request.getStartTime();
+        LocalTime end   = request.getEndTime();
+
+        // (1) 연간 스케줄 체크
+        List<YearSchedule> yearSchedules = yearScheduleRepository.findByDate(now);
+        if (yearSchedules.stream().anyMatch(YearSchedule::getIsHoliday)) {
+            throw new IllegalArgumentException("휴일에는 강의실을 대여 할 수 없습니다.");
+        }
+        if (yearSchedules.stream().anyMatch(ys ->
+                CompareUtils.hasIntersectionInclusive(ys.getStartAt(), ys.getEndAt(), start, end))) {
+            throw new IllegalArgumentException("특강과 강의실 대여 시간이 겹칩니다.");
+        }
+
+        // (2) 수업 스케줄 체크
+        List<Semester> semesters = semesterRepository.findSemesterContainingDate(now);
+        boolean clash = semesterScheduleRepository
+                .findByClassroomAndSemesterIn(classroom, semesters).stream()
+                .filter(ss -> ss.getDay() == day)
+                .anyMatch(ss -> CompareUtils.hasIntersectionExclusive(
+                        ss.getStartAt(), ss.getEndAt(), start, end));
+        if (clash) {
+            throw new IllegalArgumentException("수업과 강의실 대여 시간이 겹칩니다.");
+        }
+
+        classroom.makeRentalPending(start, end, user);
+        classroomRepository.save(classroom);
+    }
+
+    private void handleRentCancel(User user, ClassroomActionRequest request) {
+        Classroom classroom = classroomRepository.findWithLockAndRenterById(request.getId())
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 대여 id 입니다."));
 
-        if (classroom.getRenter().getId().compareTo(renterId) != 0)
-            throw new IllegalArgumentException("대여한 사용자와 로그인한 사용자가 다릅니다.");
-
-        if (classroom.getStatus() != Status.RENTAL_PENDING)
-            throw new IllegalArgumentException("대여 신청중이 아니면 대여 신청을 취소할수 없습니다.");
+        if (!classroom.getRenter().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("대여한 사용자만 취소할 수 있습니다.");
+        }
+        if (classroom.getStatus() != Status.RENTAL_PENDING) {
+            throw new IllegalArgumentException("대여 신청 상태만 취소할 수 있습니다.");
+        }
 
         classroom.makeAvailable();
-
         classroomRepository.save(classroom);
-        return classroom.getId();
     }
 
     @Transactional(readOnly = true)
@@ -101,6 +112,7 @@ public class ClassroomService {
         return classroomRepository.findAll()
                 .stream()
                 .map(ClassroomResponse::new)
+                .sorted(Comparator.comparing(ClassroomResponse::getId))
                 .toList();
     }
 
@@ -137,11 +149,22 @@ public class ClassroomService {
         if (classroom.getRenter() != null)
             result.add(new ScheduleResponse(classroom, classroom.getRenter()));
 
-        // 요일, 시작 시간 순으로 정렬
-        result.sort((a, b) -> {
-            if (a.getDay().compareTo(b.getDay()) != 0) return a.getDay() - b.getDay();
-            return a.getStartAt().compareTo(b.getStartAt());
-        });
+        // 이번주의 휴일인 요일 목록 구하기
+        List<Integer> holidayList = yearSchedules.stream()
+                .filter(YearSchedule::getIsHoliday)
+                .map((ys) -> ys.getDate().getDayOfWeek().getValue())
+                .toList();
+
+        result = result.stream()
+                // 결과에서 휴일과 겹치는 일정은 제외
+                .filter((sr) -> !(sr.getType() != ScheduleType.HOLIDAY && holidayList.contains(sr.getDay())))
+                // 요일순, 시작 시간순으로 정렬
+                .sorted((a, b) -> {
+                    if (a.getDay().compareTo(b.getDay()) != 0) return a.getDay() - b.getDay();
+                    return a.getStartTime().compareTo(b.getStartTime());
+                })
+                .toList();
+
 
         return result;
     }

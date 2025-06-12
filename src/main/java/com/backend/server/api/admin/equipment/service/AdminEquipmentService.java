@@ -45,13 +45,13 @@ public class AdminEquipmentService {
     private final EquipmentModelRepository equipmentModelRepository;
     private final BrokenRepairHistoryRepository brokenRepairHistoryRepository;
 
-    
+
     //어드민 유저 조회
     public List<AdminManagerCandidatesResponse> getAdminUsers() {
         List<User> adminUsers = userRepository.findByRoleIn(Role.ROLE_ADMIN,Role.ROLE_SUPER_ADMIN);
         return adminUsers.stream()
-            .map(AdminManagerCandidatesResponse::new)
-            .collect(Collectors.toList());
+                .map(AdminManagerCandidatesResponse::new)
+                .collect(Collectors.toList());
     }
 
     // 시리얼 넘버를 생성하는 공통 로직 (모델 그룹 인덱스 및 동적 자릿수 포함)
@@ -229,15 +229,15 @@ public class AdminEquipmentService {
     // 장비 업데이트
     public Long updateEquipment(Long id, AdminEquipmentCreateRequest request) {
         Equipment equipment = equipmentRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
+                .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
 
         // toBuilder가 맞는거같아요
         Equipment updated = equipment.toBuilder()
-            .imageUrl(request.getImageUrl())
-            .managerId(request.getManagerId())
-            .description(request.getDescription())
-            .restrictionGrade(request.getRestrictionGrade())
-            .build();
+                .imageUrl(request.getImageUrl())
+                .managerId(request.getManagerId())
+                .description(request.getDescription())
+                .restrictionGrade(request.getRestrictionGrade())
+                .build();
 
         updated = equipmentRepository.save(updated);
 
@@ -257,31 +257,31 @@ public class AdminEquipmentService {
 
         Specification<Equipment> spec = EquipmentSpecification.adminFilterEquipments(request);
         Page<Equipment> page = equipmentRepository.findAll(spec, pageable);
-        
+
         List<AdminEquipmentResponse> responses = page.getContent().stream()
-            .map(AdminEquipmentResponse::new)
-            .toList();
+                .map(AdminEquipmentResponse::new)
+                .toList();
         return new AdminEquipmentListResponse(responses, page);
     }
 
     //장비 단일 조회
     public AdminEquipmentResponse getEquipment(Long id) {
         Equipment equipment = equipmentRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
+                .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
 
         return new AdminEquipmentResponse(equipment);
     }
-    
+
     //장비 강제 상태 변경경
     @Transactional
     public Long updateEquipmentStatus(Long equipmentId, AdminEquipmentStatusUpdateRequest request) {
         Equipment equipment = equipmentRepository.findById(equipmentId)
-            .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
-        
+                .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
+
         Equipment updated = equipment.toBuilder()
-            .status(request.getStatus())
-            .build();
-        
+                .status(request.getStatus())
+                .build();
+
         equipmentRepository.save(updated);
         return equipmentId;
     }

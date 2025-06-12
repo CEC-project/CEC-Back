@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,23 +17,26 @@ import lombok.NoArgsConstructor;
 public class InquiryResponse {
 
     @Schema(description = "문의 ID", example = "1")
-    private Long id;               // 문의 ID
+    private Long id;
 
     @Schema(description = "문의 제목", example = "장비 대여 관련 문의")
-    private String title;           // 제목
+    private String title;
 
     @Schema(description = "문의 내용", example = "장비 대여 예약이 되지 않습니다.")
-    private String content;         // 내용
+    private String content;
 
-    @Schema(description = "첨부파일 URL", example = "https://example.com/image.png")
-    private String attachmentUrl;   // 첨부파일 URL
+    @Schema(description = "첨부파일 목록")
+    private List<String> attachments;
 
-    @Schema(description = "문의 유형", example = "RENTAL", implementation = InquiryType.class)
-    private InquiryType type;      // 문의 유형 (enum)
+    @Schema(description = "문의 유형", example = "RENTAL")
+    private InquiryType type;
 
-    @Schema(description = "답변 상태", example = "WAITING", implementation = AnswerStatus.class)
-    private AnswerStatus status;   // 답변 상태
+    @Schema(description = "답변 상태", example = "NOT_ANSWERED")
+    private AnswerStatus status;
 
-    @Schema(description = "문의 작성 시간 (ISO-8601)", example = "2025-06-02T15:34:21")
-    private String createdAt;       // 생성 일시
+    @Schema(description = "문의 작성 시간")
+    private String createdAt;
+
+    @Schema(description = "답변 내용")
+    private InquiryAnswerResponse answer; // answer.author → 공통 AuthorResponse 사용
 }

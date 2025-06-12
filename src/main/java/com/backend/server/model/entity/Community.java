@@ -31,16 +31,26 @@ public class Community extends BaseTimeEntity{
     @Column
     private int view;
 
-    @Column
-    private String type;
-
-    @Column
-    private Long typeId;
+//    @Column
+//    private String type;
+//
+//    @Column
+//    private Long typeId;
+//    @Enumerated(EnumType.STRING)
+//    @Column(nullable = false)
+//    private CommunityType communityType;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
+    @Column(name = "attachment_url")
+    private String attachmentUrl;  // 첨부파일 URL
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_category_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private BoardCategory boardCategory;
+
+    public void increaseViewCount() {
+        this.view++;
+    }
 }

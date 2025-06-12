@@ -1,7 +1,6 @@
 package com.backend.server.api.admin.equipment.controller;
 
 import com.backend.server.api.admin.equipment.dto.category.AdminEquipmentCountByCategoryResponse;
-import com.backend.server.api.user.equipment.dto.category.EquipmentCountByCategoryResponse;
 import org.springframework.web.bind.annotation.*;
 
 import com.backend.server.api.admin.equipment.dto.category.AdminEquipmentCategoryCreateRequest;
