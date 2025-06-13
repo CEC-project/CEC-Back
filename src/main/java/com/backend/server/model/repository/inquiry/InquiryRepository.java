@@ -1,5 +1,5 @@
 
-package com.backend.server.model.repository;
+package com.backend.server.model.repository.inquiry;
 
 import com.backend.server.api.user.inquiry.dto.InquiryResponse;
 import com.backend.server.model.entity.Inquiry;
@@ -16,6 +16,7 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long>, JpaSpec
 
     @EntityGraph(attributePaths = {"answers", "author", "author.professor"})
     Page<Inquiry> findAll(Specification<Inquiry> spec, Pageable pageable);
-
+    //N+1 문제 해결
+    @EntityGraph(attributePaths = {"answers"})
     Page<Inquiry> findAllByAuthorId(Long authorId, Pageable pageable); //사용자 ID로 조회
 }

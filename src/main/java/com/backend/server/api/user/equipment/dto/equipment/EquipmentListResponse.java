@@ -15,8 +15,8 @@ public class EquipmentListResponse {
     private List<EquipmentResponse> content;
     private PageableInfo pageable;
 
-    public EquipmentListResponse(List<EquipmentResponse> content, Page<Equipment> page) {
+    public EquipmentListResponse(List<EquipmentResponse> content, Page<?> page) {
         this.content = content;
-        this.pageable = new PageableInfo(page.getNumber(), page.getSize(), page.getTotalPages(), page.getTotalElements());
+        this.pageable = new PageableInfo(page);
     }
 }

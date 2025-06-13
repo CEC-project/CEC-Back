@@ -7,7 +7,7 @@ import com.backend.server.api.user.inquiry.dto.*;
 import com.backend.server.model.entity.Inquiry;
 import com.backend.server.model.entity.InquiryAnswer;
 import com.backend.server.model.entity.User;
-import com.backend.server.model.repository.InquiryRepository;
+import com.backend.server.model.repository.inquiry.InquiryRepository;
 import com.backend.server.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
