@@ -23,73 +23,69 @@ import java.util.Optional;
 
 @Repository
 public interface EquipmentRepository extends JpaRepository<Equipment, Long>, JpaSpecificationExecutor<Equipment> {
-    //Long countByEquipmentModel_Id(Long id);
-    // List<Equipment> findByCategoryId(Long categoryId);
-    // List<Equipment> findByRenterId(Integer renterId);
-    // List<Equipment> findByManagerName(String managerName);
-    // List<Equipment> findByRentalStatus(Status rentalStatus);
-    // Integer countByRentalStatus(Status rentalStatus);
-    // List<Equipment> findByRentalStatusAndName(Status status, String name);
     Long countByEquipmentModel_Id(Long modelId);
-    Optional<User> findByRenterId(Long renterId);
 
     Long countBySerialNumberStartingWith(String prefix);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT e FROM Equipment e WHERE e.id = :id")
     Optional<Equipment> findByIdForUpdate(@Param("id") Long id);
-    
-
 
     // 수업 생성시 장비 대여 가능 여부 확인
     @Query("SELECT COUNT(e.id) = :size "
             + "FROM Equipment e "
-            + "WHERE e.id IN :ids AND e.status = :status")
-    boolean isAvailableAllByIdIn(@Param("ids") List<Long> ids, @Param("size") long size,
-            @Param("status") Status status);
+            + "WHERE e.id IN :ids AND e.status = :availableStatus")
+    boolean isAvailableAllByScheduleAndIds(@Param("ids") List<Long> ids, @Param("size") long size,
+            @Param("availableStatus") Status availableStatus);
 
     // 수업 수정시 장비 대여 가능 여부 확인
     @Query("SELECT COUNT(e.id) = :size "
             + "FROM Equipment e "
             + "LEFT JOIN e.semesterSchedule ss "
             + "WHERE e.id IN :ids AND ("
-            + "    e.status = :status OR "
+            + "    e.status = :availableStatus OR "
             + "    ss = :schedule"
             + ")")
-    boolean isAvailableAllByIdIn(@Param("ids") List<Long> ids, @Param("size") long size,
-            @Param("schedule") SemesterSchedule schedule, @Param("status") Status status);
+    boolean isAvailableAllByScheduleAndIds(@Param("ids") List<Long> ids, @Param("size") long size,
+            @Param("schedule") SemesterSchedule schedule, @Param("availableStatus") Status availableStatus);
 
     // 수업에 필요한 장비 대여
     @Modifying
     @Query("UPDATE Equipment e SET "
-            + "e.status = :status, "
+            + "e.status = :inUseStatus, "
             + "e.startRentTime = :start, "
             + "e.endRentTime = :end, "
             + "e.semesterSchedule = :schedule "
             + "WHERE e.id IN :ids")
-    void rentByIds(
+    void rentByScheduleAndIds(
             @Param("ids") List<Long> ids,
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end,
             @Param("schedule") SemesterSchedule schedule,
-            @Param("status") Status status
+            @Param("inUseStatus") Status inUseStatus
     );
+
+    // 수업 수정시 대여 취소시킬 장비 목록
+    // 조건1. 현재 수업에서 이미 대여중이던 장비인가?
+    // 조건2. 현재 대여할 장비 목록에 없는가?
+    @Query("""
+    SELECT e
+    FROM Equipment e
+    WHERE e.semesterSchedule = :schedule
+    AND e.id IN :equipments""")
+    List<Equipment> findByScheduleAndNotInIds(
+            @Param("schedule") SemesterSchedule schedule,
+            @Param("equipments") List<Long> equipments);
 
     // 수업에 필요한 장비 대여 취소
     @Modifying
     @Query("UPDATE Equipment e SET "
-            + "e.status = :status, "
+            + "e.status = :availableStatus, "
             + "e.startRentTime = null, "
             + "e.endRentTime = null, "
             + "e.semesterSchedule = null "
             + "WHERE e IN :equipments")
-    void cancelRent(List<Equipment> equipments, Status status);
-
-    //관리자 장비 상태 다중 업데이트
-    @Modifying
-    @Query("UPDATE Equipment e SET e.status = :status WHERE e.id IN :ids")
-    void bulkUpdateStatus(@Param("status") String status, @Param("ids") List<Long> ids);
-
+    void cancelRentByIds(List<Equipment> equipments, Status availableStatus);
 
     @Modifying
     @Transactional
@@ -97,7 +93,6 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     void updateStatusByStartRentTimeBefore(@Param("targetStatus") Status targetStatus,
                                            @Param("newStatus") Status newStatus,
                                            @Param("now") LocalDateTime now);
-
 
     @Modifying
     @Transactional

@@ -3,6 +3,7 @@ package com.backend.server.api.admin.classroom.service;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomResponse;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
 import java.util.List;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +15,8 @@ public class AdminClassroomServiceTest {
     private AdminClassroomService adminClassroomService;
 
     @Test
-    void searchClassrooms_전체_강의실_조회() {
+    @DisplayName("전체 강의실 조회")
+    void searchClassrooms() {
         // given
         AdminClassroomSearchRequest request = new AdminClassroomSearchRequest();
 
