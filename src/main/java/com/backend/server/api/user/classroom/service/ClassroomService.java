@@ -11,7 +11,7 @@ import com.backend.server.model.entity.classroom.Semester;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
 import com.backend.server.model.entity.classroom.YearSchedule;
 import com.backend.server.model.entity.enums.Status;
-import com.backend.server.model.repository.UserRepository;
+import com.backend.server.model.repository.user.UserRepository;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
 import com.backend.server.model.repository.classroom.SemesterRepository;
 import com.backend.server.model.repository.classroom.SemesterScheduleRepository;

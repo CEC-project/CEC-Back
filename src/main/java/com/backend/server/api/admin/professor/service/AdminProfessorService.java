@@ -3,7 +3,7 @@ package com.backend.server.api.admin.professor.service;
 import com.backend.server.api.admin.professor.dto.AdminProfessorRequest;
 import com.backend.server.api.admin.professor.dto.AdminProfessorResponse;
 import com.backend.server.model.entity.Professor;
-import com.backend.server.model.repository.ProfessorRepository;
+import com.backend.server.model.repository.user.ProfessorRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

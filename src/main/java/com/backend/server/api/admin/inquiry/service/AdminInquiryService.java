@@ -11,7 +11,7 @@ import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.inquiry.InquiryAnswerRepository;
 import com.backend.server.model.repository.inquiry.InquiryRepository;
 import com.backend.server.model.repository.inquiry.InquirySpecification;
-import com.backend.server.model.repository.UserRepository;
+import com.backend.server.model.repository.user.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

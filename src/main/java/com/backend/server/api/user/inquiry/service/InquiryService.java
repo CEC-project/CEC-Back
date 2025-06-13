@@ -8,7 +8,7 @@ import com.backend.server.model.entity.Inquiry;
 import com.backend.server.model.entity.InquiryAnswer;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.inquiry.InquiryRepository;
-import com.backend.server.model.repository.UserRepository;
+import com.backend.server.model.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;

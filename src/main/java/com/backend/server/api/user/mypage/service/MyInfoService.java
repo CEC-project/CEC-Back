@@ -4,7 +4,7 @@ import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.user.mypage.dto.MyInfoRequest;
 import com.backend.server.api.user.mypage.dto.MyInfoResponse;
 import com.backend.server.model.entity.User;
-import com.backend.server.model.repository.UserRepository;
+import com.backend.server.model.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

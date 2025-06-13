@@ -1,4 +1,4 @@
-package com.backend.server.model.repository;
+package com.backend.server.model.repository.user;
 
 import com.backend.server.api.admin.professor.dto.AdminProfessorResponse;
 import com.backend.server.model.entity.Professor;

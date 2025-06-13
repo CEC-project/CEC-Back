@@ -2,11 +2,10 @@ package com.backend.server.api.common.notification.service;
 import java.util.List;
 
 import com.backend.server.model.entity.User;
-import com.backend.server.model.repository.UserRepository;
+import com.backend.server.model.repository.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Pageable; 
 
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.dto.CommonNotificationResponse;

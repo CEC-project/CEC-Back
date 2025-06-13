@@ -1,4 +1,4 @@
-package com.backend.server.model.repository;
+package com.backend.server.model.repository.history;
 
 import com.backend.server.model.entity.BrokenRepairHistory;
 import com.backend.server.model.entity.classroom.Classroom;

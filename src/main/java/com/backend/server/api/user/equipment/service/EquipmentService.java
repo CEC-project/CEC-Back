@@ -5,13 +5,11 @@ import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.service.CommonNotificationService;
 import com.backend.server.api.user.equipment.dto.equipment.*;
 import com.backend.server.model.entity.User;
-import com.backend.server.model.entity.enums.EquipmentAction;
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.equipment.EquipmentCart;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
-import com.backend.server.model.entity.equipment.EquipmentModel;
-import com.backend.server.model.repository.UserRepository;
+import com.backend.server.model.repository.user.UserRepository;
 import com.backend.server.model.repository.equipment.*;
 
 import java.util.HashMap;

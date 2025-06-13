@@ -1,8 +1,9 @@
-package com.backend.server.model.repository;
+package com.backend.server.model.repository.user;
 
 import com.backend.server.api.admin.rentalRestriction.dto.AdminRentalRestrictionListRequest;
 import com.backend.server.model.entity.RentalRestriction;
 import com.backend.server.model.entity.User;
+import com.backend.server.model.repository.user.UserSpecification;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import java.time.LocalDateTime;

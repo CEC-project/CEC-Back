@@ -11,7 +11,7 @@
 //import com.backend.server.model.entity.equipment.EquipmentCart;
 //import com.backend.server.model.entity.equipment.EquipmentCategory;
 //import com.backend.server.model.entity.equipment.EquipmentModel;
-//import com.backend.server.model.repository.UserRepository;
+//import com.backend.server.model.repository.user.UserRepository;
 //import com.backend.server.model.repository.equipment.EquipmentCartRepository;
 //import com.backend.server.model.repository.equipment.EquipmentRepository;
 //import org.junit.jupiter.api.*;

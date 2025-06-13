@@ -1,4 +1,4 @@
-package com.backend.server.model.repository;
+package com.backend.server.model.repository.board;
 
 import com.backend.server.api.admin.community.dto.AdminCommunityListRequest;
 import com.backend.server.api.admin.community.dto.CommunityListRequest;

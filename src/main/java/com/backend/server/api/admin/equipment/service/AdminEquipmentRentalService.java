@@ -7,7 +7,7 @@ import com.backend.server.model.entity.BrokenRepairHistory;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.equipment.Equipment;
-import com.backend.server.model.repository.BrokenRepairHistoryRepository;
+import com.backend.server.model.repository.history.BrokenRepairHistoryRepository;
 import com.backend.server.model.repository.equipment.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
