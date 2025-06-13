@@ -3,8 +3,7 @@ package com.backend.server.model.repository;
 import com.backend.server.api.admin.community.dto.AdminCommunityListRequest;
 import com.backend.server.api.admin.community.dto.CommunityListRequest;
 import com.backend.server.api.admin.notice.dto.AdminNoticeListRequest;
-import com.backend.server.model.entity.Community;
-import com.backend.server.model.entity.Notice;
+import com.backend.server.model.entity.Board;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommunitySpecification {
-    public static Specification<Community> filterCommunity(AdminNoticeListRequest request) {
+    public static Specification<Board> filterCommunity(AdminNoticeListRequest request) {
         return ((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -45,7 +44,7 @@ public class CommunitySpecification {
         });
     }
 
-    public static Specification<Community> filterCommunities(AdminCommunityListRequest request) {
+    public static Specification<Board> filterCommunities(AdminCommunityListRequest request) {
         return (root, query, cb) -> {
             var predicate = cb.conjunction();
 
@@ -56,7 +55,7 @@ public class CommunitySpecification {
     }
 
     public static Predicate searchAndFilterCommunities(
-            From<?, Community> root, CriteriaBuilder cb, Predicate predicate, AdminCommunityListRequest request) {
+            From<?, Board> root, CriteriaBuilder cb, Predicate predicate, AdminCommunityListRequest request) {
 
         // 이름, 제목, 내용, 닉네임 으로 검색합니다.
         String keyword = "%" + request.getSearchKeyword() + "%";
@@ -82,7 +81,7 @@ public class CommunitySpecification {
     }
 
     //--------------------------
-    public static Specification<Community> filterCommunitiesForUser(CommunityListRequest request) {
+    public static Specification<Board> filterCommunitiesForUser(CommunityListRequest request) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 

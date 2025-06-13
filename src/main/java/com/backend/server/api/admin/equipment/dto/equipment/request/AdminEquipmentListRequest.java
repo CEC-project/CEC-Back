@@ -31,7 +31,7 @@ public class AdminEquipmentListRequest extends AbstractPaginationParam {
     private EquipmentStatus status = EquipmentStatus.ALL;
 
     @Schema(description = "정렬 기준",
-            example = "createdAt", implementation = SortBy.class)
+            example = "CREATED_AT", implementation = SortBy.class)
     private SortBy sortBy = SortBy.ID;
 
     public Pageable toPageable() {

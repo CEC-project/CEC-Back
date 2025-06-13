@@ -9,11 +9,14 @@ import com.backend.server.model.entity.enums.EquipmentAction;
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.equipment.EquipmentCart;
+import com.backend.server.model.entity.equipment.EquipmentCategory;
+import com.backend.server.model.entity.equipment.EquipmentModel;
 import com.backend.server.model.repository.UserRepository;
-import com.backend.server.model.repository.equipment.EquipmentCartRepository;
-import com.backend.server.model.repository.equipment.EquipmentRepository;
-import com.backend.server.model.repository.equipment.EquipmentSpecification;
+import com.backend.server.model.repository.equipment.*;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,6 +32,7 @@ public class EquipmentService {
     private final UserRepository userRepository;
     private final EquipmentCartRepository equipmentCartRepository;
     private final CommonNotificationService notificationService;
+    private final EquipmentCategoryRepository equipmentCategoryRepository;
 
     //장비 하나 호버링시 이미지 보여주기
     public EquipmentResponse getEquipment(Long id) {
@@ -98,25 +102,56 @@ public class EquipmentService {
 
 
     @Transactional
-
     public void handleUserAction(LoginUser loginUser, EquipmentActionRequest request) {
         User user = userRepository.findById(loginUser.getId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        BiConsumer<Long, EquipmentActionRequest> operator = switch (request.getAction()) {
+        // 대여 제한 체크 (RENT_REQUEST만)
+        if (request.getAction() == EquipmentActionRequest.Action.RENT_REQUEST) {
+            Map<Long, Integer> categoryRequestCount = new HashMap<>();
+            Map<Long, EquipmentCategory> categoryMap = new HashMap<>();
+            for (Long equipmentId : request.getIds()) {
+                Equipment equipment = equipmentRepository.findById(equipmentId)
+                        .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));
+                EquipmentCategory category = equipment.getEquipmentModel().getCategory();
+                Long categoryId = category.getId();
+                categoryRequestCount.put(categoryId, categoryRequestCount.getOrDefault(categoryId, 0) + 1);
+                categoryMap.put(categoryId, category);
+            }
 
+            for (Map.Entry<Long, Integer> entry : categoryRequestCount.entrySet()) {
+                Long categoryId = entry.getKey();
+                int addCount = entry.getValue();
+                EquipmentCategory category = categoryMap.get(categoryId);
+
+                int currentCount = equipmentRepository.countByRenterAndEquipmentCategoryAndStatusIn(
+                        user, category, List.of(Status.RENTAL_PENDING, Status.IN_USE)
+                );
+
+                int maxRentalCount = category.getMaxRentalCount();
+                if (currentCount + addCount > maxRentalCount) {
+                    throw new IllegalStateException(
+                            String.format("카테고리 [%s]의 최대 대여 가능 수(%d개)를 초과할 수 없습니다.",
+                                    category.getName(), maxRentalCount
+                            )
+                    );
+                }
+            }
+        }
+
+        BiConsumer<Long, EquipmentActionRequest> operator = switch (request.getAction()) {
             case RENT_REQUEST -> (id, req) -> handleRentRequest(user, loginUser, id, req);
             case RENT_CANCEL -> (id, req) -> handleRentCancel(user, id);
             case RETURN_REQUEST -> (id, req) -> handleReturnRequest(user, id);
             case RETURN_CANCEL -> (id, req) -> handleReturnCancel(user, id);
         };
 
+        // 모든 신청 장비에 대해 액션 실행
         for (Long equipmentId : request.getIds()) {
             operator.accept(equipmentId, request);
         }
     }
 
-    //대여요청
     private void handleRentRequest(User user, LoginUser loginUser, Long equipmentId, EquipmentActionRequest request) {
         Equipment equipment = equipmentRepository.findByIdForUpdate(equipmentId)
                 .orElseThrow(() -> new IllegalArgumentException("장비를 찾을 수 없습니다."));

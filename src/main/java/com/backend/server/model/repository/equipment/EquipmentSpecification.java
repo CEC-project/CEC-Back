@@ -164,7 +164,9 @@ public class EquipmentSpecification {
 
             // 대여 제한 학년이 걸리는 장비는 조회 제외
             if (userGrade != null) {
-                predicates.add(cb.not(cb.like(root.get("restrictionGrade"), "%" + userGrade + "%")));
+                Predicate restrictionIsNull = cb.isNull(root.get("restrictionGrade"));
+                Predicate notRestricted = cb.not(cb.like(root.get("restrictionGrade"), "%" + userGrade + "%"));
+                predicates.add(cb.or(restrictionIsNull, notRestricted));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));

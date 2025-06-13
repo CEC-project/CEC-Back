@@ -5,7 +5,9 @@ import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
 import com.backend.server.model.entity.enums.Status;
 
-import io.lettuce.core.dynamic.annotation.Param;
+import com.backend.server.model.entity.equipment.EquipmentCategory;
+import org.springframework.data.repository.query.Param;
+
 import jakarta.persistence.LockModeType;
 
 import java.time.LocalDateTime;
@@ -118,10 +120,9 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
             @Param("availableStatus") String availableStatus
     );
 
-    @Query(value = "SELECT e.serialNumber FROM Equipment e " + // JPQL 사용 (엔티티명 사용)
-            "WHERE e.serialNumber LIKE :serialPrefix || '%' " + // JPQL의 CONCATENATION은 DB에 따라 다를 수 있으나, 일반적으로 || 사용
-            "ORDER BY LENGTH(e.serialNumber) DESC, e.serialNumber DESC")
-    Optional<String> findTopBySerialNumberStartingWithOrderBySerialNumberDesc(@Param("serialPrefix") String serialPrefix);
-    Optional<Equipment> findBySerialNumber(String serialNumber);
+
+    List<Equipment> findBySerialNumberStartingWith(String serialNumber);
+
+    int countByRenterAndEquipmentCategoryAndStatusIn(User renter, EquipmentCategory category, List<Status> statusList);
 
 }

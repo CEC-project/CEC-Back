@@ -98,7 +98,26 @@ public class CommonNotificationService {
             .toList();
     }
 
-    //알림조회 전체
+    public void notificationProcess(Long targetUserId, String category, String title, String message, String link) {
+        // 알림 DTO 생성 및 전송
+        CommonNotificationDto notification = CommonNotificationDto.builder()
+                .category(category)
+                .title(title)
+                .message(message)
+                .link(link)
+                .build();
+        createNotification(notification, targetUserId);
+    }
+
+    public void toAdminNotificationProcess(String category, String title, String message, String link) {
+        CommonNotificationDto dto = CommonNotificationDto.builder()
+                .category(category)
+                .title(title)
+                .message(message)
+                .link(link)
+                .build();
+        createNotificationToAdmins(dto);
+    }
 
 
 }

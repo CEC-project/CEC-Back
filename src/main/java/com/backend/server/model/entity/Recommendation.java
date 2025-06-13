@@ -26,5 +26,5 @@ public class Recommendation extends BaseTimeEntity {
     // 하나의 게시글은 여러 추천을 받을 수 있습니다. (Recommendation : Community = N : 1)
     @ManyToOne(fetch = FetchType.LAZY) // 지연 로딩 설정
     @JoinColumn(name = "community_id", nullable = false) // 외래 키 컬럼 이름을 community_id로 지정하고 NOT NULL 설정
-    private Community community;
+    private Board board;
 }

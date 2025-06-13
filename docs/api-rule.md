@@ -17,7 +17,7 @@
    - attachments 는 배열로 응답하는 것이 맞는것 같습니다.
 2. 게시글/댓글 작성자는 authorResponse dto를 반환하도록 통일했습니다.
 3. 문의 상세조회 응답에서 문의 답변도 응답하게 수정했습니다.
-4. community 를 전부 board 로 수정하고, url 를 수정했습니다.
+4. board 를 전부 board 로 수정하고, url 를 수정했습니다.
 5. 다른 자잘한 수정사항도 있으니, 각자 맡은 부분 명세서를 [after](./after) 와 [before](./before) 폴더에서 찾아서 [비교 사이트](https://wepplication.github.io/tools/compareDoc/)에서 비교해 주세요.
 
 ### 6월 6일 명세서 변경사항

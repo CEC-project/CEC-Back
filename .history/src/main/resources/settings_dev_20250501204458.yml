@@ -1,9 +1,0 @@
-spring:
-  jwt:
-    secret: 'Ny0pUyf1R2xhIj8sC5e6r7t01NMinef9329HJfdo380F0h08FKf3fEF3bsy2B3n4V5c6B7n8M9l0K1J2H3G4F5D6S7a8S9D0g1F2g3H4j5L6K7l8Z9x0C1v2B3n4M5l6K7J8H92f344234f6524e65165f165wsa1f65165123231f651f651f651234616'
-    access-token-validity-in-minutes: 43200  # 30일
-    refresh-token-validity-in-days: 30  # 30일
-
-swagger.server.url: 'https://dev.api.bmvcec.store'
-
-server.port: 8080

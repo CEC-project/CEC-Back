@@ -2,6 +2,7 @@ package com.backend.server.api.user.inquiry.service;
 
 import com.backend.server.api.common.dto.AuthorResponse; // 공통 DTO 사용
 import com.backend.server.api.common.dto.PageableInfo;   // 공통 페이지 DTO 사용
+import com.backend.server.api.common.notification.service.CommonNotificationService;
 import com.backend.server.api.user.inquiry.dto.*;
 import com.backend.server.model.entity.Inquiry;
 import com.backend.server.model.entity.InquiryAnswer;
@@ -23,6 +24,7 @@ public class InquiryService {
 
     private final InquiryRepository inquiryRepository;
     private final UserRepository userRepository;
+    private final CommonNotificationService notificationService;
 
     private String joinAttachments(List<String> attachments) {
         return (attachments != null && !attachments.isEmpty()) ? String.join(",", attachments) : null;
@@ -55,8 +57,18 @@ public class InquiryService {
                 .build();
 
         Inquiry saved = inquiryRepository.save(inquiry);
+
+        // 알림
+        notificationService.toAdminNotificationProcess(
+                "문의", // category
+                "새 문의가 등록되었습니다", // title
+                author.getNickname() + "님이 [" + inquiry.getTitle() + "] 문의를 등록했습니다.", // message
+                "/admin/inquiry/" + saved.getId() // link (관리자 문의 상세페이지 링크에 맞게)
+        );
+
         return saved.getId();
     }
+
 
     @Transactional(readOnly = true)
     public InquiryResponse getInquiry(Long id, Long currentUserId) throws AccessDeniedException {

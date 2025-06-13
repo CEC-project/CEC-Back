@@ -105,7 +105,7 @@ Table notification {
   updated_at timestamp
 }
 
-Table community {
+Table board {
   id bigint [primary key]
   title varchar
   nickname varchar
@@ -231,7 +231,7 @@ TableGroup inquiry_group {
 }
 
 TableGroup community_group {
-  community
+  board
   community_type
 }
 
@@ -249,8 +249,8 @@ Ref: "notification"."author_id" > "users"."id"
 Ref: "inquiry"."author_id" > "users"."id"
 Ref: "inquiry_inquiry_type"."inquiry_id" > "inquiry"."id"
 Ref: "inquiry_inquiry_type"."inquiry_type_id" > "inquiry_type"."id"
-Ref: "community"."author_id" > "users"."id"
-Ref: "community"."community_type_id" > "community_type"."id"
+Ref: "board"."author_id" > "users"."id"
+Ref: "board"."community_type_id" > "community_type"."id"
 Ref: "equipment_category"."id" < "equipment"."category_id"
 Ref: "equipment_model"."category_id" > "equipment_category"."id"
 Ref: "equipment"."model_id" > "equipment_model"."id"
