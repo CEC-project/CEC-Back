@@ -94,9 +94,8 @@ public class InquiryService {
     }
 
     @Transactional(readOnly = true)
-    public InquiryListResponse getMyInquiries(Long currentUserId, int page, int size, String sortBy, String sortDirection) {
-        Sort.Direction direction = Sort.Direction.fromOptionalString(sortDirection).orElse(Sort.Direction.DESC);
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(direction, sortBy)); //  0-based index
+    public InquiryListResponse getMyInquiries(Long currentUserId, InquiryListRequest request) {
+        Pageable pageable = request.toPageable();
 
         Page<Inquiry> inquiries = inquiryRepository.findAllByAuthorId(currentUserId, pageable);
 

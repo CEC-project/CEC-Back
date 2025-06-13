@@ -4,7 +4,10 @@ import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
 import com.backend.server.model.entity.enums.Status;
-
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
 import org.springframework.data.repository.query.Param;
 
@@ -25,22 +28,12 @@ import java.util.Optional;
 
 @Repository
 public interface EquipmentRepository extends JpaRepository<Equipment, Long>, JpaSpecificationExecutor<Equipment> {
-    //Long countByEquipmentModel_Id(Long id);
-    // List<Equipment> findByCategoryId(Long categoryId);
-    // List<Equipment> findByRenterId(Integer renterId);
-    // List<Equipment> findByManagerName(String managerName);
-    // List<Equipment> findByRentalStatus(Status rentalStatus);
-    // Integer countByRentalStatus(Status rentalStatus);
-    // List<Equipment> findByRentalStatusAndName(Status status, String name);
-    Long countByEquipmentModel_Id(Long modelId);
-    Optional<User> findByRenterId(Long renterId);
 
-    Long countBySerialNumberStartingWith(String prefix);
+    Long countByEquipmentModel_Id(Long modelId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT e FROM Equipment e WHERE e.id = :id")
     Optional<Equipment> findByIdForUpdate(@Param("id") Long id);
-    
 
 
     // 수업 생성시 장비 대여 가능 여부 확인
@@ -124,5 +117,6 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     List<Equipment> findBySerialNumberStartingWith(String serialNumber);
 
     int countByRenterAndEquipmentCategoryAndStatusIn(User renter, EquipmentCategory category, List<Status> statusList);
-
+    @EntityGraph(attributePaths = {"equipmentModel", "equipmentCategory", "renter"})
+    Page<Equipment> findAll(Specification<Equipment> spec, Pageable pageable);
 }
