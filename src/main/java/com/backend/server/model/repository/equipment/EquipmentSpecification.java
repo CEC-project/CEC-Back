@@ -22,27 +22,6 @@ import java.util.List;
 import static com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest.Status.CANCELABLE;
 
 public class EquipmentSpecification {
-
-    public static <T extends PageableRequest> Pageable getPageable(T request) {
-        int page = request.getPage() != null ? request.getPage() : 0;
-        int size = request.getSize() != null ? request.getSize() : 17;
-        String sortBy = StringUtils.hasText(request.getSortBy()) ? request.getSortBy() : "id";
-
-        String rawDirection = StringUtils.hasText(request.getSortDirection())
-                ? request.getSortDirection()
-                : "DESC";
-
-        // 안전하게 enum으로 변환. 잘못된 값이면 DESC로 폴백
-        Sort.Direction direction;
-        try {
-            direction = Sort.Direction.fromString(rawDirection);
-        } catch (IllegalArgumentException ex) {
-            direction = Sort.Direction.DESC;
-        }
-
-        return PageRequest.of(page, size, Sort.by(direction, sortBy));
-    }
-
     public static Specification<Equipment> adminFilterEquipments(AdminEquipmentListRequest request) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -117,34 +96,30 @@ public class EquipmentSpecification {
                 predicates.add(cb.equal(root.get("equipmentCategory").get("id"), request.getCategoryId()));
             }
 
-            String keyword = request.getSearchKeyword();
-            EquipmentListRequest.SearchType searchType = request.getSearchType() != null
-                    ? request.getSearchType()
-                    : EquipmentListRequest.SearchType.ALL;
+            if (StringUtils.hasText(request.getSearchKeyword())) {
+                String keyword = "%" + request.getSearchKeyword().toLowerCase() + "%";
+                EquipmentListRequest.SearchType type = request.getSearchType() != null
+                        ? request.getSearchType()
+                        : EquipmentListRequest.SearchType.ALL;
 
-            if (StringUtils.hasText(keyword)) {
-                String likeKeyword = "%" + keyword.toLowerCase() + "%";
+                Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
 
-                switch (searchType) {
-                    case MODEL_NAME -> predicates.add(cb.like(cb.lower(root.get("equipmentModel").get("name")), likeKeyword));
-                    case CATEGORY_NAME -> predicates.add(cb.like(cb.lower(root.get("equipmentCategory").get("name")), likeKeyword));
-                    case RENTER_NAME -> {
-                        Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
-                        predicates.add(cb.and(
-                                cb.isNotNull(renter.get("name")),
-                                cb.like(cb.lower(renter.get("name")), likeKeyword)
-                        ));
-                    }
+                switch (type) {
+                    case MODEL_NAME -> predicates.add(
+                            cb.like(cb.lower(root.get("equipmentModel").get("name")), keyword));
+                    case RENTER_NAME -> predicates.add(cb.and(
+                            cb.isNotNull(renter.get("name")),
+                            cb.like(cb.lower(renter.get("name")), keyword)));
+                    case CATEGORY_NAME -> predicates.add(cb.like(
+                            cb.lower(root.get("equipmentCategory").get("name")), keyword));
                     case ALL -> {
-                        List<Predicate> keywordPredicates = new ArrayList<>();
-                        keywordPredicates.add(cb.like(cb.lower(root.get("equipmentModel").get("name")), likeKeyword));
-                        keywordPredicates.add(cb.like(cb.lower(root.get("equipmentCategory").get("name")), likeKeyword));
-                        Join<Equipment, User> renter = root.join("renter", JoinType.LEFT);
-                        keywordPredicates.add(cb.and(
+                        Predicate modelNamePredicate = cb.like(cb.lower(root.get("equipmentModel").get("name")), keyword);
+                        Predicate renterNamePredicate = cb.and(
                                 cb.isNotNull(renter.get("name")),
-                                cb.like(cb.lower(renter.get("name")), likeKeyword)
-                        ));
-                        predicates.add(cb.or(keywordPredicates.toArray(new Predicate[0])));
+                                cb.like(cb.lower(renter.get("name")), keyword));
+                        Predicate categoryNamePredicate = cb.like(cb.lower(root.get("equipmentCategory").get("name")), keyword);
+
+                        predicates.add(cb.or(modelNamePredicate, renterNamePredicate, categoryNamePredicate));
                     }
                 }
             }
@@ -164,7 +139,9 @@ public class EquipmentSpecification {
 
             // 대여 제한 학년이 걸리는 장비는 조회 제외
             if (userGrade != null) {
-                predicates.add(cb.not(cb.like(root.get("restrictionGrade"), "%" + userGrade + "%")));
+                Predicate restrictionIsNull = cb.isNull(root.get("restrictionGrade"));
+                Predicate notRestricted = cb.not(cb.like(root.get("restrictionGrade"), "%" + userGrade + "%"));
+                predicates.add(cb.or(restrictionIsNull, notRestricted));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));

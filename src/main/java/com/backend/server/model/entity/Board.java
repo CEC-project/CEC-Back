@@ -1,21 +1,12 @@
 package com.backend.server.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
@@ -28,16 +19,38 @@ public class Board extends BaseTimeEntity{
     private String title;
 
     @Column(nullable = false)
-    private String content;
+    private String nickname;
 
-    @Column
-    private String attachmentUrl;  // 첨부파일 URL
-
-    @ManyToOne
-    @JoinColumn(name = "author_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User author;
 
-    @ManyToOne
-    @JoinColumn(name = "board_category_id")
+    @Column
+    private int recommend;
+
+    @Column
+    private int view;
+
+//    @Column
+//    private String type;
+//
+//    @Column
+//    private Long typeId;
+//    @Enumerated(EnumType.STRING)
+//    @Column(nullable = false)
+//    private CommunityType communityType;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String content;
+
+    @Column(name = "attachment_url")
+    private String attachmentUrl;  // 첨부파일 URL
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_category_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private BoardCategory boardCategory;
+
+    public void increaseViewCount() {
+        this.view++;
+    }
 }

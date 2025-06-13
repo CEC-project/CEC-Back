@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.data.domain.Pageable;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

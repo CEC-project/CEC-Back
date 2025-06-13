@@ -34,5 +34,5 @@ public class BoardCategory extends BaseTimeEntity{
 
     @Builder.Default
     @OneToMany(mappedBy = "boardCategory", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Community> posts = new ArrayList<>();
+    private List<Board> posts = new ArrayList<>();
 }

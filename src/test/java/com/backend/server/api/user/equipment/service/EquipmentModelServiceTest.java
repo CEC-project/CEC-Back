@@ -2,7 +2,6 @@ package com.backend.server.api.user.equipment.service;
 
 import com.backend.server.api.user.equipment.dto.model.EquipmentModelListRequest;
 import com.backend.server.api.user.equipment.dto.model.EquipmentModelListResponse;
-import com.backend.server.model.entity.Category;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
 import com.backend.server.model.entity.equipment.EquipmentModel;
 import com.backend.server.model.repository.equipment.EquipmentModelRepository;

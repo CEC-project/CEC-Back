@@ -54,10 +54,10 @@ public class AdminEquipmentService {
                 .collect(Collectors.toList());
     }
 
-    // 시리얼 넘버를 생성하는 공통 로직 (모델 그룹 인덱스 및 동적 자릿수 포함)
-    private String generateUniqueSerialNumber(EquipmentCategory category, EquipmentModel model, long currentCount) {
-        // 카테고리 영문코드 3자리 (3자리 미만이면 _로 채움)
+    private String generateSerialPrefix(EquipmentCategory category, EquipmentModel model) {
         String prefixCategoryCode;
+        String prefixEquipmentModelCode;
+
         String categoryCode = category.getEnglishCode().toUpperCase();
         if (categoryCode.length() < 3) {
             prefixCategoryCode = String.format("%3s", categoryCode).replace(' ', '_');
@@ -65,49 +65,67 @@ public class AdminEquipmentService {
             prefixCategoryCode = categoryCode.substring(0, 3);
         }
 
-        // 모델 영문 코드 3자리 (3자리 미만이면 _로 채움)
-        String prefixModelEnglishCode;
-        String modelEnglishCode = model.getEnglishCode().toUpperCase();
-        if (modelEnglishCode.length() < 3) {
-            prefixModelEnglishCode = String.format("%3s", modelEnglishCode).replace(' ', '_');
+        String modelCode = model.getEnglishCode().toUpperCase();
+        if (modelCode.length() < 3) {
+            prefixEquipmentModelCode = String.format("%3s", modelCode).replace(' ', '_');
         } else {
-            prefixModelEnglishCode = modelEnglishCode.substring(0, 3);
+            prefixEquipmentModelCode = modelCode.substring(0, 3);
         }
 
-        // 모델 그룹 인덱스 (EquipmentModel 엔티티에 modelGroupIndex 필드가 있다고 가정)
-        // modelGroupIndex가 null일 경우를 대비하여 0으로 처리 (일반적으로는 모델 생성 시 부여되므로 null이 아니어야 함)
-        String modelGroupIndexStr = String.format("%02d", Optional.ofNullable(model.getModelGroupIndex()).orElse(0)); // 2자리로 고정
+        // 모델 그룹 인덱스 (01~99 형식, 2자리로 고정)
+        // modelGroupIndex는 EquipmentModel 엔티티에 존재한다고 가정
+        String modelGroupIndexPart = String.format("%02d", model.getModelGroupIndex());
 
-        // 날짜 구성: yyMM (현재 2025년 6월 12일 -> 2506)
-        String datePrefix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMM"));
+        // 접두사 구성: 카테고리3 + 모델3 + 모델그룹인덱스2 + 날짜4 = 총 12자리
+        String prefix = prefixCategoryCode + prefixEquipmentModelCode + modelGroupIndexPart; // e.g., CAMSON01
 
-        // 시퀀스 번호 자릿수 동적 결정
-        String sequenceFormat;
-        if (currentCount < 9) { // 0 ~ 9
-            sequenceFormat = "%01d"; // 1자리
-        } else if (currentCount < 99) { // 10 ~ 99
-            sequenceFormat = "%02d"; // 2자리
-        } else if (currentCount < 999) { // 100 ~ 999
-            sequenceFormat = "%03d"; // 3자리
-        } else if (currentCount < 9999) { // 1000 ~ 9999
-            sequenceFormat = "%04d"; // 4자리
-        } else {
-            // 9999를 초과하는 경우 5자리 이상으로 확장. 필요에 따라 더 많은 자릿수를 정의하거나,
-            // 시리얼 넘버 길이 제한이 있다면 예외 처리 등을 고려할 수 있습니다.
-            sequenceFormat = "%05d"; // 예를 들어 5자리까지 확장
-        }
+        // 날짜 구성: yyMM (현재 시간 기준)
+        String datePrefix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMM")); // e.g., 2506
 
-        String sequence = String.format(sequenceFormat, currentCount + 1); // currentCount는 0부터 시작하므로 +1
-
-        // 최종 시리얼 넘버 조합
-        // 예: CAMCAN01250601 (카테고리3 + 모델영문3 + 모델그룹2 + 날짜4 + 시퀀스2 = 총 14자리)
-        // 예: _CA_A_01250601 (카테고리3 + 모델영문3 + 모델그룹2 + 날짜4 + 시퀀스2 = 총 14자리)
-        return prefixCategoryCode + prefixModelEnglishCode + modelGroupIndexStr + datePrefix + sequence;
+        return prefix + datePrefix; // e.g., CAMSON012506
     }
 
+    /**
+     * 시리얼 넘버의 전체를 생성합니다. (접두사 + 동적 자릿수 시퀀스)
+     *
+     * @param category 장비 카테고리 엔티티
+     * @param model    장비 모델 엔티티
+     * @param currentCount 현재까지 해당 접두사로 생성된 가장 큰 시퀀스 번호
+     * @return 생성된 최종 시리얼 넘버 (예: CAMSON01250601, CAMSON012506100, CAMSON0125061000)
+     */
+    private String generateUniqueSerialNumber(EquipmentCategory category, EquipmentModel model, long currentCount) {
+        String serialPrefix = generateSerialPrefix(category, model); // 새로운 접두사 생성 메소드 사용
 
-    // 단일 시리얼 넘버를 미리 생성하여 반환
-    @Transactional(readOnly = true) // 읽기 전용 트랜잭션
+        String sequenceFormat;
+        if (currentCount < 9) { // 0 ~ 9 (다음 번호가 1~10일 때)
+            sequenceFormat = "%02d"; // 01 ~ 10
+        } else if (currentCount < 99) { // 10 ~ 99 (다음 번호가 100~999일 때)
+            sequenceFormat = "%03d"; // 100 ~ 999
+        } else if (currentCount < 999) { // 100 ~ 999 (다음 번호가 1000~9999일 때)
+            sequenceFormat = "%04d"; // 1000 ~ 9999
+        } else if (currentCount < 9999) { // 1000 ~ 9999 (다음 번호가 10000~99999일 때)
+            sequenceFormat = "%05d"; // 10000 ~ 99999
+        } else {
+            sequenceFormat = "%06d"; // 필요에 따라 더 확장
+        }
+
+        String sequence = String.format(sequenceFormat, currentCount + 1);
+
+        // 최종 시리얼 넘버 (총 길이 가변)
+        // CAMSON012506 + 01 = 14자리 (CAMSON01250601)
+        // CAMSON012506 + 100 = 15자리 (CAMSON012506100)
+        return serialPrefix + sequence;
+    }
+
+    /**
+     * 장비 등록 전 시리얼 넘버를 미리보거나 단일 시리얼 넘버를 생성하는 메소드.
+     * 트랜잭션 없이 읽기 전용으로 동작.
+     *
+     * @param request 시리얼 넘버 생성 요청 DTO
+     * @return 생성될 다음 시리얼 넘버 문자열
+     * @throws RuntimeException 카테고리 또는 모델을 찾을 수 없는 경우
+     */
+    @Transactional(readOnly = true)
     public String generateSerialNumber(AdminEquipmentSerialNumberGenerateRequest request) {
         EquipmentCategory category = equipmentCategoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("카테고리 없음"));
@@ -115,50 +133,42 @@ public class AdminEquipmentService {
         EquipmentModel model = equipmentModelRepository.findById(request.getModelId())
                 .orElseThrow(() -> new RuntimeException("모델 없음"));
 
-        // generateUniqueSerialNumber가 사용하는 접두사를 계산
-        String prefixCategoryCode;
-        String categoryCode = category.getEnglishCode().toUpperCase();
-        if (categoryCode.length() < 3) {
-            prefixCategoryCode = String.format("%3s", categoryCode).replace(' ', '_');
-        } else {
-            prefixCategoryCode = categoryCode.substring(0, 3);
-        }
+        String serialPrefix = generateSerialPrefix(category, model); // 새로운 접두사 생성 메소드 사용
 
-        String prefixModelEnglishCode;
-        String modelEnglishCode = model.getEnglishCode().toUpperCase();
-        if (modelEnglishCode.length() < 3) {
-            prefixModelEnglishCode = String.format("%3s", modelEnglishCode).replace(' ', '_');
-        } else {
-            prefixModelEnglishCode = modelEnglishCode.substring(0, 3);
-        }
-
-        String modelGroupIndexStr = String.format("%02d", Optional.ofNullable(model.getModelGroupIndex()).orElse(0));
-        String datePrefix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMM"));
-
-        // 쿼리용 시리얼 접두사 (시퀀스 부분을 제외한 고정 부분)
-        String serialPrefixForQuery = prefixCategoryCode + prefixModelEnglishCode + modelGroupIndexStr + datePrefix;
-
-        // 현재 이 접두사로 시작하는 가장 큰 시리얼 넘버를 가져와서 시퀀스를 파악
-        Optional<String> latestSerialNumberOpt = equipmentRepository.findTopBySerialNumberStartingWithOrderBySerialNumberDesc(serialPrefixForQuery);
         long currentMaxSequence = 0;
-        if (latestSerialNumberOpt.isPresent()) {
-            String latestSerialNumber = latestSerialNumberOpt.get();
-            try {
-                // 접두사를 제외한 나머지 부분이 시퀀스 번호
-                currentMaxSequence = Long.parseLong(latestSerialNumber.substring(serialPrefixForQuery.length()));
-            } catch (NumberFormatException e) {
-                // 시리얼 넘버 뒷부분이 숫자가 아닌 경우 (예외 상황)
-                System.err.println("Error parsing sequence number from " + latestSerialNumber + ": " + e.getMessage());
-                currentMaxSequence = 0; // 파싱 실패 시 0부터 다시 시작 (또는 다른 에러 처리)
-            }
+
+        List<Equipment> existingEquipments = equipmentRepository.findBySerialNumberStartingWith(serialPrefix);
+        List<String> existingSerialNumbers = existingEquipments.stream()
+                .map(Equipment::getSerialNumber)
+                .collect(Collectors.toList());
+
+        if (!existingSerialNumbers.isEmpty()) {
+            currentMaxSequence = existingSerialNumbers.stream()
+                    .map(sn -> {
+                        try {
+                            String sequencePart = sn.substring(serialPrefix.length());
+                            return Long.parseLong(sequencePart);
+                        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                            System.err.println("Error parsing sequence number for preview: " + sn + " with prefix: " + serialPrefix + " - " + e.getMessage());
+                            return 0L;
+                        }
+                    })
+                    .max(Long::compare)
+                    .orElse(0L);
         }
 
-        // 다음 시리얼 넘버를 생성
         return generateUniqueSerialNumber(category, model, currentMaxSequence);
     }
 
-    // 장비를 실제로 생성하는 메소드 (createEquipment)
-    @Transactional // 트랜잭션 적용
+
+    /**
+     * 여러 개의 장비를 생성하고 저장하는 메소드.
+     *
+     * @param request 장비 생성 요청 DTO
+     * @return 저장된 장비들의 ID 리스트
+     * @throws RuntimeException 카테고리, 모델을 찾을 수 없거나 시리얼 넘버 중복 발생 시
+     */
+    @Transactional
     public List<Long> createEquipment(AdminEquipmentCreateRequest request) {
         EquipmentCategory category = equipmentCategoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("카테고리 없음"));
@@ -166,57 +176,34 @@ public class AdminEquipmentService {
         EquipmentModel model = equipmentModelRepository.findById(request.getModelId())
                 .orElseThrow(() -> new RuntimeException("모델 없음"));
 
-        // generateUniqueSerialNumber가 사용하는 접두사를 계산
-        String prefixCategoryCode;
-        String categoryCode = category.getEnglishCode().toUpperCase();
-        if (categoryCode.length() < 3) {
-            prefixCategoryCode = String.format("%3s", categoryCode).replace(' ', '_');
-        } else {
-            prefixCategoryCode = categoryCode.substring(0, 3);
-        }
+        String serialPrefix = generateSerialPrefix(category, model); // 새로운 접두사 생성 메소드 사용
 
-        String prefixModelEnglishCode;
-        String modelEnglishCode = model.getEnglishCode().toUpperCase();
-        if (modelEnglishCode.length() < 3) {
-            prefixModelEnglishCode = String.format("%3s", modelEnglishCode).replace(' ', '_');
-        } else {
-            prefixModelEnglishCode = modelEnglishCode.substring(0, 3);
-        }
-
-        String modelGroupIndexStr = String.format("%02d", Optional.ofNullable(model.getModelGroupIndex()).orElse(0));
-        String datePrefix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMM"));
-
-        // 쿼리용 시리얼 접두사 (시퀀스 부분을 제외한 고정 부분)
-        String serialPrefixForQuery = prefixCategoryCode + prefixModelEnglishCode + modelGroupIndexStr + datePrefix;
-
-        // 트랜잭션 내에서 가장 최신 시퀀스 번호를 가져와서 동시성 문제 완화
-        // findTopBySerialNumberStartingWithOrderBySerialNumberDesc 쿼리가 필요
-        Optional<String> latestSerialNumberOpt = equipmentRepository.findTopBySerialNumberStartingWithOrderBySerialNumberDesc(serialPrefixForQuery);
         long currentMaxSequence = 0;
-        if (latestSerialNumberOpt.isPresent()) {
-            String latestSerialNumber = latestSerialNumberOpt.get();
-            try {
-                // 접두사를 제외한 나머지 부분이 시퀀스 번호
-                currentMaxSequence = Long.parseLong(latestSerialNumber.substring(serialPrefixForQuery.length()));
-            } catch (NumberFormatException e) {
-                System.err.println("Error parsing sequence number from " + latestSerialNumber + ": " + e.getMessage());
-                currentMaxSequence = 0;
-            }
+
+        List<Equipment> existingEquipments = equipmentRepository.findBySerialNumberStartingWith(serialPrefix);
+        List<String> existingSerialNumbers = existingEquipments.stream()
+                .map(Equipment::getSerialNumber)
+                .collect(Collectors.toList());
+
+        if (!existingSerialNumbers.isEmpty()) {
+            currentMaxSequence = existingSerialNumbers.stream()
+                    .map(sn -> {
+                        try {
+                            String sequencePart = sn.substring(serialPrefix.length());
+                            return Long.parseLong(sequencePart);
+                        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                            System.err.println("Error parsing sequence number during creation: " + sn + " with prefix: " + serialPrefix + " - " + e.getMessage());
+                            return 0L;
+                        }
+                    })
+                    .max(Long::compare)
+                    .orElse(0L);
         }
 
         List<Long> savedEquipmentIds = new ArrayList<>();
 
         for (int i = 1; i <= request.getQuantity(); i++) {
-            // 각 장비마다 증가된 시퀀스 번호를 사용하여 시리얼 넘버 생성
-            // generateUniqueSerialNumber에 전달하는 currentCount는 0부터 시작하므로 (i-1)을 사용
             String serialNumber = generateUniqueSerialNumber(category, model, currentMaxSequence + (i - 1));
-
-            // DB unique 제약조건에 의해 에러 발생하기 전에 미리 확인 (선택 사항이지만 안전한 처리)
-            // 동시성 문제 발생 시 여기서 충돌 감지 및 예외 처리
-            if (equipmentRepository.findBySerialNumber(serialNumber).isPresent()) {
-                throw new RuntimeException("Generated serial number " + serialNumber + " already exists. Possible concurrency issue. Please retry.");
-            }
-
             Equipment equipment = request.toEntity(category, model, serialNumber);
             Equipment saved = equipmentRepository.save(equipment);
             savedEquipmentIds.add(saved.getId());

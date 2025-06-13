@@ -2,7 +2,7 @@ package com.backend.server.api.admin.community.dto;
 
 import com.backend.server.api.common.dto.AdminAuthorResponse;
 import com.backend.server.api.common.dto.BoardResponse;
-import com.backend.server.model.entity.Community;
+import com.backend.server.model.entity.Board;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,15 +22,15 @@ public class AdminCommunityResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public AdminCommunityResponse(Community community) {
-        this.id = community.getId();
-        this.title = community.getTitle();
-        this.author = community.getAuthor() == null ? null : AdminAuthorResponse.from(community.getAuthor());
-        this.recommend = community.getRecommend();
-        this.view = community.getView();
-        this.board = BoardResponse.from(community.getBoardCategory());
-        this.content = community.getContent();
-        this.createdAt = community.getCreatedAt();
-        this.updatedAt = community.getUpdatedAt();
+    public AdminCommunityResponse(Board board) {
+        this.id = board.getId();
+        this.title = board.getTitle();
+        this.author = board.getAuthor() == null ? null : AdminAuthorResponse.from(board.getAuthor());
+        this.recommend = board.getRecommend();
+        this.view = board.getView();
+        this.board = BoardResponse.from(board.getBoardCategory());
+        this.content = board.getContent();
+        this.createdAt = board.getCreatedAt();
+        this.updatedAt = board.getUpdatedAt();
     }
 }

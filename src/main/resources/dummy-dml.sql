@@ -396,7 +396,7 @@ values
     (now(), now(), '개선사항 ㄱㄱ링.', '개선사항 요구 게시판');
 
 -- 게시판
-INSERT INTO community
+INSERT INTO board
 ( title, nickname, author_id, recommend, view, content, board_category_id, created_at, updated_at )
 VALUES
     (

@@ -3,8 +3,8 @@ package com.backend.server.api.admin.community.service;
 import com.backend.server.api.admin.community.dto.AdminCommunityListRequest;
 import com.backend.server.api.admin.community.dto.AdminCommunityListResponse;
 import com.backend.server.api.admin.community.dto.AdminCommunityResponse;
-import com.backend.server.model.entity.Community;
-import com.backend.server.model.repository.CommunityRepository;
+import com.backend.server.model.entity.Board;
+import com.backend.server.model.repository.BoardRepository;
 import com.backend.server.model.repository.CommunitySpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,28 +18,28 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AdminCommunityService {
 
-    private final CommunityRepository communityRepository;
+    private final BoardRepository boardRepository;
 
     public AdminCommunityListResponse getCommunityPosts(AdminCommunityListRequest request) {
         Pageable pageable = request.toPageable();
 
-        Specification<Community> spec = CommunitySpecification.filterCommunities(request);
+        Specification<Board> spec = CommunitySpecification.filterCommunities(request);
 
-        Page<Community> page = communityRepository.findAll(spec, pageable);
+        Page<Board> page = boardRepository.findAll(spec, pageable);
 
         return new AdminCommunityListResponse(page);
     }
 
     public AdminCommunityResponse getCommunityPost(Long id) {
-        Community community = communityRepository.findById(id)
+        Board board = boardRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
 
-        community.increaseViewCount();
+        board.increaseViewCount();
 
-        return new AdminCommunityResponse(community);
+        return new AdminCommunityResponse(board);
     }
 
     public void deleteCommunityPost(Long id) {
-        communityRepository.deleteById(id);
+        boardRepository.deleteById(id);
     }
 }
