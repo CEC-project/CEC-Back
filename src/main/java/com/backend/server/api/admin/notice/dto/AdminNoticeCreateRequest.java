@@ -30,7 +30,7 @@ public class AdminNoticeCreateRequest {
   @NotNull(message = "공지사항 중요도는 필수 입력 항목입니다.")
   private Boolean important;
 
-  @Schema(description = "첨부파일 URL (첨부파일 경로)", example = "images/exam_day.jpg")
+  @Schema(description = "첨부파일 URL (첨부파일 경로)")
   private List<String> attachments;
 
   public Notice toEntity(User author) {
