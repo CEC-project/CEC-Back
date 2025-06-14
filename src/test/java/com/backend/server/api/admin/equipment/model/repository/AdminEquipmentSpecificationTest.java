@@ -7,7 +7,7 @@ import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
 import com.backend.server.model.entity.equipment.EquipmentModel;
-import com.backend.server.model.repository.UserRepository;
+import com.backend.server.model.repository.user.UserRepository;
 import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
 import com.backend.server.model.repository.equipment.EquipmentModelRepository;
 import com.backend.server.model.repository.equipment.EquipmentRepository;

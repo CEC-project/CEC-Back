@@ -4,7 +4,7 @@ import com.backend.server.api.admin.inquiry.dto.AdminInquiryListRequest;
 import com.backend.server.api.admin.user.dto.AdminUserListRequest;
 import com.backend.server.model.entity.Inquiry;
 import com.backend.server.model.entity.User;
-import com.backend.server.model.repository.UserSpecification;
+import com.backend.server.model.repository.user.UserSpecification;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;

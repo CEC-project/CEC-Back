@@ -1,4 +1,4 @@
-package com.backend.server.model.repository;
+package com.backend.server.model.repository.notice;
 
 import com.backend.server.model.entity.Notice;
 import org.springframework.data.jpa.repository.JpaRepository;

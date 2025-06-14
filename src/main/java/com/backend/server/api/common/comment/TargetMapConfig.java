@@ -1,9 +1,9 @@
 package com.backend.server.api.common.comment;
 
 import com.backend.server.model.entity.enums.TargetType;
-import com.backend.server.model.repository.BoardRepository;
+import com.backend.server.model.repository.board.BoardRepository;
 import com.backend.server.model.repository.inquiry.InquiryRepository;
-import com.backend.server.model.repository.NoticeRepository;
+import com.backend.server.model.repository.notice.NoticeRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.JpaRepository;

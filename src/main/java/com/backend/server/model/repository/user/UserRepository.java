@@ -1,4 +1,4 @@
-package com.backend.server.model.repository;
+package com.backend.server.model.repository.user;
 
 import java.util.Collection;
 import java.util.List;

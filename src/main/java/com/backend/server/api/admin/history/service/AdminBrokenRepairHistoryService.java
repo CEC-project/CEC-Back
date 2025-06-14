@@ -1,15 +1,11 @@
 package com.backend.server.api.admin.history.service;
 
-import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentListResponse;
-import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipmentResponse;
 import com.backend.server.api.admin.history.dto.AdminBrokenRepairHistoryListResponse;
 import com.backend.server.api.admin.history.dto.AdminBrokenRepairHistoryRequest;
 import com.backend.server.api.admin.history.dto.AdminBrokenRepairHistoryResponse;
 import com.backend.server.model.entity.BrokenRepairHistory;
-import com.backend.server.model.entity.equipment.Equipment;
-import com.backend.server.model.repository.BrokenRepairHistoryRepository;
-import com.backend.server.model.repository.BrokenRepairHistorySpecification;
-import com.backend.server.model.repository.equipment.EquipmentSpecification;
+import com.backend.server.model.repository.history.BrokenRepairHistoryRepository;
+import com.backend.server.model.repository.history.BrokenRepairHistorySpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

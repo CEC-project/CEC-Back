@@ -5,7 +5,7 @@ import com.backend.server.api.common.auth.dto.CommonSignInRequest;
 import com.backend.server.api.common.auth.dto.CommonSignInResponse;
 import com.backend.server.config.security.JwtUtil;
 import com.backend.server.model.entity.User;
-import com.backend.server.model.repository.UserRepository;
+import com.backend.server.model.repository.user.UserRepository;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;

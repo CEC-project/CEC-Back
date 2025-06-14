@@ -4,7 +4,7 @@ import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Role;
-import com.backend.server.model.repository.UserRepository;
+import com.backend.server.model.repository.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

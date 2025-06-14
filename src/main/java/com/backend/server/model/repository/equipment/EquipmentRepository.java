@@ -4,7 +4,10 @@ import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
 import com.backend.server.model.entity.enums.Status;
-
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
 import org.springframework.data.repository.query.Param;
 
@@ -25,69 +28,63 @@ import java.util.Optional;
 
 @Repository
 public interface EquipmentRepository extends JpaRepository<Equipment, Long>, JpaSpecificationExecutor<Equipment> {
-    Long countByEquipmentModel_Id(Long modelId);
 
-    Long countBySerialNumberStartingWith(String prefix);
+    Long countByEquipmentModel_Id(Long modelId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT e FROM Equipment e WHERE e.id = :id")
     Optional<Equipment> findByIdForUpdate(@Param("id") Long id);
 
+
     // 수업 생성시 장비 대여 가능 여부 확인
     @Query("SELECT COUNT(e.id) = :size "
             + "FROM Equipment e "
-            + "WHERE e.id IN :ids AND e.status = :availableStatus")
-    boolean isAvailableAllByScheduleAndIds(@Param("ids") List<Long> ids, @Param("size") long size,
-            @Param("availableStatus") Status availableStatus);
+            + "WHERE e.id IN :ids AND e.status = :status")
+    boolean isAvailableAllByIdIn(@Param("ids") List<Long> ids, @Param("size") long size,
+            @Param("status") Status status);
 
     // 수업 수정시 장비 대여 가능 여부 확인
     @Query("SELECT COUNT(e.id) = :size "
             + "FROM Equipment e "
             + "LEFT JOIN e.semesterSchedule ss "
             + "WHERE e.id IN :ids AND ("
-            + "    e.status = :availableStatus OR "
+            + "    e.status = :status OR "
             + "    ss = :schedule"
             + ")")
-    boolean isAvailableAllByScheduleAndIds(@Param("ids") List<Long> ids, @Param("size") long size,
-            @Param("schedule") SemesterSchedule schedule, @Param("availableStatus") Status availableStatus);
+    boolean isAvailableAllByIdIn(@Param("ids") List<Long> ids, @Param("size") long size,
+            @Param("schedule") SemesterSchedule schedule, @Param("status") Status status);
 
     // 수업에 필요한 장비 대여
     @Modifying
     @Query("UPDATE Equipment e SET "
-            + "e.status = :inUseStatus, "
+            + "e.status = :status, "
             + "e.startRentTime = :start, "
             + "e.endRentTime = :end, "
             + "e.semesterSchedule = :schedule "
             + "WHERE e.id IN :ids")
-    void rentByScheduleAndIds(
+    void rentByIds(
             @Param("ids") List<Long> ids,
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end,
             @Param("schedule") SemesterSchedule schedule,
-            @Param("inUseStatus") Status inUseStatus
+            @Param("status") Status status
     );
-
-    // 수업 수정시 대여 취소시킬 장비 목록
-    // 조건1. 현재 수업에서 이미 대여중이던 장비인가?
-    // 조건2. 현재 대여할 장비 목록에 없는가?
-    @Query("""
-    SELECT e
-    FROM Equipment e
-    WHERE e.semesterSchedule = :schedule
-    AND e.id IN :equipments""")
-    List<Equipment> findByScheduleAndNotInIds(
-            @Param("schedule") SemesterSchedule schedule,
-            @Param("equipments") List<Long> equipments);
 
     // 수업에 필요한 장비 대여 취소
     @Modifying
     @Query("UPDATE Equipment e SET "
-            + "e.status = :availableStatus, "
+            + "e.status = :status, "
             + "e.startRentTime = null, "
             + "e.endRentTime = null, "
             + "e.semesterSchedule = null "
             + "WHERE e IN :equipments")
-    void cancelRentByIds(List<Equipment> equipments, Status availableStatus);
+    void cancelRent(List<Equipment> equipments, Status status);
+
+    //관리자 장비 상태 다중 업데이트
+    @Modifying
+    @Query("UPDATE Equipment e SET e.status = :status WHERE e.id IN :ids")
+    void bulkUpdateStatus(@Param("status") String status, @Param("ids") List<Long> ids);
+
 
     @Modifying
     @Transactional
@@ -95,6 +92,7 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     void updateStatusByStartRentTimeBefore(@Param("targetStatus") Status targetStatus,
                                            @Param("newStatus") Status newStatus,
                                            @Param("now") LocalDateTime now);
+
 
     @Modifying
     @Transactional
@@ -119,5 +117,6 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     List<Equipment> findBySerialNumberStartingWith(String serialNumber);
 
     int countByRenterAndEquipmentCategoryAndStatusIn(User renter, EquipmentCategory category, List<Status> statusList);
-
+    @EntityGraph(attributePaths = {"equipmentModel", "equipmentCategory", "renter"})
+    Page<Equipment> findAll(Specification<Equipment> spec, Pageable pageable);
 }

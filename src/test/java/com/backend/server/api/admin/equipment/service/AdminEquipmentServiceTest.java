@@ -3,7 +3,6 @@ package com.backend.server.api.admin.equipment.service;
 
 import com.backend.server.api.admin.equipment.dto.equipment.request.*;
 import com.backend.server.api.admin.equipment.dto.equipment.response.*;
-import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.service.CommonNotificationService;
 import com.backend.server.model.entity.*;
 import com.backend.server.model.entity.enums.Role;
@@ -11,14 +10,13 @@ import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
 import com.backend.server.model.entity.equipment.EquipmentModel;
-import com.backend.server.model.repository.UserRepository;
+import com.backend.server.model.repository.user.UserRepository;
 import com.backend.server.model.repository.equipment.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;

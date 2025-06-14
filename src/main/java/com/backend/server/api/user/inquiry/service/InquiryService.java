@@ -8,7 +8,7 @@ import com.backend.server.model.entity.Inquiry;
 import com.backend.server.model.entity.InquiryAnswer;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.inquiry.InquiryRepository;
-import com.backend.server.model.repository.UserRepository;
+import com.backend.server.model.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -94,9 +94,8 @@ public class InquiryService {
     }
 
     @Transactional(readOnly = true)
-    public InquiryListResponse getMyInquiries(Long currentUserId, int page, int size, String sortBy, String sortDirection) {
-        Sort.Direction direction = Sort.Direction.fromOptionalString(sortDirection).orElse(Sort.Direction.DESC);
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(direction, sortBy)); //  0-based index
+    public InquiryListResponse getMyInquiries(Long currentUserId, InquiryListRequest request) {
+        Pageable pageable = request.toPageable();
 
         Page<Inquiry> inquiries = inquiryRepository.findAllByAuthorId(currentUserId, pageable);
 

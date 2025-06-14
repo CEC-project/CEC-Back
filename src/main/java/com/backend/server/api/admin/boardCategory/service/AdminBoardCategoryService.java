@@ -3,7 +3,7 @@ package com.backend.server.api.admin.boardCategory.service;
 import com.backend.server.api.admin.boardCategory.dto.AdminBoardCategoryRequest;
 import com.backend.server.api.admin.boardCategory.dto.AdminBoardCategoryResponse;
 import com.backend.server.model.entity.BoardCategory;
-import com.backend.server.model.repository.BoardCategoryRepository;
+import com.backend.server.model.repository.board.BoardCategoryRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

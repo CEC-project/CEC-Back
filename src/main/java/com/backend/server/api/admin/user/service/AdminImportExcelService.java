@@ -2,11 +2,10 @@ package com.backend.server.api.admin.user.service;
 
 import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.enums.Gender;
-import java.util.Optional;
 import com.backend.server.model.entity.enums.Role;
 import com.backend.server.model.entity.User;
-import com.backend.server.model.repository.ProfessorRepository;
-import com.backend.server.model.repository.UserRepository;
+import com.backend.server.model.repository.user.ProfessorRepository;
+import com.backend.server.model.repository.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;

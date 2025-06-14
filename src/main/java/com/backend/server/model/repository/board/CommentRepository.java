@@ -1,4 +1,4 @@
-package com.backend.server.model.repository;
+package com.backend.server.model.repository.board;
 
 import com.backend.server.model.entity.Comment;
 import com.backend.server.model.entity.enums.TargetType;

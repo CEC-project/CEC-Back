@@ -7,8 +7,7 @@ import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.classroom.Semester;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
 import com.backend.server.model.entity.enums.Status;
-import com.backend.server.model.entity.equipment.Equipment;
-import com.backend.server.model.repository.ProfessorRepository;
+import com.backend.server.model.repository.user.ProfessorRepository;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
 import com.backend.server.model.repository.classroom.SemesterRepository;
 import com.backend.server.model.repository.classroom.SemesterScheduleRepository;
@@ -59,19 +58,17 @@ public class AdminSemesterScheduleService {
         SemesterSchedule result = semesterScheduleRepository.save(schedule);
 
         List<Long> equipments = request.getEquipments();
-        if (equipments == null || equipments.isEmpty())
-            return result.getId();
+        if (equipments != null && !equipments.isEmpty()) {
+            if (!equipmentRepository.isAvailableAllByIdIn(equipments, equipments.size(), Status.AVAILABLE))
+                throw new IllegalArgumentException("장비 id 가 유효하지 않습니다");
 
-        if (!equipmentRepository.isAvailableAllByScheduleAndIds(equipments, equipments.size(), Status.AVAILABLE))
-            throw new IllegalArgumentException("장비 id 가 유효하지 않습니다");
-
-        // 수업에 필요한 장비를 대여합니다.
-        equipmentRepository.rentByScheduleAndIds(
-                equipments,
-                semester.getStartDate().atStartOfDay(),
-                semester.getEndDate().atStartOfDay(),
-                result,
-                Status.IN_USE);
+            equipmentRepository.rentByIds(
+                    equipments,
+                    semester.getStartDate().atStartOfDay(),
+                    semester.getEndDate().atStartOfDay(),
+                    result,
+                    Status.IN_USE);
+        }
 
         return result.getId();
     }
@@ -92,38 +89,34 @@ public class AdminSemesterScheduleService {
                 .startAt(request.getStartAt())
                 .endAt(request.getEndAt())
                 .build();
-        schedule = semesterScheduleRepository.save(schedule);
+        SemesterSchedule result = semesterScheduleRepository.save(schedule);
 
         Semester semester = semesterRepository.findById(schedule.getSemester().getId())
                 .orElseThrow(() -> new IllegalArgumentException("학기 id 가 유효하지 않습니다"));
 
         List<Long> equipments = request.getEquipments();
-        if (equipments == null || equipments.isEmpty())
-            return schedule.getId();
+        if (equipments != null && !equipments.isEmpty()) {
+            if (!equipmentRepository.isAvailableAllByIdIn(equipments, equipments.size(), schedule, Status.AVAILABLE))
+                throw new IllegalArgumentException("장비 id 가 유효하지 않습니다");
 
-        if (!equipmentRepository.isAvailableAllByScheduleAndIds(equipments, equipments.size(), schedule, Status.AVAILABLE))
-            throw new IllegalArgumentException("장비 id 가 유효하지 않습니다");
+            // 제외된 장비는 대여 취소하는 코드 필요
 
-        // 수업에 필요하지 않은 장비를 대여 취소합니다.
-        List<Equipment> equipmentsToCancel = equipmentRepository.findByScheduleAndNotInIds(schedule, equipments);
-        equipmentRepository.cancelRentByIds(equipmentsToCancel, Status.AVAILABLE);
+            equipmentRepository.rentByIds(
+                    equipments,
+                    semester.getStartDate().atStartOfDay(),
+                    semester.getEndDate().atStartOfDay(),
+                    result,
+                    Status.IN_USE);
+        }
 
-        // 수업에 필요한 장비를 대여합니다.
-        equipmentRepository.rentByScheduleAndIds(
-                equipments,
-                semester.getStartDate().atStartOfDay(),
-                semester.getEndDate().atStartOfDay(),
-                schedule,
-                Status.IN_USE);
-
-        return schedule.getId();
+        return result.getId();
     }
 
     @Transactional
     public void deleteSemesterSchedule(Long id) {
         SemesterSchedule schedule = semesterScheduleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("유효하지 않은 수업 시간표 id 입니다."));
-        equipmentRepository.cancelRentByIds(schedule.getEquipments(), Status.AVAILABLE);
+        equipmentRepository.cancelRent(schedule.getEquipments(), Status.AVAILABLE);
         semesterScheduleRepository.deleteById(id);
     }
 }

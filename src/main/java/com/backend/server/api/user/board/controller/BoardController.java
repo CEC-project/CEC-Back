@@ -50,12 +50,13 @@ public class BoardController {
 
     @GetMapping("/post")
     @Operation(summary = "게시글 목록 조회")
-    public ResponseEntity<BoardListResponse> getCommunityPosts(@ParameterObject CommunityListRequest request,
-                                                               @AuthenticationPrincipal LoginUser loginuser // 실제 환경에서 로그인 사용자 정보 주입 필요
+    public ApiResponse<BoardListResponse> getCommunityPosts(
+            @ParameterObject CommunityListRequest request,
+            @AuthenticationPrincipal LoginUser loginuser // 실제 환경에서 로그인 사용자 정보 주입 필요
     ) {
         // Service 레이어 호출 시 typeId 인자를 함께 전달합니다.
         BoardListResponse response = boardService.getPosts(loginuser, request);
-        return ResponseEntity.ok(response);
+        return ApiResponse.success("게시글 목록 조회 성공", response);
     }
 
     @GetMapping("/post/{id}")
