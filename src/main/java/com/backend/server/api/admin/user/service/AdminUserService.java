@@ -58,8 +58,14 @@ public class AdminUserService {
     @Transactional
     public Long resetUserPassword(Long id) {
         User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        user.toBuilder().password(passwordEncoder.encode(user.getStudentNumber()));
-        user = userRepository.save(user);
+        //밑에 toBuilder에서 build() 없었어요
+//        user.toBuilder().password(passwordEncoder.encode(user.getStudentNumber()));
+//        user = userRepository.save(user);
+
+        User updatedUser = user.toBuilder()
+                .password(passwordEncoder.encode(user.getStudentNumber()))
+                .build();
+        user = userRepository.save(updatedUser);
         return user.getId();
     }
 
