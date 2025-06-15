@@ -1,11 +1,11 @@
 package com.backend.server.api.user.board.service;
 
 import com.backend.server.api.admin.community.dto.CommunityListRequest;
+import com.backend.server.api.common.dto.BoardResponse;
 import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.api.user.board.dto.BoardCategoryListResponse;
-import com.backend.server.api.user.board.dto.BoardListResponse;
-import com.backend.server.api.user.board.dto.BoardResponse;
-import com.backend.server.api.user.board.dto.BoardPostRequest;
+import com.backend.server.api.user.board.dto.PostListResponse;
+import com.backend.server.api.user.board.dto.PostRequest;
+import com.backend.server.api.user.board.dto.PostResponse;
 import com.backend.server.api.user.board.dto.UpdatePostRequest;
 import com.backend.server.model.entity.Board;
 import com.backend.server.model.entity.BoardCategory;
@@ -54,7 +54,7 @@ public class BoardService {
      * @return 생성된 게시글 정보가 담긴 CommunityResponse DTO
      */
     @Transactional // 쓰기 작업이므로 트랜잭션 적용
-    public BoardResponse createPost(BoardPostRequest request, Long authorId, LoginUser loginuser) {
+    public PostResponse createPost(PostRequest request, Long authorId, LoginUser loginuser) {
         User author = userRepository.findById(authorId)
             .orElseThrow(() -> new RuntimeException("User not found with id: " + authorId));
         BoardCategory category = boardCategoryRepository.findById(request.getCategoryId()).orElseThrow(()->new IllegalArgumentException("카테고리 없음"));
@@ -70,21 +70,15 @@ public class BoardService {
 
         Board savedBoard = boardRepository.save(board);
 
-        return new BoardResponse(savedBoard, loginuser);
+        return new PostResponse(savedBoard);
     }
 
     @Transactional(readOnly = true)
-    public List<BoardCategoryListResponse> getBoardCategories() {
+    public List<BoardResponse> getBoardCategories() {
         List<BoardCategory> categories = boardCategoryRepository.findAll();
         return categories.stream()
-                .map(category -> {
-                    BoardCategoryListResponse dto = new BoardCategoryListResponse();
-                    dto.setId(category.getId());
-                    dto.setName(category.getName());
-                    dto.setDescription(category.getDescription());
-                    return dto;
-                })
-                .sorted(Comparator.comparing(BoardCategoryListResponse::getId))
+                .map(BoardResponse::from)
+                .sorted(Comparator.comparing(BoardResponse::id))
                 .collect(Collectors.toList());
     }
     /**
@@ -92,11 +86,10 @@ public class BoardService {
      * 게시글 조회 시 조회수를 1 증가시킵니다.
      *
      * @param postId 조회할 게시글의 ID
-     * @param loginuser 현재 로그인한 사용자 정보 (응답 DTO 생성 시 작성자 이름 표시 로직에 사용)
      * @return 조회된 게시글 정보가 담긴 CommunityResponse DTO
      */
     @Transactional // 조회수 증가(쓰기 작업)가 포함되므로 트랜잭션 적용
-    public BoardResponse getPostById(Long postId, LoginUser loginuser) {
+    public PostResponse getPostById(Long postId) {
         Optional<Board> communityOptional = boardRepository.findById(postId);
 
         Board board = communityOptional.orElseThrow(() -> new RuntimeException("Post not found with id: " + postId));
@@ -104,23 +97,23 @@ public class BoardService {
         board.setView(board.getView() + 1);
         Board viewedBoard = boardRepository.save(board);
 
-        return new BoardResponse(viewedBoard, loginuser);
+        return new PostResponse(viewedBoard);
     }
 
 
     // @Transactional(readOnly = true) // 클래스 레벨에 적용되어 있음
-    public BoardListResponse getPosts(LoginUser loginuser, CommunityListRequest request) {
+    public PostListResponse getPosts(CommunityListRequest request) {
         Pageable pageable = request.toPageable();
 
         Specification<Board> spec = CommunitySpecification.filterCommunitiesForUser(request);
 
         Page<Board> page = boardRepository.findAll(spec, pageable);
 
-        return new BoardListResponse(page, loginuser);
+        return new PostListResponse(page);
     }
 
     @Transactional
-    public BoardResponse updatePost(Long postId,
+    public PostResponse updatePost(Long postId,
                                     UpdatePostRequest request,
                                     LoginUser loginUser) {
         Board existing = boardRepository.findById(postId)
@@ -143,7 +136,7 @@ public class BoardService {
         // 변경사항 저장
         Board updated = boardRepository.save(existing);
 
-        return new BoardResponse(updated, loginUser);
+        return new PostResponse(updated);
     }
 
     /**
@@ -174,7 +167,7 @@ public class BoardService {
      * @return 추천 후 업데이트된 게시글 정보가 담긴 CommunityResponse DTO
      */
     @Transactional // 쓰기 작업(추천 기록 저장, 추천수 증가)이 포함되므로 트랜잭션 적용
-    public BoardResponse recommendPost(Long postId, LoginUser loginuser) {
+    public PostResponse recommendPost(Long postId, LoginUser loginuser) {
         Board board = boardRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found with id: " + postId));
 
@@ -188,7 +181,7 @@ public class BoardService {
 
             board.setRecommend(board.getRecommend() - 1);
             Board updatedBoard = boardRepository.save(board);
-            return new BoardResponse(updatedBoard, loginuser);
+            return new PostResponse(updatedBoard);
         } //1번 더 클릭 시 감소로 변경
 
         Recommendation recommendation = new Recommendation(null, user, board);
@@ -198,6 +191,6 @@ public class BoardService {
         board.setRecommend(board.getRecommend() + 1);
         Board updatedBoard = boardRepository.save(board);
 
-        return new BoardResponse(updatedBoard, loginuser);
+        return new PostResponse(updatedBoard);
     }
 }

@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum BoardSortType implements SortTypeConvertible {
+public enum PostSortType implements SortTypeConvertible {
     ID("id");
 
     private final String field;
