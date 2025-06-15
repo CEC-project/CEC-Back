@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "2. 게시판", description = "수정 1차 완")
+@Tag(name = "3-1. 게시판", description = "수정 1차 완")
 @RestController
 @RequestMapping("/api/board")
 public class BoardController {
