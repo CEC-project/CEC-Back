@@ -2,11 +2,11 @@ package com.backend.server.api.user.board.controller;
 
 import com.backend.server.api.admin.community.dto.CommunityListRequest;
 import com.backend.server.api.common.dto.ApiResponse;
+import com.backend.server.api.common.dto.BoardResponse;
 import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.api.user.board.dto.BoardCategoryListResponse;
-import com.backend.server.api.user.board.dto.BoardListResponse;
-import com.backend.server.api.user.board.dto.BoardResponse;
-import com.backend.server.api.user.board.dto.BoardPostRequest;
+import com.backend.server.api.user.board.dto.PostListResponse;
+import com.backend.server.api.user.board.dto.PostRequest;
+import com.backend.server.api.user.board.dto.PostResponse;
 import com.backend.server.api.user.board.dto.UpdatePostRequest;
 import com.backend.server.api.user.board.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,39 +42,37 @@ public class BoardController {
 
     @GetMapping
     @Operation(summary = "게시판 카테고리 조회")
-    public ApiResponse<List<BoardCategoryListResponse>> getBoardCategories() {
-        List<BoardCategoryListResponse> categories = boardService.getBoardCategories();
+    public ApiResponse<List<BoardResponse>> getBoardCategories() {
+        List<BoardResponse> categories = boardService.getBoardCategories();
         return ApiResponse.success("게시판 카테고리 내역입니다", categories);
     }
 
     @GetMapping("/post")
     @Operation(summary = "게시글 목록 조회")
-    public ApiResponse<BoardListResponse> getCommunityPosts(
-            @ParameterObject CommunityListRequest request,
-            @AuthenticationPrincipal LoginUser loginuser // 실제 환경에서 로그인 사용자 정보 주입 필요
+    public ApiResponse<PostListResponse> getCommunityPosts(
+            @ParameterObject CommunityListRequest request
     ) {
         // Service 레이어 호출 시 typeId 인자를 함께 전달합니다.
-        BoardListResponse response = boardService.getPosts(loginuser, request);
+        PostListResponse response = boardService.getPosts(request);
         return ApiResponse.success("게시글 목록 조회 성공", response);
     }
 
     @GetMapping("/post/{id}")
     @Operation(summary = "게시글 상세 보기")
-    public ApiResponse<BoardResponse> getCommunityPostById(
-        @PathVariable Long id,
-        @AuthenticationPrincipal LoginUser loginuser
+    public ApiResponse<PostResponse> getCommunityPostById(
+        @PathVariable Long id
     ) {
-        BoardResponse response = boardService.getPostById(id, loginuser);
+        PostResponse response = boardService.getPostById(id);
         return ApiResponse.success("게시글 상세보기 성공", response);
     }
 
     @PostMapping("/post")
     @Operation(summary = "게시판 글 쓰기")
     public ApiResponse<Long> createCommunityPost(
-        @RequestBody BoardPostRequest request,
+        @RequestBody PostRequest request,
         @AuthenticationPrincipal LoginUser loginuser
     ) {
-        BoardResponse response = boardService.createPost(request, loginuser.getId(), loginuser);
+        PostResponse response = boardService.createPost(request, loginuser.getId(), loginuser);
 
         return ApiResponse.success("게시글 글쓰기 성공", response.getId());
     }
@@ -87,7 +84,7 @@ public class BoardController {
             @RequestBody @Valid UpdatePostRequest request,
             @AuthenticationPrincipal LoginUser loginUser
     ) {
-        BoardResponse response = boardService.updatePost(id, request, loginUser);
+        PostResponse response = boardService.updatePost(id, request, loginUser);
         return ApiResponse.success("게시글 수정 성공", response.getId());
     }
 
@@ -107,7 +104,7 @@ public class BoardController {
         @PathVariable Long id,
         @AuthenticationPrincipal LoginUser loginuser
     ) {
-        BoardResponse response = boardService.recommendPost(id, loginuser);
+        PostResponse response = boardService.recommendPost(id, loginuser);
         return ApiResponse.success("게시글 추천 성공", response.getId());
     }
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class BoardPostRequest {
+public class PostRequest {
     private String title;
     private String content;
     private Long categoryId;
