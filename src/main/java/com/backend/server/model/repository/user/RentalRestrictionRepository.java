@@ -2,7 +2,11 @@ package com.backend.server.model.repository.user;
 
 import com.backend.server.model.entity.RentalRestriction;
 import com.backend.server.model.entity.User;
+
+import java.time.LocalDateTime;
 import java.util.List;
+
+import com.backend.server.model.entity.enums.RestrictionType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,4 +29,7 @@ public interface RentalRestrictionRepository extends
     FROM RentalRestriction r
     WHERE r.user IN :users""")
     List<RentalRestriction> findAllInUser(List<User> users);
+
+    boolean existsByUserAndTypeAndEndAtGreaterThanEqual(User user, RestrictionType type, LocalDateTime endAt);
+
 }

@@ -119,4 +119,6 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     int countByRenterAndEquipmentCategoryAndStatusIn(User renter, EquipmentCategory category, List<Status> statusList);
     @EntityGraph(attributePaths = {"equipmentModel", "equipmentCategory", "renter"})
     Page<Equipment> findAll(Specification<Equipment> spec, Pageable pageable);
+
+
 }

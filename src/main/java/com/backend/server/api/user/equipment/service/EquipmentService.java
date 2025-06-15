@@ -4,14 +4,18 @@ import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.service.CommonNotificationService;
 import com.backend.server.api.user.equipment.dto.equipment.*;
+import com.backend.server.model.entity.RentalRestriction;
 import com.backend.server.model.entity.User;
+import com.backend.server.model.entity.enums.RestrictionType;
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.equipment.EquipmentCart;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
+import com.backend.server.model.repository.user.RentalRestrictionRepository;
 import com.backend.server.model.repository.user.UserRepository;
 import com.backend.server.model.repository.equipment.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +34,7 @@ public class EquipmentService {
     private final UserRepository userRepository;
     private final EquipmentCartRepository equipmentCartRepository;
     private final CommonNotificationService notificationService;
-    private final EquipmentCategoryRepository equipmentCategoryRepository;
+    private final RentalRestrictionRepository rentalRestrictionRepository;
 
     //장비 하나 호버링시 이미지 보여주기
     public EquipmentResponse getEquipment(Long id) {
@@ -104,8 +108,15 @@ public class EquipmentService {
         User user = userRepository.findById(loginUser.getId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        // 대여 제한 체크 (RENT_REQUEST만)
+        // 대여 제한 갯수 체크 (RENT_REQUEST만)
         if (request.getAction() == EquipmentActionRequest.Action.RENT_REQUEST) {
+            //그전에 제제받은 학생인지도 체크
+            if (rentalRestrictionRepository.existsByUserAndTypeAndEndAtGreaterThanEqual(
+                    user, RestrictionType.EQUIPMENT, LocalDateTime.now())) {
+                throw new IllegalStateException("장비 대여가 제한된 사용자입니다.");
+            }
+
+
             Map<Long, Integer> categoryRequestCount = new HashMap<>();
             Map<Long, EquipmentCategory> categoryMap = new HashMap<>();
             for (Long equipmentId : request.getIds()) {
@@ -157,6 +168,7 @@ public class EquipmentService {
         if (equipment.getStatus() != Status.AVAILABLE) {
             throw new IllegalStateException("장비가 대여 불가능한 상태입니다.");
         }
+
 
         String restriction = equipment.getRestrictionGrade();
         if (restriction != null) {
