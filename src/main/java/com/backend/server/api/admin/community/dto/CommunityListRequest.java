@@ -1,7 +1,7 @@
 package com.backend.server.api.admin.community.dto;
 
 import com.backend.server.api.common.dto.pagination.AbstractPaginationParam;
-import com.backend.server.api.user.board.dto.BoardSortType;
+import com.backend.server.api.user.board.dto.PostSortType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -27,7 +27,7 @@ public class CommunityListRequest extends AbstractPaginationParam {
 
 
 
-    BoardSortType sortBy;
+    PostSortType sortBy;
 
     public CommunityListRequest(
             CommunitySearchType searchType,
@@ -35,7 +35,7 @@ public class CommunityListRequest extends AbstractPaginationParam {
 
             Integer page,
             Integer size,
-            BoardSortType sortBy,
+            PostSortType sortBy,
             Sort.Direction direction
     ) {
         this.searchType = searchType == null ? CommunitySearchType.ALL : searchType;
@@ -43,7 +43,7 @@ public class CommunityListRequest extends AbstractPaginationParam {
 
         this.page = Math.max(page, 0);
         this.size = Math.max(size, 10);
-        this.sortBy = sortBy == null ? BoardSortType.ID : sortBy;
+        this.sortBy = sortBy == null ? PostSortType.ID : sortBy;
         this.sortDirection = direction == null ? Sort.Direction.ASC : direction;
     }
 

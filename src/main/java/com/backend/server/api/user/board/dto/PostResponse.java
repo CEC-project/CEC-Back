@@ -1,6 +1,7 @@
 package com.backend.server.api.user.board.dto;
 
-import com.backend.server.api.common.dto.LoginUser;
+import com.backend.server.api.common.dto.AuthorResponse;
+import com.backend.server.api.common.dto.BoardResponse;
 import com.backend.server.model.entity.Board;
 import io.micrometer.common.util.StringUtils;
 import lombok.Getter;
@@ -11,26 +12,25 @@ import java.util.Arrays;
 import java.util.List;
 
 @Getter
-public class BoardResponse {
+public class PostResponse {
     private final Long id;
     private final String title;
+    private final String content;
     private final int recommend;
     private final int view;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
-    private final String categoryName;
+    private final BoardResponse board;
     private final List<String> attachments;
-    private final Long authorId;
-    private final String authorName;
-    private final String authorNickname;
-    private final String authorProfilePicture;
+    private final AuthorResponse author;
 
-    public BoardResponse(Board board, LoginUser loginuser) {
+    public PostResponse(Board board) {
         this.id = board.getId();
         this.title = board.getTitle();
+        this.content = board.getContent();
         this.recommend = board.getRecommend();
         this.view = board.getView();
-        this.categoryName = board.getBoardCategory().getName();
+        this.board = BoardResponse.from(board.getBoardCategory());
         List<String> attachments = new ArrayList<>();
         if (!StringUtils.isEmpty(board.getAttachmentUrl()))
             attachments = Arrays.stream(board.getAttachmentUrl().split(";")).toList();
@@ -38,9 +38,6 @@ public class BoardResponse {
         this.createdAt = board.getCreatedAt();
         this.updatedAt = board.getUpdatedAt();
 
-        this.authorId = board.getAuthor().getId();
-        this.authorName = board.getAuthor().getName();
-        this.authorNickname = board.getAuthor().getNickname();
-        this.authorProfilePicture = board.getAuthor().getProfilePicture();
+        author = AuthorResponse.from(board.getAuthor());
     }
 }
