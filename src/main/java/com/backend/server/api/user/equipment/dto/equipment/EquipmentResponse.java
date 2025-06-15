@@ -51,6 +51,4 @@ public class EquipmentResponse {
         this.createdAt = equipment.getCreatedAt();
         this.imageUrl = equipment.getImageUrl();
     }
-
-
 }
