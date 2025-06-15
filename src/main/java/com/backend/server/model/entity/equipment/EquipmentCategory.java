@@ -1,5 +1,6 @@
 package com.backend.server.model.entity.equipment;
 
+import com.backend.server.model.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 //장비 분류 엔티티
-public class EquipmentCategory {
+public class EquipmentCategory extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
