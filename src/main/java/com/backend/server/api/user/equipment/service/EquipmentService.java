@@ -77,7 +77,8 @@ public class EquipmentService {
                 throw new IllegalStateException("장비가 대여 불가능한 상태입니다: " + equipment.getId());
             }
             Integer userGrade = user.getGrade();
-            if(equipment.getRestrictionGrade().contains(userGrade.toString())) {
+            if (equipment.getRestrictionGrade() != null &&
+                    equipment.getRestrictionGrade().contains(userGrade.toString())) {
                 throw new IllegalStateException("장비 대여 제한 학년에 걸려요");
             }
 
