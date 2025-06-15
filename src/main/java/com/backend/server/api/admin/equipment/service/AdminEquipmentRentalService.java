@@ -4,17 +4,18 @@ import com.backend.server.api.admin.equipment.dto.equipment.request.AdminEquipme
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.service.CommonNotificationService;
 import com.backend.server.model.entity.BrokenRepairHistory;
+import com.backend.server.model.entity.RentalHistory;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.equipment.Equipment;
+import com.backend.server.model.repository.equipment.EquipmentRepository;
 import com.backend.server.model.repository.history.BrokenRepairHistoryRepository;
-import com.backend.server.model.repository.equipment.*;
+import com.backend.server.model.repository.history.RentalHistoryRepository;
+import java.util.List;
+import java.util.function.BiFunction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.function.BiFunction;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class AdminEquipmentRentalService {
 
     private final CommonNotificationService notificationService;
     private final BrokenRepairHistoryRepository brokenRepairHistoryRepository;
+    private final RentalHistoryRepository rentalHistoryRepository;
 
     @Transactional
     public List<Long> changeStatus(AdminEquipmentDetailRequest request) {
@@ -37,6 +39,7 @@ public class AdminEquipmentRentalService {
             operator.apply(classroomId, request.getDetail());
         return request.getIds();
     }
+
     //승인
     public Long rentalAccept(Long equipmentId){
         Equipment equipment = equipmentRepository.findById(equipmentId)
@@ -47,15 +50,20 @@ public class AdminEquipmentRentalService {
         if(equipment.getStatus() != Status.RENTAL_PENDING){
             throw new IllegalArgumentException("대여 요청 중인 장비만 대여 가능합니다.");
         }
+
         equipment.makeInUse();
         equipmentRepository.save(equipment);
 
-        notificationProcess(equipmentId, equipmentName, renterId, "대여 승인", "");
+        RentalHistory rentalHistory = rentalHistoryRepository
+                .findFirstByEquipmentAndRenterOrderByCreatedAtDesc(equipment, equipment.getRenter())
+                .orElseThrow(() -> new IllegalArgumentException("대여 내역이 존재하지 않습니다."));
+        rentalHistory.makeInUse();
+        rentalHistoryRepository.save(rentalHistory);
 
+        notificationProcess(equipmentId, equipmentName, renterId, "대여 승인", "");
 
         return equipmentId;
     }
-
 
     //반납
     public Long rentalReturn(Long equipmentId){
@@ -71,12 +79,18 @@ public class AdminEquipmentRentalService {
         equipment.makeAvailable();
         equipmentRepository.save(equipment);
 
+        RentalHistory rentalHistory = rentalHistoryRepository
+                .findFirstByEquipmentAndRenterOrderByCreatedAtDesc(equipment, equipment.getRenter())
+                .orElseThrow(() -> new IllegalArgumentException("대여 내역이 존재하지 않습니다."));
+        rentalHistory.makeReturn();
+        rentalHistoryRepository.save(rentalHistory);
+
         notificationProcess(equipmentId, equipmentName, renterId, "대여 반납", "");
 
         return equipmentId;
     }
 
-    //승인
+    //취소
     public Long rentalCancel(Long equipmentId, String detail){
         Equipment equipment = equipmentRepository.findById(equipmentId)
                 .orElseThrow(()-> new IllegalArgumentException("장비를 찾을 수 없습니다"+equipmentId));
@@ -84,17 +98,23 @@ public class AdminEquipmentRentalService {
         Long renterId = equipment.getRenter().getId();
 
         if(equipment.getStatus() != Status.IN_USE){
-            throw new IllegalArgumentException("대여 요청 중인 장비만 대여 가능합니다.");
+            throw new IllegalArgumentException("대여 승인된 장비만 승인 취소가 가능합니다.");
         }
 
         equipment.makeAvailable();
         equipmentRepository.save(equipment);
 
-        notificationProcess(equipmentId, equipmentName, renterId, "대여 취소", "\n대여 취소 사유 : " + detail);
+        RentalHistory rentalHistory = rentalHistoryRepository
+                .findFirstByEquipmentAndRenterOrderByCreatedAtDesc(equipment, equipment.getRenter())
+                .orElseThrow(() -> new IllegalArgumentException("대여 내역이 존재하지 않습니다."));
+        rentalHistory.makeApprovalCancelled(detail);
+        rentalHistoryRepository.save(rentalHistory);
 
+        notificationProcess(equipmentId, equipmentName, renterId, "대여 취소", "\n대여 취소 사유 : " + detail);
 
         return equipmentId;
     }
+
     //반려
     public Long rentalReject(Long equipmentId, String detail){
         Equipment equipment = equipmentRepository.findById(equipmentId)
@@ -108,6 +128,12 @@ public class AdminEquipmentRentalService {
 
         equipment.makeAvailable();
         equipmentRepository.save(equipment);
+
+        RentalHistory rentalHistory = rentalHistoryRepository
+                .findFirstByEquipmentAndRenterOrderByCreatedAtDesc(equipment, equipment.getRenter())
+                .orElseThrow(() -> new IllegalArgumentException("대여 내역이 존재하지 않습니다."));
+        rentalHistory.makeRejected(detail);
+        rentalHistoryRepository.save(rentalHistory);
 
         notificationProcess(equipmentId, equipmentName, renterId, "대여 반려", "\n반려 사유 : " + detail);
 
@@ -131,6 +157,12 @@ public class AdminEquipmentRentalService {
 
         equipment.makeBroken();
         equipmentRepository.save(equipment);
+
+        RentalHistory rentalHistory = rentalHistoryRepository
+                .findFirstByEquipmentAndRenterOrderByCreatedAtDesc(equipment, equipment.getRenter())
+                .orElseThrow(() -> new IllegalArgumentException("대여 내역이 존재하지 않습니다."));
+        rentalHistory.makeBroken(history);
+        rentalHistoryRepository.save(rentalHistory);
 
         notificationProcess(equipmentId, equipmentName, renterId, "반납시 파손처리", "\n파손 내용 : " + detail);
 

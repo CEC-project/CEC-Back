@@ -62,11 +62,7 @@ public class BrokenRepairHistory extends BaseTimeEntity{
             this.brokenByName = this.brokenBy.getName();
             this.brokenByStudentNumber = this.brokenBy.getStudentNumber();
         }
-
-
     }
-
-
 
     public enum TargetType { EQUIPMENT, CLASSROOM }
     public enum HistoryType { BROKEN, REPAIR }
