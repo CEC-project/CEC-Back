@@ -31,15 +31,6 @@ public class Board extends BaseTimeEntity{
     @Column
     private int view;
 
-//    @Column
-//    private String type;
-//
-//    @Column
-//    private Long typeId;
-//    @Enumerated(EnumType.STRING)
-//    @Column(nullable = false)
-//    private CommunityType communityType;
-
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 

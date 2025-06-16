@@ -1,6 +1,6 @@
 package com.backend.server.api.user.board.service;
 
-import com.backend.server.api.admin.community.dto.CommunityListRequest;
+import com.backend.server.api.user.board.dto.PostListRequest;
 import com.backend.server.api.common.dto.BoardResponse;
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.user.board.dto.PostListResponse;
@@ -102,7 +102,7 @@ public class BoardService {
 
 
     // @Transactional(readOnly = true) // 클래스 레벨에 적용되어 있음
-    public PostListResponse getPosts(CommunityListRequest request) {
+    public PostListResponse getPosts(PostListRequest request) {
         Pageable pageable = request.toPageable();
 
         Specification<Board> spec = CommunitySpecification.filterCommunitiesForUser(request);
