@@ -66,6 +66,15 @@ public class EquipmentController {
         return ApiResponse.success("장바구니 조회 성공", equipmentService.getCartItems(loginUser));
     }
 
+    @DeleteMapping("/cart")
+    @Operation(
+            summary = "장비 장바구니 삭제"
+    )
+    public ApiResponse<List<Long>> getCartItems(
+            @AuthenticationPrincipal LoginUser loginUser, EquipmentCartListRequest request) {
+        return ApiResponse.success("장바구니 조회 성공", equipmentService.deleteCartItems(loginUser, request));
+    }
+
 
     @PatchMapping("/action")
     @Operation(summary = "장비 상태 변경 요청 (대여/반납 요청 및 취소)",description = "날짜는 대여 요청 시에만 필요")
