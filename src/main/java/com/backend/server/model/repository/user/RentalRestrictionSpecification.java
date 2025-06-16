@@ -1,9 +1,9 @@
 package com.backend.server.model.repository.user;
 
 import com.backend.server.api.admin.rentalRestriction.dto.AdminRentalRestrictionListRequest;
+import com.backend.server.api.user.history.dto.RentalRestrictionListRequest;
 import com.backend.server.model.entity.RentalRestriction;
 import com.backend.server.model.entity.User;
-import com.backend.server.model.repository.user.UserSpecification;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import java.time.LocalDateTime;
@@ -26,7 +26,32 @@ public class RentalRestrictionSpecification {
                 predicate = cb.and(predicate, cb.equal(root.get("reason"), request.getReason()));
 
             if (request.getType() != null)
-                predicate = cb.and(predicate, cb.equal(user.get("type"), request.getType()));
+                predicate = cb.and(predicate, cb.equal(root.get("type"), request.getType()));
+
+            return predicate;
+        };
+    }
+
+    public static Specification<RentalRestriction> filter(RentalRestrictionListRequest request, User user) {
+        return (root, query, cb) -> {
+            var predicate = cb.conjunction();
+
+            predicate = cb.and(predicate, cb.equal(root.get("user"), user));
+
+            if (request.getStartDate() != null) {
+                Predicate isEndAtAfterRequestedDate = cb.greaterThanOrEqualTo(
+                        root.get("endAt"), request.getStartDate().atStartOfDay());
+                predicate = cb.and(predicate, isEndAtAfterRequestedDate);
+            }
+
+            if (request.getEndDate() != null) {
+                Predicate isStartAtBeforeRequestedDate = cb.lessThanOrEqualTo(
+                        root.get("startAt"), request.getEndDate().atStartOfDay());
+                predicate = cb.and(predicate, isStartAtBeforeRequestedDate);
+            }
+
+            if (request.getTargetType() != null)
+                predicate = cb.and(predicate, cb.equal(root.get("type"), request.getTargetType()));
 
             return predicate;
         };

@@ -2,6 +2,7 @@ package com.backend.server.model.repository.history;
 
 import com.backend.server.api.user.history.dto.RentalHistoryListRequest;
 import com.backend.server.model.entity.RentalHistory;
+import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
@@ -12,9 +13,16 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 public class RentalHistorySpecification {
-    public static Specification<RentalHistory> filter(RentalHistoryListRequest request) {
+    public static Specification<RentalHistory> filter(RentalHistoryListRequest request, User renter) {
         return (root, query, cb) -> {
             Predicate predicate = cb.conjunction();
+
+            // 자신이 대여한 내역만 조회 가능하다.
+            predicate = cb.and(predicate, cb.equal(root.get("renter"), renter));
+
+            // 장비/강의실 필터링
+            if (request.getTargetType() != null)
+                predicate = cb.and(predicate, cb.equal(root.get("targetType"), request.getTargetType()));
 
             // 상태 필터링
             if (request.getStartDate() != null)

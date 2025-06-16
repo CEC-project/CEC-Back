@@ -1,6 +1,7 @@
 package com.backend.server.api.user.history.service;
 
 import com.backend.server.api.admin.history.dto.AdminBrokenRepairHistoryResponse;
+import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.common.dto.PageableInfo;
 import com.backend.server.api.user.classroom.dto.ClassroomResponse;
 import com.backend.server.api.user.equipment.dto.equipment.EquipmentResponse;
@@ -8,8 +9,10 @@ import com.backend.server.api.user.history.dto.RentalHistoryListRequest;
 import com.backend.server.api.user.history.dto.RentalHistoryListResponse;
 import com.backend.server.api.user.history.dto.RentalHistoryResponse;
 import com.backend.server.model.entity.RentalHistory;
+import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.history.RentalHistoryRepository;
 import com.backend.server.model.repository.history.RentalHistorySpecification;
+import com.backend.server.model.repository.user.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,9 +25,13 @@ import org.springframework.stereotype.Service;
 public class RentalHistoryService {
 
     private final RentalHistoryRepository rentalHistoryRepository;
+    private final UserRepository userRepository;
 
-    public RentalHistoryListResponse getRentalHistoryList(RentalHistoryListRequest request) {
-        Specification<RentalHistory> spec = RentalHistorySpecification.filter(request);
+    public RentalHistoryListResponse getRentalHistoryList(RentalHistoryListRequest request, LoginUser loginUser) {
+        User user = userRepository.findById(loginUser.getId())
+                .orElseThrow(() -> new IllegalArgumentException("로그인 된 사용자를 DB 에서 찾을수 없습니다."));
+
+        Specification<RentalHistory> spec = RentalHistorySpecification.filter(request, user);
         Pageable pageable = request.toPageable();
         Page<RentalHistory> page = rentalHistoryRepository.findAll(spec, pageable);
 
