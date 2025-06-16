@@ -71,7 +71,7 @@ public class EquipmentController {
             summary = "장비 장바구니 삭제"
     )
     public ApiResponse<List<Long>> getCartItems(
-            @AuthenticationPrincipal LoginUser loginUser, EquipmentCartListRequest request) {
+            @AuthenticationPrincipal LoginUser loginUser, @RequestBody EquipmentCartListRequest request) {
         return ApiResponse.success("장바구니 조회 성공", equipmentService.deleteCartItems(loginUser, request));
     }
 
