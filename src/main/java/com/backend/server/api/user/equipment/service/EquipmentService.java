@@ -103,6 +103,26 @@ public class EquipmentService {
             .toList();
     }
 
+    // 장비 장바구니에서 항목 삭제 후, 삭제된 장바구니 ID를 반환
+    public List<Long> deleteCartItems(LoginUser loginUser, EquipmentCartListRequest request) {
+        // 로그인한 사용자의 장바구니 아이템 조회
+        List<EquipmentCart> userCartItems = equipmentCartRepository.findByUserId(loginUser.getId());
+
+        // 삭제 대상 중 본인의 장바구니에 있는 항목만 필터링
+        List<EquipmentCart> toDelete = userCartItems.stream()
+                .filter(cart -> request.getIds().contains(cart.getId()))
+                .toList();
+
+        // 실제 삭제 수행
+        equipmentCartRepository.deleteAll(toDelete);
+
+        // 실제 삭제된 장바구니 ID 반환
+        return toDelete.stream()
+                .map(EquipmentCart::getId)
+                .toList();
+    }
+
+
 
     @Transactional
     public void handleUserAction(LoginUser loginUser, EquipmentActionRequest request) {
