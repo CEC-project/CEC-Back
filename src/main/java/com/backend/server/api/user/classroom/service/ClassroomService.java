@@ -5,12 +5,18 @@ import com.backend.server.api.user.classroom.dto.ClassroomActionRequest;
 import com.backend.server.api.user.classroom.dto.ClassroomResponse;
 import com.backend.server.api.user.classroom.dto.ScheduleResponse;
 import com.backend.server.api.user.classroom.dto.ScheduleResponse.ScheduleType;
+import com.backend.server.model.entity.RentalHistory;
+import com.backend.server.model.entity.RentalHistory.RentalHistoryStatus;
+import com.backend.server.model.entity.RentalHistory.TargetType;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.classroom.Semester;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
 import com.backend.server.model.entity.classroom.YearSchedule;
+import com.backend.server.model.entity.enums.RestrictionType;
 import com.backend.server.model.entity.enums.Status;
+import com.backend.server.model.repository.user.RentalRestrictionRepository;
+import com.backend.server.model.repository.history.RentalHistoryRepository;
 import com.backend.server.model.repository.user.UserRepository;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
 import com.backend.server.model.repository.classroom.SemesterRepository;
@@ -18,6 +24,7 @@ import com.backend.server.model.repository.classroom.SemesterScheduleRepository;
 import com.backend.server.model.repository.classroom.YearScheduleRepository;
 import com.backend.server.util.CompareUtils;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
@@ -36,6 +43,8 @@ public class ClassroomService {
     private final YearScheduleRepository yearScheduleRepository;
     private final SemesterScheduleRepository semesterScheduleRepository;
     private final SemesterRepository semesterRepository;
+    private final RentalHistoryRepository rentalHistoryRepository;
+    private final RentalRestrictionRepository rentalRestrictionRepository;
 
     @Transactional
     public void handleUserAction(LoginUser loginUser, ClassroomActionRequest request) {
@@ -88,8 +97,21 @@ public class ClassroomService {
             throw new IllegalArgumentException("수업과 강의실 대여 시간이 겹칩니다.");
         }
 
+        if (rentalRestrictionRepository.existsByUserAndTypeAndEndAtGreaterThanEqual(
+                user, RestrictionType.CLASSROOM, LocalDateTime.now())) {
+            throw new IllegalStateException("강의실 대여가 제한된 사용자입니다.");
+        }
+
         classroom.makeRentalPending(start, end, user);
         classroomRepository.save(classroom);
+
+        RentalHistory rentalHistory = RentalHistory.builder()
+                .targetType(TargetType.CLASSROOM)
+                .classroom(classroom)
+                .status(RentalHistoryStatus.RENTAL_PENDING)
+                .renter(user)
+                .build();
+        rentalHistoryRepository.save(rentalHistory);
     }
 
     private void handleRentCancel(User user, ClassroomActionRequest request) {
@@ -105,6 +127,12 @@ public class ClassroomService {
 
         classroom.makeAvailable();
         classroomRepository.save(classroom);
+
+        RentalHistory rentalHistory = rentalHistoryRepository
+                .findFirstByClassroomAndRenterOrderByCreatedAtDesc(classroom, classroom.getRenter())
+                .orElseThrow(() -> new IllegalArgumentException("대여 내역이 존재하지 않습니다."));
+        rentalHistory.makeCancelled();
+        rentalHistoryRepository.save(rentalHistory);
     }
 
     @Transactional(readOnly = true)

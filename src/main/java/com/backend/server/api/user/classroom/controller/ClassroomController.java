@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "1-4. 대여 신청 / 강의실", description = "수정 필요")
+@Tag(name = "1-4. 대여 신청 / 강의실", description = "수정 완료")
 @RestController
 @RequestMapping("/api/classroom")
 @RequiredArgsConstructor

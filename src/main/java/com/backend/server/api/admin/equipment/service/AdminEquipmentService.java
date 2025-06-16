@@ -10,18 +10,20 @@ import com.backend.server.api.admin.equipment.dto.equipment.response.AdminEquipm
 import com.backend.server.api.admin.equipment.dto.equipment.response.AdminManagerCandidatesResponse;
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.model.entity.BrokenRepairHistory;
+import com.backend.server.model.entity.RentalHistory.RentalHistoryStatus;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Role;
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
 import com.backend.server.model.entity.equipment.EquipmentModel;
-import com.backend.server.model.repository.history.BrokenRepairHistoryRepository;
-import com.backend.server.model.repository.user.UserRepository;
 import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
 import com.backend.server.model.repository.equipment.EquipmentModelRepository;
 import com.backend.server.model.repository.equipment.EquipmentRepository;
 import com.backend.server.model.repository.equipment.EquipmentSpecification;
+import com.backend.server.model.repository.history.BrokenRepairHistoryRepository;
+import com.backend.server.model.repository.history.RentalHistoryRepository;
+import com.backend.server.model.repository.user.UserRepository;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -44,7 +46,7 @@ public class AdminEquipmentService {
     private final EquipmentCategoryRepository equipmentCategoryRepository;
     private final EquipmentModelRepository equipmentModelRepository;
     private final BrokenRepairHistoryRepository brokenRepairHistoryRepository;
-
+    private final RentalHistoryRepository rentalHistoryRepository;
 
     //어드민 유저 조회
     public List<AdminManagerCandidatesResponse> getAdminUsers() {
@@ -140,7 +142,7 @@ public class AdminEquipmentService {
         List<Equipment> existingEquipments = equipmentRepository.findBySerialNumberStartingWith(serialPrefix);
         List<String> existingSerialNumbers = existingEquipments.stream()
                 .map(Equipment::getSerialNumber)
-                .collect(Collectors.toList());
+                .toList();
 
         if (!existingSerialNumbers.isEmpty()) {
             currentMaxSequence = existingSerialNumbers.stream()
@@ -183,7 +185,7 @@ public class AdminEquipmentService {
         List<Equipment> existingEquipments = equipmentRepository.findBySerialNumberStartingWith(serialPrefix);
         List<String> existingSerialNumbers = existingEquipments.stream()
                 .map(Equipment::getSerialNumber)
-                .collect(Collectors.toList());
+                .toList();
 
         if (!existingSerialNumbers.isEmpty()) {
             currentMaxSequence = existingSerialNumbers.stream()
@@ -337,6 +339,14 @@ public class AdminEquipmentService {
         // 장비 상태 변경
         equipment.makeAvailable();
         equipmentRepository.save(equipment);
+
+        rentalHistoryRepository
+                .findFirstByEquipmentAndRenterOrderByCreatedAtDesc(equipment, equipment.getRenter())
+                .filter(rentalHistory -> rentalHistory.getStatus().equals(RentalHistoryStatus.BROKEN))
+                .ifPresent(rentalHistory -> {
+                    rentalHistory.makeRepair(repairHistory);
+                    rentalHistoryRepository.save(rentalHistory);
+                });
 
         return equipmentId;
     }
