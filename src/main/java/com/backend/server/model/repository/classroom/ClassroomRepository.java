@@ -4,7 +4,10 @@ import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.enums.Status;
 import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.persistence.LockModeType;
+import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -14,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.Lock;
 
 public interface ClassroomRepository extends JpaRepository<Classroom, Long>, JpaSpecificationExecutor<Classroom> {
+    @EntityGraph(attributePaths = {"manager", "renter", "renter.professor"})
+    List<Classroom> findAll(Specification<Classroom> spec, Sort sort);
+
     @Modifying
     @Transactional
     @Query("UPDATE Classroom c SET c.status = :newStatus WHERE c.status = :currentStatus")
