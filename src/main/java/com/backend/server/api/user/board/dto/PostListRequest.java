@@ -3,9 +3,11 @@ package com.backend.server.api.user.board.dto;
 import com.backend.server.api.common.dto.pagination.AbstractPaginationParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Pageable;
 
 @Getter
+@Setter
 public class PostListRequest extends AbstractPaginationParam {
     public enum CommunitySearchType {
         ALL, TITLE, CONTENT, NAME, NICKNAME
@@ -26,6 +28,8 @@ public class PostListRequest extends AbstractPaginationParam {
     PostSortType sortBy;
 
     public Pageable toPageable() {
+        if (sortBy == null)
+            sortBy = PostSortType.ID;
         return toPageable(sortBy);
     }
 }
