@@ -1,9 +1,11 @@
 package com.backend.server.model.repository.board;
 
 import com.backend.server.api.admin.community.dto.AdminCommunityListRequest;
-import com.backend.server.api.admin.community.dto.CommunityListRequest;
+import com.backend.server.api.user.board.dto.PostListRequest;
 import com.backend.server.api.admin.notice.dto.AdminNoticeListRequest;
 import com.backend.server.model.entity.Board;
+import com.backend.server.model.entity.BoardCategory;
+import com.backend.server.model.entity.User;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
@@ -62,11 +64,13 @@ public class CommunitySpecification {
         if (request.getSearchKeyword() == null || request.getSearchKeyword().isEmpty())
             keyword = "%";
 
-        Join<Object, Object> author = root.join("author", JoinType.LEFT);
-        Predicate name = cb.like(author.get("name"), keyword);
         Predicate title = cb.like(root.get("title"), keyword);
         Predicate content = cb.like(root.get("content"), keyword);
-        Predicate nickname = cb.like(root.get("nickname"), keyword);
+
+        Join<Board, User> author = root.join("author", JoinType.LEFT);
+        Predicate name = cb.like(author.get("name"), keyword);
+        Predicate nickname = cb.like(author.get("nickname"), keyword);
+
         Predicate all = cb.or(name, title, content, nickname);
 
         switch (request.getSearchType()) {
@@ -81,9 +85,12 @@ public class CommunitySpecification {
     }
 
     //--------------------------
-    public static Specification<Board> filterCommunitiesForUser(CommunityListRequest request) {
+    public static Specification<Board> filterCommunitiesForUser(PostListRequest request) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
+
+            Join<Board, User> author = root.join("author", JoinType.LEFT);
+            Join<Board, BoardCategory> category = root.join("boardCategory", JoinType.LEFT);
 
             if (StringUtils.hasText(request.getSearchKeyword())) {
                 String[] keywords = request.getSearchKeyword().trim().toLowerCase().split("\\s+");
@@ -100,19 +107,19 @@ public class CommunitySpecification {
                             break;
 
                         case NAME:
-                            predicates.add(cb.like(cb.lower(root.get("author").get("name")), pattern));
+                            predicates.add(cb.like(cb.lower(author.get("name")), pattern));
                             break;
 
                         case NICKNAME:
-                            predicates.add(cb.like(cb.lower(root.get("author").get("nickname")), pattern));
+                            predicates.add(cb.like(cb.lower(author.get("nickname")), pattern));
                             break;
 
                         case ALL:
                         default:
                             Predicate titlePred    = cb.like(cb.lower(root.get("title")), pattern);
                             Predicate contentPred  = cb.like(cb.lower(root.get("content")), pattern);
-                            Predicate namePred     = cb.like(cb.lower(root.get("author").get("name")), pattern);
-                            Predicate nicknamePred = cb.like(cb.lower(root.get("author").get("nickname")), pattern);
+                            Predicate namePred     = cb.like(cb.lower(author.get("name")), pattern);
+                            Predicate nicknamePred = cb.like(cb.lower(author.get("nickname")), pattern);
                             predicates.add(cb.or(titlePred, contentPred, namePred, nicknamePred));
                             break;
                     }
@@ -120,9 +127,12 @@ public class CommunitySpecification {
             }
 
             // 2) 카테고리 필터
-            if (request.getCategoryId() != null) {
-                predicates.add(cb.equal(root.get("boardCategory").get("id"), request.getCategoryId()));
-            }
+            if (request.getCategoryId() != null)
+                predicates.add(cb.equal(category.get("id"), request.getCategoryId()));
+
+            // 3) 작성자 필터
+            if (request.getAuthorId() != null)
+                predicates.add(cb.equal(author.get("id"), request.getAuthorId()));
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };

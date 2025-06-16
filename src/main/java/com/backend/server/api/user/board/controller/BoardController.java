@@ -1,6 +1,6 @@
 package com.backend.server.api.user.board.controller;
 
-import com.backend.server.api.admin.community.dto.CommunityListRequest;
+import com.backend.server.api.user.board.dto.PostListRequest;
 import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.common.dto.BoardResponse;
 import com.backend.server.api.common.dto.LoginUser;
@@ -50,7 +50,7 @@ public class BoardController {
     @GetMapping("/post")
     @Operation(summary = "게시글 목록 조회")
     public ApiResponse<PostListResponse> getCommunityPosts(
-            @ParameterObject CommunityListRequest request
+            @ParameterObject PostListRequest request
     ) {
         // Service 레이어 호출 시 typeId 인자를 함께 전달합니다.
         PostListResponse response = boardService.getPosts(request);
