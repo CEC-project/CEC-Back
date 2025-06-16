@@ -3,18 +3,26 @@ package com.backend.server.api.user.equipment.service;
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.service.CommonNotificationService;
-import com.backend.server.api.user.equipment.dto.equipment.*;
-import com.backend.server.model.entity.RentalRestriction;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentActionRequest;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentCartListRequest;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentListResponse;
+import com.backend.server.api.user.equipment.dto.equipment.EquipmentResponse;
+import com.backend.server.model.entity.RentalHistory;
+import com.backend.server.model.entity.RentalHistory.RentalHistoryStatus;
+import com.backend.server.model.entity.RentalHistory.TargetType;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.RestrictionType;
 import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.equipment.EquipmentCart;
 import com.backend.server.model.entity.equipment.EquipmentCategory;
+import com.backend.server.model.repository.equipment.EquipmentCartRepository;
+import com.backend.server.model.repository.equipment.EquipmentRepository;
+import com.backend.server.model.repository.equipment.EquipmentSpecification;
+import com.backend.server.model.repository.history.RentalHistoryRepository;
 import com.backend.server.model.repository.user.RentalRestrictionRepository;
 import com.backend.server.model.repository.user.UserRepository;
-import com.backend.server.model.repository.equipment.*;
-
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +43,7 @@ public class EquipmentService {
     private final EquipmentCartRepository equipmentCartRepository;
     private final CommonNotificationService notificationService;
     private final RentalRestrictionRepository rentalRestrictionRepository;
+    private final RentalHistoryRepository rentalHistoryRepository;
 
     //장비 하나 호버링시 이미지 보여주기
     public EquipmentResponse getEquipment(Long id) {
@@ -193,6 +202,14 @@ public class EquipmentService {
         equipmentRepository.save(updated);
         equipmentCartRepository.deleteByUserIdAndEquipmentId(user.getId(), equipmentId);
 
+        RentalHistory rentalHistory = RentalHistory.builder()
+                .targetType(TargetType.EQUIPMENT)
+                .equipment(equipment)
+                .status(RentalHistoryStatus.RENTAL_PENDING)
+                .renter(user)
+                .build();
+        rentalHistoryRepository.save(rentalHistory);
+
         notificationService.createNotificationToAdmins(CommonNotificationDto.builder()
                 .category("장비")
                 .title("장비 대여 요청이 있습니다.")
@@ -218,6 +235,12 @@ public class EquipmentService {
                 .build();
 
         equipmentRepository.save(updated);
+
+        RentalHistory rentalHistory = rentalHistoryRepository
+                .findFirstByEquipmentAndRenterOrderByCreatedAtDesc(equipment, equipment.getRenter())
+                .orElseThrow(() -> new IllegalArgumentException("대여 내역이 존재하지 않습니다."));
+        rentalHistory.makeCancelled();
+        rentalHistoryRepository.save(rentalHistory);
     }
 
     private void handleReturnRequest(User user, Long equipmentId) {

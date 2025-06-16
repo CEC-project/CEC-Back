@@ -6,13 +6,15 @@ import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomStatusRequest;
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.model.entity.BrokenRepairHistory;
+import com.backend.server.model.entity.RentalHistory.RentalHistoryStatus;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.enums.Status;
-import com.backend.server.model.repository.history.BrokenRepairHistoryRepository;
-import com.backend.server.model.repository.user.UserRepository;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
 import com.backend.server.model.repository.classroom.ClassroomSpecification;
+import com.backend.server.model.repository.history.BrokenRepairHistoryRepository;
+import com.backend.server.model.repository.history.RentalHistoryRepository;
+import com.backend.server.model.repository.user.UserRepository;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +32,7 @@ public class AdminClassroomService {
     private final ClassroomRepository classroomRepository;
     private final UserRepository userRepository;
     private final BrokenRepairHistoryRepository brokenRepairHistoryRepository;
+    private final RentalHistoryRepository rentalHistoryRepository;
 
     @Transactional(readOnly = true)
     public List<AdminClassroomResponse> searchClassrooms(AdminClassroomSearchRequest request) {
@@ -148,6 +151,14 @@ public class AdminClassroomService {
         BrokenRepairHistory repairHistory =
                 BrokenRepairHistory.markAsRepairClassroom(classroom, user, detail, brokenRef.orElse(null));
         brokenRepairHistoryRepository.save(repairHistory);
+
+        rentalHistoryRepository
+                .findFirstByClassroomAndRenterOrderByCreatedAtDesc(classroom, classroom.getRenter())
+                .filter(rentalHistory -> rentalHistory.getStatus().equals(RentalHistoryStatus.BROKEN))
+                .ifPresent(rentalHistory -> {
+                    rentalHistory.makeRepair(repairHistory);
+                    rentalHistoryRepository.save(rentalHistory);
+                });
 
         return classroom.getId();
     }
