@@ -76,14 +76,14 @@ public class AdminEquipmentRentalService {
             throw new IllegalArgumentException("사용 중인 장비만 반납 가능합니다.");
         }
 
-        equipment.makeAvailable();
-        equipmentRepository.save(equipment);
-
         RentalHistory rentalHistory = rentalHistoryRepository
                 .findFirstByEquipmentAndRenterOrderByCreatedAtDesc(equipment, equipment.getRenter())
                 .orElseThrow(() -> new IllegalArgumentException("대여 내역이 존재하지 않습니다."));
         rentalHistory.makeReturn();
         rentalHistoryRepository.save(rentalHistory);
+
+        equipment.makeAvailable();
+        equipmentRepository.save(equipment);
 
         notificationProcess(equipmentId, equipmentName, renterId, "대여 반납", "");
 
@@ -101,14 +101,14 @@ public class AdminEquipmentRentalService {
             throw new IllegalArgumentException("대여 승인된 장비만 승인 취소가 가능합니다.");
         }
 
-        equipment.makeAvailable();
-        equipmentRepository.save(equipment);
-
         RentalHistory rentalHistory = rentalHistoryRepository
                 .findFirstByEquipmentAndRenterOrderByCreatedAtDesc(equipment, equipment.getRenter())
                 .orElseThrow(() -> new IllegalArgumentException("대여 내역이 존재하지 않습니다."));
         rentalHistory.makeApprovalCancelled(detail);
         rentalHistoryRepository.save(rentalHistory);
+
+        equipment.makeAvailable();
+        equipmentRepository.save(equipment);
 
         notificationProcess(equipmentId, equipmentName, renterId, "대여 취소", "\n대여 취소 사유 : " + detail);
 
@@ -126,14 +126,14 @@ public class AdminEquipmentRentalService {
             throw new IllegalArgumentException("대여 요청 상태인 장비만 반려 가능합니다.");
         }
 
-        equipment.makeAvailable();
-        equipmentRepository.save(equipment);
-
         RentalHistory rentalHistory = rentalHistoryRepository
                 .findFirstByEquipmentAndRenterOrderByCreatedAtDesc(equipment, equipment.getRenter())
                 .orElseThrow(() -> new IllegalArgumentException("대여 내역이 존재하지 않습니다."));
         rentalHistory.makeRejected(detail);
         rentalHistoryRepository.save(rentalHistory);
+
+        equipment.makeAvailable();
+        equipmentRepository.save(equipment);
 
         notificationProcess(equipmentId, equipmentName, renterId, "대여 반려", "\n반려 사유 : " + detail);
 
@@ -155,14 +155,14 @@ public class AdminEquipmentRentalService {
         BrokenRepairHistory history = BrokenRepairHistory.markAsBrokenWhenEquipmentReturn(equipment, renter, detail);
         brokenRepairHistoryRepository.save(history);
 
-        equipment.makeBroken();
-        equipmentRepository.save(equipment);
-
         RentalHistory rentalHistory = rentalHistoryRepository
                 .findFirstByEquipmentAndRenterOrderByCreatedAtDesc(equipment, equipment.getRenter())
                 .orElseThrow(() -> new IllegalArgumentException("대여 내역이 존재하지 않습니다."));
         rentalHistory.makeBroken(history);
         rentalHistoryRepository.save(rentalHistory);
+
+        equipment.makeBroken();
+        equipmentRepository.save(equipment);
 
         notificationProcess(equipmentId, equipmentName, renterId, "반납시 파손처리", "\n파손 내용 : " + detail);
 

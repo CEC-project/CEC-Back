@@ -102,14 +102,14 @@ public class AdminClassroomRentalService {
             throw new IllegalStateException("대여 요청 상태인 강의실만 반려할 수 있습니다. ID: " + classroomId);
 
         // 상태 변경
-        classroom.makeAvailable();
-        classroomRepository.save(classroom);
-
         RentalHistory rentalHistory = rentalHistoryRepository
                 .findFirstByClassroomAndRenterOrderByCreatedAtDesc(classroom, classroom.getRenter())
                 .orElseThrow(() -> new IllegalArgumentException("대여 내역이 존재하지 않습니다."));
         rentalHistory.makeRejected(detail);
         rentalHistoryRepository.save(rentalHistory);
+
+        classroom.makeAvailable();
+        classroomRepository.save(classroom);
 
         // 알림 전송
         notificationProcess(classroomId, classroomName, renterId, "대여 반려", "\n반려 사유 : " + detail);
@@ -130,14 +130,14 @@ public class AdminClassroomRentalService {
             throw new IllegalStateException("대여된 강의실만 반납할 수 있습니다. ID: " + classroomId);
 
         // 상태 변경
-        classroom.makeAvailable();
-        classroomRepository.save(classroom);
-
         RentalHistory rentalHistory = rentalHistoryRepository
                 .findFirstByClassroomAndRenterOrderByCreatedAtDesc(classroom, classroom.getRenter())
                 .orElseThrow(() -> new IllegalArgumentException("대여 내역이 존재하지 않습니다."));
         rentalHistory.makeReturn();
         rentalHistoryRepository.save(rentalHistory);
+
+        classroom.makeAvailable();
+        classroomRepository.save(classroom);
 
         // 알림 전송
         notificationProcess(classroomId, classroomName, renterId, "반납 승인", "");
@@ -160,9 +160,6 @@ public class AdminClassroomRentalService {
             throw new IllegalStateException("대여된 강의실만 반납시 파손처리 할 수 있습니다. ID: " + classroomId);
 
         // 상태 변경
-        classroom.makeBroken();
-        classroomRepository.save(classroom);
-
         BrokenRepairHistory history = BrokenRepairHistory.markAsBrokenWhenClassroomReturn(classroom, renter, detail);
         brokenRepairHistoryRepository.save(history);
 
@@ -171,6 +168,9 @@ public class AdminClassroomRentalService {
                 .orElseThrow(() -> new IllegalArgumentException("대여 내역이 존재하지 않습니다."));
         rentalHistory.makeBroken(history);
         rentalHistoryRepository.save(rentalHistory);
+
+        classroom.makeBroken();
+        classroomRepository.save(classroom);
 
         // 알림 전송
         notificationProcess(classroomId, classroomName, renterId, "반납시 파손처리", "\n파손 내용 : " + detail);
@@ -191,14 +191,14 @@ public class AdminClassroomRentalService {
             throw new IllegalStateException("대여된 강의실만 대여 취소 할 수 있습니다. ID: " + classroomId);
 
         // 상태 변경
-        classroom.makeAvailable();
-        classroomRepository.save(classroom);
-
         RentalHistory rentalHistory = rentalHistoryRepository
                 .findFirstByClassroomAndRenterOrderByCreatedAtDesc(classroom, classroom.getRenter())
                 .orElseThrow(() -> new IllegalArgumentException("대여 내역이 존재하지 않습니다."));
         rentalHistory.makeApprovalCancelled(detail);
         rentalHistoryRepository.save(rentalHistory);
+
+        classroom.makeAvailable();
+        classroomRepository.save(classroom);
 
         // 알림 전송
         notificationProcess(classroomId, classroomName, renterId, "대여 취소", "\n대여 취소 사유 : " + detail);
