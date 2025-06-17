@@ -30,7 +30,6 @@ public class AdminEquipmentCategoryCreateRequest {
     @Schema(description = "인당 대여 제한 갯수", example = "10")
     @NotNull(message = "대여 제한 수는 필수입니다.")
     @Min(value = 0, message = "0 이상 입력하세요.")
-    @Max(value = 10, message = "10 이하만 입력 가능합니다.")
     private Integer maxRentalCount;
 
     
