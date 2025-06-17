@@ -8,4 +8,7 @@ public interface EquipmentCartRepository extends JpaRepository<EquipmentCart, Lo
     boolean existsByUserIdAndEquipmentId(Long userId, Long equipmentId);
     List<EquipmentCart> findByUserId(Long userId);
     void deleteByUserIdAndEquipmentId(Long userId, Long equipmentId);
+
+    List<EquipmentCart> findAllByUserIdAndEquipmentIdIn(Long userId, List<Long> equipmentIds);
+
 }
