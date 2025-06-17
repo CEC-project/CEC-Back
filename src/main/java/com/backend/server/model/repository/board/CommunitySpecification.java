@@ -2,7 +2,6 @@ package com.backend.server.model.repository.board;
 
 import com.backend.server.api.admin.community.dto.AdminCommunityListRequest;
 import com.backend.server.api.user.board.dto.PostListRequest;
-import com.backend.server.api.admin.notice.dto.AdminNoticeListRequest;
 import com.backend.server.model.entity.Board;
 import com.backend.server.model.entity.BoardCategory;
 import com.backend.server.model.entity.User;
@@ -14,38 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommunitySpecification {
-    public static Specification<Board> filterCommunity(AdminNoticeListRequest request) {
-        return ((root, query, cb) -> {
-            List<Predicate> predicates = new ArrayList<>();
-
-            if (StringUtils.hasText(request.getSearchKeyword())) {
-                String[] keywords = request.getSearchKeyword().trim().split("\\s+");
-
-                switch (request.getSearchType()) {
-                    case TITLE -> {
-                        for (String keyword : keywords) {
-                            predicates.add(cb.like(cb.lower(root.get("title")), "%" + keyword.toLowerCase() + "%"));
-                        }
-                    }
-                    case CONTENT -> {
-                        for (String keyword : keywords) {
-                            predicates.add(cb.like(cb.lower(root.get("content")), "%" + keyword.toLowerCase() + "%"));
-                        }
-                    }
-                    case ALL -> {
-                        for (String keyword : keywords) {
-                            Predicate titlePredicate = cb.like(cb.lower(root.get("title")), "%" + keyword.toLowerCase() + "%");
-                            Predicate contentPredicate = cb.like(cb.lower(root.get("content")), "%" + keyword.toLowerCase() + "%");
-                            predicates.add(cb.or(titlePredicate, contentPredicate));
-                        }
-                    }
-                }
-            }
-
-            return cb.and(predicates.toArray(new Predicate[0]));
-        });
-    }
-
     public static Specification<Board> filterCommunities(AdminCommunityListRequest request) {
         return (root, query, cb) -> {
             var predicate = cb.conjunction();
@@ -127,8 +94,8 @@ public class CommunitySpecification {
             }
 
             // 2) 카테고리 필터
-            if (request.getCategoryId() != null)
-                predicates.add(cb.equal(category.get("id"), request.getCategoryId()));
+            if (request.getBoardId() != null)
+                predicates.add(cb.equal(category.get("id"), request.getBoardId()));
 
             // 3) 작성자 필터
             if (request.getAuthorId() != null)
