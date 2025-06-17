@@ -70,10 +70,12 @@ public class EquipmentController {
     @Operation(
             summary = "장비 장바구니 삭제"
     )
-    public ApiResponse<List<Long>> getCartItems(
+    public ApiResponse<List<Long>> deleteCartItems(
             @AuthenticationPrincipal LoginUser loginUser, @RequestBody EquipmentCartListRequest request) {
-        return ApiResponse.success("장바구니 조회 성공", equipmentService.deleteCartItems(loginUser, request));
+        return ApiResponse.success("장바구니 삭제 성공", equipmentService.deleteCartItemsByEquipmentIds(loginUser, request));
     }
+
+
 
 
     @PatchMapping("/action")

@@ -3,11 +3,7 @@ package com.backend.server.api.user.equipment.service;
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
 import com.backend.server.api.common.notification.service.CommonNotificationService;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentActionRequest;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentCartListRequest;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentListRequest;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentListResponse;
-import com.backend.server.api.user.equipment.dto.equipment.EquipmentResponse;
+import com.backend.server.api.user.equipment.dto.equipment.*;
 import com.backend.server.model.entity.RentalHistory;
 import com.backend.server.model.entity.RentalHistory.RentalHistoryStatus;
 import com.backend.server.model.entity.RentalHistory.TargetType;
@@ -105,14 +101,15 @@ public class EquipmentService {
         List<EquipmentCart> cartItems = equipmentCartRepository.findByUserId(loginUser.getId());
 
         return cartItems.stream()
-            .map(cart -> {
-                Equipment equipment = cart.getEquipment();
-                return new EquipmentResponse(equipment);
-            })
-            .toList();
+                .map(cart -> {
+                    Equipment equipment = cart.getEquipment();
+                    return new EquipmentResponse(equipment);
+                })
+                .toList();
     }
 
     // 장비 장바구니에서 항목 삭제 후, 삭제된 장바구니 ID를 반환
+    @Transactional
     public List<Long> deleteCartItems(LoginUser loginUser, EquipmentCartListRequest request) {
         // 로그인한 사용자의 장바구니 아이템 조회
         List<EquipmentCart> userCartItems = equipmentCartRepository.findByUserId(loginUser.getId());
@@ -122,7 +119,7 @@ public class EquipmentService {
                 .filter(cart -> request.getIds().contains(cart.getId()))
                 .toList();
 
-        // 실제 삭제 수행
+        // 삭제 수행
         equipmentCartRepository.deleteAll(toDelete);
 
         // 실제 삭제된 장바구니 ID 반환
@@ -130,6 +127,25 @@ public class EquipmentService {
                 .map(EquipmentCart::getId)
                 .toList();
     }
+
+    @Transactional
+    public List<Long> deleteCartItemsByEquipmentIds(LoginUser loginUser, EquipmentCartListRequest request) {
+        List<Long> equipmentIds = request.getIds(); // 요청에서 장비 ID 목록 추출
+
+        List<EquipmentCart> carts = equipmentCartRepository.findAllByUserIdAndEquipmentIdIn(loginUser.getId(), equipmentIds);
+
+        if (carts.size() != equipmentIds.size()) {
+            throw new IllegalArgumentException("일부 장비는 장바구니에 없거나 권한이 없습니다.");
+        }
+
+        equipmentCartRepository.deleteAll(carts);
+
+        // 삭제된 장바구니 항목 ID 반환
+        return carts.stream()
+                .map(EquipmentCart::getId)
+                .toList();
+    }
+
 
     @Transactional
     public void handleUserAction(LoginUser loginUser, EquipmentActionRequest request) {
