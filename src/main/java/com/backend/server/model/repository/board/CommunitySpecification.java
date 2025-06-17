@@ -94,8 +94,8 @@ public class CommunitySpecification {
             }
 
             // 2) 카테고리 필터
-            if (request.getBoardId() != null)
-                predicates.add(cb.equal(category.get("id"), request.getBoardId()));
+            if (request.getCategoryId() != null)
+                predicates.add(cb.equal(category.get("id"), request.getCategoryId()));
 
             // 3) 작성자 필터
             if (request.getAuthorId() != null)
