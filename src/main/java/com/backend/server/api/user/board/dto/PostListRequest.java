@@ -19,7 +19,7 @@ public class PostListRequest extends AbstractPaginationParam {
     @Schema(description = "검색어")
     String searchKeyword;
 
-    @Schema(description = "카테고리 ID로 정렬")
+    @Schema(description = "게시판 id")
     private Long categoryId;
 
     @Schema(description = "작성자 id")
