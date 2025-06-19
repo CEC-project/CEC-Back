@@ -9,6 +9,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 import com.backend.server.model.entity.enums.Role;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "users")
@@ -16,6 +17,8 @@ import com.backend.server.model.entity.enums.Role;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
+@Where(clause = "deleted_at IS NULL")
+//이제 find all 하면 SELECT * FROM user WHERE deleted_at IS NULL;
 public class User extends BaseTimeEntity {
     @Id
     @Column(name = "user_id")

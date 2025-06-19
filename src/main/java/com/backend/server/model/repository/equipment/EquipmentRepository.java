@@ -120,5 +120,10 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long>, Jpa
     @EntityGraph(attributePaths = {"equipmentModel", "equipmentCategory", "renter"})
     Page<Equipment> findAll(Specification<Equipment> spec, Pageable pageable);
 
+    @Query(value = "SELECT * FROM equipment WHERE id = :id", nativeQuery = true)
+    Optional<Equipment> findByIdIncludingDeleted(@Param("id") Long id);
 
+    @Modifying
+    @Query("delete from Equipment e where e.deletedAt <= :cutoff")
+    void deleteByDeletedAtBefore(@Param("cutoff") LocalDateTime cutoff);
 }

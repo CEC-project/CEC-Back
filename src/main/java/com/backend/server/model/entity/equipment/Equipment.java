@@ -12,11 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.backend.server.model.entity.enums.Status;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "equipment")
 @Getter
-
+@Where(clause = "deleted_at IS NULL")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)

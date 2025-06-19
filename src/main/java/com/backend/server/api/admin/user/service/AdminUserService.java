@@ -40,9 +40,12 @@ public class AdminUserService {
 
         return new AdminUserDetailListResponse(page, professors);
     }
-
+    @Transactional
     public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(IllegalArgumentException::new);
+        user.softDelete();
+        userRepository.save(user);
     }
 
     @Transactional
