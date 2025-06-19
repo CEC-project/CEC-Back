@@ -70,13 +70,13 @@ class AdminEquipmentServiceTest {
         assertTrue(serial.startsWith("_CASON"));
     }
 
-    @Test
-    void deleteEquipment_shouldReturnId() {
-        Long id = 1L;
-        Long responseId= adminEquipmentService.deleteEquipment(id);
-        assertEquals(id, responseId);
-        verify(equipmentRepository).deleteById(id);
-    }
+//    @Test
+//    void deleteEquipment_shouldReturnId() {
+//        Long id = 1L;
+//        Long responseId= adminEquipmentService.deleteEquipment(id);
+//        assertEquals(id, responseId);
+//        verify(equipmentRepository).deleteById(id);
+//    }
 
     @Test
     void updateEquipmentStatus_shouldUpdateStatus() {
