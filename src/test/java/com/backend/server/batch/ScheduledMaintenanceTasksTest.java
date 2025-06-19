@@ -11,6 +11,7 @@ import com.backend.server.model.repository.classroom.ClassroomRepository;
 import com.backend.server.model.repository.classroom.SemesterRepository;
 import com.backend.server.model.repository.classroom.SemesterScheduleRepository;
 import com.backend.server.model.repository.equipment.EquipmentRepository;
+import com.backend.server.model.repository.user.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
@@ -38,6 +39,9 @@ class ScheduledMaintenanceTasksTest {
     SemesterScheduleRepository semesterScheduleRepository;
     @Autowired
     EntityManager em;
+    @Autowired
+    UserRepository userRepository;
+
 
     private ScheduledMaintenanceTasks scheduledMaintenanceTasks;
     private Semester semester;
@@ -57,7 +61,8 @@ class ScheduledMaintenanceTasksTest {
         scheduledMaintenanceTasks = new ScheduledMaintenanceTasks(
                 equipmentRepository,
                 classroomRepository,
-                semesterRepository
+                semesterRepository,
+                userRepository
         );
 
         // 테스트용 학기

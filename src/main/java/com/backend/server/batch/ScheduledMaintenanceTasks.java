@@ -5,6 +5,7 @@ import com.backend.server.model.entity.enums.Status;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
 import com.backend.server.model.repository.classroom.SemesterRepository;
 import com.backend.server.model.repository.equipment.EquipmentRepository;
+import com.backend.server.model.repository.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,9 +21,11 @@ public class ScheduledMaintenanceTasks {
     private final EquipmentRepository equipmentRepository;
     private final ClassroomRepository classroomRepository;
     private final SemesterRepository semesterRepository;
+    private final UserRepository userRepository;
 
     @Scheduled(cron = "0 0 0 * * *")
     public void midnightScheduler() {
+        runSoftDeleteCleanup();
         runExpiredRentalCleanup();
     }
 
@@ -40,6 +43,13 @@ public class ScheduledMaintenanceTasks {
             classroomRepository.updateClassroomStatusToAvailableBySemester(
                     semester.getId(), Status.IN_USE, Status.AVAILABLE);
         }
+    }
+
+    @Transactional
+    public void runSoftDeleteCleanup() {
+        LocalDateTime cutoff = LocalDateTime.now().minusYears(1);
+        userRepository.deleteByDeletedAtBefore(cutoff);
+        equipmentRepository.deleteByDeletedAtBefore(cutoff);
     }
 }
 

@@ -234,8 +234,12 @@ public class AdminEquipmentService {
     }
 
     // 장비 삭제
+    @Transactional
     public Long deleteEquipment(Long id) {
-        equipmentRepository.deleteById(id);
+        Equipment equipment = equipmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("장비를 찾을 수 없습니다."));
+        equipment.softDelete();
+        equipmentRepository.save(equipment);
         return id;
     }
 
