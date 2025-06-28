@@ -48,7 +48,8 @@ public class AdminSemesterService {
 
     @Transactional
     public void deleteSemester(Long id) {
-        semesterRepository.findById(id).orElseThrow(() -> new RuntimeException("유효하지 않은 학기 id 입니다."));
-        semesterRepository.deleteById(id);
+        Semester semester = semesterRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("유효하지 않은 학기 id 입니다."));
+        semester.softDelete();
     }
 }

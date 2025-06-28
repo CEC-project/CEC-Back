@@ -117,6 +117,6 @@ public class AdminSemesterScheduleService {
         SemesterSchedule schedule = semesterScheduleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("유효하지 않은 수업 시간표 id 입니다."));
         equipmentRepository.cancelRent(schedule.getEquipments(), Status.AVAILABLE);
-        semesterScheduleRepository.deleteById(id);
+        schedule.softDelete();
     }
 }
