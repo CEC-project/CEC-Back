@@ -102,7 +102,8 @@ public class AdminEquipmentModelService {
     public Long deleteModel(Long id) {
         EquipmentModel equipmentModel = equipmentModelRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("해당 장비 모델이 존재하지 않습니다. id=" + id));
-        equipmentModelRepository.delete(equipmentModel);
+        equipmentModel.softDelete();
+        equipmentModelRepository.save(equipmentModel);
         return equipmentModel.getId();
     }
 }

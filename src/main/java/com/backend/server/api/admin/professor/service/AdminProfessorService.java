@@ -3,6 +3,7 @@ package com.backend.server.api.admin.professor.service;
 import com.backend.server.api.admin.professor.dto.AdminProfessorRequest;
 import com.backend.server.api.admin.professor.dto.AdminProfessorResponse;
 import com.backend.server.model.entity.Professor;
+import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.user.ProfessorRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,15 @@ public class AdminProfessorService {
         return professor.getId();
     }
 
+    //public void deleteProfessor(Long id) {
+        //professorRepository.deleteById(id);
+    //}
+
+    @Transactional
     public void deleteProfessor(Long id) {
-        professorRepository.deleteById(id);
+        Professor professor = professorRepository.findById(id)
+                .orElseThrow(IllegalArgumentException::new);
+        professor.softDelete();
+        professorRepository.save(professor);
     }
 }

@@ -25,7 +25,6 @@ public class ScheduledMaintenanceTasks {
 
     @Scheduled(cron = "0 0 0 * * *")
     public void midnightScheduler() {
-        runSoftDeleteCleanup();
         runExpiredRentalCleanup();
     }
 
@@ -45,12 +44,7 @@ public class ScheduledMaintenanceTasks {
         }
     }
 
-    @Transactional
-    public void runSoftDeleteCleanup() {
-        LocalDateTime cutoff = LocalDateTime.now().minusYears(1);
-        userRepository.deleteByDeletedAtBefore(cutoff);
-        equipmentRepository.deleteByDeletedAtBefore(cutoff);
-    }
+
 }
 
 

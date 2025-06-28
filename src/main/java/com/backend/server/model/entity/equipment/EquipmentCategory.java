@@ -29,4 +29,14 @@ public class EquipmentCategory extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EquipmentModel> models;
+
+    @Override
+    public void softDelete(){
+        super.softDelete();
+        if(models != null){
+            for (EquipmentModel equipmentModel : models){
+                equipmentModel.softDelete();
+            }
+        }
+    }
 }

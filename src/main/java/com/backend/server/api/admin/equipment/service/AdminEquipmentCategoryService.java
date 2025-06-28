@@ -70,8 +70,9 @@ public class AdminEquipmentCategoryService {
     public Long deleteCategory(Long id) {
         EquipmentCategory category = categoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다. id=" + id));
-        categoryRepository.delete(category);
-        return category.getId();
+        category.softDelete();
+        categoryRepository.save(category);
+        return id;
     }
 
     public List<AdminEquipmentCountByCategoryResponse> countAllCategoryWithEquipment() {

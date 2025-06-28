@@ -15,7 +15,7 @@ import com.backend.server.model.entity.enums.Status;
 import org.hibernate.annotations.Where;
 
 @Entity
-@Table(name = "equipment")
+@Table(name = "equipment", indexes = {@Index(name = "idx_deleted_at_equipment", columnList = "deleted_at")})
 @Getter
 @Where(clause = "deleted_at IS NULL")
 @NoArgsConstructor
@@ -112,5 +112,12 @@ public class Equipment extends BaseTimeEntity {
         this.status = Status.BROKEN;
 
         // 파손 테이블에 저장
+    }
+    @Override
+    public void softDelete() {
+        super.softDelete(); // 자기 자신 소프트 삭제
+        if (carts != null) {
+            carts.clear();
+        }
     }
 }
