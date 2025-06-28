@@ -1,25 +1,22 @@
 package com.backend.server.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 @Entity
-@Table
+@Table(name = "professor", indexes = {@Index(name = "idx_deleted_at_professor", columnList = "deleted_at")})
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
+@Where(clause = "deleted_at IS NULL")
 public class Professor extends BaseTimeEntity{
     @Id
     @Column

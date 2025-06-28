@@ -179,7 +179,7 @@ class AdminEquipmentModelServiceTest {
     }
 
     @Test
-    @DisplayName("deleteModel: 정상 삭제 후 ID 반환")
+    @DisplayName("deleteModel: 정상 소프트 삭제 후 ID 반환")
     void deleteModel_success() {
         Long id = 30L;
         EquipmentModel existing = EquipmentModel.builder().id(id).build();
@@ -188,7 +188,9 @@ class AdminEquipmentModelServiceTest {
         Long responseId = service.deleteModel(id);
 
         assertThat(responseId).isEqualTo(id);
-        verify(modelRepository).delete(existing);
+
+
+        verify(modelRepository).save(existing);  // delete → save로 변경
     }
 
     @Test

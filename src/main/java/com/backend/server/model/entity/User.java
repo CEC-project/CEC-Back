@@ -12,8 +12,7 @@ import com.backend.server.model.entity.enums.Role;
 import org.hibernate.annotations.Where;
 
 @Entity
-@Table(name = "users")
-@Getter
+@Table(name = "users", indexes = {@Index(name = "idx_deleted_at_user", columnList = "deleted_at")})@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
@@ -96,7 +95,6 @@ public class User extends BaseTimeEntity {
 
     @PrePersist //닉네임을 이름으로 설정하기 위해 30줄가량 생성자를 일일이 써야하는 문제를 해결
     public void prePersist() {
-
         if (this.nickname == null && this.name != null) {
             this.nickname = this.name;
         }
@@ -112,5 +110,26 @@ public class User extends BaseTimeEntity {
         this.professor = professor;
         this.birthDate = request.parseBirthday();
         this.profilePicture = request.getProfilePicture();
+    }
+
+    @Override
+    public void softDelete(){
+        super.softDelete();
+        if (this.name != null) {
+            this.name = String.valueOf(Math.abs(this.name.hashCode()));
+        }
+        if (this.name != null){
+            this.nickname = String.valueOf(Math.abs(this.nickname.hashCode()));
+        }
+        if (this.studentNumber != null) {
+            this.studentNumber = String.valueOf(Math.abs(this.studentNumber.hashCode()));
+        }
+        if (this.phoneNumber != null) {
+            this.phoneNumber = String.valueOf(Math.abs(this.phoneNumber.hashCode()));
+        }
+        if (this.email != null) {
+            this.email = String.valueOf(Math.abs(this.email.hashCode()));
+        }
+        this.profilePicture = null;
     }
 }
