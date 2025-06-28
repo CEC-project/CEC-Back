@@ -66,6 +66,7 @@ public class AdminInquiryService {
         Inquiry inquiry = inquiryRepository.findById(inquiryId)
                 .orElseThrow(() -> new IllegalArgumentException("답변할 문의의 id가 DB 에서 찾아지지 않음"));
         InquiryAnswer answer = request.toEntity(responder, inquiry);
+        inquiry.addAnswer(answer);
         answerRepository.save(answer);
 
         // 알림: 문의 작성자에게 답변 알림 발송
