@@ -56,4 +56,9 @@ public class Inquiry extends BaseTimeEntity {
         this.attachmentUrl = attachmentUrl;
         this.type = type;
     }
+
+    public void addAnswer(InquiryAnswer answer) {
+        answers.add(answer);
+        status = AnswerStatus.ANSWERED;
+    }
 }

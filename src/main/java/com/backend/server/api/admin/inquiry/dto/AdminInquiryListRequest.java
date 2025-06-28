@@ -24,7 +24,7 @@ public class AdminInquiryListRequest extends AbstractPaginationParam {
     }
 
     private String searchKeyword;
-    private AdminInquirySearchType searchType = AdminInquirySearchType.ALL; // 검색 유형 (0:name|1:phoneNumber|2:studentNumber|3:nickname|4 or 생략:all)
+    private AdminInquirySearchType searchType = AdminInquirySearchType.ALL;
     private Integer grade; // 1 or 2 or 3 or 4 or null
     private Gender gender; // '남' or '여' or null
     private Long professorId; // 교수 테이블의 id or null
