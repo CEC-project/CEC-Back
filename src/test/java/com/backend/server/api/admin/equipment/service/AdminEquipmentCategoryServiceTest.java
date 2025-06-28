@@ -120,18 +120,16 @@ class AdminEquipmentCategoryServiceTest {
     @Test
     void deleteCategory_success() {
         Long id = 20L;
-        // findById 시 엔티티 반환
-        EquipmentCategory existing = EquipmentCategory.builder().id(id).build();
+        EquipmentCategory existing = spy(EquipmentCategory.builder().id(id).build());
         when(categoryRepository.findById(id)).thenReturn(Optional.of(existing));
 
-        // service 호출
         Long responseId = service.deleteCategory(id);
 
-        // 반환 ID 검증
         assertThat(responseId).isEqualTo(id);
-        // delete 호출 여부 검증
-        verify(categoryRepository).delete(existing);
+        verify(existing).softDelete();
+        verify(categoryRepository).save(existing);
     }
+
 
     // deleteCategory에서 엔티티가 없을 때 예외 처리 검증
     @Test

@@ -12,7 +12,7 @@ import com.backend.server.model.entity.enums.Role;
 import org.hibernate.annotations.Where;
 
 @Entity
-@Table(name = "user", indexes = {@Index(name = "idx_deleted_at_user", columnList = "deleted_at")})@Getter
+@Table(name = "users", indexes = {@Index(name = "idx_deleted_at_user", columnList = "deleted_at")})@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
