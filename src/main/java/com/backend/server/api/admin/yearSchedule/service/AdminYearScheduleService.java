@@ -101,7 +101,8 @@ public class AdminYearScheduleService {
 
     @Transactional
     public void deleteYearSchedule(Long id) {
-        yearScheduleRepository.findById(id).orElseThrow(() -> new RuntimeException("유효하지 않은 일정 ID입니다."));
-        yearScheduleRepository.deleteById(id);
+        YearSchedule schedule = yearScheduleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("유효하지 않은 일정 ID입니다."));
+        schedule.softDelete();
     }
 }

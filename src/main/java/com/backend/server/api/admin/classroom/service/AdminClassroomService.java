@@ -92,7 +92,7 @@ public class AdminClassroomService {
         if (classroom.getStatus() == Status.IN_USE) {
             throw new RuntimeException("대여중인 강의실은 삭제할 수 없습니다.");
         }
-        classroomRepository.deleteById(id);
+        classroom.softDelete();
     }
 
     @Transactional
