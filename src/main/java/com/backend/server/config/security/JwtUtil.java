@@ -15,12 +15,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class JwtUtil {
+public class JwtUtil{
 
-    private final RedisTemplate<String, String> redisTemplate;
 
     @Value("${spring.jwt.secret:111111}")
     private String secret;
+
+    @Value("${test.token:test-token}")
+    private String testToken;
 
     @Value("${spring.jwt.access-token-validity-in-minutes:15}")
     private long accessTokenValidityInMinutes;
@@ -33,6 +35,8 @@ public class JwtUtil {
     private Duration refreshTokenDuration;
     private JwtParser jwtParser;
     private Key key;
+
+    private final RedisPostgresTemplate redisPostgresTemplate;
 
     @PostConstruct
     public void init() {
@@ -83,22 +87,22 @@ public class JwtUtil {
     }
 
     public void saveRefreshToken(String token, Long id) {
-        redisTemplate.opsForValue().set("refreshToken:" + token, id.toString(), refreshTokenDuration);
-        redisTemplate.opsForValue().set("refreshUser:" + id, token, refreshTokenDuration);
+        redisPostgresTemplate.set("refreshToken:" + token, id.toString(), refreshTokenDuration);
+        redisPostgresTemplate.set("refreshUser:" + id, token, refreshTokenDuration);
     }
 
     public void deleteRefreshToken(String token, Long id) {
-        redisTemplate.delete("refreshToken:" + token);
-        redisTemplate.delete("refreshUser:" + id);
+        redisPostgresTemplate.delete("refreshToken:" + token);
+        redisPostgresTemplate.delete("refreshUser:" + id);
     }
 
     public String getRefreshToken(Long id) {
-        return redisTemplate.opsForValue().get("refreshUser:" + id);
+        return redisPostgresTemplate.get("refreshUser:" + id);
     }
 
     public Long getUserIdByRefreshToken(String token) {
         String redisKey = "refreshToken:" + token;
-        String value = redisTemplate.opsForValue().get(redisKey);
+        String value = redisPostgresTemplate.get(redisKey);
         if (value == null)
             return null;
         return Long.valueOf(value);
@@ -121,5 +125,20 @@ public class JwtUtil {
         return true;
     }
 
+    public boolean validateAccessToken(String accessToken) {
+        // 테스트 토큰이면 true
+        if (accessToken != null && accessToken.equals(testToken)) {
+            return true;
+        }
+
+        try {
+            jwtParser.parseClaimsJws(accessToken);
+            return true;
+        } catch (ExpiredJwtException e) {
+            return false;
+        } catch (JwtException e) {
+            return false;
+        }
+    }
 
 }

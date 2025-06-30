@@ -1,9 +1,13 @@
 package com.backend.server.api.common.notification.service;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -16,31 +20,35 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.backend.server.model.entity.enums.Role;
 
+import javax.sql.DataSource;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommonNotificationService {
     private final NotificationRepository notificationRepository;
-    private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
     private final UserRepository userRepository;
+    private final SendNotification sendNotification;
+
 
     public void createNotification(CommonNotificationDto dto, Long userId){
         Notification notification = Notification.builder()
-            .userId(userId)
-            .category(dto.getCategory())
-            .title(dto.getTitle())
-            .message(dto.getMessage())
-            .link(dto.getLink())
-            .read(false)
-            .build();
+                .userId(userId)
+                .category(dto.getCategory())
+                .title(dto.getTitle())
+                .message(dto.getMessage())
+                .link(dto.getLink())
+                .read(false)
+                .build();
 
         notificationRepository.save(notification);
 
         // Redis로 실시간 알림 발송
         try {
             String json = objectMapper.writeValueAsString(notification);
-            redisTemplate.convertAndSend("notifications:" + userId, json);
+            log.info(json);
+            sendNotification.sendNotification("notifications" + userId, json);
         } catch (Exception e) {
             log.error("알림 전송 실패", e);
         }
@@ -67,7 +75,7 @@ public class CommonNotificationService {
 
             try {
                 String json = objectMapper.writeValueAsString(notification);
-                redisTemplate.convertAndSend("notifications:" + admin.getId(), json);
+                sendNotification.sendNotification("notifications" + admin.getId(), json);
             } catch (Exception e) {
                 log.error("알림 전송 실패 (관리자 ID: " + admin.getId() + ")", e);
             }
@@ -93,8 +101,8 @@ public class CommonNotificationService {
     public List<CommonNotificationResponse> getAllNotReadNotification(Long userId) {
         List<Notification> notifications = notificationRepository.findByUserIdAndReadFalse(userId);
         return notifications.stream()
-            .map(CommonNotificationResponse::new)
-            .toList();
+                .map(CommonNotificationResponse::new)
+                .toList();
     }
 
     public void notificationProcess(Long targetUserId, String category, String title, String message, String link) {
@@ -117,6 +125,9 @@ public class CommonNotificationService {
                 .build();
         createNotificationToAdmins(dto);
     }
+
+
+
 
 
 }

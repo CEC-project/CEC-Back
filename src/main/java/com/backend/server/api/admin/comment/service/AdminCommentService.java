@@ -73,7 +73,16 @@ public class AdminCommentService {
             default -> {}
         }
         // 1) 원글 작성자에게 알림 (본인이면 제외)
-        if (targetAuthorId != null && !targetAuthorId.equals(loginUser.getId())) {
+//        if (targetAuthorId != null && !targetAuthorId.equals(loginUser.getId())) {
+//            notificationService.notificationProcess(
+//                    targetAuthorId,
+//                    "댓글",
+//                    targetTitle + "에 댓글이 달렸습니다.",
+//                    loginUser.getNickname() + "님이 " + targetTitle + "에 댓글을 남겼습니다.",
+//                    link
+//            );
+//        }
+        if (targetAuthorId != null) {
             notificationService.notificationProcess(
                     targetAuthorId,
                     "댓글",
@@ -81,21 +90,6 @@ public class AdminCommentService {
                     loginUser.getNickname() + "님이 " + targetTitle + "에 댓글을 남겼습니다.",
                     link
             );
-        }
-
-        // 2) 대댓글이라면, 부모 댓글 작성자에게 알림 (본인/원글작성자와 중복시 제외)
-        if (parentComment != null) {
-            Long parentAuthorId = parentComment.getAuthor().getId();
-            if (!parentAuthorId.equals(loginUser.getId()) &&
-                    (targetAuthorId == null || !parentAuthorId.equals(targetAuthorId))) {
-                notificationService.notificationProcess(
-                        parentAuthorId,
-                        "대댓글",
-                        "내 댓글에 대댓글이 달렸습니다.",
-                        loginUser.getNickname() + "님이 내 댓글에 답글을 남겼습니다.",
-                        link + "#comment-" + parentComment.getId()
-                );
-            }
         }
 
         return comment.getId();

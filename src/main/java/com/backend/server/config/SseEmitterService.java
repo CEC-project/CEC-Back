@@ -52,7 +52,6 @@ public class SseEmitterService {
             }
         }
     }
-
     // 연결 및 스케줄러 정리
     private void cleanup(Long userId) {
         emitters.remove(userId);

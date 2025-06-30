@@ -1,12 +1,12 @@
 package com.backend.server.api.user.comment.service;
 
 import com.backend.server.api.common.dto.LoginUser;
+import com.backend.server.api.common.notification.service.CommonNotificationService;
 import com.backend.server.api.user.comment.dto.CommentListRequest;
 import com.backend.server.api.user.comment.dto.CommentListResponse;
 import com.backend.server.api.user.comment.dto.CommentRequest;
 import com.backend.server.api.user.comment.dto.CommentUpdateRequest;
-import com.backend.server.model.entity.Comment;
-import com.backend.server.model.entity.User;
+import com.backend.server.model.entity.*;
 import com.backend.server.model.entity.enums.TargetType;
 import com.backend.server.model.repository.board.CommentRepository;
 import com.backend.server.model.repository.user.UserRepository;
@@ -27,6 +27,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final Map<TargetType, JpaRepository<?, Long>> targetMap;
+    private final CommonNotificationService commonNotificationService;
 
     public Long createComment(CommentRequest request, LoginUser loginUser) {
         User currentuser = userRepository.findById(loginUser.getId())
@@ -41,8 +42,47 @@ public class CommentService {
                 .orElseThrow(() -> new EntityNotFoundException("원본 댓글을를 찾을 수 없습니다."));
         Comment comment = request.toEntity(parentComment, currentuser);
         commentRepository.save(comment);
+
+        //------알림
+        Object targetEntity = targetMap.get(request.getType()).findById(request.getTargetId())
+                .orElseThrow(() -> new EntityNotFoundException("댓글 대상을 찾을 수 없습니다."));
+        Long targetAuthorId = null;
+        String link = "#";
+        String targetTitle = "";
+        switch (request.getType()) {
+            case BOARD -> {
+                Board board = (Board) targetEntity;
+                targetAuthorId = board.getAuthor().getId();
+                link = "/community/" + board.getId();
+                targetTitle = board.getTitle();
+            }
+            case NOTICE -> {
+                Notice notice = (Notice) targetEntity;
+                targetAuthorId = notice.getAuthor().getId();
+                link = "/notice/" + notice.getId();
+                targetTitle = notice.getTitle();
+            }
+            case INQUIRY -> {
+                Inquiry inquiry = (Inquiry) targetEntity;
+                targetAuthorId = inquiry.getAuthor().getId();
+                link = "/inquiry/" + inquiry.getId();
+                targetTitle = inquiry.getTitle();
+            }
+            default -> {}
+        }
+//        if (targetAuthorId != null && !targetAuthorId.equals(loginUser.getId())) {
+//            commonNotificationService.notificationProcess(
+//                    targetAuthorId,
+//                    "댓글",
+//                    targetTitle + "에 댓글이 달렸습니다.",
+//                    loginUser.getNickname() + "님이 " + targetTitle + "에 댓글을 남겼습니다.",
+//                    link
+//            );
+//        }
+
         return comment.getId();
     }
+
 
     public CommentListResponse getComments(CommentListRequest request) {
         Page<Comment> parentComments = commentRepository.findAllByTypeAndTargetIdAndParentCommentIsNullWithAuthor(
