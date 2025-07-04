@@ -73,7 +73,7 @@ public class AdminBrokenRepairHistoryResponse {
         } else if (history.getTargetType() == BrokenRepairHistory.TargetType.CLASSROOM && history.getClassroom() != null) {
             this.name = history.getClassroom().getName();
             this.serialNumber = null;
-            this.location = history.getClassroom().getLocation();
+            this.location = history.getClassroom().getDescription();
         } else {
             this.name = null;
             this.serialNumber = null;

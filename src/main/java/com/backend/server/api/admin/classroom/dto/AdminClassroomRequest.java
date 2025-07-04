@@ -8,11 +8,17 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.time.LocalTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class AdminClassroomRequest {
 
     @NotEmpty
@@ -49,12 +55,12 @@ public class AdminClassroomRequest {
     public Classroom toEntity(User manager) {
         return Classroom.builder()
                 .name(name)
-                .location(description)
+                .description(description)
                 .startTime(parseStartTime())
                 .endTime(parseEndTime())
                 .manager(manager)
                 .status(Status.AVAILABLE)
-                .attachment(imageUrl)
+                .imageUrl(imageUrl)
                 .build();
     }
 }

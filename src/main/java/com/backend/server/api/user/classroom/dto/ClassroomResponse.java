@@ -28,8 +28,8 @@ public class ClassroomResponse {
     public ClassroomResponse(Classroom classroom) {
         this.id = classroom.getId();
         this.name = classroom.getName();
-        this.description = classroom.getLocation();
-        this.imageUrl = classroom.getAttachment();
+        this.description = classroom.getDescription();
+        this.imageUrl = classroom.getImageUrl();
         this.status = classroom.getStatus();
         this.startTime = classroom.getStartTime();
         this.endTime = classroom.getEndTime();
