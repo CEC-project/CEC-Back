@@ -38,12 +38,12 @@ public class Classroom extends BaseTimeEntity {
     private Long id;
 
     private String name;
-    private String location;
+    private String description;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private String attachment;
+    private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))

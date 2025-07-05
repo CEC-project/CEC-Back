@@ -37,11 +37,11 @@ public class AdminClassroomDetailResponse {
     public AdminClassroomDetailResponse(Classroom classroom, User manager, User renter, Professor professor) {
         this.id = classroom.getId();
         this.name = classroom.getName();
-        this.description = classroom.getLocation();
+        this.description = classroom.getDescription();
         this.startRentTime = classroom.getStartRentTime();
         this.endRentTime = classroom.getEndRentTime();
         this.status = classroom.getStatus();
-        this.imageUrl = classroom.getAttachment();
+        this.imageUrl = classroom.getImageUrl();
         this.requestedTime = classroom.getRequestedAt();
         this.managerName = manager != null ? manager.getName() : null;
         this.managerId = manager != null ? manager.getId() : null;

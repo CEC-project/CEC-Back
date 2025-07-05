@@ -74,11 +74,11 @@ public class AdminClassroomService {
 
         classroom = classroom.toBuilder()
                 .name(request.getName())
-                .location(request.getDescription())
+                .description(request.getDescription())
                 .startTime(start)
                 .endTime(end)
                 .manager(manager)
-                .attachment(request.getImageUrl())
+                .imageUrl(request.getImageUrl())
                 .build();
 
         classroomRepository.save(classroom);

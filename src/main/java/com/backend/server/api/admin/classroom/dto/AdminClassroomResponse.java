@@ -22,11 +22,11 @@ public class AdminClassroomResponse {
     public AdminClassroomResponse(Classroom classroom, User manager) {
         this.id = classroom.getId();
         this.name = classroom.getName();
-        this.description = classroom.getLocation();
+        this.description = classroom.getDescription();
         this.startTime = classroom.getStartTime().toString();
         this.endTime = classroom.getEndTime().toString();
-        this.managerName = manager.getName(); // User의 name 필드 기준
+        this.managerName = manager != null ? manager.getName() : ""; // User의 name 필드 기준
         this.status = classroom.getStatus().name();
-        this.imageUrl = classroom.getAttachment();
+        this.imageUrl = classroom.getImageUrl();
     }
 }
