@@ -1,8 +1,7 @@
-package com.backend.server.api.admin.classroom;
+package com.backend.server.api.admin.classroom.controller;
 
 import static com.backend.server.fixture.ClassroomFixture.강의실1;
 import static com.backend.server.fixture.ClassroomFixture.강의실2;
-import static com.backend.server.fixture.UserFixture.관리자1;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -11,35 +10,25 @@ import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest.SearchType;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest.SortBy;
 import com.backend.server.api.common.dto.ApiResponse;
+import com.backend.server.config.ControllerTest;
 import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
-import com.backend.server.model.repository.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@Transactional
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("dev")
+@ControllerTest
 @DisplayName("강의실 관리")
 public class AdminClassroomTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ClassroomRepository classroomRepository;
-    @Autowired private UserRepository userRepository;
-    @Autowired private PasswordEncoder passwordEncoder;
     @Autowired private ObjectMapper objectMapper;
 
     @Nested
@@ -47,7 +36,6 @@ public class AdminClassroomTest {
         @Test
         public void 강의실명으로_검색이_가능하다() throws Exception {
             //given
-            userRepository.save(관리자1.엔티티_생성(passwordEncoder, null));
             Classroom classroom = classroomRepository.save(강의실1.엔티티_생성(null));
 
             AdminClassroomSearchRequest request = new AdminClassroomSearchRequest();
@@ -70,7 +58,6 @@ public class AdminClassroomTest {
         @Test
         public void ID순_정렬이_가능하다() throws Exception {
             //given
-            userRepository.save(관리자1.엔티티_생성(passwordEncoder, null));
             Classroom classroom2 = classroomRepository.save(강의실2.엔티티_생성(null));
             Classroom classroom1 = classroomRepository.save(강의실1.엔티티_생성(null));
 

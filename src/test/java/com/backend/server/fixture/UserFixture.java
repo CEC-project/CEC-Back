@@ -15,9 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 public enum UserFixture {
     관리자1(
-            "관리자명",
+            "관리자1",
             "202011212",
-            "관리자닉",
+            "관리자1닉",
             "부서",
             1,
             "전공1",
@@ -33,7 +33,27 @@ public enum UserFixture {
             0,
             Role.ROLE_SUPER_ADMIN,
             1L
-    );
+    ),
+    사용자1(
+            "사용자1",
+            "202011213",
+            "사용자1닉",
+            "부서",
+            1,
+            "전공1",
+            "반1",
+            Gender.F,
+            "01012345678",
+            "asd@asdf.com",
+            "202011212",
+            null,
+            LocalDate.of(2020, 1, 1),
+            0,
+            0,
+            0,
+            Role.ROLE_USER,
+            1L
+            );
 
     private final String name;
     private final String studentNumber;
