@@ -1,4 +1,4 @@
-package com.backend.server.api.common.notification.service;
+package com.backend.server.model.repository.notification;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

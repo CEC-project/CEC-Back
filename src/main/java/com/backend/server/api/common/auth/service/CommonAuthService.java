@@ -1,13 +1,12 @@
 package com.backend.server.api.common.auth.service;
 
-import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.common.auth.dto.CommonSignInRequest;
 import com.backend.server.api.common.auth.dto.CommonSignInResponse;
+import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.config.security.JwtUtil;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.user.UserRepository;
 import io.jsonwebtoken.JwtException;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ public class CommonAuthService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public CommonSignInResponse login(HttpServletResponse response, CommonSignInRequest request) {
+    public CommonSignInResponse login(CommonSignInRequest request) {
         Optional<User> optionalUser = userRepository.findByStudentNumber(request.getStudentNumber());
         if (optionalUser.isEmpty())
             throw new RuntimeException("로그인 실패");
@@ -40,7 +39,7 @@ public class CommonAuthService {
 
         String refresh = jwtUtil.createRefreshToken();
         jwtUtil.saveRefreshToken(refresh, user.getId());
-        jwtUtil.saveRefreshCookie(response, refresh);
+        jwtUtil.saveRefreshCookie(refresh);
 
         return new CommonSignInResponse(user, jwtUtil.createAccessToken(user.getId()));
     }
@@ -63,9 +62,9 @@ public class CommonAuthService {
     }
 
     @Transactional
-    public void logout(LoginUser loginUser, HttpServletResponse response) {
+    public void logout(LoginUser loginUser) {
         String refreshToken = jwtUtil.getRefreshToken(loginUser.getId());
         jwtUtil.deleteRefreshToken(refreshToken, loginUser.getId());
-        jwtUtil.deleteRefreshCookie(response);
+        jwtUtil.deleteRefreshCookie();
     }
 }
