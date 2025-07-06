@@ -2,15 +2,15 @@ package com.backend.server.model.repository.keyValue;
 
 import com.backend.server.model.entity.PostgresqlRefreshToken;
 import com.backend.server.model.repository.user.PostgresqlRefreshTokenRepository;
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-import java.time.Duration;
 @Profile("postgre")
-@Component
+@Repository
 @RequiredArgsConstructor
-public class PostgresqlKeyValueTemplate implements RedisPostgresTemplate{
+public class PostgresqlKeyValueRepository implements KeyValueRepository {
     private final PostgresqlRefreshTokenRepository refreshTokenRepository;
     @Override
     public void set(String key, String value, Duration timeToLive) {

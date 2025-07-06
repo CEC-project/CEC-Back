@@ -1,10 +1,10 @@
 package com.backend.server.api.common.auth.controller;
 
+import com.backend.server.api.common.auth.dto.CommonSignInRequest;
+import com.backend.server.api.common.auth.dto.CommonSignInResponse;
 import com.backend.server.api.common.auth.service.CommonAuthService;
 import com.backend.server.api.common.dto.CommonResponse;
 import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.api.common.auth.dto.CommonSignInRequest;
-import com.backend.server.api.common.auth.dto.CommonSignInResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -52,9 +51,8 @@ public class CommonAuthController {
     )
     @PostMapping("/sign-in")
     public CommonResponse<CommonSignInResponse> signIn(
-            HttpServletResponse response,
             @RequestBody CommonSignInRequest request) {
-        return CommonResponse.success("로그인 성공", commonAuthService.login(response, request));
+        return CommonResponse.success("로그인 성공", commonAuthService.login(request));
     }
 
     @Operation(
@@ -111,8 +109,8 @@ public class CommonAuthController {
                     + "프론트는 로그아웃 시 엑세스 토큰을 삭제해야 합니다."
     )
     @DeleteMapping("/sign-out")
-    public CommonResponse<Object> signOut(@AuthenticationPrincipal LoginUser loginUser, HttpServletResponse response) {
-        commonAuthService.logout(loginUser, response);
+    public CommonResponse<Object> signOut(@AuthenticationPrincipal LoginUser loginUser) {
+        commonAuthService.logout(loginUser);
         return CommonResponse.success("로그아웃 성공", null);
     }
 }

@@ -1,9 +1,12 @@
 package com.backend.server.config.security;
 
-import com.backend.server.model.repository.keyValue.RedisPostgresTemplate;
-import io.jsonwebtoken.*;
+import com.backend.server.model.repository.cookie.CookieRepository;
+import com.backend.server.model.repository.keyValue.KeyValueRepository;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletResponse;
 import java.security.Key;
 import java.time.Duration;
 import java.util.Date;
@@ -16,7 +19,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class JwtUtil{
-
 
     @Value("${spring.jwt.secret:111111}")
     private String secret;
@@ -34,9 +36,10 @@ public class JwtUtil{
     private long refreshTokenValidity;
     private Duration refreshTokenDuration;
     private JwtParser jwtParser;
-    private Key key;
+    private Key jwtKey;
 
-    private final RedisPostgresTemplate redisPostgresTemplate;
+    private final KeyValueRepository keyValueRepository;
+    private final CookieRepository cookieRepository;
 
     @PostConstruct
     public void init() {
@@ -46,25 +49,25 @@ public class JwtUtil{
 
         byte[] secretBytes = secret.getBytes();
         jwtParser = Jwts.parserBuilder().setSigningKey(secretBytes).build();
-        key = new SecretKeySpec(secretBytes, SignatureAlgorithm.HS256.getJcaName());
+        jwtKey = new SecretKeySpec(secretBytes, SignatureAlgorithm.HS256.getJcaName());
     }
 
     public String createAccessToken(Long id) {
         return Jwts.builder()
                 .setSubject(id.toString())
                 .setExpiration(new Date(System.currentTimeMillis() + accessTokenValidity))
-                .signWith(key)
+                .signWith(jwtKey)
                 .compact();
     }
 
     public String createRefreshToken() {
         return Jwts.builder()
                 .setExpiration(new Date(System.currentTimeMillis() + refreshTokenValidity))
-                .signWith(key)
+                .signWith(jwtKey)
                 .compact();
     }
 
-    public void saveRefreshCookie(HttpServletResponse response, String refreshToken) {
+    public void saveRefreshCookie(String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .secure(true)
@@ -72,10 +75,10 @@ public class JwtUtil{
                 .path("/api/auth/token/refresh")
                 .maxAge(refreshTokenDuration)
                 .build();
-        response.addHeader("Set-Cookie", cookie.toString());
+        cookieRepository.setCookie(cookie);
     }
 
-    public void deleteRefreshCookie(HttpServletResponse response) {
+    public void deleteRefreshCookie() {
         ResponseCookie cookie = ResponseCookie.from("refreshToken", "")
                 .httpOnly(true)
                 .secure(true)
@@ -83,26 +86,26 @@ public class JwtUtil{
                 .path("/api/auth/token/refresh")
                 .maxAge(0)
                 .build();
-        response.addHeader("Set-Cookie", cookie.getValue());
+        cookieRepository.setCookie(cookie);
     }
 
     public void saveRefreshToken(String token, Long id) {
-        redisPostgresTemplate.set("refreshToken:" + token, id.toString(), refreshTokenDuration);
-        redisPostgresTemplate.set("refreshUser:" + id, token, refreshTokenDuration);
+        keyValueRepository.set("refreshToken:" + token, id.toString(), refreshTokenDuration);
+        keyValueRepository.set("refreshUser:" + id, token, refreshTokenDuration);
     }
 
     public void deleteRefreshToken(String token, Long id) {
-        redisPostgresTemplate.delete("refreshToken:" + token);
-        redisPostgresTemplate.delete("refreshUser:" + id);
+        keyValueRepository.delete("refreshToken:" + token);
+        keyValueRepository.delete("refreshUser:" + id);
     }
 
     public String getRefreshToken(Long id) {
-        return redisPostgresTemplate.get("refreshUser:" + id);
+        return keyValueRepository.get("refreshUser:" + id);
     }
 
     public Long getUserIdByRefreshToken(String token) {
-        String redisKey = "refreshToken:" + token;
-        String value = redisPostgresTemplate.get(redisKey);
+        String key = "refreshToken:" + token;
+        String value = keyValueRepository.get(key);
         if (value == null)
             return null;
         return Long.valueOf(value);
