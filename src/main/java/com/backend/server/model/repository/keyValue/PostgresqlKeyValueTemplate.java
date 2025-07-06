@@ -1,4 +1,4 @@
-package com.backend.server.config.security;
+package com.backend.server.model.repository.keyValue;
 
 import com.backend.server.model.entity.PostgresqlRefreshToken;
 import com.backend.server.model.repository.user.PostgresqlRefreshTokenRepository;

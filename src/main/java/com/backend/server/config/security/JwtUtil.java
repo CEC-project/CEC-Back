@@ -1,5 +1,6 @@
 package com.backend.server.config.security;
 
+import com.backend.server.model.repository.keyValue.RedisPostgresTemplate;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,7 +10,6 @@ import java.util.Date;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
@@ -134,11 +134,8 @@ public class JwtUtil{
         try {
             jwtParser.parseClaimsJws(accessToken);
             return true;
-        } catch (ExpiredJwtException e) {
-            return false;
         } catch (JwtException e) {
             return false;
         }
     }
-
 }

@@ -1,4 +1,4 @@
-package com.backend.server.config.security;
+package com.backend.server.model.repository.keyValue;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;

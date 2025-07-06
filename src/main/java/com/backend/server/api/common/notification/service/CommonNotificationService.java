@@ -1,14 +1,10 @@
 package com.backend.server.api.common.notification.service;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import com.backend.server.model.repository.notification.SendNotification;
 import java.util.List;
 
 import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.context.annotation.Profile;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.backend.server.api.common.notification.dto.CommonNotificationDto;
@@ -19,8 +15,6 @@ import com.backend.server.model.repository.notification.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.backend.server.model.entity.enums.Role;
-
-import javax.sql.DataSource;
 
 @Slf4j
 @Service
