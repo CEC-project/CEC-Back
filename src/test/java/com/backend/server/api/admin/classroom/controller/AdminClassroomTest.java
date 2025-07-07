@@ -2,6 +2,8 @@ package com.backend.server.api.admin.classroom.controller;
 
 import static com.backend.server.fixture.ClassroomFixture.강의실1;
 import static com.backend.server.fixture.ClassroomFixture.강의실2;
+import static com.backend.server.util.MockMvcUtil.convertToParams;
+import static com.backend.server.util.MockMvcUtil.jsonPathEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -9,11 +11,9 @@ import com.backend.server.api.admin.classroom.dto.AdminClassroomResponse;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest.SearchType;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest.SortBy;
-import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.config.ControllerTest;
 import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @ControllerTest
 @DisplayName("강의실 관리")
@@ -29,7 +28,6 @@ public class AdminClassroomTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ClassroomRepository classroomRepository;
-    @Autowired private ObjectMapper objectMapper;
 
     @Nested
     class 강의실_목록_조회_API는 {
@@ -43,16 +41,14 @@ public class AdminClassroomTest {
             request.setSearchType(SearchType.NAME);
 
             //when
-            ResultActions result = mockMvc.perform(
-                    get("/api/admin/classroom", objectMapper.writeValueAsString(request)));
+            ResultActions result = mockMvc.perform(get("/api/admin/classroom")
+                    .params(convertToParams(request)));
 
             //then
             AdminClassroomResponse classroomResponse = new AdminClassroomResponse(classroom, null);
-            ApiResponse<?> apiResponse = ApiResponse.success("강의실 목록 조회 성공", List.of(classroomResponse));
-            String response = objectMapper.writeValueAsString(apiResponse);
 
             result.andExpect(status().isOk())
-                    .andExpect(MockMvcResultMatchers.content().json(response));
+                    .andExpect(jsonPathEquals("$.data", List.of(classroomResponse)));
         }
 
         @Test
@@ -65,18 +61,15 @@ public class AdminClassroomTest {
             request.setSortBy(SortBy.ID);
 
             //when
-            ResultActions result = mockMvc.perform(
-                    get("/api/admin/classroom", objectMapper.writeValueAsString(request)));
+            ResultActions result = mockMvc.perform(get("/api/admin/classroom")
+                    .params(convertToParams(request)));
 
             //then
             AdminClassroomResponse classroomResponse2 = new AdminClassroomResponse(classroom2, null);
             AdminClassroomResponse classroomResponse1 = new AdminClassroomResponse(classroom1, null);
-            ApiResponse<?> apiResponse = ApiResponse.success("강의실 목록 조회 성공",
-                    List.of(classroomResponse2,  classroomResponse1));
-            String response = objectMapper.writeValueAsString(apiResponse);
 
             result.andExpect(status().isOk())
-                    .andExpect(MockMvcResultMatchers.content().json(response));
+                    .andExpect(jsonPathEquals("$.data", List.of(classroomResponse2, classroomResponse1)));
         }
     }
 }
