@@ -2,11 +2,15 @@ package com.backend.server.api.admin.classroom.controller;
 
 import static com.backend.server.fixture.ClassroomFixture.강의실1;
 import static com.backend.server.fixture.ClassroomFixture.강의실2;
+import static com.backend.server.util.MockMvcUtil.convertToJson;
 import static com.backend.server.util.MockMvcUtil.convertToParams;
 import static com.backend.server.util.MockMvcUtil.jsonPathEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.backend.server.api.admin.classroom.dto.AdminClassroomRequest;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomResponse;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest;
 import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest.SearchType;
@@ -14,17 +18,19 @@ import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest.So
 import com.backend.server.config.ControllerTest;
 import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 @ControllerTest
 @DisplayName("강의실 관리")
-public class AdminClassroomTest {
+public class AdminClassroomControllerTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ClassroomRepository classroomRepository;
@@ -71,5 +77,25 @@ public class AdminClassroomTest {
             result.andExpect(status().isOk())
                     .andExpect(jsonPathEquals("$.data", List.of(classroomResponse2, classroomResponse1)));
         }
+    }
+
+    @Test
+    public void 강의실_등록_API_테스트() throws Exception {
+        //given
+        AdminClassroomRequest request1 = 강의실1.등록_요청_생성();
+
+        //when
+        ResultActions result1 = mockMvc.perform(post("/api/admin/classroom")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(convertToJson(request1)));
+
+        //then
+        result1.andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").value(1L));
+
+        Classroom classroom1 = classroomRepository.findById(1L).orElseThrow(() ->
+            new AssertionError("Classroom not found"));
+
+        강의실1.엔티티와_비교(classroom1);
     }
 }
