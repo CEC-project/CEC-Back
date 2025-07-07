@@ -1,5 +1,7 @@
 package com.backend.server.fixture;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.backend.server.api.admin.classroom.dto.AdminClassroomRequest;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.classroom.Classroom;
@@ -23,16 +25,16 @@ public enum ClassroomFixture {
     강의실1(
             "강의실1",
             "설명1",
-            DefaultTime.START.getValue(),
-            DefaultTime.END.getValue(),
+            LocalTime.of(8, 0),
+            LocalTime.of(20, 0),
             null,
             1L,
             Status.AVAILABLE),
     강의실2(
             "강의실2",
             "설명2",
-            DefaultTime.START.getValue(),
-            DefaultTime.END.getValue(),
+            LocalTime.of(6, 0),
+            LocalTime.of(18, 0),
             null,
             1L,
             Status.AVAILABLE);
@@ -66,5 +68,14 @@ public enum ClassroomFixture {
                 .imageUrl(imageUrl)
                 .managerId(managerId)
                 .build();
+    }
+
+    public void 엔티티와_비교(Classroom classroom) {
+        assertEquals(name, classroom.getName());
+        assertEquals(description, classroom.getDescription());
+        assertEquals(startTime, classroom.getStartTime());
+        assertEquals(endTime, classroom.getEndTime());
+        assertEquals(imageUrl, classroom.getImageUrl());
+        assertEquals(status, classroom.getStatus());
     }
 }
