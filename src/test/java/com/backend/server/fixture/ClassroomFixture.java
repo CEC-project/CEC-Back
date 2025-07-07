@@ -13,14 +13,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-enum DefaultTime {
-    START(LocalTime.of(9, 0)),
-    END(LocalTime.of(18, 0));
-    private final LocalTime value;
-}
-
-@AllArgsConstructor
-@Getter
 public enum ClassroomFixture {
     강의실1(
             "강의실1",
