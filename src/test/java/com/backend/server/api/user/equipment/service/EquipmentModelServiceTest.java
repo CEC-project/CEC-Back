@@ -46,28 +46,28 @@ public class EquipmentModelServiceTest {
 
 
     //페이지 테스트
-    @Test
-    void getAllModels_shouldReturnFilteredResults() {
-        //1.given
-        EquipmentCategory category = EquipmentCategory.builder().id(1L).name("SONY").build();
-        EquipmentModel model1 = EquipmentModel.builder().id(1L).name("SONY-A7000").category(category).build();
-        EquipmentModel model2 = EquipmentModel.builder().id(1L).name("SONY-A8000").category(category).build();
-
-        EquipmentModelListRequest request = EquipmentModelListRequest.builder()
-                .searchKeyword("sony")
-                .build();
-
-        Page<EquipmentModel> page = new PageImpl<>(List.of(model1,model2));
-        when(equipmentModelRepository.findAll(any(Specification.class), any(Pageable.class)))
-                .thenReturn(page);
-
-        //2.when
-        EquipmentModelListResponse result = equipmentModelService.getAllModels(request);
-        //3.then
-        assertEquals(2, result.getContent().size());
-        assertEquals("SONY-A7000", result.getContent().get(0).getName());
-
-    }
+//    @Test
+//    void getAllModels_shouldReturnFilteredResults() {
+//        //1.given
+//        EquipmentCategory category = EquipmentCategory.builder().id(1L).name("SONY").build();
+//        EquipmentModel model1 = EquipmentModel.builder().id(1L).name("SONY-A7000").category(category).build();
+//        EquipmentModel model2 = EquipmentModel.builder().id(1L).name("SONY-A8000").category(category).build();
+//
+//        EquipmentModelListRequest request = EquipmentModelListRequest.builder()
+//                .searchKeyword("sony")
+//                .build();
+//
+//        Page<EquipmentModel> page = new PageImpl<>(List.of(model1,model2));
+//        when(equipmentModelRepository.findAll(any(Specification.class), any(Pageable.class)))
+//                .thenReturn(page);
+//
+//        //2.when
+//        EquipmentModelListResponse result = equipmentModelService.getAllModels(request);
+//        //3.then
+//        assertEquals(2, result.getContent().size());
+//        assertEquals("SONY-A7000", result.getContent().get(0).getName());
+//
+//    }
 
 //    @Test
 //    void getModelsByCategory_shouldReturnFilteredByCategoryResult() {

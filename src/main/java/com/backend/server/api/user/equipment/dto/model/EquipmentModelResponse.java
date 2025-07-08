@@ -1,5 +1,6 @@
 package com.backend.server.api.user.equipment.dto.model;
 
+import com.backend.server.model.entity.equipment.Equipment;
 import com.backend.server.model.entity.equipment.EquipmentModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -24,11 +25,15 @@ public class EquipmentModelResponse {
     @Schema(description = "장비 모델이 속한 카테고리 ID", example = "3")
     private Long categoryId;
 
+    @Schema(description = "장비 모델에 속한 장비 이미지 URL", example = "https://example.com/images/equipment.jpg")
+    private String imageUrl;
+
     public EquipmentModelResponse(EquipmentModel equipmentModel) {
         this.id = equipmentModel.getId();
         this.name = equipmentModel.getName();
         this.englishCode = equipmentModel.getEnglishCode();
         this.available = equipmentModel.isAvailable();
         this.categoryId = equipmentModel.getCategory().getId();
+        this.imageUrl = equipmentModel.getEquipments().get(0).getImageUrl();
     }
 }
