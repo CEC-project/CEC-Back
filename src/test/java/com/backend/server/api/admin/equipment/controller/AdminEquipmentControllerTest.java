@@ -26,7 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 @ControllerTest
-@DisplayName("장비 관리 컨트롤러 테스트")
+@DisplayName("AdminEquipmentController")
 class AdminEquipmentControllerTest {
 
     @Autowired private MockMvc mockMvc;

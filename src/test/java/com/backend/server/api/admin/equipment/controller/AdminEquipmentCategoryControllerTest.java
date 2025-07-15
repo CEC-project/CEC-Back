@@ -15,10 +15,8 @@ import static com.backend.server.fixture.EquipmentCategoryFixture.장비분류1;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ControllerTest
-@DisplayName("장비 카테고리 컨트롤러 테스트")
+@DisplayName("AdminEquipmentCategoryController")
 public class AdminEquipmentCategoryControllerTest {
-    @Autowired
-    private MockMvcUtil mockMvcUtil;
     @Autowired
     private MockMvc mockMvc;
     @Autowired private EquipmentCategoryRepository equipmentCategoryRepository;

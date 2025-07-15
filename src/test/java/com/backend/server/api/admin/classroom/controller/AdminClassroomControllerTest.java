@@ -18,7 +18,6 @@ import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest.So
 import com.backend.server.config.ControllerTest;
 import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -29,7 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 @ControllerTest
-@DisplayName("강의실 관리")
+@DisplayName("AdminClassroomController")
 public class AdminClassroomControllerTest {
 
     @Autowired private MockMvc mockMvc;
