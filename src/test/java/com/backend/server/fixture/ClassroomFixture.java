@@ -51,7 +51,7 @@ public enum ClassroomFixture {
                 .build();
     }
 
-    public AdminClassroomRequest 등록_요청_생성() {
+    public AdminClassroomRequest 등록_요청_생성(Long managerId) {
         return AdminClassroomRequest.builder()
                 .name(name)
                 .description(description)

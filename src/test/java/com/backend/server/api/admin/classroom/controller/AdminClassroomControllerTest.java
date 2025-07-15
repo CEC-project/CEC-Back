@@ -2,12 +2,12 @@ package com.backend.server.api.admin.classroom.controller;
 
 import static com.backend.server.fixture.ClassroomFixture.강의실1;
 import static com.backend.server.fixture.ClassroomFixture.강의실2;
+import static com.backend.server.fixture.UserFixture.관리자1;
 import static com.backend.server.util.MockMvcUtil.convertToJson;
 import static com.backend.server.util.MockMvcUtil.convertToParams;
 import static com.backend.server.util.MockMvcUtil.jsonPathEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.backend.server.api.admin.classroom.dto.AdminClassroomRequest;
@@ -18,12 +18,15 @@ import com.backend.server.api.admin.classroom.dto.AdminClassroomSearchRequest.So
 import com.backend.server.config.ControllerTest;
 import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.repository.classroom.ClassroomRepository;
+import com.backend.server.model.repository.user.UserRepository;
+import com.jayway.jsonpath.JsonPath;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -33,6 +36,8 @@ public class AdminClassroomControllerTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ClassroomRepository classroomRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private PasswordEncoder passwordEncoder;
 
     @Nested
     class 강의실_목록_조회_API는 {
@@ -81,7 +86,8 @@ public class AdminClassroomControllerTest {
     @Test
     public void 강의실_등록_API_테스트() throws Exception {
         //given
-        AdminClassroomRequest request1 = 강의실1.등록_요청_생성();
+        Long managerId = userRepository.save(관리자1.엔티티_생성(passwordEncoder, null)).getId();
+        AdminClassroomRequest request1 = 강의실1.등록_요청_생성(managerId);
 
         //when
         ResultActions result1 = mockMvc.perform(post("/api/admin/classroom")
@@ -89,10 +95,12 @@ public class AdminClassroomControllerTest {
                 .content(convertToJson(request1)));
 
         //then
-        result1.andExpect(status().isOk())
-                .andExpect(jsonPath("$.data").value(1L));
+        result1.andExpect(status().isOk());
 
-        Classroom classroom1 = classroomRepository.findById(1L).orElseThrow(() ->
+        String responseJson = result1.andReturn().getResponse().getContentAsString();
+        Long classroomId = JsonPath.parse(responseJson).read("$.data", Long.class);
+
+        Classroom classroom1 = classroomRepository.findById(classroomId).orElseThrow(() ->
             new AssertionError("Classroom not found"));
 
         강의실1.엔티티와_비교(classroom1);

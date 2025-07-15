@@ -14,6 +14,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @AllArgsConstructor
 @Getter
 public enum UserFixture {
+    MOCK_MVC_테스트시_로그인_계정(
+            "테스트",
+            "202011210",
+            "테스트",
+            "부서",
+            1,
+            "전공1",
+            "반1",
+            Gender.M,
+            "01012341234",
+            "asd@asdf.com",
+            "202011210",
+            null,
+            LocalDate.of(2020, 1, 1),
+            0,
+            0,
+            0,
+            Role.ROLE_SUPER_ADMIN,
+            1L
+    ),
     관리자1(
             "관리자1",
             "202011212",
@@ -97,7 +117,7 @@ public enum UserFixture {
                 .build();
     }
 
-    public AdminUserRequest 등록_요청_생성() {
+    public AdminUserRequest 등록_요청_생성(Long professorId) {
         return AdminUserRequest.builder()
                 .name(name)
                 .studentNumber(studentNumber)
