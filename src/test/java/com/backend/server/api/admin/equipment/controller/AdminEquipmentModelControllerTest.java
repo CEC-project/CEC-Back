@@ -20,10 +20,8 @@ import static com.backend.server.fixture.EquipmentModelFixture.장비모델1;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ControllerTest
-@DisplayName("장비 모델 관리 컨트롤러 테스트")
+@DisplayName("AdminEquipmentModelController")
 public class AdminEquipmentModelControllerTest {
-    @Autowired
-    private MockMvcUtil mockMvcUtil;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
