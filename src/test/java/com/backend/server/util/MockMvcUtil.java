@@ -12,13 +12,11 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jayway.jsonpath.JsonPath;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-@Component
 public class MockMvcUtil {
 
     private static final ObjectMapper mapper  = new ObjectMapper()
@@ -54,9 +52,7 @@ public class MockMvcUtil {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 
         JsonNode node = mapper.valueToTree(dto);
-        node.fields().forEachRemaining(entry -> {
-            String key = entry.getKey();
-            JsonNode value = entry.getValue();
+        node.forEachEntry((key, value) -> {
             if (!value.isNull()) {
                 if (value.isArray()) {
                     for (JsonNode item : value)
@@ -90,6 +86,4 @@ public class MockMvcUtil {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(convertToJson(body));
     }
-
-
 }
