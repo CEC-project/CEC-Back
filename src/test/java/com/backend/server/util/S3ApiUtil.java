@@ -37,20 +37,20 @@ public class S3ApiUtil {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
-    public String get(String fileKey) {
+    public ResponseEntity<String> get(String fileKey) {
         final String url = String.format("https://%s.s3.%s.amazonaws.com/%s",
                 s3Properties.getBucket(), s3Properties.getRegion(), fileKey);
 
-        ResponseEntity<String> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                new HttpEntity<>(new HttpHeaders()),
-                String.class
-        );
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-
-        return response.getBody();
+        try {
+            return restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    new HttpEntity<>(new HttpHeaders()),
+                    String.class
+            );
+        } catch (RuntimeException e) {
+            return null;
+        }
     }
 
     public void delete(String fileKey) {
