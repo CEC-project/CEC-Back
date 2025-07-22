@@ -3,8 +3,10 @@ package com.backend.server.api.user.mypage.dto;
 import com.backend.server.api.common.dto.LoginUser;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class MyInfoResponse {
 
     @Schema(description = "사용자 이름", example = "홍길동")

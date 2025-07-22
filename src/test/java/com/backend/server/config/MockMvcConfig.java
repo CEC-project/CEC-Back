@@ -1,5 +1,7 @@
 package com.backend.server.config;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -9,12 +11,13 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 @TestConfiguration
-public class MockMvcUTF8Config {
+public class MockMvcConfig {
     @Bean
     @Primary
     public MockMvc customMockMvc(WebApplicationContext context) {
         return MockMvcBuilders.webAppContextSetup(context)
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
+                .apply(springSecurity())
                 .build();
     }
 }
