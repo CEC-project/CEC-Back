@@ -2,8 +2,6 @@ package com.backend.server.fixture;
 
 import com.backend.server.api.admin.user.dto.AdminUserRequest;
 import com.backend.server.api.common.auth.dto.CommonSignInRequest;
-import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.api.user.mypage.dto.MyInfoResponse;
 import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Gender;

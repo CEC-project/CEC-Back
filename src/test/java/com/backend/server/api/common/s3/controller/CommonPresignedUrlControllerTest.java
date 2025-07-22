@@ -1,12 +1,12 @@
 package com.backend.server.api.common.s3.controller;
 
+import static com.backend.server.util.MockMvcUtil.toJsonPathDocument;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.backend.server.config.ControllerTest;
 import com.backend.server.util.S3ApiUtil;
-import com.jayway.jsonpath.JsonPath;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -44,8 +44,7 @@ class CommonPresignedUrlControllerTest {
             //then
             result.andExpect(status().isOk());
 
-            String responseJson = result.andReturn().getResponse().getContentAsString();
-            String presignedUrl = JsonPath.parse(responseJson).read("$.data", String.class);
+            String presignedUrl = toJsonPathDocument(result).read("$.data", String.class);
             /* presigned url 을 발급받습니다. */
 
             /* presigned url 로 파일이 잘 업로드 되는지 테스트 */

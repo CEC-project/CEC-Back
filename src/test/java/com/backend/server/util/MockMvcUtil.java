@@ -6,12 +6,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import java.io.UnsupportedEncodingException;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.util.LinkedMultiValueMap;
@@ -24,8 +28,8 @@ public class MockMvcUtil {
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     /**
-     * 하나의 API 응답에 대해 여러번 이 함수를 호출할 일이 있다면, JsonPath 라이브러리로 대체하는걸 추천합니다.
-     * 이 메소드는 API 응답을 json 으로 파싱하므로, 한번의 API 응답에 대해 여러번 호출하기 부적절합니다.
+     * 이 메소드는 API 응답을 json 으로 파싱하므로, 한번의 API 응답에 대해 여러번 호출하기 부적절합니다.<br>
+     * 여러번 호출할거라면, toJsonPathDocument() / toDto 를 사용하세요.
      */
     public static ResultMatcher jsonPathEquals(String jsonPath, Object expected) {
         return result -> {
@@ -64,6 +68,16 @@ public class MockMvcUtil {
         });
 
         return params;
+    }
+
+    public static DocumentContext toJsonPathDocument(ResultActions result) throws UnsupportedEncodingException {
+        String responseBody = result.andReturn().getResponse().getContentAsString();
+        return JsonPath.parse(responseBody);
+    }
+
+    public static <T> T toDto(ResultActions result, TypeReference<T> typeReference) throws Exception {
+        String responseBody = result.andReturn().getResponse().getContentAsString();
+        return mapper.readValue(responseBody, typeReference);
     }
 
     public static MockHttpServletRequestBuilder postJson(String url, Object body) throws JsonProcessingException {

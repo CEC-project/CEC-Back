@@ -1,22 +1,22 @@
 package com.backend.server.api.common.auth.controller;
 
 import static com.backend.server.fixture.UserFixture.MOCK_MVC_테스트시_로그인_계정;
-import static com.backend.server.util.MockMvcUtil.*;
+import static com.backend.server.util.MockMvcUtil.convertToJson;
+import static com.backend.server.util.MockMvcUtil.toDto;
+import static com.backend.server.util.MockMvcUtil.toJsonPathDocument;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.backend.server.api.common.auth.dto.CommonSignInRequest;
-import com.backend.server.api.common.auth.dto.CommonSignInResponse;
 import com.backend.server.api.common.dto.ApiResponse;
-import com.backend.server.api.common.dto.CommonResponse;
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.user.mypage.dto.MyInfoResponse;
 import com.backend.server.config.MockMvcConfig;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.user.UserRepository;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 import jakarta.servlet.http.Cookie;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
@@ -40,7 +40,6 @@ class CommonAuthControllerTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private PasswordEncoder passwordEncoder;
-    @Autowired private ObjectMapper objectMapper;
     @Autowired private UserRepository userRepository;
 
     @Nested
@@ -67,11 +66,7 @@ class CommonAuthControllerTest {
                 throw new Exception("No refresh token found");
             System.out.printf("refresh token : %s\n", refreshToken.getValue());
 
-            final String responseJson = resultActions.andReturn().getResponse().getContentAsString();
-            final JavaType type = objectMapper.getTypeFactory()
-                    .constructParametricType(CommonResponse.class, CommonSignInResponse.class);
-            final CommonResponse<CommonSignInResponse> signInResponse = objectMapper.readValue(responseJson, type);
-            final String accessToken = signInResponse.getData().getAccessToken();
+            final String accessToken = toJsonPathDocument(resultActions).read("$.data.accessToken");
             System.out.printf("access token : %s\n", accessToken);
             /* 1. 로그인 */
 
@@ -87,10 +82,7 @@ class CommonAuthControllerTest {
             //then
             resultActions2.andExpect(status().isOk());
 
-            final String responseJson2 = resultActions2.andReturn().getResponse().getContentAsString();
-            final JavaType type2 = objectMapper.getTypeFactory()
-                    .constructParametricType(ApiResponse.class, MyInfoResponse.class);
-            final ApiResponse<MyInfoResponse> myInfoResponse = objectMapper.readValue(responseJson2, type2);
+            final ApiResponse<MyInfoResponse> myInfoResponse = toDto(resultActions2, new TypeReference<>() {});
             assertThat(myInfoResponse.getData())
                     .usingRecursiveComparison()
                     .isEqualTo(expectedMyInfoResponse)
