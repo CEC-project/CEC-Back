@@ -1,6 +1,7 @@
 package com.backend.server.fixture;
 
 import com.backend.server.api.admin.user.dto.AdminUserRequest;
+import com.backend.server.api.common.auth.dto.CommonSignInRequest;
 import com.backend.server.model.entity.Professor;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.entity.enums.Gender;
@@ -129,5 +130,12 @@ public enum UserFixture {
                 .profilePicture(profilePicture)
                 .birthday(birthDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .build();
+    }
+
+    public CommonSignInRequest 로그인_요청_생성() {
+        final CommonSignInRequest commonSignInRequest = new CommonSignInRequest();
+        commonSignInRequest.setPassword(password);
+        commonSignInRequest.setStudentNumber(studentNumber);
+        return commonSignInRequest;
     }
 }

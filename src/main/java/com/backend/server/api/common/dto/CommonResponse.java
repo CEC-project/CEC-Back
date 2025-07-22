@@ -2,13 +2,15 @@ package com.backend.server.api.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class CommonResponse<T> {
-    private final String status;
-    private final String message;
-    private final T data;
+    private String status;
+    private String message;
+    private T data;
 
     public static <T> CommonResponse<T> success(String message, T data) {
         return new CommonResponse<>("success", message, data);
