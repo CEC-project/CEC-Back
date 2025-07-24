@@ -8,6 +8,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.TestExecutionListener;
 
+/**
+ * 테스트용 관리자 계정을 db에 저장하고, 테스트가 끝나면 삭제합니다.
+ */
 public class UserSaveListener implements TestExecutionListener {
 
     @Override

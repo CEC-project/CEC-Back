@@ -19,6 +19,9 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * S3 파일 업로드 테스트에서 사용하는 RestTemplate 빈 설정입니다.
+ */
 @Configuration
 public class RestTemplateConfig {
 

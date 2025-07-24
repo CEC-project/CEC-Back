@@ -26,14 +26,20 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class RedisConfig {
 
-    //private final RedisSubscriber redisSubscriber;
-
-
     @Value("${spring.data.redis.host}")
     private String host;
 
     @Value("${spring.data.redis.port}")
     private int port;
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        return mapper;
+    }
+
     @Bean
     @Profile("!postgre")
     public MessageListener redisSubscriber(ObjectMapper objectMapper, SseEmitterService sseEmitterService) {
@@ -54,14 +60,6 @@ public class RedisConfig {
             }
         };
     }
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        return mapper;
-    }
-
 
     @Bean
     @Profile("!postgre")

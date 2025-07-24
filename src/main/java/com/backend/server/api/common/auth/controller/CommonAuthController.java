@@ -5,6 +5,7 @@ import com.backend.server.api.common.auth.dto.CommonSignInResponse;
 import com.backend.server.api.common.auth.service.CommonAuthService;
 import com.backend.server.api.common.dto.CommonResponse;
 import com.backend.server.api.common.dto.LoginUser;
+import com.backend.server.config.annotation.rateLimit.LimitRequestPerTime;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -33,6 +34,8 @@ public class CommonAuthController {
             summary = "로그인 API",
             description = """
         사용자가 로그인하면 엑세스 토큰을 반환합니다.<br/>
+        1분에 5회 연속 실패하면, 1분간 기다려야 다시 시도 가능합니다.<br/>
+        (로그인 성공시 실패 횟수 초기화 됩니다.)<br/>
 
         <b>엑세스 토큰 정보:</b><br>
         - JWT 형식의 토큰이 발급됩니다.<br>
@@ -40,7 +43,8 @@ public class CommonAuthController {
 
         <b>응답 코드:</b><br>
         - <code>200 OK</code>: 로그인 성공<br>
-        - <code>500 Internal Server Error</code>: 서버 오류 발생<br>
+        - <code>500 Internal Server Error</code>: 비밀번호 불일치 등<br>
+        - <code>429 Too Many Requests</code>: 1분에 5회 연속 실패시<br>
 
         <hr/>
 
@@ -50,6 +54,9 @@ public class CommonAuthController {
         """
     )
     @PostMapping("/sign-in")
+    @LimitRequestPerTime(
+            identifier = "#request.getStudentNumber()",
+            resetOnSuccess = true) // 분당 5회 호출 제한 + 로그인 성공시 실패 기록 초기화
     public CommonResponse<CommonSignInResponse> signIn(
             @RequestBody CommonSignInRequest request) {
         return CommonResponse.success("로그인 성공", commonAuthService.login(request));
