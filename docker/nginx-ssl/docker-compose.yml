@@ -14,3 +14,13 @@ services:
     restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    networks:
+      reverse-proxy-net:
+        ipv4_address: 172.18.0.10
+
+networks:
+  reverse-proxy-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16

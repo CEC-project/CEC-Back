@@ -1,6 +1,7 @@
-package com.backend.server.api.common.handler;
+package com.backend.server.api.common.exceptionHandler.controller;
 
 import com.backend.server.api.common.dto.ApiResponse;
+import com.backend.server.api.common.exceptionHandler.exception.TooManyRequestException;
 import io.jsonwebtoken.JwtException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
@@ -74,6 +75,13 @@ public class CommonExceptionController {
     @ExceptionHandler(IllegalArgumentException.class)
     public ApiResponse<Object> handleIllegalArgumentException(HttpServletResponse res, IllegalArgumentException ex) {
         res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        log.error(ex.getMessage(), ex);
+        return ApiResponse.fail(getTimeString() + ex.getMessage());
+    }
+
+    @ExceptionHandler(TooManyRequestException.class)
+    public ApiResponse<Object> handleTooManyRequestException(HttpServletResponse res, TooManyRequestException ex) {
+        res.setStatus(429); // TOO_MANY_REQUEST
         log.error(ex.getMessage(), ex);
         return ApiResponse.fail(getTimeString() + ex.getMessage());
     }
