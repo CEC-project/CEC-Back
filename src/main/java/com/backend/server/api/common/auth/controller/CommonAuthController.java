@@ -5,7 +5,7 @@ import com.backend.server.api.common.auth.dto.CommonSignInResponse;
 import com.backend.server.api.common.auth.service.CommonAuthService;
 import com.backend.server.api.common.dto.CommonResponse;
 import com.backend.server.api.common.dto.LoginUser;
-import com.backend.server.config.annotation.rateLimit.LimitRequestPerTime;
+import com.backend.server.support.rateLimit.LimitRequestPerTime;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

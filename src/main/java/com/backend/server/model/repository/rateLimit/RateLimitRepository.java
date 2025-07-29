@@ -1,7 +1,7 @@
 package com.backend.server.model.repository.rateLimit;
 
 import com.backend.server.api.common.exceptionHandler.exception.TooManyRequestException;
-import com.backend.server.config.annotation.rateLimit.LimitRequestPerTime;
+import com.backend.server.support.rateLimit.LimitRequestPerTime;
 
 public interface RateLimitRepository {
 

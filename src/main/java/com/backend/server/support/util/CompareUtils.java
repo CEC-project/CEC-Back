@@ -1,4 +1,4 @@
-package com.backend.server.util;
+package com.backend.server.support.util;
 
 public class CompareUtils {
 

@@ -1,8 +1,8 @@
 package com.backend.server.api.common.exceptionHandler.exception;
 
-import static com.backend.server.util.DurationUtils.durationToKorean;
+import static com.backend.server.support.util.DurationUtils.durationToKorean;
 
-import com.backend.server.config.annotation.rateLimit.LimitRequestPerTime;
+import com.backend.server.support.rateLimit.LimitRequestPerTime;
 import java.time.Duration;
 import lombok.Getter;
 

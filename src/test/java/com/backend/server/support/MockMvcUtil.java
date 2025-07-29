@@ -1,4 +1,4 @@
-package com.backend.server.util;
+package com.backend.server.support;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;

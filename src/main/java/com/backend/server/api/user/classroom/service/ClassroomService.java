@@ -22,7 +22,7 @@ import com.backend.server.model.repository.classroom.ClassroomRepository;
 import com.backend.server.model.repository.classroom.SemesterRepository;
 import com.backend.server.model.repository.classroom.SemesterScheduleRepository;
 import com.backend.server.model.repository.classroom.YearScheduleRepository;
-import com.backend.server.util.CompareUtils;
+import com.backend.server.support.util.CompareUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
