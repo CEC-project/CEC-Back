@@ -1,9 +1,9 @@
 package com.backend.server.api.common.auth.controller;
 
 import static com.backend.server.fixture.UserFixture.MOCK_MVC_테스트시_로그인_계정;
-import static com.backend.server.util.MockMvcUtil.convertToJson;
-import static com.backend.server.util.MockMvcUtil.toDto;
-import static com.backend.server.util.MockMvcUtil.toJsonPathDocument;
+import static com.backend.server.support.MockMvcUtil.convertToJson;
+import static com.backend.server.support.MockMvcUtil.toDto;
+import static com.backend.server.support.MockMvcUtil.toJsonPathDocument;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;

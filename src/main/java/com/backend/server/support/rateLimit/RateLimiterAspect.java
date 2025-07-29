@@ -1,4 +1,4 @@
-package com.backend.server.config.annotation.rateLimit;
+package com.backend.server.support.rateLimit;
 
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.model.repository.rateLimit.RateLimitRepository;
@@ -21,7 +21,7 @@ public class RateLimiterAspect {
 
     private final RateLimitRepository rateLimitRepository;
 
-    @Around("@within(LimitRequestPerTime) || @annotation(LimitRequestPerTime)")
+    @Around("@within(com.backend.server.support.rateLimit.LimitRequestPerTime) || @annotation(com.backend.server.support.rateLimit.LimitRequestPerTime)")
     public Object interceptor(ProceedingJoinPoint joinPoint) throws Throwable {
         final RateLimitMethodInfo info = RateLimitMethodInfo.of(joinPoint);
         final String key = createKey(joinPoint, info);

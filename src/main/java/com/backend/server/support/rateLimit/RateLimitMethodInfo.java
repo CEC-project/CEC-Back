@@ -1,4 +1,4 @@
-package com.backend.server.config.annotation.rateLimit;
+package com.backend.server.support.rateLimit;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
