@@ -1,9 +1,9 @@
 package com.backend.server.api.common.auth.controller;
 
 import static com.backend.server.fixture.UserFixture.MOCK_MVC_테스트시_로그인_계정;
-import static com.backend.server.util.MockMvcUtil.convertToJson;
-import static com.backend.server.util.MockMvcUtil.toDto;
-import static com.backend.server.util.MockMvcUtil.toJsonPathDocument;
+import static com.backend.server.support.MockMvcUtil.convertToJson;
+import static com.backend.server.support.MockMvcUtil.toDto;
+import static com.backend.server.support.MockMvcUtil.toJsonPathDocument;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -16,6 +16,7 @@ import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.user.mypage.dto.MyInfoResponse;
 import com.backend.server.config.MockMvcConfig;
+import com.backend.server.config.TestDatabaseConfig;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.rateLimit.RateLimitRepository;
 import com.backend.server.model.repository.user.UserRepository;
@@ -44,7 +45,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-@Import(MockMvcConfig.class)
+@Import({MockMvcConfig.class, TestDatabaseConfig.class})
 @ExtendWith(MockitoExtension.class)
 @DisplayName("CommonAuthController")
 class CommonAuthControllerTest {

@@ -2,6 +2,7 @@ package com.backend.server.batch;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import com.backend.server.config.DatabaseTest;
 import com.backend.server.model.entity.classroom.Classroom;
 import com.backend.server.model.entity.classroom.Semester;
 import com.backend.server.model.entity.classroom.SemesterSchedule;
@@ -13,7 +14,6 @@ import com.backend.server.model.repository.classroom.SemesterScheduleRepository;
 import com.backend.server.model.repository.equipment.EquipmentRepository;
 import com.backend.server.model.repository.user.UserRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -22,11 +22,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-@Transactional
+@DatabaseTest
 class ScheduledMaintenanceTasksTest {
 
     @Autowired
@@ -53,9 +50,6 @@ class ScheduledMaintenanceTasksTest {
 
     @BeforeEach
     void setUp() {
-        semesterRepository.deleteAll();
-        classroomRepository.deleteAll();
-        equipmentRepository.deleteAll();
 
         //배치 스케줄러 인스턴스 생성하기
         scheduledMaintenanceTasks = new ScheduledMaintenanceTasks(

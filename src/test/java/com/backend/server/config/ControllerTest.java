@@ -23,9 +23,9 @@ import org.springframework.test.context.TestExecutionListeners;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("dev")
-@Import({MockMvcConfig.class, FakeRateLimitConfig.class})
+@Import({MockMvcConfig.class, FakeRateLimitConfig.class, TestDatabaseConfig.class})
 @TestExecutionListeners(
-        value = UserSaveListener.class,
+        listeners = {UserSaveListener.class},
         mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 public @interface ControllerTest {
 

@@ -3,7 +3,7 @@ package com.backend.server.api.admin.equipment.controller;
 import com.backend.server.api.admin.equipment.dto.category.AdminEquipmentCategoryCreateRequest;
 import com.backend.server.config.ControllerTest;
 import com.backend.server.model.repository.equipment.EquipmentCategoryRepository;
-import com.backend.server.util.MockMvcUtil;
+import com.backend.server.support.MockMvcUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
