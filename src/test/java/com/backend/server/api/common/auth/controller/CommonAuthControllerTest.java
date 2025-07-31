@@ -16,6 +16,7 @@ import com.backend.server.api.common.dto.ApiResponse;
 import com.backend.server.api.common.dto.LoginUser;
 import com.backend.server.api.user.mypage.dto.MyInfoResponse;
 import com.backend.server.config.MockMvcConfig;
+import com.backend.server.config.TestDatabaseConfig;
 import com.backend.server.model.entity.User;
 import com.backend.server.model.repository.rateLimit.RateLimitRepository;
 import com.backend.server.model.repository.user.UserRepository;
@@ -44,7 +45,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-@Import(MockMvcConfig.class)
+@Import({MockMvcConfig.class, TestDatabaseConfig.class})
 @ExtendWith(MockitoExtension.class)
 @DisplayName("CommonAuthController")
 class CommonAuthControllerTest {
