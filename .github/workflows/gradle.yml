@@ -2,7 +2,7 @@ name: PR Build & Test Check
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
   release:
     types: [ published ]
 
@@ -18,9 +18,17 @@ jobs:
         options: --privileged
 
     steps:
-      - name: Check if author is allowed
-        if: contains('["qkr10","geniusBrainLsm","leesunuk","GenTaram","klaus9267","Kimhasa"]', github.event.pull_request.user.login)
-        run: echo "Allowed user"
+      - name: Validate PR source branch (only develop -> main allowed)
+        if: github.base_ref == 'main' && github.head_ref != 'develop'
+        run: |
+          echo "main 브랜치는 develop 브랜치에서만 pr 가능합니다."
+          exit 1
+
+      - name: ❌ Block unauthorized user
+        if: ${{ !contains(fromJson('["qkr10","geniusBrainLsm","leesunuk","GenTaram","klaus9267","Kimhasa"]'), github.event.pull_request.user.login) }}
+        run: |
+          echo "사용자 '${{ github.event.pull_request.user.login }}' 는 pr이 허용되지 않습니다."
+          exit 1
 
       - name: Checkout this repo
         uses: actions/checkout@v4
