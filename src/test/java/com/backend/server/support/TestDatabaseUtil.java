@@ -1,9 +1,5 @@
 package com.backend.server.support;
 
-import static com.backend.server.support.TestDatabaseUtil.TestDatabaseSettings.PASSWORD;
-import static com.backend.server.support.TestDatabaseUtil.TestDatabaseSettings.URL;
-import static com.backend.server.support.TestDatabaseUtil.TestDatabaseSettings.USER;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -12,24 +8,15 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 public class TestDatabaseUtil {
 
-    @AllArgsConstructor
-    @Getter
-    public enum TestDatabaseSettings {
-        URL("spring.datasource.url", "jdbc:postgresql://localhost:5432/cec"),
-        URL_TEMPLATE("spring.datasource.url", "jdbc:postgresql://localhost:5432/"),
-        DRIVER("spring.datasource.driver-class-name", "org.postgresql.Driver"),
-        USER("spring.datasource.username", "cec"),
-        PASSWORD("spring.datasource.password", "1234"),
-        DB_NAME("test.db.name", "dbName");
-        final String ymlPath, value;
-    }
+    public static final String URL_TEMPLATE = "jdbc:postgresql://localhost:5432/";
+    public static final String USER = "cec";
+    public static final String PASSWORD = "1234";
 
-    public static final String PREFIX = "test_db_";
+    private static final String URL = "jdbc:postgresql://localhost:5432/cec";
+    private static final String PREFIX = "test_db_";
 
     private static final ConcurrentMap<String, String> dbNames = new ConcurrentHashMap<>();
     private static final Random random = new Random();
@@ -42,7 +29,7 @@ public class TestDatabaseUtil {
         final String dbId = String.valueOf(random.nextLong(0L, Long.MAX_VALUE));
         final String dbName = PREFIX + dbId;
 
-        try (Connection conn = DriverManager.getConnection(URL.getValue(), USER.getValue(), PASSWORD.getValue());
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
                 Statement stmt = conn.createStatement()) {
             stmt.executeUpdate("CREATE DATABASE \"" + dbName + "\"");
             System.out.println(dbName + " 생성 성공.");
@@ -50,7 +37,7 @@ public class TestDatabaseUtil {
             throw new RuntimeException("DB 생성 실패: " + dbName, e);
         }
 
-        dbNames.put(dbName, "true");
+        dbNames.put(dbId, dbName);
         if (!isTriggered.get()) {
             isTriggered.set(true);
             Runtime.getRuntime().addShutdownHook(new Thread(TestDatabaseUtil::dropAllTestDatabases));
@@ -62,9 +49,9 @@ public class TestDatabaseUtil {
      * 아직 삭제되지 않은 db 들을 전부 삭제합니다.
      */
     public static void dropAllTestDatabases() {
-        try (Connection conn = DriverManager.getConnection(URL.getValue(), USER.getValue(), PASSWORD.getValue());
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
                 Statement stmt = conn.createStatement()) {
-            for (String dbName : dbNames.keySet()) {
+            for (String dbName : dbNames.values()) {
                 try {
                     stmt.executeUpdate("DROP DATABASE IF EXISTS \"" + dbName + "\" WITH ( FORCE )");
                     System.out.println(dbName + " 삭제 성공.");

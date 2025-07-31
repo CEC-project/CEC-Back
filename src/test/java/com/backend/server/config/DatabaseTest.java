@@ -11,8 +11,11 @@ import org.springframework.context.annotation.Import;
 
 /**
  * DB 를 사용하는 테스트는 이 어노테이션을 쓰면 됩니다.<br>
- * 1. 새로운 DB를 생성 / 삭제하여 테스트를 격리합니다.
- * 2. @Transactional 을 통해 DB 변경사항들을 롤백합니다.
+ * 1. 새로운 DB를 생성하여 테스트를 격리합니다.(테스크 클래스 마다)<br>
+ * 2. @Transactional 로 테스트 메소드마다 DB 변경사항을 롤백합니다.
+ * @see <a href="https://docs.spring.io/spring-framework/reference/testing/testcontext-framework/parallel-test-execution.html">
+ *     Junit5 로 병렬 테스트를 할 경우 @DirtiesContext 를 사용해선 안됩니다. (공식문서)
+ * </a>
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
