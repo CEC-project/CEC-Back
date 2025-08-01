@@ -57,6 +57,10 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation platform('org.junit:junit-bom:5.10.0')
 	testImplementation 'org.junit.jupiter:junit-jupiter'
+
+	testImplementation "org.testcontainers:testcontainers:1.20.5" // testcontainers
+	testImplementation 'org.testcontainers:postgresql:1.20.5' // PostgreSQL 모듈
+	testImplementation "org.testcontainers:junit-jupiter:1.20.5" // JUnit 5 연동
 }
 
 compileJava {
