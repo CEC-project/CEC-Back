@@ -5,12 +5,11 @@ import com.backend.server.model.repository.keyValue.KeyValueRepository;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import java.security.Key;
 import java.time.Duration;
 import java.util.Date;
-import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
@@ -36,7 +35,7 @@ public class JwtUtil{
     private long refreshTokenValidity;
     private Duration refreshTokenDuration;
     private JwtParser jwtParser;
-    private Key jwtKey;
+    private SecretKey jwtKey;
 
     private final KeyValueRepository keyValueRepository;
     private final CookieRepository cookieRepository;
@@ -48,8 +47,8 @@ public class JwtUtil{
         refreshTokenDuration = Duration.ofMillis(refreshTokenValidity);
 
         byte[] secretBytes = secret.getBytes();
-        jwtParser = Jwts.parserBuilder().setSigningKey(secretBytes).build();
-        jwtKey = new SecretKeySpec(secretBytes, SignatureAlgorithm.HS256.getJcaName());
+        jwtKey = Keys.hmacShaKeyFor(secretBytes);
+        jwtParser = Jwts.parser().verifyWith(jwtKey).build();
     }
 
     public String createAccessToken(Long id) {
