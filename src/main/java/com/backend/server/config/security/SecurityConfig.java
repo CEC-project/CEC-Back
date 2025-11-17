@@ -32,17 +32,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         RequestMatcher requestMatcher = new OrRequestMatcher(
-                new AntPathRequestMatcher("/swagger-ui/**"),
-                new AntPathRequestMatcher("/swagger-ui.html"),
-                new AntPathRequestMatcher("/v3/api-docs/**"),
-                new AntPathRequestMatcher("/swagger-resources/**"),
-                new AntPathRequestMatcher("/swagger-resources"),
-                new AntPathRequestMatcher("/webjars/**"),
-                new AntPathRequestMatcher("/configuration/ui"),
-                new AntPathRequestMatcher("/configuration/security"),
-                new AntPathRequestMatcher("/api/auth/sign-in"),
-                new AntPathRequestMatcher("/api/auth/token/refresh"),
-                new AntPathRequestMatcher("/api/health-check")
+                AntPathRequestMatcher.antMatcher("/swagger-ui/**"),
+                AntPathRequestMatcher.antMatcher("/swagger-ui.html"),
+                AntPathRequestMatcher.antMatcher("/v3/api-docs/**"),
+                AntPathRequestMatcher.antMatcher("/swagger-resources/**"),
+                AntPathRequestMatcher.antMatcher("/swagger-resources"),
+                AntPathRequestMatcher.antMatcher("/webjars/**"),
+                AntPathRequestMatcher.antMatcher("/configuration/ui"),
+                AntPathRequestMatcher.antMatcher("/configuration/security"),
+                AntPathRequestMatcher.antMatcher("/api/auth/sign-in"),
+                AntPathRequestMatcher.antMatcher("/api/auth/token/refresh"),
+                AntPathRequestMatcher.antMatcher("/api/health-check")
         );
 
         List<String> origins = List.of(
